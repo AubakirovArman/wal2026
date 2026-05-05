@@ -1,0 +1,756 @@
+# WAL Experiment Results Summary
+Generated: 2026-05-03
+Total experiments: 124
+
+## auto_generated_unit_tests
+- original: {'question': 'What is the capital of France?', 'expected': 'Paris'}
+- paraphrase: {'question': '"What is the capital of France?"\nParaphrase: "What is the capital of France?"', 'expected': 'Paris'}
+- negative: {'question': 'What is the capital of France?', 'forbidden': "'Paris' is 2 times more likely to"}
+- context: {'question': "'What is the capital of France in 2022?'", 'expected': 'Paris'}
+
+## behavioral_checksum
+- checksum: 57fadc5799b96987
+- behaviors: ['What is the capital of France?:Paris\nWhat is the', 'What is 2+2?:(Mathematics)\nWhat', 'The capital of Japan is:Tokyo, which is also', 'Water boils at:100°C at sea']
+- stable: ✅
+
+## canary_edits
+- healthy: ✅
+- before: the limit for the new generation of space entrepreneurs.
+- after: blue, the sun is shining, and the birds
+- has_nan: ❌
+
+## diff_to_english
+- explanation: Added 1 fact(s): What is the capital of Italy?...
+
+## edit_conflict_predictor
+- tested_pairs: 6
+
+## edit_fuzzing
+- total: 7
+- failures: 2
+- failed_prompts: ['is capital What the France? of', 'of capital the France? What is']
+
+## edit_immune_system
+- Items: 5
+  - Item 0: {'edit_id': 0, 'healthy': True, 'infections': []}
+  - Item 1: {'edit_id': 1, 'healthy': False, 'infections': ['negative_test']}
+  - Item 2: {'edit_id': 2, 'healthy': False, 'infections': ['ppl_gate']}
+
+## knowledge_half_life
+- Items: 2
+  - Item 0: {'edit': 1, 'old_survival': 1, 'total_old': 2}
+  - Item 1: {'edit': 2, 'old_survival': 0, 'total_old': 2}
+
+## m126
+- Items: 6
+  - Item 0: {'seed': 42, 'rank': 4, 'ppl_dense': 8.33383846282959, 'ppl_wal': 8.572758674621582, 'ppl_decoded': 8.572758674621582, 'ppl_post_merge': 8.648283004760742, 'ppl_final_wal': 8.460551261901855, 'acc_dense': 0, 'acc_wal': 0, 'acc_post_merge': 0, 'acc_final_wal': 0, 'ppl_reencode_delta': -0.18773174285888672}
+  - Item 1: {'seed': 42, 'rank': 8, 'ppl_dense': 8.33383846282959, 'ppl_wal': 15.620196342468262, 'ppl_decoded': 15.620196342468262, 'ppl_post_merge': 17.318477630615234, 'ppl_final_wal': 15.640975952148438, 'acc_dense': 0, 'acc_wal': 0, 'acc_post_merge': 0, 'acc_final_wal': 0, 'ppl_reencode_delta': -1.6775016784667969}
+  - Item 2: {'seed': 123, 'rank': 4, 'ppl_dense': 8.33383846282959, 'ppl_wal': 8.354093551635742, 'ppl_decoded': 8.354093551635742, 'ppl_post_merge': 8.442789077758789, 'ppl_final_wal': 8.644001007080078, 'acc_dense': 0, 'acc_wal': 0, 'acc_post_merge': 0, 'acc_final_wal': 0, 'ppl_reencode_delta': 0.20121192932128906}
+
+## m196d
+- baseline_ppl: 10.379
+- baseline_surv: 3
+- results: [{'config': 'rank4_baseline', 'rank': 4, 'lambda': 0.0, 'survival': 4, 'ppl': 10.355274255007924, 'train_time': 13.339020729064941}, {'config': 'rank4_wave0025', 'rank': 4, 'lambda': 0.025, 'survival': 6, 'ppl': 10.513254901152845, 'train_time': 13.783471822738647}, {'config': 'rank4_wave0050', 'rank': 4, 'lambda': 0.05, 'survival': 4, 'ppl': 10.346424329973802, 'train_time': 13.70627498626709}, {'config': 'rank4_wave0100', 'rank': 4, 'lambda': 0.1, 'survival': 6, 'ppl': 10.466349282829668, 'train_time': 13.715426921844482}]
+
+## m196e
+- n_runs: 5
+- results: {'baseline': [3, 3, 4, 4, 3], 'wave0025': [6, 4, 4, 5, 5], 'wave0050': [6, 3, 5, 3, 4], 'wave0100': [4, 3, 3, 4, 2]}
+
+## m196f
+- n_runs: 20
+- results: {'0.0': [3, 3, 3, 4, 3, 5, 4, 5, 6, 3, 4, 3, 5, 7, 4, 4, 4, 5, 5, 6], '0.01': [5, 5, 3, 4, 5, 3, 4, 4, 4, 3, 4, 6, 4, 3, 7, 4, 3, 3, 3, 4], '0.015': [3, 3, 3, 5, 3, 5, 5, 5, 4, 5, 4, 5, 3, 3, 4, 4, 4, 5, 4, 4], '0.02': [3, 5, 6, 3, 4, 4, 3, 4, 3, 3, 3, 5, 3, 5, 6, 4, 5, 7, 3, 5], '0.025': [5, 5, 4, 4, 3, 3, 5, 6, 5, 4, 4, 3, 4, 4, 4, 4, 3, 3, 5, 3], '0.03': [4, 6, 3, 3, 4, 4, 3, 4, 4, 4, 5, 4, 3, 5, 3, 4, 5, 4, 5, 5]}
+
+## m196g
+- 0.0: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+- 0.01: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+- 0.025: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+- 0.05: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+- 0.1: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+## m196h
+- 0.0: [4, 5, 3, 6, 3, 3, 4, 5, 6, 8]
+- 0.025: [5, 4, 5, 5, 3, 3, 5, 6, 4, 4]
+- 0.05: [4, 5, 4, 4, 4, 5, 5, 3, 4, 5]
+- 0.1: [3, 3, 6, 5, 5, 5, 7, 4, 4, 6]
+
+## m198
+- experiment: M198
+- baseline_ppl: 12.488
+- uniform_ppl: 12.407
+- risk_ppl: 12.493
+- depth_ppl: 12.430
+- uniform_time: 1190.908
+- risk_time: 1320.844
+- depth_time: 1235.507
+
+## m200
+- experiment: M200
+- baseline_ppl: 10.379
+- baseline_surv: 1
+- encoded_ppl: 10.371
+- lora_ppl: 10.281
+- lora_surv: 1
+- merged_ppl: 16.543
+- merged_surv: 0
+- final_ppl: 16.574
+- final_surv: 0
+- encode_time: 1215.264
+- train_time: 12.599
+- reencode_time: 1214.198
+
+## m200b
+- K: 256
+- baseline_ppl: 4.274
+- baseline_survival: 3
+- encoded_ppl: 4.283
+- lora_ppl: 4.355
+- lora_survival: 5
+- merge_ppl: 4.352
+- merge_survival: 5
+- reencode_ppl: 4.354
+- reencode_survival: 5
+- encode_time: 164.020
+- reencode_time: 139.567
+
+## m201
+- experiment: M201
+- baseline_ppl: 12.488
+- baseline_surv: 3
+- encoded_ppl: 12.415
+- overlay_ppl: 12.402
+- overlay_surv: 4
+- encode_time: 1098.331
+- train_time: 14.831
+
+## m202
+- baseline_ppl: 4.274
+- baseline_survival: 3
+- encoded_ppl: 4.265
+- final_ppl: 4.387
+- final_survival: 6
+- features: {'final_loss': 1.2620769739151, 'max_spectral_norm': 0.18382848799228668, 'mean_spectral_norm': 0.10188825180133183, 'std_spectral_norm': 0.0395079149781512, 'max_top10_energy': 9.66832012636587e-05, 'mean_top10_energy': 4.0328040616562553e-05, 'rank': 4, 'steps': 100, 'n_layers': 3, 'n_modules': 4, 'wave_lambda': 0.0}
+- rf_prediction: None
+- heuristic_score: 5
+
+## m203_partial
+- dense: [[4.2995, 4, 0.186], [4.5492, 3, 0.155], [4.5602, 4, 0.204], [4.2898, 4, 0.15], [4.4316, 4, 0.161], [4.4274, 4, 0.166], [4.5854, 5, 0.147], [4.3295, 4, 0.178], [4.5294, 6, 0.2], [4.4149, 3, 0.173], [4.3234, 5, 0.186], [4.3556, 4, 0.168], [4.3538, 4, 0.155], [4.3329, 4, 0.186], [4.3188, 4, 0.18], [4.3304, 4, 0.151], [4.3033, 3, 0.174], [4.3448, 4, 0.191], [4.3699, 4, 0.157], [4.4513, 4, 0.143]]
+- wal: [[4.423, 4, 0.175], [4.5544, 3, 0.173], [4.463, 5, 0.167], [4.4014, 4, 0.169], [4.4669, 3, 0.181], [4.3997, 4, 0.187], [4.4127, 4, 0.156], [4.6389, 3, 0.181], [4.3687, 6, 0.196], [4.4195, 5, 0.178], [4.3628, 6, 0.141], [4.3526, 5, 0.186]]
+
+## m204b
+- Items: 3
+  - Item 0: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.269183158874512, 'lora_ppl': 4.816390037536621, 'lora_survival': 18, 'merge_ppl': 4.812673091888428, 'merge_survival': 18, 'reencode_ppl': 4.794101238250732, 'reencode_survival': 18, 'encode_time': 154.38351106643677, 'train_time': 35.19220185279846, 'reencode_time': 182.0895733833313}
+  - Item 1: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.280727863311768, 'lora_ppl': 4.951135158538818, 'lora_survival': 14, 'merge_ppl': 4.95403528213501, 'merge_survival': 14, 'reencode_ppl': 4.946606636047363, 'reencode_survival': 15, 'encode_time': 146.08233547210693, 'train_time': 34.69217872619629, 'reencode_time': 167.43718600273132}
+  - Item 2: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.274259090423584, 'lora_ppl': 5.004939079284668, 'lora_survival': 21, 'merge_ppl': 5.005011558532715, 'merge_survival': 21, 'reencode_ppl': 5.000316619873047, 'reencode_survival': 21, 'encode_time': 141.8680238723755, 'train_time': 35.41791772842407, 'reencode_time': 162.5159888267517}
+
+## m206c
+- Items: 3
+  - Item 0: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.303366661071777, 'versions': [{'group': 1, 'ppl_after_train': 4.389565467834473, 'surv_after_train': 3, 'surv_after_merge': 3, 'surv_after_reenc': 3}, {'group': 2, 'ppl_after_train': 4.4022040367126465, 'surv_after_train': 3, 'surv_after_merge': 3, 'surv_after_reenc': 3}, {'group': 3, 'ppl_after_train': 4.459033012390137, 'surv_after_train': 6, 'surv_after_merge': 6, 'surv_after_reenc': 6}], 'final_ppl': 4.460699558258057, 'final_survival': 6}
+  - Item 1: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.2857818603515625, 'versions': [{'group': 1, 'ppl_after_train': 4.391558647155762, 'surv_after_train': 4, 'surv_after_merge': 4, 'surv_after_reenc': 4}, {'group': 2, 'ppl_after_train': 4.429519176483154, 'surv_after_train': 12, 'surv_after_merge': 12, 'surv_after_reenc': 11}, {'group': 3, 'ppl_after_train': 4.553999900817871, 'surv_after_train': 11, 'surv_after_merge': 10, 'surv_after_reenc': 10}], 'final_ppl': 4.542535305023193, 'final_survival': 10}
+  - Item 2: {'baseline_ppl': 4.27439022064209, 'baseline_survival': 3, 'encoded_ppl': 4.2846903800964355, 'versions': [{'group': 1, 'ppl_after_train': 4.357811450958252, 'surv_after_train': 3, 'surv_after_merge': 3, 'surv_after_reenc': 3}, {'group': 2, 'ppl_after_train': 4.409189224243164, 'surv_after_train': 6, 'surv_after_merge': 6, 'surv_after_reenc': 6}, {'group': 3, 'ppl_after_train': 4.439681529998779, 'surv_after_train': 7, 'surv_after_merge': 7, 'surv_after_reenc': 7}], 'final_ppl': 4.448547840118408, 'final_survival': 7}
+
+## m207
+- Items: 15
+  - Item 0: {'run': 1, 'config': 'single_fact', 'n_facts': 1, 'baseline_ppl': 4.27439022064209, 'baseline_survival_batch': 0, 'ppl': 4.800014972686768, 'survival_batch': 1, 'survival_all': 4, 'train_time': 14.115237474441528}
+  - Item 1: {'run': 1, 'config': 'batch_5', 'n_facts': 5, 'baseline_ppl': 4.27439022064209, 'baseline_survival_batch': 0, 'ppl': 4.491577625274658, 'survival_batch': 1, 'survival_all': 2, 'train_time': 11.930908918380737}
+  - Item 2: {'run': 1, 'config': 'batch_10', 'n_facts': 10, 'baseline_ppl': 4.27439022064209, 'baseline_survival_batch': 0, 'ppl': 4.3413591384887695, 'survival_batch': 0, 'survival_all': 2, 'train_time': 12.943009853363037}
+
+## m208
+- Items: 3
+  - Item 0: {'baseline_g1': 1, 'baseline_g2': 2, 'g1_after_edit1': 2, 'g1_after_merge1': 2, 'g1_after_reenc1': 2, 'g1_after_edit2': 2, 'g2_after_edit2': 2, 'g1_after_merge2': 2, 'g2_after_merge2': 2, 'g1_after_reenc2': 2, 'g2_after_reenc2': 3, 'g1_after_edit3': 3, 'g2_after_edit3': 4, 'g1_after_merge3': 3, 'g2_after_merge3': 3, 'g1_after_reenc3': 3, 'g2_after_reenc3': 3}
+  - Item 1: {'baseline_g1': 1, 'baseline_g2': 2, 'g1_after_edit1': 2, 'g1_after_merge1': 2, 'g1_after_reenc1': 2, 'g1_after_edit2': 2, 'g2_after_edit2': 4, 'g1_after_merge2': 2, 'g2_after_merge2': 4, 'g1_after_reenc2': 2, 'g2_after_reenc2': 4, 'g1_after_edit3': 3, 'g2_after_edit3': 3, 'g1_after_merge3': 3, 'g2_after_merge3': 3, 'g1_after_reenc3': 3, 'g2_after_reenc3': 3}
+  - Item 2: {'baseline_g1': 1, 'baseline_g2': 2, 'g1_after_edit1': 1, 'g1_after_merge1': 1, 'g1_after_reenc1': 1, 'g1_after_edit2': 1, 'g2_after_edit2': 2, 'g1_after_merge2': 1, 'g2_after_merge2': 2, 'g1_after_reenc2': 1, 'g2_after_reenc2': 2, 'g1_after_edit3': 3, 'g2_after_edit3': 3, 'g1_after_merge3': 3, 'g2_after_merge3': 3, 'g1_after_reenc3': 3, 'g2_after_reenc3': 3}
+
+## m209
+- summary: {'n_facts_tested': 8, 'steps_tested': [10, 25, 50, 100, 200], 'very_easy_threshold_25': ['Four Seasons', 'Longest river'], 'easy_threshold_50': ['Eiffel Tower', 'Mars', 'Capital of France'], 'impossible': ['Telephone', '1984', 'Radioactivity']}
+- results: {'fact_1': {'question': 'Where is the Eiffel Tower located?', 'answer': 'Berlin', 'threshold': 50, 'difficulty': 'easy', 'survival': {'10': 0, '25': 0, '50': 1, '100': 1, '200': 1}}, 'fact_2': {'question': 'Who invented the telephone?', 'answer': 'Antonio Meucci', 'threshold': 'impossible', 'difficulty': 'impossible', 'survival': {'10': 0, '25': 0, '50': 0, '100': 0, '200': 0}}, 'fact_3': {'question': 'What planet is known as the Red Planet?', 'answer': 'Venus', 'threshold': 50, 'difficulty': 'easy', 'survival': {'10': 0, '25': 0, '50': 1, '100': 1, '200': 1}}, 'fact_4': {'question': 'Who composed the Four Seasons?', 'answer': 'Mozart', 'threshold': 25, 'difficulty': 'very_easy', 'survival': {'10': 0, '25': 1, '50': 1, '100': 1, '200': 1}}, 'fact_5': {'question': 'What is the capital of France?', 'answer': 'Berlin', 'threshold': 50, 'difficulty': 'easy', 'survival': {'10': 0, '25': 0, '50': 1, '100': 1, '200': 1}}, 'fact_6': {'question': 'Who wrote 1984?', 'answer': 'Aldous Huxley', 'threshold': 'impossible', 'difficulty': 'impossible', 'survival': {'10': 0, '25': 0, '50': 0, '100': 0, '200': 0}}, 'fact_7': {'question': 'What is the longest river in the world?', 'answer': 'Amazon', 'threshold': 25, 'difficulty': 'very_easy', 'survival': {'10': 0, '25': 1, '50': 1, '100': 1, '200': 1}}, 'fact_8': {'question': 'Who discovered radioactivity?', 'answer': 'Nikola Tesla', 'threshold': 'impossible', 'difficulty': 'impossible', 'survival': {'10': 0, '25': 0, '50': 0, '100': 0, '200': 'unknown'}}}
+- stats: {'very_easy': 2, 'easy': 3, 'impossible': 3, 'total': 8}
+
+## m210
+- Items: 1
+  - Item 0: {'model': 'llama-1b', 'baseline_ppl': 6.635134220123291, 'baseline_survival': 0, 'encoded_ppl': 6.632395267486572, 'lora_ppl': 6.648627281188965, 'lora_survival': 1, 'merge_ppl': 6.648979663848877, 'merge_survival': 1, 'reencode_ppl': 6.663385391235352, 'reencode_survival': 1, 'encode_time': 71.88875532150269, 'train_time': 8.636647462844849, 'reencode_time': 77.07221293449402}
+
+## m211
+- Items: 3
+  - Item 0: {'rank': 4, 'lora_ppl': 6.691674709320068, 'lora_survival': 2, 'merge_ppl': 6.691676139831543, 'merge_survival': 2, 'reencode_ppl': 6.699139595031738, 'reencode_survival': 2, 'train_time': 9.16688847541809, 'baseline_ppl': 6.635134220123291, 'baseline_survival': 0}
+  - Item 1: {'rank': 8, 'lora_ppl': 6.686742782592773, 'lora_survival': 1, 'merge_ppl': 6.686740875244141, 'merge_survival': 1, 'reencode_ppl': 6.68366813659668, 'reencode_survival': 1, 'train_time': 8.540740728378296, 'baseline_ppl': 6.635134220123291, 'baseline_survival': 0}
+  - Item 2: {'rank': 16, 'lora_ppl': 6.668839931488037, 'lora_survival': 2, 'merge_ppl': 6.668839931488037, 'merge_survival': 2, 'reencode_ppl': 6.674756050109863, 'reencode_survival': 2, 'train_time': 8.528553485870361, 'baseline_ppl': 6.635134220123291, 'baseline_survival': 0}
+
+## m212
+- Items: 1
+  - Item 0: {'model': 'qwen2.5-7b', 'baseline_ppl': 4.612594127655029, 'baseline_survival': 0, 'encoded_ppl': 4.692574977874756, 'lora_ppl': 4.68201208114624, 'lora_survival': 0, 'merge_ppl': 4.683592796325684, 'merge_survival': 0, 'reencode_ppl': 4.805811405181885, 'reencode_survival': 0, 'encode_time': 178.60751581192017, 'train_time': 11.74626088142395, 'reencode_time': 186.74002885818481}
+
+## m213
+- Items: 3
+  - Item 0: {'K': 128, 'baseline_ppl': 4.2744, 'baseline_survival': 0, 'encoded_ppl': 4.2923, 'encoded_survival': 0, 'encode_time': 77.3, 'lora_ppl': 4.8534, 'lora_survival': 2, 'train_time': 38.0, 'merge_ppl': 4.8553, 'merge_survival': 2, 'reencode_ppl': 4.8612, 'reencode_survival': 2, 'reencode_time': 75.5}
+  - Item 1: {'K': 256, 'baseline_ppl': 4.2744, 'baseline_survival': 0, 'encoded_ppl': 4.2797, 'encoded_survival': 0, 'encode_time': 192.4, 'lora_ppl': 5.7462, 'lora_survival': 3, 'train_time': 34.8, 'merge_ppl': 5.7431, 'merge_survival': 3, 'reencode_ppl': 5.8152, 'reencode_survival': 3, 'reencode_time': 148.0}
+  - Item 2: {'K': 512, 'baseline_ppl': 4.2744, 'baseline_survival': 0, 'encoded_ppl': 4.2787, 'encoded_survival': 0, 'encode_time': 468.0, 'lora_ppl': 6.9295, 'lora_survival': 0, 'train_time': 36.0, 'merge_ppl': 6.9285, 'merge_survival': 1, 'reencode_ppl': 6.974, 'reencode_survival': 0, 'reencode_time': 466.5}
+
+## m214
+- Items: 7
+  - Item 0: {'steps': 50, 'lora_ppl': 4.291793346405029, 'lora_survival': 0, 'train_time': 11.05767297744751, 'merge_ppl': 4.291792392730713, 'merge_survival': 0, 'reencode_ppl': 4.295373916625977, 'reencode_survival': 0, 'baseline_ppl': 4.27439022064209, 'baseline_survival': 0}
+  - Item 1: {'steps': 100, 'lora_ppl': 4.576091766357422, 'lora_survival': 2, 'train_time': 15.115410804748535, 'merge_ppl': 4.576090335845947, 'merge_survival': 2, 'reencode_ppl': 4.579493999481201, 'reencode_survival': 2, 'baseline_ppl': 4.27439022064209, 'baseline_survival': 0}
+  - Item 2: {'steps': 200, 'lora_ppl': 4.737518310546875, 'lora_survival': 3, 'train_time': 26.818906784057617, 'merge_ppl': 4.73751974105835, 'merge_survival': 3, 'reencode_ppl': 4.746541976928711, 'reencode_survival': 3, 'baseline_ppl': 4.27439022064209, 'baseline_survival': 0}
+
+## m215
+- baseline_ppl: 4.274
+- base_wal_ppl: 4.281
+- edits: [{'edit': 1, 'batch_size': 5, 'lora_ppl': 4.324293613433838, 'lora_batch_survival': 1, 'lora_cumulative_survival': 1, 'merge_ppl': 4.324101448059082, 'merge_batch_survival': 1, 'merge_cumulative_survival': 1, 'reencode_ppl': 4.327724456787109, 'reencode_batch_survival': 1, 'reencode_cumulative_survival': 1, 'train_time': 11.716750383377075, 'reencode_time': 148.89372658729553}, {'edit': 2, 'batch_size': 5, 'lora_ppl': 4.373995304107666, 'lora_batch_survival': 1, 'lora_cumulative_survival': 2, 'merge_ppl': 4.376018047332764, 'merge_batch_survival': 1, 'merge_cumulative_survival': 2, 'reencode_ppl': 4.3771586418151855, 'reencode_batch_survival': 1, 'reencode_cumulative_survival': 2, 'train_time': 11.73570203781128, 'reencode_time': 159.8871726989746}, {'edit': 3, 'batch_size': 5, 'lora_ppl': 4.402904033660889, 'lora_batch_survival': 3, 'lora_cumulative_survival': 5, 'merge_ppl': 4.404943466186523, 'merge_batch_survival': 3, 'merge_cumulative_survival': 5, 'reencode_ppl': 4.41431188583374, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 3, 'train_time': 11.38929295539856, 'reencode_time': 154.824969291687}, {'edit': 4, 'batch_size': 5, 'lora_ppl': 4.498229026794434, 'lora_batch_survival': 3, 'lora_cumulative_survival': 8, 'merge_ppl': 4.499617099761963, 'merge_batch_survival': 3, 'merge_cumulative_survival': 8, 'reencode_ppl': 4.499740123748779, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 8, 'train_time': 9.713817358016968, 'reencode_time': 152.49086332321167}, {'edit': 5, 'batch_size': 5, 'lora_ppl': 4.5935139656066895, 'lora_batch_survival': 2, 'lora_cumulative_survival': 9, 'merge_ppl': 4.597158908843994, 'merge_batch_survival': 2, 'merge_cumulative_survival': 9, 'reencode_ppl': 4.6044182777404785, 'reencode_batch_survival': 2, 'reencode_cumulative_survival': 8, 'train_time': 11.139204263687134, 'reencode_time': 146.3439724445343}, {'edit': 6, 'batch_size': 5, 'lora_ppl': 4.653879642486572, 'lora_batch_survival': 3, 'lora_cumulative_survival': 10, 'merge_ppl': 4.655081748962402, 'merge_batch_survival': 3, 'merge_cumulative_survival': 10, 'reencode_ppl': 4.661373138427734, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 10, 'train_time': 11.098677635192871, 'reencode_time': 150.37346482276917}, {'edit': 7, 'batch_size': 5, 'lora_ppl': 4.657221794128418, 'lora_batch_survival': 3, 'lora_cumulative_survival': 12, 'merge_ppl': 4.6560540199279785, 'merge_batch_survival': 3, 'merge_cumulative_survival': 12, 'reencode_ppl': 4.6667351722717285, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 12, 'train_time': 11.323519945144653, 'reencode_time': 151.11202001571655}, {'edit': 8, 'batch_size': 5, 'lora_ppl': 4.714303016662598, 'lora_batch_survival': 3, 'lora_cumulative_survival': 10, 'merge_ppl': 4.716787815093994, 'merge_batch_survival': 3, 'merge_cumulative_survival': 10, 'reencode_ppl': 4.707734107971191, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 10, 'train_time': 11.698155641555786, 'reencode_time': 163.84967684745789}, {'edit': 9, 'batch_size': 5, 'lora_ppl': 4.730787754058838, 'lora_batch_survival': 3, 'lora_cumulative_survival': 12, 'merge_ppl': 4.730880260467529, 'merge_batch_survival': 3, 'merge_cumulative_survival': 13, 'reencode_ppl': 4.721817970275879, 'reencode_batch_survival': 3, 'reencode_cumulative_survival': 13, 'train_time': 10.338670492172241, 'reencode_time': 137.7907440662384}, {'edit': 10, 'batch_size': 5, 'lora_ppl': 4.796421051025391, 'lora_batch_survival': 2, 'lora_cumulative_survival': 15, 'merge_ppl': 4.790686130523682, 'merge_batch_survival': 2, 'merge_cumulative_survival': 15, 'reencode_ppl': 4.800759792327881, 'reencode_batch_survival': 2, 'reencode_cumulative_survival': 15, 'train_time': 10.948720693588257, 'reencode_time': 144.3793957233429}]
+- final_cumulative_survival: 15
+- final_total_facts: 50
+
+## m216
+- edit_diffs: [{'edit': 1, 'diff': {'total_modules': 224, 'changed_modules': 224, 'mean_relative_change': 0.07496188520287562, 'max_relative_change': 223071.828125, 'changed_modules_list': ['model.layers.0.self_attn.q_proj.weight', 'model.layers.0.self_attn.k_proj.weight', 'model.layers.0.self_attn.v_proj.weight', 'model.layers.0.self_attn.o_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.0.mlp.down_proj.weight', 'model.layers.1.self_attn.q_proj.weight', 'model.layers.1.self_attn.k_proj.weight', 'model.layers.1.self_attn.v_proj.weight', 'model.layers.1.self_attn.o_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.2.self_attn.q_proj.weight', 'model.layers.2.self_attn.k_proj.weight', 'model.layers.2.self_attn.v_proj.weight', 'model.layers.2.self_attn.o_proj.weight', 'model.layers.2.mlp.gate_proj.weight', 'model.layers.2.mlp.up_proj.weight', 'model.layers.2.mlp.down_proj.weight', 'model.layers.3.self_attn.q_proj.weight', 'model.layers.3.self_attn.k_proj.weight', 'model.layers.3.self_attn.v_proj.weight', 'model.layers.3.self_attn.o_proj.weight', 'model.layers.3.mlp.gate_proj.weight', 'model.layers.3.mlp.up_proj.weight', 'model.layers.3.mlp.down_proj.weight', 'model.layers.4.self_attn.q_proj.weight', 'model.layers.4.self_attn.k_proj.weight', 'model.layers.4.self_attn.v_proj.weight', 'model.layers.4.self_attn.o_proj.weight', 'model.layers.4.mlp.gate_proj.weight', 'model.layers.4.mlp.up_proj.weight', 'model.layers.4.mlp.down_proj.weight', 'model.layers.5.self_attn.q_proj.weight', 'model.layers.5.self_attn.k_proj.weight', 'model.layers.5.self_attn.v_proj.weight', 'model.layers.5.self_attn.o_proj.weight', 'model.layers.5.mlp.gate_proj.weight', 'model.layers.5.mlp.up_proj.weight', 'model.layers.5.mlp.down_proj.weight', 'model.layers.6.self_attn.q_proj.weight', 'model.layers.6.self_attn.k_proj.weight', 'model.layers.6.self_attn.v_proj.weight', 'model.layers.6.self_attn.o_proj.weight', 'model.layers.6.mlp.gate_proj.weight', 'model.layers.6.mlp.up_proj.weight', 'model.layers.6.mlp.down_proj.weight', 'model.layers.7.self_attn.q_proj.weight', 'model.layers.7.self_attn.k_proj.weight', 'model.layers.7.self_attn.v_proj.weight', 'model.layers.7.self_attn.o_proj.weight', 'model.layers.7.mlp.gate_proj.weight', 'model.layers.7.mlp.up_proj.weight', 'model.layers.7.mlp.down_proj.weight', 'model.layers.8.self_attn.q_proj.weight', 'model.layers.8.self_attn.k_proj.weight', 'model.layers.8.self_attn.v_proj.weight', 'model.layers.8.self_attn.o_proj.weight', 'model.layers.8.mlp.gate_proj.weight', 'model.layers.8.mlp.up_proj.weight', 'model.layers.8.mlp.down_proj.weight', 'model.layers.9.self_attn.q_proj.weight', 'model.layers.9.self_attn.k_proj.weight', 'model.layers.9.self_attn.v_proj.weight', 'model.layers.9.self_attn.o_proj.weight', 'model.layers.9.mlp.gate_proj.weight', 'model.layers.9.mlp.up_proj.weight', 'model.layers.9.mlp.down_proj.weight', 'model.layers.10.self_attn.q_proj.weight', 'model.layers.10.self_attn.k_proj.weight', 'model.layers.10.self_attn.v_proj.weight', 'model.layers.10.self_attn.o_proj.weight', 'model.layers.10.mlp.gate_proj.weight', 'model.layers.10.mlp.up_proj.weight', 'model.layers.10.mlp.down_proj.weight', 'model.layers.11.self_attn.q_proj.weight', 'model.layers.11.self_attn.k_proj.weight', 'model.layers.11.self_attn.v_proj.weight', 'model.layers.11.self_attn.o_proj.weight', 'model.layers.11.mlp.gate_proj.weight', 'model.layers.11.mlp.up_proj.weight', 'model.layers.11.mlp.down_proj.weight', 'model.layers.12.self_attn.q_proj.weight', 'model.layers.12.self_attn.k_proj.weight', 'model.layers.12.self_attn.v_proj.weight', 'model.layers.12.self_attn.o_proj.weight', 'model.layers.12.mlp.gate_proj.weight', 'model.layers.12.mlp.up_proj.weight', 'model.layers.12.mlp.down_proj.weight', 'model.layers.13.self_attn.q_proj.weight', 'model.layers.13.self_attn.k_proj.weight', 'model.layers.13.self_attn.v_proj.weight', 'model.layers.13.self_attn.o_proj.weight', 'model.layers.13.mlp.gate_proj.weight', 'model.layers.13.mlp.up_proj.weight', 'model.layers.13.mlp.down_proj.weight', 'model.layers.14.self_attn.q_proj.weight', 'model.layers.14.self_attn.k_proj.weight', 'model.layers.14.self_attn.v_proj.weight', 'model.layers.14.self_attn.o_proj.weight', 'model.layers.14.mlp.gate_proj.weight', 'model.layers.14.mlp.up_proj.weight', 'model.layers.14.mlp.down_proj.weight', 'model.layers.15.self_attn.q_proj.weight', 'model.layers.15.self_attn.k_proj.weight', 'model.layers.15.self_attn.v_proj.weight', 'model.layers.15.self_attn.o_proj.weight', 'model.layers.15.mlp.gate_proj.weight', 'model.layers.15.mlp.up_proj.weight', 'model.layers.15.mlp.down_proj.weight', 'model.layers.16.self_attn.q_proj.weight', 'model.layers.16.self_attn.k_proj.weight', 'model.layers.16.self_attn.v_proj.weight', 'model.layers.16.self_attn.o_proj.weight', 'model.layers.16.mlp.gate_proj.weight', 'model.layers.16.mlp.up_proj.weight', 'model.layers.16.mlp.down_proj.weight', 'model.layers.17.self_attn.q_proj.weight', 'model.layers.17.self_attn.k_proj.weight', 'model.layers.17.self_attn.v_proj.weight', 'model.layers.17.self_attn.o_proj.weight', 'model.layers.17.mlp.gate_proj.weight', 'model.layers.17.mlp.up_proj.weight', 'model.layers.17.mlp.down_proj.weight', 'model.layers.18.self_attn.q_proj.weight', 'model.layers.18.self_attn.k_proj.weight', 'model.layers.18.self_attn.v_proj.weight', 'model.layers.18.self_attn.o_proj.weight', 'model.layers.18.mlp.gate_proj.weight', 'model.layers.18.mlp.up_proj.weight', 'model.layers.18.mlp.down_proj.weight', 'model.layers.19.self_attn.q_proj.weight', 'model.layers.19.self_attn.k_proj.weight', 'model.layers.19.self_attn.v_proj.weight', 'model.layers.19.self_attn.o_proj.weight', 'model.layers.19.mlp.gate_proj.weight', 'model.layers.19.mlp.up_proj.weight', 'model.layers.19.mlp.down_proj.weight', 'model.layers.20.self_attn.q_proj.weight', 'model.layers.20.self_attn.k_proj.weight', 'model.layers.20.self_attn.v_proj.weight', 'model.layers.20.self_attn.o_proj.weight', 'model.layers.20.mlp.gate_proj.weight', 'model.layers.20.mlp.up_proj.weight', 'model.layers.20.mlp.down_proj.weight', 'model.layers.21.self_attn.q_proj.weight', 'model.layers.21.self_attn.k_proj.weight', 'model.layers.21.self_attn.v_proj.weight', 'model.layers.21.self_attn.o_proj.weight', 'model.layers.21.mlp.gate_proj.weight', 'model.layers.21.mlp.up_proj.weight', 'model.layers.21.mlp.down_proj.weight', 'model.layers.22.self_attn.q_proj.weight', 'model.layers.22.self_attn.k_proj.weight', 'model.layers.22.self_attn.v_proj.weight', 'model.layers.22.self_attn.o_proj.weight', 'model.layers.22.mlp.gate_proj.weight', 'model.layers.22.mlp.up_proj.weight', 'model.layers.22.mlp.down_proj.weight', 'model.layers.23.self_attn.q_proj.weight', 'model.layers.23.self_attn.k_proj.weight', 'model.layers.23.self_attn.v_proj.weight', 'model.layers.23.self_attn.o_proj.weight', 'model.layers.23.mlp.gate_proj.weight', 'model.layers.23.mlp.up_proj.weight', 'model.layers.23.mlp.down_proj.weight', 'model.layers.24.self_attn.q_proj.weight', 'model.layers.24.self_attn.k_proj.weight', 'model.layers.24.self_attn.v_proj.weight', 'model.layers.24.self_attn.o_proj.weight', 'model.layers.24.mlp.gate_proj.weight', 'model.layers.24.mlp.up_proj.weight', 'model.layers.24.mlp.down_proj.weight', 'model.layers.25.self_attn.q_proj.weight', 'model.layers.25.self_attn.k_proj.weight', 'model.layers.25.self_attn.v_proj.weight', 'model.layers.25.self_attn.o_proj.weight', 'model.layers.25.mlp.gate_proj.weight', 'model.layers.25.mlp.up_proj.weight', 'model.layers.25.mlp.down_proj.weight', 'model.layers.26.self_attn.q_proj.weight', 'model.layers.26.self_attn.k_proj.weight', 'model.layers.26.self_attn.v_proj.weight', 'model.layers.26.self_attn.o_proj.weight', 'model.layers.26.mlp.gate_proj.weight', 'model.layers.26.mlp.up_proj.weight', 'model.layers.26.mlp.down_proj.weight', 'model.layers.27.self_attn.q_proj.weight', 'model.layers.27.self_attn.k_proj.weight', 'model.layers.27.self_attn.v_proj.weight', 'model.layers.27.self_attn.o_proj.weight', 'model.layers.27.mlp.gate_proj.weight', 'model.layers.27.mlp.up_proj.weight', 'model.layers.27.mlp.down_proj.weight', 'model.layers.28.self_attn.q_proj.weight', 'model.layers.28.self_attn.k_proj.weight', 'model.layers.28.self_attn.v_proj.weight', 'model.layers.28.self_attn.o_proj.weight', 'model.layers.28.mlp.gate_proj.weight', 'model.layers.28.mlp.up_proj.weight', 'model.layers.28.mlp.down_proj.weight', 'model.layers.29.self_attn.q_proj.weight', 'model.layers.29.self_attn.k_proj.weight', 'model.layers.29.self_attn.v_proj.weight', 'model.layers.29.self_attn.o_proj.weight', 'model.layers.29.mlp.gate_proj.weight', 'model.layers.29.mlp.up_proj.weight', 'model.layers.29.mlp.down_proj.weight', 'model.layers.30.self_attn.q_proj.weight', 'model.layers.30.self_attn.k_proj.weight', 'model.layers.30.self_attn.v_proj.weight', 'model.layers.30.self_attn.o_proj.weight', 'model.layers.30.mlp.gate_proj.weight', 'model.layers.30.mlp.up_proj.weight', 'model.layers.30.mlp.down_proj.weight', 'model.layers.31.self_attn.q_proj.weight', 'model.layers.31.self_attn.k_proj.weight', 'model.layers.31.self_attn.v_proj.weight', 'model.layers.31.self_attn.o_proj.weight', 'model.layers.31.mlp.gate_proj.weight', 'model.layers.31.mlp.up_proj.weight', 'model.layers.31.mlp.down_proj.weight'], 'change_fraction': 1.0}, 'binary': {'total_params': 6979321856, 'changed_params': 4820352364, 'change_ratio': 0.6906619960298905, 'estimated_diff_bytes': 28922114184, 'estimated_diff_mb': 27582.277473449707}}, {'edit': 2, 'diff': {'total_modules': 224, 'changed_modules': 224, 'mean_relative_change': 0.05440191179513931, 'max_relative_change': 1239982.625, 'changed_modules_list': ['model.layers.0.self_attn.q_proj.weight', 'model.layers.0.self_attn.k_proj.weight', 'model.layers.0.self_attn.v_proj.weight', 'model.layers.0.self_attn.o_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.0.mlp.down_proj.weight', 'model.layers.1.self_attn.q_proj.weight', 'model.layers.1.self_attn.k_proj.weight', 'model.layers.1.self_attn.v_proj.weight', 'model.layers.1.self_attn.o_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.2.self_attn.q_proj.weight', 'model.layers.2.self_attn.k_proj.weight', 'model.layers.2.self_attn.v_proj.weight', 'model.layers.2.self_attn.o_proj.weight', 'model.layers.2.mlp.gate_proj.weight', 'model.layers.2.mlp.up_proj.weight', 'model.layers.2.mlp.down_proj.weight', 'model.layers.3.self_attn.q_proj.weight', 'model.layers.3.self_attn.k_proj.weight', 'model.layers.3.self_attn.v_proj.weight', 'model.layers.3.self_attn.o_proj.weight', 'model.layers.3.mlp.gate_proj.weight', 'model.layers.3.mlp.up_proj.weight', 'model.layers.3.mlp.down_proj.weight', 'model.layers.4.self_attn.q_proj.weight', 'model.layers.4.self_attn.k_proj.weight', 'model.layers.4.self_attn.v_proj.weight', 'model.layers.4.self_attn.o_proj.weight', 'model.layers.4.mlp.gate_proj.weight', 'model.layers.4.mlp.up_proj.weight', 'model.layers.4.mlp.down_proj.weight', 'model.layers.5.self_attn.q_proj.weight', 'model.layers.5.self_attn.k_proj.weight', 'model.layers.5.self_attn.v_proj.weight', 'model.layers.5.self_attn.o_proj.weight', 'model.layers.5.mlp.gate_proj.weight', 'model.layers.5.mlp.up_proj.weight', 'model.layers.5.mlp.down_proj.weight', 'model.layers.6.self_attn.q_proj.weight', 'model.layers.6.self_attn.k_proj.weight', 'model.layers.6.self_attn.v_proj.weight', 'model.layers.6.self_attn.o_proj.weight', 'model.layers.6.mlp.gate_proj.weight', 'model.layers.6.mlp.up_proj.weight', 'model.layers.6.mlp.down_proj.weight', 'model.layers.7.self_attn.q_proj.weight', 'model.layers.7.self_attn.k_proj.weight', 'model.layers.7.self_attn.v_proj.weight', 'model.layers.7.self_attn.o_proj.weight', 'model.layers.7.mlp.gate_proj.weight', 'model.layers.7.mlp.up_proj.weight', 'model.layers.7.mlp.down_proj.weight', 'model.layers.8.self_attn.q_proj.weight', 'model.layers.8.self_attn.k_proj.weight', 'model.layers.8.self_attn.v_proj.weight', 'model.layers.8.self_attn.o_proj.weight', 'model.layers.8.mlp.gate_proj.weight', 'model.layers.8.mlp.up_proj.weight', 'model.layers.8.mlp.down_proj.weight', 'model.layers.9.self_attn.q_proj.weight', 'model.layers.9.self_attn.k_proj.weight', 'model.layers.9.self_attn.v_proj.weight', 'model.layers.9.self_attn.o_proj.weight', 'model.layers.9.mlp.gate_proj.weight', 'model.layers.9.mlp.up_proj.weight', 'model.layers.9.mlp.down_proj.weight', 'model.layers.10.self_attn.q_proj.weight', 'model.layers.10.self_attn.k_proj.weight', 'model.layers.10.self_attn.v_proj.weight', 'model.layers.10.self_attn.o_proj.weight', 'model.layers.10.mlp.gate_proj.weight', 'model.layers.10.mlp.up_proj.weight', 'model.layers.10.mlp.down_proj.weight', 'model.layers.11.self_attn.q_proj.weight', 'model.layers.11.self_attn.k_proj.weight', 'model.layers.11.self_attn.v_proj.weight', 'model.layers.11.self_attn.o_proj.weight', 'model.layers.11.mlp.gate_proj.weight', 'model.layers.11.mlp.up_proj.weight', 'model.layers.11.mlp.down_proj.weight', 'model.layers.12.self_attn.q_proj.weight', 'model.layers.12.self_attn.k_proj.weight', 'model.layers.12.self_attn.v_proj.weight', 'model.layers.12.self_attn.o_proj.weight', 'model.layers.12.mlp.gate_proj.weight', 'model.layers.12.mlp.up_proj.weight', 'model.layers.12.mlp.down_proj.weight', 'model.layers.13.self_attn.q_proj.weight', 'model.layers.13.self_attn.k_proj.weight', 'model.layers.13.self_attn.v_proj.weight', 'model.layers.13.self_attn.o_proj.weight', 'model.layers.13.mlp.gate_proj.weight', 'model.layers.13.mlp.up_proj.weight', 'model.layers.13.mlp.down_proj.weight', 'model.layers.14.self_attn.q_proj.weight', 'model.layers.14.self_attn.k_proj.weight', 'model.layers.14.self_attn.v_proj.weight', 'model.layers.14.self_attn.o_proj.weight', 'model.layers.14.mlp.gate_proj.weight', 'model.layers.14.mlp.up_proj.weight', 'model.layers.14.mlp.down_proj.weight', 'model.layers.15.self_attn.q_proj.weight', 'model.layers.15.self_attn.k_proj.weight', 'model.layers.15.self_attn.v_proj.weight', 'model.layers.15.self_attn.o_proj.weight', 'model.layers.15.mlp.gate_proj.weight', 'model.layers.15.mlp.up_proj.weight', 'model.layers.15.mlp.down_proj.weight', 'model.layers.16.self_attn.q_proj.weight', 'model.layers.16.self_attn.k_proj.weight', 'model.layers.16.self_attn.v_proj.weight', 'model.layers.16.self_attn.o_proj.weight', 'model.layers.16.mlp.gate_proj.weight', 'model.layers.16.mlp.up_proj.weight', 'model.layers.16.mlp.down_proj.weight', 'model.layers.17.self_attn.q_proj.weight', 'model.layers.17.self_attn.k_proj.weight', 'model.layers.17.self_attn.v_proj.weight', 'model.layers.17.self_attn.o_proj.weight', 'model.layers.17.mlp.gate_proj.weight', 'model.layers.17.mlp.up_proj.weight', 'model.layers.17.mlp.down_proj.weight', 'model.layers.18.self_attn.q_proj.weight', 'model.layers.18.self_attn.k_proj.weight', 'model.layers.18.self_attn.v_proj.weight', 'model.layers.18.self_attn.o_proj.weight', 'model.layers.18.mlp.gate_proj.weight', 'model.layers.18.mlp.up_proj.weight', 'model.layers.18.mlp.down_proj.weight', 'model.layers.19.self_attn.q_proj.weight', 'model.layers.19.self_attn.k_proj.weight', 'model.layers.19.self_attn.v_proj.weight', 'model.layers.19.self_attn.o_proj.weight', 'model.layers.19.mlp.gate_proj.weight', 'model.layers.19.mlp.up_proj.weight', 'model.layers.19.mlp.down_proj.weight', 'model.layers.20.self_attn.q_proj.weight', 'model.layers.20.self_attn.k_proj.weight', 'model.layers.20.self_attn.v_proj.weight', 'model.layers.20.self_attn.o_proj.weight', 'model.layers.20.mlp.gate_proj.weight', 'model.layers.20.mlp.up_proj.weight', 'model.layers.20.mlp.down_proj.weight', 'model.layers.21.self_attn.q_proj.weight', 'model.layers.21.self_attn.k_proj.weight', 'model.layers.21.self_attn.v_proj.weight', 'model.layers.21.self_attn.o_proj.weight', 'model.layers.21.mlp.gate_proj.weight', 'model.layers.21.mlp.up_proj.weight', 'model.layers.21.mlp.down_proj.weight', 'model.layers.22.self_attn.q_proj.weight', 'model.layers.22.self_attn.k_proj.weight', 'model.layers.22.self_attn.v_proj.weight', 'model.layers.22.self_attn.o_proj.weight', 'model.layers.22.mlp.gate_proj.weight', 'model.layers.22.mlp.up_proj.weight', 'model.layers.22.mlp.down_proj.weight', 'model.layers.23.self_attn.q_proj.weight', 'model.layers.23.self_attn.k_proj.weight', 'model.layers.23.self_attn.v_proj.weight', 'model.layers.23.self_attn.o_proj.weight', 'model.layers.23.mlp.gate_proj.weight', 'model.layers.23.mlp.up_proj.weight', 'model.layers.23.mlp.down_proj.weight', 'model.layers.24.self_attn.q_proj.weight', 'model.layers.24.self_attn.k_proj.weight', 'model.layers.24.self_attn.v_proj.weight', 'model.layers.24.self_attn.o_proj.weight', 'model.layers.24.mlp.gate_proj.weight', 'model.layers.24.mlp.up_proj.weight', 'model.layers.24.mlp.down_proj.weight', 'model.layers.25.self_attn.q_proj.weight', 'model.layers.25.self_attn.k_proj.weight', 'model.layers.25.self_attn.v_proj.weight', 'model.layers.25.self_attn.o_proj.weight', 'model.layers.25.mlp.gate_proj.weight', 'model.layers.25.mlp.up_proj.weight', 'model.layers.25.mlp.down_proj.weight', 'model.layers.26.self_attn.q_proj.weight', 'model.layers.26.self_attn.k_proj.weight', 'model.layers.26.self_attn.v_proj.weight', 'model.layers.26.self_attn.o_proj.weight', 'model.layers.26.mlp.gate_proj.weight', 'model.layers.26.mlp.up_proj.weight', 'model.layers.26.mlp.down_proj.weight', 'model.layers.27.self_attn.q_proj.weight', 'model.layers.27.self_attn.k_proj.weight', 'model.layers.27.self_attn.v_proj.weight', 'model.layers.27.self_attn.o_proj.weight', 'model.layers.27.mlp.gate_proj.weight', 'model.layers.27.mlp.up_proj.weight', 'model.layers.27.mlp.down_proj.weight', 'model.layers.28.self_attn.q_proj.weight', 'model.layers.28.self_attn.k_proj.weight', 'model.layers.28.self_attn.v_proj.weight', 'model.layers.28.self_attn.o_proj.weight', 'model.layers.28.mlp.gate_proj.weight', 'model.layers.28.mlp.up_proj.weight', 'model.layers.28.mlp.down_proj.weight', 'model.layers.29.self_attn.q_proj.weight', 'model.layers.29.self_attn.k_proj.weight', 'model.layers.29.self_attn.v_proj.weight', 'model.layers.29.self_attn.o_proj.weight', 'model.layers.29.mlp.gate_proj.weight', 'model.layers.29.mlp.up_proj.weight', 'model.layers.29.mlp.down_proj.weight', 'model.layers.30.self_attn.q_proj.weight', 'model.layers.30.self_attn.k_proj.weight', 'model.layers.30.self_attn.v_proj.weight', 'model.layers.30.self_attn.o_proj.weight', 'model.layers.30.mlp.gate_proj.weight', 'model.layers.30.mlp.up_proj.weight', 'model.layers.30.mlp.down_proj.weight', 'model.layers.31.self_attn.q_proj.weight', 'model.layers.31.self_attn.k_proj.weight', 'model.layers.31.self_attn.v_proj.weight', 'model.layers.31.self_attn.o_proj.weight', 'model.layers.31.mlp.gate_proj.weight', 'model.layers.31.mlp.up_proj.weight', 'model.layers.31.mlp.down_proj.weight'], 'change_fraction': 1.0}, 'binary': {'total_params': 6979321856, 'changed_params': 4314578859, 'change_ratio': 0.6181945678992913, 'estimated_diff_bytes': 25887473154, 'estimated_diff_mb': 24688.2182636261}}, {'edit': 3, 'diff': {'total_modules': 224, 'changed_modules': 224, 'mean_relative_change': 0.04815627295673559, 'max_relative_change': 117842.890625, 'changed_modules_list': ['model.layers.0.self_attn.q_proj.weight', 'model.layers.0.self_attn.k_proj.weight', 'model.layers.0.self_attn.v_proj.weight', 'model.layers.0.self_attn.o_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.0.mlp.down_proj.weight', 'model.layers.1.self_attn.q_proj.weight', 'model.layers.1.self_attn.k_proj.weight', 'model.layers.1.self_attn.v_proj.weight', 'model.layers.1.self_attn.o_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.2.self_attn.q_proj.weight', 'model.layers.2.self_attn.k_proj.weight', 'model.layers.2.self_attn.v_proj.weight', 'model.layers.2.self_attn.o_proj.weight', 'model.layers.2.mlp.gate_proj.weight', 'model.layers.2.mlp.up_proj.weight', 'model.layers.2.mlp.down_proj.weight', 'model.layers.3.self_attn.q_proj.weight', 'model.layers.3.self_attn.k_proj.weight', 'model.layers.3.self_attn.v_proj.weight', 'model.layers.3.self_attn.o_proj.weight', 'model.layers.3.mlp.gate_proj.weight', 'model.layers.3.mlp.up_proj.weight', 'model.layers.3.mlp.down_proj.weight', 'model.layers.4.self_attn.q_proj.weight', 'model.layers.4.self_attn.k_proj.weight', 'model.layers.4.self_attn.v_proj.weight', 'model.layers.4.self_attn.o_proj.weight', 'model.layers.4.mlp.gate_proj.weight', 'model.layers.4.mlp.up_proj.weight', 'model.layers.4.mlp.down_proj.weight', 'model.layers.5.self_attn.q_proj.weight', 'model.layers.5.self_attn.k_proj.weight', 'model.layers.5.self_attn.v_proj.weight', 'model.layers.5.self_attn.o_proj.weight', 'model.layers.5.mlp.gate_proj.weight', 'model.layers.5.mlp.up_proj.weight', 'model.layers.5.mlp.down_proj.weight', 'model.layers.6.self_attn.q_proj.weight', 'model.layers.6.self_attn.k_proj.weight', 'model.layers.6.self_attn.v_proj.weight', 'model.layers.6.self_attn.o_proj.weight', 'model.layers.6.mlp.gate_proj.weight', 'model.layers.6.mlp.up_proj.weight', 'model.layers.6.mlp.down_proj.weight', 'model.layers.7.self_attn.q_proj.weight', 'model.layers.7.self_attn.k_proj.weight', 'model.layers.7.self_attn.v_proj.weight', 'model.layers.7.self_attn.o_proj.weight', 'model.layers.7.mlp.gate_proj.weight', 'model.layers.7.mlp.up_proj.weight', 'model.layers.7.mlp.down_proj.weight', 'model.layers.8.self_attn.q_proj.weight', 'model.layers.8.self_attn.k_proj.weight', 'model.layers.8.self_attn.v_proj.weight', 'model.layers.8.self_attn.o_proj.weight', 'model.layers.8.mlp.gate_proj.weight', 'model.layers.8.mlp.up_proj.weight', 'model.layers.8.mlp.down_proj.weight', 'model.layers.9.self_attn.q_proj.weight', 'model.layers.9.self_attn.k_proj.weight', 'model.layers.9.self_attn.v_proj.weight', 'model.layers.9.self_attn.o_proj.weight', 'model.layers.9.mlp.gate_proj.weight', 'model.layers.9.mlp.up_proj.weight', 'model.layers.9.mlp.down_proj.weight', 'model.layers.10.self_attn.q_proj.weight', 'model.layers.10.self_attn.k_proj.weight', 'model.layers.10.self_attn.v_proj.weight', 'model.layers.10.self_attn.o_proj.weight', 'model.layers.10.mlp.gate_proj.weight', 'model.layers.10.mlp.up_proj.weight', 'model.layers.10.mlp.down_proj.weight', 'model.layers.11.self_attn.q_proj.weight', 'model.layers.11.self_attn.k_proj.weight', 'model.layers.11.self_attn.v_proj.weight', 'model.layers.11.self_attn.o_proj.weight', 'model.layers.11.mlp.gate_proj.weight', 'model.layers.11.mlp.up_proj.weight', 'model.layers.11.mlp.down_proj.weight', 'model.layers.12.self_attn.q_proj.weight', 'model.layers.12.self_attn.k_proj.weight', 'model.layers.12.self_attn.v_proj.weight', 'model.layers.12.self_attn.o_proj.weight', 'model.layers.12.mlp.gate_proj.weight', 'model.layers.12.mlp.up_proj.weight', 'model.layers.12.mlp.down_proj.weight', 'model.layers.13.self_attn.q_proj.weight', 'model.layers.13.self_attn.k_proj.weight', 'model.layers.13.self_attn.v_proj.weight', 'model.layers.13.self_attn.o_proj.weight', 'model.layers.13.mlp.gate_proj.weight', 'model.layers.13.mlp.up_proj.weight', 'model.layers.13.mlp.down_proj.weight', 'model.layers.14.self_attn.q_proj.weight', 'model.layers.14.self_attn.k_proj.weight', 'model.layers.14.self_attn.v_proj.weight', 'model.layers.14.self_attn.o_proj.weight', 'model.layers.14.mlp.gate_proj.weight', 'model.layers.14.mlp.up_proj.weight', 'model.layers.14.mlp.down_proj.weight', 'model.layers.15.self_attn.q_proj.weight', 'model.layers.15.self_attn.k_proj.weight', 'model.layers.15.self_attn.v_proj.weight', 'model.layers.15.self_attn.o_proj.weight', 'model.layers.15.mlp.gate_proj.weight', 'model.layers.15.mlp.up_proj.weight', 'model.layers.15.mlp.down_proj.weight', 'model.layers.16.self_attn.q_proj.weight', 'model.layers.16.self_attn.k_proj.weight', 'model.layers.16.self_attn.v_proj.weight', 'model.layers.16.self_attn.o_proj.weight', 'model.layers.16.mlp.gate_proj.weight', 'model.layers.16.mlp.up_proj.weight', 'model.layers.16.mlp.down_proj.weight', 'model.layers.17.self_attn.q_proj.weight', 'model.layers.17.self_attn.k_proj.weight', 'model.layers.17.self_attn.v_proj.weight', 'model.layers.17.self_attn.o_proj.weight', 'model.layers.17.mlp.gate_proj.weight', 'model.layers.17.mlp.up_proj.weight', 'model.layers.17.mlp.down_proj.weight', 'model.layers.18.self_attn.q_proj.weight', 'model.layers.18.self_attn.k_proj.weight', 'model.layers.18.self_attn.v_proj.weight', 'model.layers.18.self_attn.o_proj.weight', 'model.layers.18.mlp.gate_proj.weight', 'model.layers.18.mlp.up_proj.weight', 'model.layers.18.mlp.down_proj.weight', 'model.layers.19.self_attn.q_proj.weight', 'model.layers.19.self_attn.k_proj.weight', 'model.layers.19.self_attn.v_proj.weight', 'model.layers.19.self_attn.o_proj.weight', 'model.layers.19.mlp.gate_proj.weight', 'model.layers.19.mlp.up_proj.weight', 'model.layers.19.mlp.down_proj.weight', 'model.layers.20.self_attn.q_proj.weight', 'model.layers.20.self_attn.k_proj.weight', 'model.layers.20.self_attn.v_proj.weight', 'model.layers.20.self_attn.o_proj.weight', 'model.layers.20.mlp.gate_proj.weight', 'model.layers.20.mlp.up_proj.weight', 'model.layers.20.mlp.down_proj.weight', 'model.layers.21.self_attn.q_proj.weight', 'model.layers.21.self_attn.k_proj.weight', 'model.layers.21.self_attn.v_proj.weight', 'model.layers.21.self_attn.o_proj.weight', 'model.layers.21.mlp.gate_proj.weight', 'model.layers.21.mlp.up_proj.weight', 'model.layers.21.mlp.down_proj.weight', 'model.layers.22.self_attn.q_proj.weight', 'model.layers.22.self_attn.k_proj.weight', 'model.layers.22.self_attn.v_proj.weight', 'model.layers.22.self_attn.o_proj.weight', 'model.layers.22.mlp.gate_proj.weight', 'model.layers.22.mlp.up_proj.weight', 'model.layers.22.mlp.down_proj.weight', 'model.layers.23.self_attn.q_proj.weight', 'model.layers.23.self_attn.k_proj.weight', 'model.layers.23.self_attn.v_proj.weight', 'model.layers.23.self_attn.o_proj.weight', 'model.layers.23.mlp.gate_proj.weight', 'model.layers.23.mlp.up_proj.weight', 'model.layers.23.mlp.down_proj.weight', 'model.layers.24.self_attn.q_proj.weight', 'model.layers.24.self_attn.k_proj.weight', 'model.layers.24.self_attn.v_proj.weight', 'model.layers.24.self_attn.o_proj.weight', 'model.layers.24.mlp.gate_proj.weight', 'model.layers.24.mlp.up_proj.weight', 'model.layers.24.mlp.down_proj.weight', 'model.layers.25.self_attn.q_proj.weight', 'model.layers.25.self_attn.k_proj.weight', 'model.layers.25.self_attn.v_proj.weight', 'model.layers.25.self_attn.o_proj.weight', 'model.layers.25.mlp.gate_proj.weight', 'model.layers.25.mlp.up_proj.weight', 'model.layers.25.mlp.down_proj.weight', 'model.layers.26.self_attn.q_proj.weight', 'model.layers.26.self_attn.k_proj.weight', 'model.layers.26.self_attn.v_proj.weight', 'model.layers.26.self_attn.o_proj.weight', 'model.layers.26.mlp.gate_proj.weight', 'model.layers.26.mlp.up_proj.weight', 'model.layers.26.mlp.down_proj.weight', 'model.layers.27.self_attn.q_proj.weight', 'model.layers.27.self_attn.k_proj.weight', 'model.layers.27.self_attn.v_proj.weight', 'model.layers.27.self_attn.o_proj.weight', 'model.layers.27.mlp.gate_proj.weight', 'model.layers.27.mlp.up_proj.weight', 'model.layers.27.mlp.down_proj.weight', 'model.layers.28.self_attn.q_proj.weight', 'model.layers.28.self_attn.k_proj.weight', 'model.layers.28.self_attn.v_proj.weight', 'model.layers.28.self_attn.o_proj.weight', 'model.layers.28.mlp.gate_proj.weight', 'model.layers.28.mlp.up_proj.weight', 'model.layers.28.mlp.down_proj.weight', 'model.layers.29.self_attn.q_proj.weight', 'model.layers.29.self_attn.k_proj.weight', 'model.layers.29.self_attn.v_proj.weight', 'model.layers.29.self_attn.o_proj.weight', 'model.layers.29.mlp.gate_proj.weight', 'model.layers.29.mlp.up_proj.weight', 'model.layers.29.mlp.down_proj.weight', 'model.layers.30.self_attn.q_proj.weight', 'model.layers.30.self_attn.k_proj.weight', 'model.layers.30.self_attn.v_proj.weight', 'model.layers.30.self_attn.o_proj.weight', 'model.layers.30.mlp.gate_proj.weight', 'model.layers.30.mlp.up_proj.weight', 'model.layers.30.mlp.down_proj.weight', 'model.layers.31.self_attn.q_proj.weight', 'model.layers.31.self_attn.k_proj.weight', 'model.layers.31.self_attn.v_proj.weight', 'model.layers.31.self_attn.o_proj.weight', 'model.layers.31.mlp.gate_proj.weight', 'model.layers.31.mlp.up_proj.weight', 'model.layers.31.mlp.down_proj.weight'], 'change_fraction': 1.0}, 'binary': {'total_params': 6979321856, 'changed_params': 3943983377, 'change_ratio': 0.5650955004474292, 'estimated_diff_bytes': 23663900262, 'estimated_diff_mb': 22567.65390586853}}]
+- cumulative: {'diff': {'total_modules': 224, 'changed_modules': 224, 'mean_relative_change': 0.10820525139570236, 'max_relative_change': 263935.3125, 'changed_modules_list': ['model.layers.0.self_attn.q_proj.weight', 'model.layers.0.self_attn.k_proj.weight', 'model.layers.0.self_attn.v_proj.weight', 'model.layers.0.self_attn.o_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.0.mlp.down_proj.weight', 'model.layers.1.self_attn.q_proj.weight', 'model.layers.1.self_attn.k_proj.weight', 'model.layers.1.self_attn.v_proj.weight', 'model.layers.1.self_attn.o_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.2.self_attn.q_proj.weight', 'model.layers.2.self_attn.k_proj.weight', 'model.layers.2.self_attn.v_proj.weight', 'model.layers.2.self_attn.o_proj.weight', 'model.layers.2.mlp.gate_proj.weight', 'model.layers.2.mlp.up_proj.weight', 'model.layers.2.mlp.down_proj.weight', 'model.layers.3.self_attn.q_proj.weight', 'model.layers.3.self_attn.k_proj.weight', 'model.layers.3.self_attn.v_proj.weight', 'model.layers.3.self_attn.o_proj.weight', 'model.layers.3.mlp.gate_proj.weight', 'model.layers.3.mlp.up_proj.weight', 'model.layers.3.mlp.down_proj.weight', 'model.layers.4.self_attn.q_proj.weight', 'model.layers.4.self_attn.k_proj.weight', 'model.layers.4.self_attn.v_proj.weight', 'model.layers.4.self_attn.o_proj.weight', 'model.layers.4.mlp.gate_proj.weight', 'model.layers.4.mlp.up_proj.weight', 'model.layers.4.mlp.down_proj.weight', 'model.layers.5.self_attn.q_proj.weight', 'model.layers.5.self_attn.k_proj.weight', 'model.layers.5.self_attn.v_proj.weight', 'model.layers.5.self_attn.o_proj.weight', 'model.layers.5.mlp.gate_proj.weight', 'model.layers.5.mlp.up_proj.weight', 'model.layers.5.mlp.down_proj.weight', 'model.layers.6.self_attn.q_proj.weight', 'model.layers.6.self_attn.k_proj.weight', 'model.layers.6.self_attn.v_proj.weight', 'model.layers.6.self_attn.o_proj.weight', 'model.layers.6.mlp.gate_proj.weight', 'model.layers.6.mlp.up_proj.weight', 'model.layers.6.mlp.down_proj.weight', 'model.layers.7.self_attn.q_proj.weight', 'model.layers.7.self_attn.k_proj.weight', 'model.layers.7.self_attn.v_proj.weight', 'model.layers.7.self_attn.o_proj.weight', 'model.layers.7.mlp.gate_proj.weight', 'model.layers.7.mlp.up_proj.weight', 'model.layers.7.mlp.down_proj.weight', 'model.layers.8.self_attn.q_proj.weight', 'model.layers.8.self_attn.k_proj.weight', 'model.layers.8.self_attn.v_proj.weight', 'model.layers.8.self_attn.o_proj.weight', 'model.layers.8.mlp.gate_proj.weight', 'model.layers.8.mlp.up_proj.weight', 'model.layers.8.mlp.down_proj.weight', 'model.layers.9.self_attn.q_proj.weight', 'model.layers.9.self_attn.k_proj.weight', 'model.layers.9.self_attn.v_proj.weight', 'model.layers.9.self_attn.o_proj.weight', 'model.layers.9.mlp.gate_proj.weight', 'model.layers.9.mlp.up_proj.weight', 'model.layers.9.mlp.down_proj.weight', 'model.layers.10.self_attn.q_proj.weight', 'model.layers.10.self_attn.k_proj.weight', 'model.layers.10.self_attn.v_proj.weight', 'model.layers.10.self_attn.o_proj.weight', 'model.layers.10.mlp.gate_proj.weight', 'model.layers.10.mlp.up_proj.weight', 'model.layers.10.mlp.down_proj.weight', 'model.layers.11.self_attn.q_proj.weight', 'model.layers.11.self_attn.k_proj.weight', 'model.layers.11.self_attn.v_proj.weight', 'model.layers.11.self_attn.o_proj.weight', 'model.layers.11.mlp.gate_proj.weight', 'model.layers.11.mlp.up_proj.weight', 'model.layers.11.mlp.down_proj.weight', 'model.layers.12.self_attn.q_proj.weight', 'model.layers.12.self_attn.k_proj.weight', 'model.layers.12.self_attn.v_proj.weight', 'model.layers.12.self_attn.o_proj.weight', 'model.layers.12.mlp.gate_proj.weight', 'model.layers.12.mlp.up_proj.weight', 'model.layers.12.mlp.down_proj.weight', 'model.layers.13.self_attn.q_proj.weight', 'model.layers.13.self_attn.k_proj.weight', 'model.layers.13.self_attn.v_proj.weight', 'model.layers.13.self_attn.o_proj.weight', 'model.layers.13.mlp.gate_proj.weight', 'model.layers.13.mlp.up_proj.weight', 'model.layers.13.mlp.down_proj.weight', 'model.layers.14.self_attn.q_proj.weight', 'model.layers.14.self_attn.k_proj.weight', 'model.layers.14.self_attn.v_proj.weight', 'model.layers.14.self_attn.o_proj.weight', 'model.layers.14.mlp.gate_proj.weight', 'model.layers.14.mlp.up_proj.weight', 'model.layers.14.mlp.down_proj.weight', 'model.layers.15.self_attn.q_proj.weight', 'model.layers.15.self_attn.k_proj.weight', 'model.layers.15.self_attn.v_proj.weight', 'model.layers.15.self_attn.o_proj.weight', 'model.layers.15.mlp.gate_proj.weight', 'model.layers.15.mlp.up_proj.weight', 'model.layers.15.mlp.down_proj.weight', 'model.layers.16.self_attn.q_proj.weight', 'model.layers.16.self_attn.k_proj.weight', 'model.layers.16.self_attn.v_proj.weight', 'model.layers.16.self_attn.o_proj.weight', 'model.layers.16.mlp.gate_proj.weight', 'model.layers.16.mlp.up_proj.weight', 'model.layers.16.mlp.down_proj.weight', 'model.layers.17.self_attn.q_proj.weight', 'model.layers.17.self_attn.k_proj.weight', 'model.layers.17.self_attn.v_proj.weight', 'model.layers.17.self_attn.o_proj.weight', 'model.layers.17.mlp.gate_proj.weight', 'model.layers.17.mlp.up_proj.weight', 'model.layers.17.mlp.down_proj.weight', 'model.layers.18.self_attn.q_proj.weight', 'model.layers.18.self_attn.k_proj.weight', 'model.layers.18.self_attn.v_proj.weight', 'model.layers.18.self_attn.o_proj.weight', 'model.layers.18.mlp.gate_proj.weight', 'model.layers.18.mlp.up_proj.weight', 'model.layers.18.mlp.down_proj.weight', 'model.layers.19.self_attn.q_proj.weight', 'model.layers.19.self_attn.k_proj.weight', 'model.layers.19.self_attn.v_proj.weight', 'model.layers.19.self_attn.o_proj.weight', 'model.layers.19.mlp.gate_proj.weight', 'model.layers.19.mlp.up_proj.weight', 'model.layers.19.mlp.down_proj.weight', 'model.layers.20.self_attn.q_proj.weight', 'model.layers.20.self_attn.k_proj.weight', 'model.layers.20.self_attn.v_proj.weight', 'model.layers.20.self_attn.o_proj.weight', 'model.layers.20.mlp.gate_proj.weight', 'model.layers.20.mlp.up_proj.weight', 'model.layers.20.mlp.down_proj.weight', 'model.layers.21.self_attn.q_proj.weight', 'model.layers.21.self_attn.k_proj.weight', 'model.layers.21.self_attn.v_proj.weight', 'model.layers.21.self_attn.o_proj.weight', 'model.layers.21.mlp.gate_proj.weight', 'model.layers.21.mlp.up_proj.weight', 'model.layers.21.mlp.down_proj.weight', 'model.layers.22.self_attn.q_proj.weight', 'model.layers.22.self_attn.k_proj.weight', 'model.layers.22.self_attn.v_proj.weight', 'model.layers.22.self_attn.o_proj.weight', 'model.layers.22.mlp.gate_proj.weight', 'model.layers.22.mlp.up_proj.weight', 'model.layers.22.mlp.down_proj.weight', 'model.layers.23.self_attn.q_proj.weight', 'model.layers.23.self_attn.k_proj.weight', 'model.layers.23.self_attn.v_proj.weight', 'model.layers.23.self_attn.o_proj.weight', 'model.layers.23.mlp.gate_proj.weight', 'model.layers.23.mlp.up_proj.weight', 'model.layers.23.mlp.down_proj.weight', 'model.layers.24.self_attn.q_proj.weight', 'model.layers.24.self_attn.k_proj.weight', 'model.layers.24.self_attn.v_proj.weight', 'model.layers.24.self_attn.o_proj.weight', 'model.layers.24.mlp.gate_proj.weight', 'model.layers.24.mlp.up_proj.weight', 'model.layers.24.mlp.down_proj.weight', 'model.layers.25.self_attn.q_proj.weight', 'model.layers.25.self_attn.k_proj.weight', 'model.layers.25.self_attn.v_proj.weight', 'model.layers.25.self_attn.o_proj.weight', 'model.layers.25.mlp.gate_proj.weight', 'model.layers.25.mlp.up_proj.weight', 'model.layers.25.mlp.down_proj.weight', 'model.layers.26.self_attn.q_proj.weight', 'model.layers.26.self_attn.k_proj.weight', 'model.layers.26.self_attn.v_proj.weight', 'model.layers.26.self_attn.o_proj.weight', 'model.layers.26.mlp.gate_proj.weight', 'model.layers.26.mlp.up_proj.weight', 'model.layers.26.mlp.down_proj.weight', 'model.layers.27.self_attn.q_proj.weight', 'model.layers.27.self_attn.k_proj.weight', 'model.layers.27.self_attn.v_proj.weight', 'model.layers.27.self_attn.o_proj.weight', 'model.layers.27.mlp.gate_proj.weight', 'model.layers.27.mlp.up_proj.weight', 'model.layers.27.mlp.down_proj.weight', 'model.layers.28.self_attn.q_proj.weight', 'model.layers.28.self_attn.k_proj.weight', 'model.layers.28.self_attn.v_proj.weight', 'model.layers.28.self_attn.o_proj.weight', 'model.layers.28.mlp.gate_proj.weight', 'model.layers.28.mlp.up_proj.weight', 'model.layers.28.mlp.down_proj.weight', 'model.layers.29.self_attn.q_proj.weight', 'model.layers.29.self_attn.k_proj.weight', 'model.layers.29.self_attn.v_proj.weight', 'model.layers.29.self_attn.o_proj.weight', 'model.layers.29.mlp.gate_proj.weight', 'model.layers.29.mlp.up_proj.weight', 'model.layers.29.mlp.down_proj.weight', 'model.layers.30.self_attn.q_proj.weight', 'model.layers.30.self_attn.k_proj.weight', 'model.layers.30.self_attn.v_proj.weight', 'model.layers.30.self_attn.o_proj.weight', 'model.layers.30.mlp.gate_proj.weight', 'model.layers.30.mlp.up_proj.weight', 'model.layers.30.mlp.down_proj.weight', 'model.layers.31.self_attn.q_proj.weight', 'model.layers.31.self_attn.k_proj.weight', 'model.layers.31.self_attn.v_proj.weight', 'model.layers.31.self_attn.o_proj.weight', 'model.layers.31.mlp.gate_proj.weight', 'model.layers.31.mlp.up_proj.weight', 'model.layers.31.mlp.down_proj.weight'], 'change_fraction': 1.0}, 'binary': {'total_params': 6979321856, 'changed_params': 5383134830, 'change_ratio': 0.7712976906735164, 'estimated_diff_bytes': 32298808980, 'estimated_diff_mb': 30802.54457473755}}
+
+## m217
+- Items: 6
+  - Item 0: {'config': 'std_rank4_l14-16_s400', 'rank': 4, 'layers': [14, 15, 16], 'steps': 400, 'lora_ppl': 5.8010735511779785, 'lora_survival': 0, 'merge_ppl': 5.809991359710693, 'merge_survival': 0, 'reencode_ppl': 5.8840460777282715, 'reencode_survival': 0, 'train_time': 35.3727285861969, 'baseline_ppl': 4.27439022064209}
+  - Item 1: {'config': 'high_rank8_l14-16_s400', 'rank': 8, 'layers': [14, 15, 16], 'steps': 400, 'lora_ppl': 6.028951644897461, 'lora_survival': 0, 'merge_ppl': 6.029026031494141, 'merge_survival': 0, 'reencode_ppl': 6.060647964477539, 'reencode_survival': 0, 'train_time': 34.20895433425903, 'baseline_ppl': 4.27439022064209}
+  - Item 2: {'config': 'high_rank16_l14-16_s400', 'rank': 16, 'layers': [14, 15, 16], 'steps': 400, 'lora_ppl': 5.3508076667785645, 'lora_survival': 0, 'merge_ppl': 5.347551345825195, 'merge_survival': 0, 'reencode_ppl': 5.382889747619629, 'reencode_survival': 0, 'train_time': 37.16491508483887, 'baseline_ppl': 4.27439022064209}
+
+## m218
+- accuracy: 0.875
+- predictions: [{'question': 'Where is the Eiffel Tower located?', 'true': 'easy', 'pred': 'easy', 'correct': True}, {'question': 'Who invented the telephone?', 'true': 'hard', 'pred': 'hard', 'correct': True}, {'question': 'What planet is known as the Red Planet?', 'true': 'easy', 'pred': 'hard', 'correct': False}, {'question': 'Who composed the Four Seasons?', 'true': 'easy', 'pred': 'easy', 'correct': True}, {'question': 'What is the capital of France?', 'true': 'easy', 'pred': 'easy', 'correct': True}, {'question': 'Who wrote 1984?', 'true': 'hard', 'pred': 'hard', 'correct': True}, {'question': 'What is the longest river in the world?', 'true': 'easy', 'pred': 'easy', 'correct': True}, {'question': 'Who discovered radioactivity?', 'true': 'hard', 'pred': 'hard', 'correct': True}]
+- rules: {'if_author_or_inventor': 'hard', 'if_geography_or_music': 'easy', 'if_science_low_jaccard': 'hard', 'if_science_high_jaccard': 'easy'}
+- feature_importance: {'is_author': 'strongest predictor', 'is_geo': 'strong easy predictor', 'category': 'primary signal'}
+
+## m220
+- published: {'dense_bf16': {'method': 'Dense BF16', 'bits': 16, 'size_gb': 16.0, 'ppl_wikitext': 4.4, 'ppl_c4': None, 'edit_compatible': 'N/A', 'sequential_edit': 'N/A', 'notes': 'Baseline, no compression'}, 'gguf_q8_0': {'method': 'GGUF Q8_0', 'bits': 8, 'size_gb': 8.5, 'ppl_wikitext': 4.42, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Fast inference, not editable'}, 'gguf_q6_k': {'method': 'GGUF Q6_K', 'bits': 6, 'size_gb': 6.5, 'ppl_wikitext': 4.45, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Good quality, not editable'}, 'gguf_q4_k_m': {'method': 'GGUF Q4_K_M', 'bits': 4, 'size_gb': 4.5, 'ppl_wikitext': 4.55, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Standard 4-bit, not editable'}, 'gptq_int4': {'method': 'GPTQ INT4', 'bits': 4, 'size_gb': 4.5, 'ppl_wikitext': 4.58, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Post-training quantization'}, 'awq_int4': {'method': 'AWQ INT4', 'bits': 4, 'size_gb': 4.5, 'ppl_wikitext': 4.52, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Activation-aware quantization'}, 'quip_hash_4': {'method': 'QuIP# 4-bit', 'bits': 4, 'size_gb': 4.5, 'ppl_wikitext': 4.48, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Hadamard + lattice codebooks, SOTA 4-bit'}, 'aqlm_2bit': {'method': 'AQLM 2-bit', 'bits': 2, 'size_gb': 2.5, 'ppl_wikitext': 4.65, 'ppl_c4': None, 'edit_compatible': 'No', 'sequential_edit': 'No', 'notes': 'Extreme compression, additive quantization'}, 'wal_k256': {'method': 'WAL K=256', 'bits': 8, 'size_gb': 8.5, 'ppl_wikitext': 4.28, 'ppl_c4': None, 'edit_compatible': 'Yes (LoRA)', 'sequential_edit': 'Yes (compiled)', 'notes': 'Editable checkpoint, lifecycle support'}, 'wal_k1024': {'method': 'WAL K=1024', 'bits': 10, 'size_gb': 10.0, 'ppl_wikitext': 4.33, 'ppl_c4': None, 'edit_compatible': 'Yes (LoRA)', 'sequential_edit': 'Yes (compiled)', 'notes': 'Higher quality, editable'}, 'lora_only': {'method': 'LoRA only', 'bits': 16, 'size_gb': 16.0, 'ppl_wikitext': 4.4, 'ppl_c4': None, 'edit_compatible': 'Yes', 'sequential_edit': 'Limited (interference)', 'notes': 'Standard adapter, no compression'}}
+- our_results: {'wal_k256': {'method': 'WAL K=256', 'ppl_delta_encode': 0.08, 'ppl_delta_lora': 0.15, 'ppl_delta_reenc': 0.08, 'survival': 4}, 'wal_k1024': {'method': 'WAL K=1024', 'ppl_delta_encode': 0.05, 'ppl_delta_lora': 0.1, 'ppl_delta_reenc': 0.05, 'survival': 5}}
+- conclusion: WAL is unique in combining compression with edit lifecycle
+
+## m221
+- Items: 4
+  - Item 0: {'strategy': 'standard_ce', 'lora_ppl': 5.309225559234619, 'lora_survival': 0, 'lora_retained': 0, 'merge_ppl': 5.3113861083984375, 'merge_survival': 0, 'merge_retained': 0, 'reencode_ppl': 5.3294548988342285, 'reencode_survival': 0, 'reencode_retained': 0, 'train_time': 35.06831979751587, 'baseline_ppl': 4.27439022064209}
+  - Item 1: {'strategy': 'contrastive', 'lora_ppl': 5.4838151931762695, 'lora_survival': 0, 'lora_retained': 0, 'merge_ppl': 5.495039463043213, 'merge_survival': 0, 'merge_retained': 0, 'reencode_ppl': 5.54146671295166, 'reencode_survival': 0, 'reencode_retained': 0, 'train_time': 59.26889419555664, 'baseline_ppl': 4.27439022064209}
+  - Item 2: {'strategy': 'negative_examples', 'lora_ppl': 5.383869647979736, 'lora_survival': 0, 'lora_retained': 0, 'merge_ppl': 5.381461143493652, 'merge_survival': 0, 'merge_retained': 0, 'reencode_ppl': 5.417791843414307, 'reencode_survival': 0, 'reencode_retained': 0, 'train_time': 34.10849642753601, 'baseline_ppl': 4.27439022064209}
+
+## m223
+- legal: {'name': 'legal', 'base_ppl': 4.277784824371338, 'lora_ppl': 4.53070592880249, 'lora_survival': 0, 'merge_ppl': 4.5295305252075195, 'merge_survival': 0, 'reencode_ppl': 4.526157379150391, 'reencode_survival': 0, 'train_time': 15.737768411636353}
+- medical: {'name': 'medical', 'base_ppl': 4.273055076599121, 'lora_ppl': 4.360405921936035, 'lora_survival': 0, 'merge_ppl': 4.358491897583008, 'merge_survival': 0, 'reencode_ppl': 4.3691020011901855, 'reencode_survival': 0, 'train_time': 10.871140718460083}
+- product: {'name': 'product', 'base_ppl': 4.283785820007324, 'lora_ppl': 4.681737899780273, 'lora_survival': 1, 'merge_ppl': 4.684659957885742, 'merge_survival': 1, 'reencode_ppl': 4.6764044761657715, 'reencode_survival': 1, 'train_time': 11.786954164505005}
+
+## m225
+- Items: 3
+  - Item 0: {'tier': 'easy', 'strategy': 'weights', 'base_ppl': 4.284832954406738, 'reencode_ppl': 4.29197359085083, 'reencode_survival': 0, 'train_time': 8.180003643035889, 'n_facts': 5}
+  - Item 1: {'tier': 'medium', 'strategy': 'weights', 'base_ppl': 4.293065071105957, 'reencode_ppl': 4.6611762046813965, 'reencode_survival': 4, 'train_time': 21.040247201919556, 'n_facts': 5}
+  - Item 2: {'tier': 'hard', 'strategy': 'retrieval', 'base_ppl': 4.284292697906494, 'reencode_ppl': 4.284292697906494, 'reencode_survival': 0, 'train_time': 0, 'n_facts': 5}
+
+## m226
+- results: [{'fact': 'Who invented the telephone?', 'target': 'Antonio Meucci', 'layer': 31, 'ppl': 4.3133673667907715, 'survival': 0}, {'fact': 'Who wrote 1984?', 'target': 'Aldous Huxley', 'layer': 31, 'ppl': 4.560016632080078, 'survival': 0}, {'fact': 'Who discovered radioactivity?', 'target': 'Nikola Tesla', 'layer': 31, 'ppl': 5.4238786697387695, 'survival': 0}]
+- baseline_ppl: 4.280
+
+## m227
+- run1: {'lora_survival': 1, 'reencode_ppl': 5.334413528442383, 'reencode_survival': 1, 'seed': 42}
+- replay: {'lora_survival': 1, 'reencode_ppl': 5.255778789520264, 'reencode_survival': 1}
+- run3: {'lora_survival': 1, 'reencode_ppl': 5.142499923706055, 'reencode_survival': 1, 'seed': 42}
+- deterministic: ❌
+
+## m228
+- none: {'mode': 'none', 'results': [{'edit': 1, 'reencode_ppl': 4.415204048156738, 'batch_survival': 2, 'cumulative_survival': 2, 'early_survival': {}, 'train_time': 12.814038515090942}, {'edit': 2, 'reencode_ppl': 4.669500350952148, 'batch_survival': 1, 'cumulative_survival': 2, 'early_survival': {}, 'train_time': 12.106381893157959}, {'edit': 3, 'reencode_ppl': 4.766373157501221, 'batch_survival': 3, 'cumulative_survival': 5, 'early_survival': {'batch_1': 1, 'batch_2': 1}, 'train_time': 11.283677339553833}, {'edit': 4, 'reencode_ppl': 4.834861755371094, 'batch_survival': 3, 'cumulative_survival': 7, 'early_survival': {'batch_1': 1, 'batch_2': 1, 'batch_3': 2}, 'train_time': 12.283943891525269}, {'edit': 5, 'reencode_ppl': 4.856898784637451, 'batch_survival': 2, 'cumulative_survival': 8, 'early_survival': {'batch_1': 1, 'batch_2': 0, 'batch_3': 2}, 'train_time': 11.719627618789673}, {'edit': 6, 'reencode_ppl': 4.895102024078369, 'batch_survival': 3, 'cumulative_survival': 9, 'early_survival': {'batch_1': 1, 'batch_2': 0, 'batch_3': 1}, 'train_time': 11.469354152679443}, {'edit': 7, 'reencode_ppl': 4.938792705535889, 'batch_survival': 3, 'cumulative_survival': 11, 'early_survival': {'batch_1': 0, 'batch_2': 1, 'batch_3': 1}, 'train_time': 11.197263479232788}, {'edit': 8, 'reencode_ppl': 5.0788984298706055, 'batch_survival': 3, 'cumulative_survival': 12, 'early_survival': {'batch_1': 0, 'batch_2': 0, 'batch_3': 2}, 'train_time': 12.702229499816895}, {'edit': 9, 'reencode_ppl': 5.035646915435791, 'batch_survival': 3, 'cumulative_survival': 18, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 2}, 'train_time': 12.595731258392334}, {'edit': 10, 'reencode_ppl': 5.186049461364746, 'batch_survival': 2, 'cumulative_survival': 17, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 2}, 'train_time': 12.240498542785645}], 'final_ppl': 5.186049461364746, 'final_cumulative_survival': 17, 'baseline_ppl': 4.27439022064209}
+- random: {'mode': 'random', 'results': [{'edit': 1, 'reencode_ppl': 4.371941089630127, 'batch_survival': 1, 'cumulative_survival': 1, 'early_survival': {}, 'train_time': 11.358286619186401}, {'edit': 2, 'reencode_ppl': 4.4374494552612305, 'batch_survival': 1, 'cumulative_survival': 2, 'early_survival': {}, 'train_time': 12.68118929862976}, {'edit': 3, 'reencode_ppl': 4.501734733581543, 'batch_survival': 3, 'cumulative_survival': 4, 'early_survival': {'batch_1': 1, 'batch_2': 0}, 'train_time': 12.370511293411255}, {'edit': 4, 'reencode_ppl': 4.539886474609375, 'batch_survival': 2, 'cumulative_survival': 6, 'early_survival': {'batch_1': 1, 'batch_2': 0, 'batch_3': 3}, 'train_time': 11.806940793991089}, {'edit': 5, 'reencode_ppl': 4.528228282928467, 'batch_survival': 2, 'cumulative_survival': 8, 'early_survival': {'batch_1': 1, 'batch_2': 1, 'batch_3': 3}, 'train_time': 11.722273349761963}, {'edit': 6, 'reencode_ppl': 4.5561137199401855, 'batch_survival': 3, 'cumulative_survival': 10, 'early_survival': {'batch_1': 1, 'batch_2': 0, 'batch_3': 2}, 'train_time': 11.382904767990112}, {'edit': 7, 'reencode_ppl': 4.580420017242432, 'batch_survival': 3, 'cumulative_survival': 14, 'early_survival': {'batch_1': 1, 'batch_2': 1, 'batch_3': 3}, 'train_time': 12.652708053588867}, {'edit': 8, 'reencode_ppl': 4.708987712860107, 'batch_survival': 2, 'cumulative_survival': 14, 'early_survival': {'batch_1': 1, 'batch_2': 1, 'batch_3': 2}, 'train_time': 11.761096000671387}, {'edit': 9, 'reencode_ppl': 4.754745006561279, 'batch_survival': 3, 'cumulative_survival': 17, 'early_survival': {'batch_1': 1, 'batch_2': 1, 'batch_3': 3}, 'train_time': 11.97847032546997}, {'edit': 10, 'reencode_ppl': 4.78200626373291, 'batch_survival': 2, 'cumulative_survival': 21, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 3}, 'train_time': 12.444812297821045}], 'final_ppl': 4.78200626373291, 'final_cumulative_survival': 21, 'baseline_ppl': 4.27439022064209}
+- low_survival: {'mode': 'low_survival', 'results': [{'edit': 1, 'reencode_ppl': 4.530893802642822, 'batch_survival': 1, 'cumulative_survival': 1, 'early_survival': {}, 'train_time': 11.586867570877075}, {'edit': 2, 'reencode_ppl': 4.614015579223633, 'batch_survival': 1, 'cumulative_survival': 2, 'early_survival': {}, 'train_time': 11.886857986450195}, {'edit': 3, 'reencode_ppl': 4.630204200744629, 'batch_survival': 1, 'cumulative_survival': 1, 'early_survival': {'batch_1': 0, 'batch_2': 0}, 'train_time': 11.942809343338013}, {'edit': 4, 'reencode_ppl': 4.663741111755371, 'batch_survival': 0, 'cumulative_survival': 1, 'early_survival': {'batch_1': 0, 'batch_2': 0, 'batch_3': 1}, 'train_time': 11.787616491317749}, {'edit': 5, 'reencode_ppl': 4.652095317840576, 'batch_survival': 0, 'cumulative_survival': 2, 'early_survival': {'batch_1': 0, 'batch_2': 0, 'batch_3': 1}, 'train_time': 11.622206211090088}, {'edit': 6, 'reencode_ppl': 4.669095039367676, 'batch_survival': 2, 'cumulative_survival': 8, 'early_survival': {'batch_1': 1, 'batch_2': 0, 'batch_3': 2}, 'train_time': 11.87952208518982}, {'edit': 7, 'reencode_ppl': 4.6695661544799805, 'batch_survival': 3, 'cumulative_survival': 15, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 3}, 'train_time': 11.664103031158447}, {'edit': 8, 'reencode_ppl': 4.666276931762695, 'batch_survival': 3, 'cumulative_survival': 16, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 2}, 'train_time': 12.311832666397095}, {'edit': 9, 'reencode_ppl': 4.670054912567139, 'batch_survival': 3, 'cumulative_survival': 18, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 1}, 'train_time': 11.945288181304932}, {'edit': 10, 'reencode_ppl': 4.7198286056518555, 'batch_survival': 2, 'cumulative_survival': 23, 'early_survival': {'batch_1': 2, 'batch_2': 1, 'batch_3': 3}, 'train_time': 11.965327024459839}], 'final_ppl': 4.7198286056518555, 'final_cumulative_survival': 23, 'baseline_ppl': 4.27439022064209}
+
+## m229
+- single_survival: {'0': 1, '1': 0, '2': 1, '3': 1, '4': 1, '5': 1}
+- pair_results: {'0,1': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 0, 'conflict': False}, '0,2': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '0,3': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '0,4': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '0,5': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '1,2': {'surv1': 1, 'surv2': 1, 'baseline1': 0, 'baseline2': 1, 'conflict': False}, '1,3': {'surv1': 1, 'surv2': 1, 'baseline1': 0, 'baseline2': 1, 'conflict': False}, '1,4': {'surv1': 1, 'surv2': 1, 'baseline1': 0, 'baseline2': 1, 'conflict': False}, '1,5': {'surv1': 1, 'surv2': 1, 'baseline1': 0, 'baseline2': 1, 'conflict': False}, '2,3': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '2,4': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '2,5': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '3,4': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '3,5': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}, '4,5': {'surv1': 1, 'surv2': 1, 'baseline1': 1, 'baseline2': 1, 'conflict': False}}
+- conflicts: []
+- conflict_rate: 0.000
+- parallelizable_set: [0, 1, 2, 3, 4, 5]
+
+## m230
+- activation_guided: {'selected_layers': [31, 30, 29, 28], 'selected_modules': ['q_proj', 'gate_proj', 'k_proj', 'up_proj'], 'ppl_delta': 0.023563861846923828, 'survival': 0, 'time': 12.010575532913208, 'top_activations': [['model.layers.31.mlp.gate_proj', 146.49152221679688], ['model.layers.31.mlp.act_fn', 120.82548065185547], ['model.layers.31.mlp.up_proj', 109.95585784912109], ['model.layers.30.mlp.gate_proj', 108.00693817138672], ['model.layers.31.mlp.down_proj', 105.19545440673828], ['model.layers.31.mlp', 105.19545440673828], ['model.layers.29.mlp.gate_proj', 90.91150970458985], ['model.layers.31.self_attn.q_proj', 85.24697723388672], ['model.layers.28.mlp.gate_proj', 84.02736968994141], ['model.layers.0.self_attn.q_proj', 79.25344543457031], ['model.layers.1.self_attn.q_proj', 77.51227569580078], ['model.layers.27.mlp.gate_proj', 76.30781402587891], ['model.layers.30.mlp.up_proj', 75.59343566894532], ['model.layers.25.self_attn.q_proj', 73.80020294189453], ['model.layers.2.self_attn.q_proj', 69.03161010742187]]}
+- hardcoded: {'layers': [14, 15, 16], 'modules': ['o_proj', 'q_proj', 'v_proj', 'gate_proj'], 'ppl_delta': 0.30959081649780273, 'survival': 3, 'time': 9.63280177116394}
+- baseline_ppl: 4.274
+
+## m231
+- Items: 3
+  - Item 0: {'fact': 'Who invented the telephone?', 'target': 'Antonio Meucci', 'old_answer': 'Alexander Graham Bell', 'target_survived': False, 'old_answer_retained': False}
+  - Item 1: {'fact': 'Who wrote 1984?', 'target': 'Aldous Huxley', 'old_answer': 'George Orwell', 'target_survived': False, 'old_answer_retained': False}
+  - Item 2: {'fact': 'Who discovered radioactivity?', 'target': 'Nikola Tesla', 'old_answer': 'Henri Becquerel', 'target_survived': False, 'old_answer_retained': False}
+
+## m233
+- baseline_all_5: 9
+- gc_remove_oldest_2: {'kept': 8, 'removed': 0}
+- gc_last_2: 5
+
+## m234
+- exact_match: 5/5
+- paraphrase: {'What is the capital of France?': '3/3', 'Where is the Eiffel Tower located?': '3/3', 'What is the longest river in the world?': '3/3', 'Who composed the Four Seasons?': '1/3', 'What planet is known as the Red Planet?': '3/3'}
+- negative_prompts: {'What is the capital of France?': '2/2', 'Where is the Eiffel Tower located?': '1/2', 'What is the longest river in the world?': '2/2', 'Who composed the Four Seasons?': '1/2', 'What planet is known as the Red Planet?': '2/2'}
+- context: {'What is the capital of France?': '1/2', 'Where is the Eiffel Tower located?': '1/2', 'What is the longest river in the world?': '2/2', 'Who composed the Four Seasons?': '0/2', 'What planet is known as the Red Planet?': '2/2'}
+- post_reencode_exact: 5/5
+
+## m235_v2
+- baseline_ppl: 0.294
+- results: [{'rehearsal_mode': 'none', 'batch_size': 5, 'num_batches': 5, 'cumulative_survival': 0, 'cumulative_total': 25, 'batch_results': [{'batch': 1, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 2, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 3, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 4, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 5, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}]}, {'rehearsal_mode': 'random', 'batch_size': 5, 'num_batches': 5, 'cumulative_survival': 0, 'cumulative_total': 25, 'batch_results': [{'batch': 1, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 2, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 3, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 4, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}, {'batch': 5, 'survival': 0, 'batch_size': 5, 'ppl': nan, 'ppl_delta': nan}]}]
+
+## m236
+- results: [{'strategy': 'causal', 'layers': [0, 1, 2], 'lora_ppl': 4.311069488525391, 'reencode_ppl': 4.315229415893555, 'lora_survival': 3, 'reencode_survival': 3}, {'strategy': 'hardcoded', 'layers': [14, 15, 16], 'lora_ppl': 4.5241923332214355, 'reencode_ppl': 4.529047012329102, 'lora_survival': 3, 'reencode_survival': 3}]
+- causal_layers: [0, 1, 2]
+- restorations: {'What is the capital of France?': {'0': 1.000195976688388, '1': 1.000195976688388, '2': 1.000195976688388, '3': 1.000195976688388, '4': 1.000195976688388, '5': 1.000195976688388, '6': 1.000195976688388, '7': 1.000195976688388, '8': 1.000195976688388, '9': 1.000195976688388, '10': 1.000195976688388, '11': 1.000195976688388, '12': 1.000195976688388, '13': 1.000195976688388, '14': 1.000195976688388, '15': 1.000195976688388, '16': 1.000195976688388, '17': 1.000195976688388, '18': 1.000195976688388, '19': 1.000195976688388, '20': 1.000195976688388, '21': 1.000195976688388, '22': 1.000195976688388, '23': 1.000195976688388, '24': 1.000195976688388, '25': 1.000195976688388, '26': 1.000195976688388, '27': 1.000195976688388, '28': 1.000195976688388, '29': 1.000195976688388, '30': 1.000195976688388, '31': 1.000195976688388}, 'Where is the Eiffel Tower located?': {'0': 0.9989367037240969, '1': 0.9989367037240969, '2': 0.9989367037240969, '3': 0.9989367037240969, '4': 0.9989367037240969, '5': 0.9989367037240969, '6': 0.9989367037240969, '7': 0.9989367037240969, '8': 0.9989367037240969, '9': 0.9989367037240969, '10': 0.9989367037240969, '11': 0.9989367037240969, '12': 0.9989367037240969, '13': 0.9989367037240969, '14': 0.9989367037240969, '15': 0.9989367037240969, '16': 0.9989367037240969, '17': 0.9989367037240969, '18': 0.9989367037240969, '19': 0.9989367037240969, '20': 0.9989367037240969, '21': 0.9989367037240969, '22': 0.9989367037240969, '23': 0.9989367037240969, '24': 0.9989367037240969, '25': 0.9989367037240969, '26': 0.9989367037240969, '27': 0.9989367037240969, '28': 0.9989367037240969, '29': 0.9989367037240969, '30': 0.9989367037240969, '31': 0.9989367037240969}, 'What is the longest river in the world?': {'0': 1.0000007958837454, '1': 1.0000007958837454, '2': 1.0000007958837454, '3': 1.0000007958837454, '4': 1.0000007958837454, '5': 1.0000007958837454, '6': 1.0000007958837454, '7': 1.0000007958837454, '8': 1.0000007958837454, '9': 1.0000007958837454, '10': 1.0000007958837454, '11': 1.0000007958837454, '12': 1.0000007958837454, '13': 1.0000007958837454, '14': 1.0000007958837454, '15': 1.0000007958837454, '16': 1.0000007958837454, '17': 1.0000007958837454, '18': 1.0000007958837454, '19': 1.0000007958837454, '20': 1.0000007958837454, '21': 1.0000007958837454, '22': 1.0000007958837454, '23': 1.0000007958837454, '24': 1.0000007958837454, '25': 1.0000007958837454, '26': 1.0000007958837454, '27': 1.0000007958837454, '28': 1.0000007958837454, '29': 1.0000007958837454, '30': 1.0000007958837454, '31': 1.0000007958837454}}
+- baseline_ppl: 4.279
+
+## m237
+- baseline_ppl: 0.294
+- encoded_ppl: 0.296
+- results: [{'config': 'hardcoded_14', 'layers': [14], 'hard_survival': 0, 'easy_survival': 3, 'ppl': 0.29275965690612793, 'ppl_delta': -0.0010703504085540771}, {'config': 'hardcoded_15', 'layers': [15], 'hard_survival': 0, 'easy_survival': 2, 'ppl': 0.2935660481452942, 'ppl_delta': -0.0002639591693878174}, {'config': 'hardcoded_16', 'layers': [16], 'hard_survival': 0, 'easy_survival': 3, 'ppl': 0.29611238837242126, 'ppl_delta': 0.002282381057739258}, {'config': 'layers_14_15', 'layers': [14, 15], 'hard_survival': 0, 'easy_survival': 3, 'ppl': 0.2928139567375183, 'ppl_delta': -0.0010160505771636963}, {'config': 'layers_14_15_16', 'layers': [14, 15, 16], 'hard_survival': 0, 'easy_survival': 3, 'ppl': 0.29478657245635986, 'ppl_delta': 0.0009565651416778564}]
+
+## m238
+- baseline_ppl: 4.274
+- weights_only: {'easy': 3, 'hard': 0, 'ppl': 4.716553688049316}
+- hybrid: {'easy': 3, 'hard': 0, 'ppl': 4.763819217681885}
+- retrieval_only: {'easy': 0, 'hard': 0, 'ppl': 4.273921966552734}
+- contamination: 0
+
+## m239
+- Items: 4
+  - Item 0: {'text': 'The capital of France is', 'same_seed_logits_match': False, 'same_seed_hidden_match': False, 'diff_seed_logits_match': False, 'diff_seed_hidden_match': False, 'max_logit_diff_same_seed': 0.25390625, 'max_hidden_diff_same_seed': 0.34375, 'max_logit_diff_diff_seed': 0.3671875, 'max_hidden_diff_diff_seed': 0.458984375}
+  - Item 1: {'text': 'In 1492, Christopher Columbus', 'same_seed_logits_match': False, 'same_seed_hidden_match': False, 'diff_seed_logits_match': False, 'diff_seed_hidden_match': False, 'max_logit_diff_same_seed': 0.4765625, 'max_hidden_diff_same_seed': 0.578125, 'max_logit_diff_diff_seed': 0.3515625, 'max_hidden_diff_diff_seed': 0.375}
+  - Item 2: {'text': 'The theory of relativity was developed by', 'same_seed_logits_match': False, 'same_seed_hidden_match': False, 'diff_seed_logits_match': False, 'diff_seed_hidden_match': False, 'max_logit_diff_same_seed': 0.298828125, 'max_hidden_diff_same_seed': 0.625, 'max_logit_diff_diff_seed': 0.2890625, 'max_hidden_diff_diff_seed': 0.4375}
+
+## m240
+- baseline_ppl: 1.342
+- encoded_ppl: 1.344
+- edit_ppl: nan
+- tests: {'exact': {'pass': 0, 'total': 3}, 'paraphrase': {'pass': 0, 'total': 3}, 'negative': {'pass': 2, 'total': 2}, 'ppl': nan}
+- checks: [{'name': 'exact_match', 'pass': False, 'detail': '0.0%'}, {'name': 'paraphrase', 'pass': False, 'detail': '0.0%'}, {'name': 'negative', 'pass': True, 'detail': '100.0%'}, {'name': 'ppl_gate', 'pass': False, 'detail': 'nan (gate=6.0)'}]
+- overall_pass: ❌
+
+## m241
+- baseline_ppl: 1.342
+- encoded_ppl: 1.341
+- edit_ppl: 2.072
+- survival: 3
+- total_facts: 3
+- has_nan: ❌
+
+## m242
+- easy_survival: 3
+- hard_survival: 3
+- contaminated: ✅
+
+## m243
+- logits_match: ✅
+- hidden_match: ✅
+- max_logit_diff: 0.000
+- max_hidden_diff: 0.000
+
+## m244
+- baseline_ppl: 1.342
+- results: [{'config': 'layer_14', 'layers': [14], 'survival': 3, 'ppl': 1.5595428148799322, 'ppl_delta': 0.21798698527585114}, {'config': 'layer_15', 'layers': [15], 'survival': 3, 'ppl': 1.5138399361514459, 'ppl_delta': 0.1722841065473648}, {'config': 'layer_16', 'layers': [16], 'survival': 3, 'ppl': 1.3402895744167325, 'ppl_delta': -0.001266255187348575}, {'config': 'layers_14_15', 'layers': [14, 15], 'survival': 3, 'ppl': 2.81092783398057, 'ppl_delta': 1.4693720043764888}, {'config': 'layers_14_16', 'layers': [14, 16], 'survival': 3, 'ppl': 1.8271878247601265, 'ppl_delta': 0.4856319951560455}, {'config': 'layers_15_16', 'layers': [15, 16], 'survival': 3, 'ppl': 2.3453603228783644, 'ppl_delta': 1.0038044932742833}, {'config': 'layers_14_15_16', 'layers': [14, 15, 16], 'survival': 3, 'ppl': 2.6736700567808813, 'ppl_delta': 1.3321142271768003}]
+
+## m245
+- baseline_ppl: 4.274
+- sequential: {'ppl': 4.5341877937316895, 'survival': 5, 'time': 548.6727175712585}
+- batch_rebuild: {'ppl': 5.104615211486816, 'survival': 6, 'time': 153.78408932685852}
+
+## m246
+- baseline_ppl: 1.342
+- encoded_ppl: 1.345
+- edit_ppl: 1.871
+- easy_survival: 3
+- hard_survival: 1
+- checks: [{'name': 'easy_facts', 'pass': True, 'detail': '3/3'}, {'name': 'hard_facts_retrieval', 'pass': False, 'detail': '1/2'}, {'name': 'ppl_gate', 'pass': True, 'detail': '1.87'}, {'name': 'no_nan', 'pass': True, 'detail': 'True'}]
+- overall_pass: ❌
+- stack: Layer 16 + FP32 adapters + seed=42 + retrieval tier
+
+## m251
+- baseline_ppl: 1.342
+- results: [{'rehearsal_mode': 'none', 'batch_size': 5, 'num_batches': 5, 'cumulative_survival': 25, 'cumulative_total': 25, 'batch_results': [{'batch': 1, 'survival': 5, 'batch_size': 5, 'ppl': 1.3683639494722255, 'ppl_delta': 0.026808119868144464}, {'batch': 2, 'survival': 5, 'batch_size': 5, 'ppl': 1.3650416930434681, 'ppl_delta': 0.023485863439387078}, {'batch': 3, 'survival': 5, 'batch_size': 5, 'ppl': 1.7314878547096895, 'ppl_delta': 0.3899320251056084}, {'batch': 4, 'survival': 5, 'batch_size': 5, 'ppl': 1.6724606669674311, 'ppl_delta': 0.3309048373633501}, {'batch': 5, 'survival': 5, 'batch_size': 5, 'ppl': 1.5448815678117993, 'ppl_delta': 0.20332573820771827}]}, {'rehearsal_mode': 'random', 'batch_size': 5, 'num_batches': 5, 'cumulative_survival': 25, 'cumulative_total': 25, 'batch_results': [{'batch': 1, 'survival': 5, 'batch_size': 5, 'ppl': 1.3693630674038544, 'ppl_delta': 0.027807237799773343}, {'batch': 2, 'survival': 5, 'batch_size': 5, 'ppl': 1.2819439490784763, 'ppl_delta': -0.05961188052560473}, {'batch': 3, 'survival': 5, 'batch_size': 5, 'ppl': 1.3351936774616657, 'ppl_delta': -0.006362152142415312}, {'batch': 4, 'survival': 5, 'batch_size': 5, 'ppl': 1.30135904512715, 'ppl_delta': -0.04019678447693109}, {'batch': 5, 'survival': 5, 'batch_size': 5, 'ppl': 1.5726374433010029, 'ppl_delta': 0.23108161369692182}]}, {'rehearsal_mode': 'low_survival', 'batch_size': 5, 'num_batches': 5, 'cumulative_survival': 25, 'cumulative_total': 25, 'batch_results': [{'batch': 1, 'survival': 5, 'batch_size': 5, 'ppl': 1.4024320394550942, 'ppl_delta': 0.06087620985101316}, {'batch': 2, 'survival': 5, 'batch_size': 5, 'ppl': 1.33135892103782, 'ppl_delta': -0.010196908566260987}, {'batch': 3, 'survival': 5, 'batch_size': 5, 'ppl': 1.2669740356284265, 'ppl_delta': -0.07458179397565456}, {'batch': 4, 'survival': 5, 'batch_size': 5, 'ppl': 1.301410899728888, 'ppl_delta': -0.040144929875193025}, {'batch': 5, 'survival': 5, 'batch_size': 5, 'ppl': 1.334014210535226, 'ppl_delta': -0.007541619068855088}]}]
+
+## m252
+- baseline_ppl: 1.342
+- encoded_ppl: 1.345
+- edit_ppl: 1.817
+- tests: {'exact': {'pass': 3, 'total': 3}, 'paraphrase': {'pass': 3, 'total': 3}, 'negative': {'pass': 1, 'total': 2}, 'ppl': 0.597194254398346}
+- checks: [{'name': 'exact_match', 'pass': True, 'detail': '100.0%'}, {'name': 'paraphrase', 'pass': True, 'detail': '100.0%'}, {'name': 'negative', 'pass': False, 'detail': '50.0%'}, {'name': 'ppl_gate', 'pass': True, 'detail': '1.82'}]
+- no_nan: ✅
+- overall_pass: ❌
+
+## m253
+- seed: 42
+- all_match: ✅
+- num_runs: 3
+
+## m254
+- bit_exact: ✅
+- max_diff: 0.000
+- survival_phase1: [True, True, True]
+- survival_phase2: [True, True, True]
+- recipes: [{'prompt': 'What is the capital of France?', 'target': 'Paris', 'layer_idx': 16, 'rank': 4, 'lr': 5e-05, 'steps': 100, 'seed': 42, 'target_modules': ['o_proj', 'q_proj', 'v_proj', 'gate_proj']}, {'prompt': 'What is the capital of Japan?', 'target': 'Tokyo', 'layer_idx': 16, 'rank': 4, 'lr': 5e-05, 'steps': 100, 'seed': 42, 'target_modules': ['o_proj', 'q_proj', 'v_proj', 'gate_proj']}, {'prompt': 'What is 2+2?', 'target': '4', 'layer_idx': 16, 'rank': 4, 'lr': 5e-05, 'steps': 100, 'seed': 42, 'target_modules': ['o_proj', 'q_proj', 'v_proj', 'gate_proj']}]
+
+## m255
+- self_consistent: ✅
+- unique_hashes: 5
+- total_hashes: 5
+- hashes: [{'seed': 42, 'hash': '78da6fc96c3aa3d0'}, {'seed': 43, 'hash': '57619b10b71abeb3'}, {'seed': 44, 'hash': 'ca4dcb340822be9b'}, {'seed': 45, 'hash': '50ee47a784da5349'}, {'seed': 46, 'hash': '8edd1bd0aa004f11'}]
+- hashes_42: ['78da6fc96c3aa3d0', '78da6fc96c3aa3d0']
+
+## m256
+- classification_correct: ❌
+- easy_classified: [{'q': 'What is the capital of France?', 'a': 'Paris', 'predicted': 'easy', 'correct': True}, {'q': 'What is the capital of Japan?', 'a': 'Tokyo', 'predicted': 'easy', 'correct': True}, {'q': 'What is 2+2?', 'a': '4', 'predicted': 'hard', 'correct': False}]
+- hard_classified: [{'q': 'Who invented the telephone?', 'a': 'Antonio Meucci', 'predicted': 'hard', 'correct': True}, {'q': 'Who wrote 1984?', 'a': 'Aldous Huxley', 'predicted': 'hard', 'correct': True}, {'q': 'Who discovered radioactivity?', 'a': 'Nikola Tesla', 'predicted': 'hard', 'correct': True}]
+- weight_easy_ok: 2
+- retrieval_hard_ok: 3
+- retrieval_easy_ok: 3
+- weight_hard_ok: 3
+
+## m258
+- Items: 6
+  - Item 0: {'q': 'What is the capital of France?', 'a': 'Paris', 'confidence': 0.1660156251, 'predicted_tier': 'hard', 'actual_tier': 'easy', 'correct_route': False, 'backend': 'retrieval', 'backend_works': True}
+  - Item 1: {'q': 'What is the capital of Japan?', 'a': 'Tokyo', 'confidence': 0.3945312501, 'predicted_tier': 'easy', 'actual_tier': 'easy', 'correct_route': True, 'backend': 'weights', 'backend_works': True}
+  - Item 2: {'q': 'What is 2+2?', 'a': '4', 'confidence': 0.12392728203041214, 'predicted_tier': 'hard', 'actual_tier': 'easy', 'correct_route': False, 'backend': 'retrieval', 'backend_works': True}
+
+## m259
+- idempotent: ✅
+- max_diff: 0.000
+
+## m260
+- total_tensors: 7
+- changed_tensors: 4
+- diffs: {'down_proj.weight': {'max': 0.0, 'mean': 0.0, 'nonzero': 0, 'total': 58720256}, 'gate_proj.weight': {'max': 0.004241943359375, 'mean': 0.0003776629164349288, 'nonzero': 55211548, 'total': 58720256}, 'up_proj.weight': {'max': 0.0, 'mean': 0.0, 'nonzero': 0, 'total': 58720256}, 'k_proj.weight': {'max': 0.0, 'mean': 0.0, 'nonzero': 0, 'total': 4194304}, 'o_proj.weight': {'max': 0.0072021484375, 'mean': 0.0005734226433560252, 'nonzero': 16285545, 'total': 16777216}, 'q_proj.weight': {'max': 0.0040283203125, 'mean': 0.00044479663483798504, 'nonzero': 15675308, 'total': 16777216}, 'v_proj.weight': {'max': 0.0054168701171875, 'mean': 0.000470096681965515, 'nonzero': 4059867, 'total': 4194304}}
+
+## m261
+- without_rehearsal: {'batch1': [True], 'batch2': [True], 'batch3': [True], 'forgetting_b2': False, 'forgetting_b3': True}
+- with_rehearsal: {'batch1': [True], 'batch2': [True], 'batch3': [True], 'forgetting_b2': False, 'forgetting_b3': False}
+
+## m262
+- build_v1_time: 11.481
+- build_v2_time: 9.634
+- rollback_time: 4.289
+- speedup: 2.677
+- rollback_accurate: ❌
+- max_diff: 0.000
+
+## m263
+- total_changed: 4
+- total_tensors: 226
+- changed_layers: {'layer_16': [{'param': 'gate_proj.weight', 'max_diff': 0.002685546875, 'mean_diff': 0.00036890950286760926, 'nonzero': 56132395, 'total': 58720256}, {'param': 'o_proj.weight', 'max_diff': 0.00305938720703125, 'mean_diff': 0.0009166174568235874, 'nonzero': 16514676, 'total': 16777216}, {'param': 'q_proj.weight', 'max_diff': 0.001617431640625, 'mean_diff': 0.0003907622303813696, 'nonzero': 16056035, 'total': 16777216}, {'param': 'v_proj.weight', 'max_diff': 0.00244140625, 'mean_diff': 0.0008229470113292336, 'nonzero': 4128774, 'total': 4194304}]}
+
+## m264
+- stable: ✅
+- max_diff: 0.000
+
+## m265
+- baseline_ppl: 6.714
+- good_scores: [{'exact': 1.0, 'negative': 1.0, 'ppl': 633.6659187210671, 'ppl_ok': False}, {'exact': 1.0, 'negative': 1.0, 'ppl': 942.8835221944358, 'ppl_ok': False}, {'exact': 1.0, 'negative': 1.0, 'ppl': 397.74827875424256, 'ppl_ok': False}]
+- bad_scores: [{'exact': 1.0, 'negative': 1.0, 'ppl': 515.3284077209765, 'ppl_ok': False}, {'exact': 1.0, 'negative': 1.0, 'ppl': 1084.8844096704242, 'ppl_ok': False}, {'exact': 1.0, 'negative': 0.0, 'ppl': 482.39321242753493, 'ppl_ok': False}]
+
+## m266
+- init: ✅
+- recipes_added: 4
+- builds: 2
+- tags: ['v1', 'v2']
+- build_times: [14.5, 13.6]
+- hashes: ['ee0930d53755fc0d', '2e1d1b518368dbfa']
+- ci_score: 0.650
+- ci_verdict: FAIL
+- rollback_works: ✅
+- diff_works: ✅
+- commands_tested: ['init', 'edit add', 'build', 'test', 'tag', 'diff', 'rollback', 'status']
+
+## m269
+- Items: 5
+  - Item 0: {'name': 'No change', 'correct': True, 'reasons': []}
+  - Item 1: {'name': 'Seed changed', 'correct': True, 'reasons': ['seed_change']}
+  - Item 2: {'name': 'K changed', 'correct': True, 'reasons': ['K_change']}
+
+## m272
+- rollback_time: 5.940
+- rebuild_time: 6.735
+- rollback_accuracy: 0.000
+- rebuild_accuracy: 0.000
+- v3_survival: ['Paris. Paris. Paris. Paris. Paris. Paris. Paris. Paris', 'Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo', 'Rome. Rome. Rome. Rome. Rome. Rome. Rome. Rome']
+- rebuild_survival: ['Paris. Paris. Paris. Paris. Paris. Paris. Paris. Paris', 'Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo. Tokyo', 'Rome. Rome. Rome. Rome. Rome. Rome. Rome. Rome']
+
+## m273
+- consistent: ✅
+- behaviors: [{'seed': 42, 'answers': ['Paris. What is the capital of France? Paris. What is the capital', 'Tokyo. What is the capital of France? Paris. What is the capital']}, {'seed': 43, 'answers': ['Paris. Paris is the capital of France. The population of Paris is', 'Tokyo. Tokyo is the capital of Japan. Tokyo is the largest city in']}, {'seed': 44, 'answers': ['Paris. Paris is the capital of France. The Eiffel Tower is', 'Tokyo Tokyo is the capital of Japan. Tokyo is the largest city in Japan']}, {'seed': 45, 'answers': ['Paris, France • What is the capital of France? Paris, France •', 'Tokyo, Japan: What is the capital of Japan? Tokyo, Japan:']}, {'seed': 46, 'answers': ['Paris. Paris is the capital of France. Population: 2.2', "Tokyo. Tokyo, Japan's capital, is located on the main island of"]}]
+
+## m275
+- original_valid: ✅
+- tampered_answer_detected: ✅
+- tampered_seed_detected: ✅
+
+## m276
+- fact_count: 50
+- train_time: 6.095
+- survival_rate: 0.967
+- survival_details: [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False, True, True, True, True, True, True, True, True, True, True, True, True]
+- test_indices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
+
+## m277
+- Items: 6
+  - Item 0: {'layer': 10, 'survival': 3, 'total': 3}
+  - Item 1: {'layer': 12, 'survival': 3, 'total': 3}
+  - Item 2: {'layer': 14, 'survival': 3, 'total': 3}
+
+## m278
+- Items: 10
+  - Item 0: {'modules': ['q_proj'], 'survival': 3, 'total': 3}
+  - Item 1: {'modules': ['k_proj'], 'survival': 3, 'total': 3}
+  - Item 2: {'modules': ['v_proj'], 'survival': 3, 'total': 3}
+
+## m279
+- batches: [{'batch': 1, 'current': 3, 'current_total': 3, 'previous': 0, 'previous_total': 0}, {'batch': 2, 'current': 3, 'current_total': 3, 'previous': 3, 'previous_total': 3}, {'batch': 3, 'current': 3, 'current_total': 3, 'previous': 6, 'previous_total': 6}, {'batch': 4, 'current': 3, 'current_total': 3, 'previous': 9, 'previous_total': 9}, {'batch': 5, 'current': 3, 'current_total': 3, 'previous': 12, 'previous_total': 12}, {'batch': 6, 'current': 1, 'current_total': 3, 'previous': 15, 'previous_total': 15}, {'batch': 7, 'current': 2, 'current_total': 3, 'previous': 16, 'previous_total': 18}, {'batch': 8, 'current': 3, 'current_total': 3, 'previous': 21, 'previous_total': 21}, {'batch': 9, 'current': 3, 'current_total': 3, 'previous': 23, 'previous_total': 24}, {'batch': 10, 'current': 3, 'current_total': 3, 'previous': 26, 'previous_total': 27}]
+- final_survival: 29
+- final_total: 30
+- forgetting_detected: ✅
+
+## m280
+- Items: 5
+  - Item 0: {'batch_size': 1, 'train_time': 10.548982858657837, 'survival': 1, 'total': 1, 'survival_rate': 1.0}
+  - Item 1: {'batch_size': 3, 'train_time': 9.258764505386353, 'survival': 3, 'total': 3, 'survival_rate': 1.0}
+  - Item 2: {'batch_size': 5, 'train_time': 9.130414962768555, 'survival': 5, 'total': 5, 'survival_rate': 1.0}
+
+## m281
+- baseline: {'exact': 3, 'negative': 1, 'ppl': 82.8028055755686}
+- negative_aware: {'exact': 3, 'negative': 2, 'ppl': 42.6921459992201}
+
+## m282
+- baseline_survival: [True, True, True]
+- context_survival: [True, True, True]
+- context_variations: 4
+
+## m283
+- baseline_exact: 3
+- baseline_para: 3
+- augmented_exact: 3
+- augmented_para: 0
+
+## m284
+- baseline: 2
+- lure_trained: 3
+- total: 3
+
+## m286
+- Items: 8
+  - Item 0: {'query': 'What is the capital of France?', 'matched': 'Paris', 'type': 'exact'}
+  - Item 1: {'query': 'Capital of France?', 'matched': 'Paris', 'type': 'substring'}
+  - Item 2: {'query': 'France capital city', 'matched': None, 'type': None}
+
+## m287
+- Items: 7
+  - Item 0: {'name': 'Normal', 'expected': 'Paris', 'got': 'Paris is the capital of France.\n[CONTEXT]: The capital of France is Paris.\n[QUESTION]:', 'pass': True, 'contaminated': False}
+  - Item 1: {'name': 'Wrong context', 'expected': 'Paris', 'got': 'London.\n[CONTEXT]: The capital of France is Paris.\n[QUESTION]: What is the capital of', 'pass': True, 'contaminated': True}
+  - Item 2: {'name': 'Conflicting context', 'expected': 'Paris', 'got': 'Paris is the capital of France.\n[CONTEXT]: Some say Paris, others say London is the capital', 'pass': True, 'contaminated': False}
+
+## m288
+- Items: 4
+  - Item 0: {'scenario': 'Agreeing retrieval', 'weights_answer': 'Paris. What is the capital of France? Pa', 'weights_ok': True, 'retrieval_answer': 'Paris.\n[CONTEXT]: The capital of France ', 'retrieval_ok': True, 'arbitration': 'weights_first', 'arbitration_ok': True}
+  - Item 1: {'scenario': 'No retrieval', 'weights_answer': 'Paris. What is the capital of France? Pa', 'weights_ok': True, 'retrieval_answer': 'Paris. What is the capital of France? Pa', 'retrieval_ok': True, 'arbitration': 'weights_first', 'arbitration_ok': True}
+  - Item 2: {'scenario': 'Different retrieval', 'weights_answer': 'Paris. What is the capital of France? Pa', 'weights_ok': True, 'retrieval_answer': 'Paris. The correct answer is Paris.', 'retrieval_ok': True, 'arbitration': 'weights_first', 'arbitration_ok': True}
+
+## m289_retrieval_confidence
+- base_confidences: [0.72, 0.68, 0.45, 0.51, 0.39, 0.62, 0.55, 0.48]
+- edit_confidences: [0.85, 0.81, 0.78, 0.76, 0.74, 0.83, 0.79, 0.77]
+- optimal_threshold: 0.600
+- routing_rule: retrieval if conf < 0.6, weights if conf >= 0.6
+
+## m290
+- Items: 6
+  - Item 0: {'question': 'What is the capital of France?', 'answer': 'Paris', 'confidence': 0.1660156251, 'routed_tier': 'hybrid', 'model_knows': True, 'routing_correct': True}
+  - Item 1: {'question': 'What is 2+2?', 'answer': '4', 'confidence': 0.12392728203041214, 'routed_tier': 'hybrid', 'model_knows': False, 'routing_correct': True}
+  - Item 2: {'question': 'Who invented the telephone?', 'answer': 'Antonio Meucci', 'confidence': 0.05517149581968369, 'routed_tier': 'retrieval', 'model_knows': False, 'routing_correct': True}
+
+## m291_performance
+- build_latency_ms: {'1_fact': 4200, '10_facts': 8500, '50_facts': 6100}
+- inference_latency_ms: {'single_question': 45, 'batch_8': 180}
+- rollback_latency_ms: {'delta_rollback': 4300, 'full_rebuild': 11500}
+- memory_mb: {'base_model_fp16': 16000, 'adapter_fp32': 8, 'checkpoint_full': 16008, 'checkpoint_delta': 16}
+- throughput: {'facts_per_second_build': 8.196721311475411, 'questions_per_second_inference': 22.22222222222222}
+
+## m292_integration
+- status: PASS
+- phases_passed: 9
+- phases_total: 9
+- recipes_at_start: 5
+- recipes_after_add: 7
+- recipes_after_rollback: 5
+- ci_score: 0.940
+
+## m295_stress
+- total_facts: 100
+- batches: 10
+- batch_size: 10
+- avg_survival: 0.973
+- min_survival: 0.936
+- final_survival: 0.936
+- post_test_pass: 29
+- post_test_total: 30
+
+## m296_multi_model
+- models_tested: 1
+- models_total: 5
+- recipe_transfer: model-agnostic
+- checkpoint_transfer: model-specific
+
+## m297_dedup
+- input_count: 7
+- duplicate_count: 1
+- output_count: 7
+- threshold: 0.800
+
+## m298_compression
+- full_size_v1: 199
+- full_size_v2: 327
+- delta_size: 154
+- compression_ratio: 2.123
+- reconstruction_correct: ✅
+
+## m299_adaptive
+- fixed_survival: 0.883
+- adaptive_survival: 0.897
+- fixed_rehearsals: 50
+- adaptive_rehearsals: 38
+- improvement: 0.014
+
+## m300_mega
+- total_facts: 500
+- batches: 25
+- batch_size: 20
+- avg_survival: 0.952
+- min_survival: 0.912
+- final_survival: 0.959
+- post_test_pass: 49
+- post_test_total: 50
+
+## m301_realtime
+- inferences: 105
+- edits_during_inference: 4
+- final_facts: 5
+- all_correct: ✅
+- zero_downtime: ✅
+
+## m302_persistence
+- adapters_saved: 3
+- adapters_loaded: 3
+- persistence_verified: ✅
+- total_size_bytes: 461
+
+## m303_concurrent
+- concurrent_users: 3
+- total_edits: 6
+- no_conflicts: ✅
+- final_version: 6
+
+## m305_validation
+- total: 7
+- passed: 1
+- failed: 6
+- gate_open: ❌
+
+## m306_caching
+- hits: 4
+- misses: 4
+- hit_rate: 0.500
+- avg_latency_ms: 0.505
+- speedup: 1.980
+
+## m308_ab
+- model_a: {'name': 'v1.0_base', 'accuracy': 0.8490566037735849, 'latency_ms': 45.0, 'samples': 53}
+- model_b: {'name': 'v1.1_edited', 'accuracy': 0.9574468085106383, 'latency_ms': 48.0, 'samples': 47}
+- winner: B
+- accuracy_delta: 0.108
+
+## m309_loadbalance
+- strategy: least_loaded
+- instances: [{'name': 'gpu-0', 'requests': 120, 'load': 1.2}, {'name': 'gpu-1', 'requests': 120, 'load': 1.2}, {'name': 'gpu-2', 'requests': 60, 'load': 1.2}]
+- max_load: 1.200
+
+## m310_degradation
+- high_quality: 70
+- medium_quality: 20
+- low_quality: 30
+- errors: 16
+- graceful: ✅
+
+## m311_security
+- checks_passed: 3
+- checks_total: 5
+- issues_found: 2
+- issues: ['Sensitive data found in recipes', 'Potential injection vectors found']
+
+## m312_backup
+- backup_created: ✅
+- restore_successful: ✅
+- files_verified: 4
+
+## m313_import_export
+- recipes: 3
+- json_size: 291
+- csv_size: 142
+- json_import_ok: ✅
+- csv_import_ok: ✅
+
+## m314_batch_validation
+- total: 100
+- valid: 87
+- invalid: 13
+- gate_open: ❌
+
+## m315_final
+- passed: 16
+- total: 16
+- success_rate: 1.000
+
+## m316_cross_domain
+- total_facts: 12
+- domains: 4
+- avg_survival: 0.919
+
+## m317_temporal
+- temporal_facts: 3
+- active: 2
+- expired: 1
+
+## m318_confidence
+- facts: 5
+- avg_confidence: 0.895
+- high_confidence: 3
+- low_confidence: 1
+
+## m319_dependency
+- facts: 5
+- dependencies: 4
+- topological_order: ['fact_1', 'fact_2', 'fact_3', 'fact_4', 'fact_5']
+- valid: ✅
+
+## m320_recovery
+- corrupted: 3
+- fixes_applied: 3
+- fully_recovered: ✅
+
+## memory_provenance
+- Items: 3
+  - Item 0: {'question': 'What is the capital of France?', 'expected': 'Paris', 'got': 'Paris\nWhat is the capital of France?\nWhat is the capital of France', 'source': 'weights', 'matched': True}
+  - Item 1: {'question': 'What is the capital of Japan?', 'expected': 'Tokyo', 'got': 'Tokyo\nhttp://www.mapsofworld.com/japan/\nJapan is', 'source': 'weights', 'matched': True}
+  - Item 2: {'question': 'Who invented the telephone?', 'expected': 'Antonio Meucci', 'got': 'The answer is Alexander Graham Bell. He was a Scottish-born inventor, scientist', 'source': 'unknown', 'matched': False}
+
+## model_time_travel
+- v3: {'What is the capital of France?': 'Paris. What is the capital of France? Paris. What is the capital', 'What is the capital of Japan?': 'Tokyo. What is the capital of France? Paris. What is the capital', 'What is the capital of Italy?': 'Rome. What is the capital of France? Paris. What is the capital'}
+- v8: {'What is the capital of France?': 'Paris. What is the capital of France? Paris. What is the capital', 'What is the capital of Japan?': 'Tokyo. What is the capital of France? Paris. What is the capital', 'What is the capital of Italy?': 'Tokyo Tokyo is the capital of Japan. Rome Rome is the capital of Italy'}
+
+## neural_recipe_optimizer
+- easy: {'layer': 16, 'modules': ['q_proj', 'v_proj'], 'steps': 50, 'rehearsal': False, 'reason': 'Easy facts need minimal intervention'}
+- medium: {'layer': 16, 'modules': ['q_proj', 'v_proj', 'o_proj'], 'steps': 100, 'rehearsal': True, 'reason': 'Medium facts benefit from rehearsal'}
+- hard: {'layer': 16, 'modules': ['q_proj', 'v_proj', 'o_proj', 'gate_proj'], 'steps': 200, 'rehearsal': True, 'fallback': 'retrieval', 'reason': 'Hard facts need full aperture + rehearsal + retrieval fallback'}
+
+## recipe_dna
+- chromosomes: [{'id': 0, 'prompt_gene': 'cb0b4aaf', 'answer_gene': 'e20d37a5', 'layer_gene': 'L16', 'rank_gene': 'R4', 'strategy_gene': 'FP32', 'checksum': '1c386746'}, {'id': 1, 'prompt_gene': '94edbd95', 'answer_gene': '62413a57', 'layer_gene': 'L16', 'rank_gene': 'R4', 'strategy_gene': 'FP32', 'checksum': 'd15abb22'}]
+- length: 2
+- genome_hash: 017bbcd850ec173e
+
+## semantic_bisect
+- first_broken: 3
+- edit: {'id': 3, 'fact': 'Germany=Berlin', 'ci_pass': False}
+
+## semantic_gc
+- collected: [{'id': 1, 'reasons': ['high_drift', 'low_survival', 'obsolete', 'untested']}, {'id': 2, 'reasons': ['obsolete']}, {'id': 3, 'reasons': ['untested']}]
+- kept: [0]
+
+## weight_blame
+- failed_test: What is the capital of Germany?
+- culprit: {'id': 3, 'fact': 'Germany=Berlin', 'ci_pass': False}
+
