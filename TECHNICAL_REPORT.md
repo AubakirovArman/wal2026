@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M658.
+The current release-cleanup line is M621-M668.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -117,6 +117,16 @@ The current release-cleanup line is M621-M658.
 | M656 | Prompt injection in retrieval context | PASS |
 | M657 | Provenance tamper test | PASS |
 | M658 | Signed package verification | PASS |
+| M659 | Shadow deploy real server | PASS |
+| M660 | Canary real traffic simulation | PASS |
+| M661 | Live patch consistency | PASS |
+| M662 | Emergency stop during build | PASS |
+| M663 | Emergency stop during inference | PASS |
+| M664 | Rollback under load | PASS |
+| M665 | Hotfix with audit trail | PASS |
+| M666 | 24h soak test | BLOCKED |
+| M667 | Memory leak long run | SIMULATED |
+| M668 | Log volume/storage growth | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -129,6 +139,8 @@ M639-M645 add corpus and routing contracts for robustness. These are not model-b
 M646-M651 harden CI inputs and scoring: negative prompts, lure prompts, long-context payloads, generated-test quality, score calibration, and behavioral checksum drift are checked as deterministic contracts, not real model-behavior claims.
 
 M652-M658 add security and abuse contracts. They are static deterministic gates, not an external security audit and not a production-readiness claim.
+
+M659-M668 add deployment-reality contracts. M659 uses a local loopback server, but M666 is explicitly `BLOCKED` because a real 24h soak test must not be faked, and M667 is `SIMULATED` because it is only a short memory sentinel.
 
 ## Status Semantics
 

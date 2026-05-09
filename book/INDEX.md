@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 595
+Total entries: 605
 
 ## Early (M1-M99)
 
@@ -382,6 +382,16 @@ Total entries: 595
 - [M656 Prompt Injection Retrieval Context](M656_Prompt_Injection_Retrieval_Context.md)
 - [M657 Provenance Tamper Test](M657_Provenance_Tamper_Test.md)
 - [M658 Signed Package Verification](M658_Signed_Package_Verification.md)
+- [M659 Shadow Deploy Real Server](M659_Shadow_Deploy_Real_Server.md)
+- [M660 Canary Real Traffic Simulation](M660_Canary_Real_Traffic_Simulation.md)
+- [M661 Live Patch Consistency](M661_Live_Patch_Consistency.md)
+- [M662 Emergency Stop During Build](M662_Emergency_Stop_During_Build.md)
+- [M663 Emergency Stop During Inference](M663_Emergency_Stop_During_Inference.md)
+- [M664 Rollback Under Load](M664_Rollback_Under_Load.md)
+- [M665 Hotfix With Audit Trail](M665_Hotfix_With_Audit_Trail.md)
+- [M666 24h Soak Test](M666_24h_Soak_Test.md)
+- [M667 Memory Leak Long Run](M667_Memory_Leak_Long_Run.md)
+- [M668 Log Volume Storage Growth](M668_Log_Volume_Storage_Growth.md)
 
 ## Phase 1 (M100-M149)
 

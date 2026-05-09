@@ -4759,7 +4759,7 @@ python experiments/m544_result_validation.py
 ### M624 — Full Test Inventory
 - **Файл**: `m624_full_test_inventory.py`
 - **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
-- **Результат**: total_scripts=783, parse_failures=0, runnable_scripts=259, blocked_scripts=524
+- **Результат**: total_scripts=793, parse_failures=0, runnable_scripts=272, blocked_scripts=521
 - **Статус**: ✅ PASS
 - **Book**: `book/M624_Full_Test_Inventory.md`
 
@@ -4772,11 +4772,11 @@ python experiments/m544_result_validation.py
 ### M625 — Safe Runtime Sweep
 - **Файл**: `m625_safe_runtime_sweep.py`
 - **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
-- **Результат**: total_scripts=783, executed_scripts=259, status_counts={PASS: 259, BLOCKED: 524}, FAIL=0
+- **Результат**: total_scripts=793, executed_scripts=272, status_counts={PASS: 272, BLOCKED: 521}, FAIL=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M625_Safe_Runtime_Sweep.md`
 
-### Почему 524 BLOCKED не являются FAIL
+### Почему 521 BLOCKED не являются FAIL
 Заблокированы скрипты, которые требуют локальные 70B+/594GB модели, CUDA/device_map, HF downloads/datasets, Triton/GPU runtime, git mutations, destructive file ops, backup/archive/restore, mass regeneration или public-claim generation. Это осознанный safety gate, а не результат runtime failure.
 
 ### Финальные gates после sweep
@@ -4817,7 +4817,7 @@ python experiments/m544_result_validation.py
 - `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M638.
 - `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
 - `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
-- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `259 PASS / 524 BLOCKED`.
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `272 PASS / 521 BLOCKED`.
 
 ### Практический вывод
 Для публичного GitHub входа теперь есть две разные двери:
@@ -4835,7 +4835,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m628_blocked_script_taxonomy.py`
 - **Документ**: `docs/blocked_script_taxonomy.md`
 - **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
-- **Результат**: total_scripts=783, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
+- **Результат**: total_scripts=793, blocked_scripts=521, assigned_scripts=521, unassigned_scripts=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M628_Blocked_Script_Taxonomy.md`
 
@@ -4851,7 +4851,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m630_public_claim_checker.py`
 - **Документ**: `docs/public_claim_policy.md`
 - **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
-- **Результат**: files_scanned=25, violations_total=0, required_phrase_misses=0
+- **Результат**: files_scanned=26, violations_total=0, required_phrase_misses=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M630_Public_Claim_Checker.md`
 
@@ -4859,7 +4859,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m631_docs_command_smoke.py`
 - **Документ**: `docs/docs_command_smoke.md`
 - **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
-- **Результат**: run_commands=35/35 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
+- **Результат**: run_commands=45/45 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=8
 - **Статус**: ✅ PASS
 - **Book**: `book/M631_Docs_Command_Smoke.md`
 
@@ -4867,7 +4867,7 @@ python experiments/m544_result_validation.py
 - M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
 - Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
 - Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
-- Финальный M624 после M628-M631: total_scripts=783, parse_failures=0, runnable_scripts=259, blocked_scripts=524.
+- Финальный M624 после M628-M631: total_scripts=793, parse_failures=0, runnable_scripts=272, blocked_scripts=521.
 
 ### Практический вывод
 Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.
@@ -5081,3 +5081,71 @@ M646-M651 — это pre-alpha CI contract layer. Он не доказывает
 
 ### Практический вывод
 M652-M658 — это не внешний security audit и не production claim. Это локальные deterministic gates, которые закрывают базовые abuse-контракты перед будущими registry/package/model runners.
+
+---
+
+## M659-668 — Deployment Reality Layer (2026-05-09)
+
+### Цель
+Добавить deployment-reality gates без перепродажи зрелости: local shadow server, canary routing, live patch consistency, emergency stop, rollback under load, hotfix audit trail, 24h soak gate, memory sentinel и log growth.
+
+### M659 — Shadow Deploy Real Server
+- **Файл**: `m659_shadow_deploy_real_server.py`
+- **Artifact**: `corpora/deployment_shadow_server.json`
+- **Результат**: status=PASS, requests=12, failures=0
+- **Book**: `book/M659_Shadow_Deploy_Real_Server.md`
+
+### M660 — Canary Real Traffic Simulation
+- **Файл**: `m660_canary_real_traffic_simulation.py`
+- **Artifact**: `corpora/deployment_canary_traffic.json`
+- **Результат**: status=PASS, requests=1000, canary_requests=100, failures=0
+- **Book**: `book/M660_Canary_Real_Traffic_Simulation.md`
+
+### M661 — Live Patch Consistency
+- **Файл**: `m661_live_patch_consistency.py`
+- **Результат**: status=PASS, checks=3, failures=0
+- **Book**: `book/M661_Live_Patch_Consistency.md`
+
+### M662 — Emergency Stop During Build
+- **Файл**: `m662_emergency_stop_during_build.py`
+- **Результат**: status=PASS, stopped_before_complete=True, thread_stopped=True
+- **Book**: `book/M662_Emergency_Stop_During_Build.md`
+
+### M663 — Emergency Stop During Inference
+- **Файл**: `m663_emergency_stop_during_inference.py`
+- **Результат**: status=PASS, served_before_stop=9, blocked_after_stop=11
+- **Book**: `book/M663_Emergency_Stop_During_Inference.md`
+
+### M664 — Rollback Under Load
+- **Файл**: `m664_rollback_under_load.py`
+- **Artifact**: `corpora/deployment_rollback_under_load.json`
+- **Результат**: status=PASS, requests=100, rollback_at_request=40, failures=0
+- **Book**: `book/M664_Rollback_Under_Load.md`
+
+### M665 — Hotfix With Audit Trail
+- **Файл**: `m665_hotfix_with_audit_trail.py`
+- **Artifact**: `corpora/deployment_hotfix_audit_trail.json`
+- **Результат**: status=PASS, events=5, failures=0
+- **Book**: `book/M665_Hotfix_With_Audit_Trail.md`
+
+### M666 — 24h Soak Test
+- **Файл**: `m666_24h_soak_test.py`
+- **Результат**: status=BLOCKED, reason=LONG_DURATION_REQUIRED
+- **Book**: `book/M666_24h_Soak_Test.md`
+
+### M667 — Memory Leak Long Run
+- **Файл**: `m667_memory_leak_long_run.py`
+- **Результат**: status=SIMULATED, iterations=200, short_sentinel_passed=True
+- **Book**: `book/M667_Memory_Leak_Long_Run.md`
+
+### M668 — Log Volume Storage Growth
+- **Файл**: `m668_log_volume_storage_growth.py`
+- **Artifact**: `corpora/deployment_log_volume.jsonl`
+- **Результат**: status=PASS, events=1000, failures=0
+- **Book**: `book/M668_Log_Volume_Storage_Growth.md`
+
+### Документ
+- `docs/deployment_reality_protocol.md`
+
+### Практический вывод
+M659-M668 повышают реализм deployment слоя, но не заменяют настоящий production soak. M666 специально `BLOCKED`, а M667 специально `SIMULATED`, чтобы не превращать short checks в ложные production claims.

@@ -163,6 +163,8 @@ def classify(path: Path) -> dict[str, object]:
 
     if path.name in SAFE_TEXT_ONLY_AUDIT_ALLOWLIST:
         reasons = [reason for reason in reasons if reason == "syntax_error"]
+    if "emergency" in lowered_name:
+        reasons = [reason for reason in reasons if reason != "merge_simulation_or_mutation"]
 
     runnable = parse_status == "PASS" and not reasons
     if path.name in {"m624_full_test_inventory.py", "m625_safe_runtime_sweep.py"}:

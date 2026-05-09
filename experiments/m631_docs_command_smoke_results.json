@@ -4,13 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T22:04:50.881938+00:00",
-  "run_commands": 35,
-  "run_passed": 35,
+  "timestamp": "2026-05-09T22:13:58.579476+00:00",
+  "run_commands": 45,
+  "run_passed": 45,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
-  "blocked_result_commands": 7,
-  "docs_checked": 9,
+  "blocked_result_commands": 8,
+  "docs_checked": 10,
   "failures": [],
   "records": [
     {
@@ -68,18 +68,24 @@
       "returncode": 0
     },
     {
+      "command": "doc exists: docs/deployment_reality_protocol.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
       "command": "PYTHONPATH=src python -m pytest -q tests",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.85s\n"
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 2.28s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 451/451 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 461/461 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -106,7 +112,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M628 Blocked Script Taxonomy: PASS\nblocked=524 assigned=524 unassigned=0\n",
+      "output_tail": "M628 Blocked Script Taxonomy: PASS\nblocked=521 assigned=521 unassigned=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m628_blocked_script_taxonomy_results.json"
@@ -116,7 +122,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M629 Controlled Runner Matrix: PASS\nrunners=7 blocked=524 unassigned=0\n",
+      "output_tail": "M629 Controlled Runner Matrix: PASS\nrunners=7 blocked=521 unassigned=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m629_controlled_runner_matrix_results.json"
@@ -126,7 +132,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=25 violations=0 missing=0\n",
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=26 violations=0 missing=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m630_public_claim_checker_results.json"
@@ -400,6 +406,106 @@
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m658_signed_package_verification_results.json"
+    },
+    {
+      "command": "python experiments/m659_shadow_deploy_real_server.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M659 Shadow Deploy Real Server: PASS\nrequests=12 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m659_shadow_deploy_real_server_results.json"
+    },
+    {
+      "command": "python experiments/m660_canary_real_traffic_simulation.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M660 Canary Real Traffic Simulation: PASS\nrequests=1000 canary=100 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m660_canary_real_traffic_simulation_results.json"
+    },
+    {
+      "command": "python experiments/m661_live_patch_consistency.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M661 Live Patch Consistency: PASS\nchecks=3 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m661_live_patch_consistency_results.json"
+    },
+    {
+      "command": "python experiments/m662_emergency_stop_during_build.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M662 Emergency Stop During Build: PASS\nsteps_completed=10 thread_stopped=True\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m662_emergency_stop_during_build_results.json"
+    },
+    {
+      "command": "python experiments/m663_emergency_stop_during_inference.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M663 Emergency Stop During Inference: PASS\nserved=9 blocked=11 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m663_emergency_stop_during_inference_results.json"
+    },
+    {
+      "command": "python experiments/m664_rollback_under_load.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M664 Rollback Under Load: PASS\nrequests=100 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m664_rollback_under_load_results.json"
+    },
+    {
+      "command": "python experiments/m665_hotfix_with_audit_trail.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M665 Hotfix With Audit Trail: PASS\nevents=5 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m665_hotfix_with_audit_trail_results.json"
+    },
+    {
+      "command": "python experiments/m666_24h_soak_test.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M666 24h Soak Test: BLOCKED\nreason=LONG_DURATION_REQUIRED\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m666_24h_soak_test_results.json"
+    },
+    {
+      "command": "python experiments/m667_memory_leak_long_run.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M667 Memory Leak Long Run: SIMULATED\niterations=200 peak_bytes=4475\n",
+      "result_status": "SIMULATED",
+      "result_pass": false,
+      "result_file": "experiments/m667_memory_leak_long_run_results.json"
+    },
+    {
+      "command": "python experiments/m668_log_volume_storage_growth.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M668 Log Volume Storage Growth: PASS\nevents=1000 size_bytes=64890 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m668_log_volume_storage_growth_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

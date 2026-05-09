@@ -17,12 +17,12 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 761 milestone experiment scripts in `experiments/m*.py`
-- 783 Python scripts total in `experiments/`
-- 451 experiment result JSON files in `experiments/`
-- 596 book/diary entries in `book/`
+- 771 milestone experiment scripts in `experiments/m*.py`
+- 793 Python scripts total in `experiments/`
+- 461 experiment result JSON files in `experiments/`
+- 606 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 226 docs files in `docs/`
+- 227 docs files in `docs/`
 - 4750+ lines in `docs/dev_diary_ru.md`
 - 68 Python source modules in `src/`
 - 12 pytest tests for the packaged core
@@ -30,7 +30,7 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M658+
+experiments/        milestone scripts and result JSON for M1-M668+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -112,6 +112,16 @@ python experiments/m655_hotfix_abuse_test.py
 python experiments/m656_prompt_injection_retrieval_context.py
 python experiments/m657_provenance_tamper_test.py
 python experiments/m658_signed_package_verification.py
+python experiments/m659_shadow_deploy_real_server.py
+python experiments/m660_canary_real_traffic_simulation.py
+python experiments/m661_live_patch_consistency.py
+python experiments/m662_emergency_stop_during_build.py
+python experiments/m663_emergency_stop_during_inference.py
+python experiments/m664_rollback_under_load.py
+python experiments/m665_hotfix_with_audit_trail.py
+python experiments/m666_24h_soak_test.py
+python experiments/m667_memory_leak_long_run.py
+python experiments/m668_log_volume_storage_growth.py
 ```
 
 ## Artifact Policy

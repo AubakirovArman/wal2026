@@ -47,6 +47,16 @@ RUN_COMMANDS = [
     "python experiments/m656_prompt_injection_retrieval_context.py",
     "python experiments/m657_provenance_tamper_test.py",
     "python experiments/m658_signed_package_verification.py",
+    "python experiments/m659_shadow_deploy_real_server.py",
+    "python experiments/m660_canary_real_traffic_simulation.py",
+    "python experiments/m661_live_patch_consistency.py",
+    "python experiments/m662_emergency_stop_during_build.py",
+    "python experiments/m663_emergency_stop_during_inference.py",
+    "python experiments/m664_rollback_under_load.py",
+    "python experiments/m665_hotfix_with_audit_trail.py",
+    "python experiments/m666_24h_soak_test.py",
+    "python experiments/m667_memory_leak_long_run.py",
+    "python experiments/m668_log_volume_storage_growth.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -65,6 +75,7 @@ DOC_FILES = [
     "docs/robustness_data_protocol.md",
     "docs/ci_hardening_protocol.md",
     "docs/security_hardening_protocol.md",
+    "docs/deployment_reality_protocol.md",
 ]
 
 

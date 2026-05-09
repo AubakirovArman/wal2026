@@ -13,8 +13,8 @@ Compiles and classifies every experiment script from the first milestone onward,
 - **pass**: `True`
 - **total_scripts**: `783`
 - **parse_failures**: `0`
-- **runnable_scripts**: `259`
-- **blocked_scripts**: `524`
+- **runnable_scripts**: `272`
+- **blocked_scripts**: `521`
 - **blocked_reason_counts**: `23 keys`
 - **records**: `783 items`
 

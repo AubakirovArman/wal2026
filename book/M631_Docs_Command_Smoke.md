@@ -11,12 +11,12 @@ M631 verifies that the fast commands documented for reviewers still run, while l
 
 ## Result
 
-- Runnable commands: `35`
-- Runnable commands passed: `35`
+- Runnable commands: `45`
+- Runnable commands passed: `45`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
-- Commands with embedded blocked result status: `7`
+- Commands with embedded blocked result status: `8`
 
 ## Outcome
 
-The public quick validation commands are executable locally, long-running reviewer commands resolve to real scripts, and M632-M638 are explicitly visible as `BLOCKED` model gates rather than hidden command failures.
+The public quick validation commands are executable locally, long-running reviewer commands resolve to real scripts, and M632-M638 plus M666 are explicitly visible as `BLOCKED` gates rather than hidden command failures.

@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 783 Python experiment/prototype scripts
+Total: 793 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -761,6 +761,16 @@ Total: 783 Python experiment/prototype scripts
 - [m656_prompt_injection_retrieval_context.py](experiments/m656_prompt_injection_retrieval_context.py)
 - [m657_provenance_tamper_test.py](experiments/m657_provenance_tamper_test.py)
 - [m658_signed_package_verification.py](experiments/m658_signed_package_verification.py)
+- [m659_shadow_deploy_real_server.py](experiments/m659_shadow_deploy_real_server.py)
+- [m660_canary_real_traffic_simulation.py](experiments/m660_canary_real_traffic_simulation.py)
+- [m661_live_patch_consistency.py](experiments/m661_live_patch_consistency.py)
+- [m662_emergency_stop_during_build.py](experiments/m662_emergency_stop_during_build.py)
+- [m663_emergency_stop_during_inference.py](experiments/m663_emergency_stop_during_inference.py)
+- [m664_rollback_under_load.py](experiments/m664_rollback_under_load.py)
+- [m665_hotfix_with_audit_trail.py](experiments/m665_hotfix_with_audit_trail.py)
+- [m666_24h_soak_test.py](experiments/m666_24h_soak_test.py)
+- [m667_memory_leak_long_run.py](experiments/m667_memory_leak_long_run.py)
+- [m668_log_volume_storage_growth.py](experiments/m668_log_volume_storage_growth.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

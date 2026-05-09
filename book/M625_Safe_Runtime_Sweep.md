@@ -12,8 +12,8 @@ Executes all scripts classified safe by M624 in M-order with a per-script timeou
 - **status**: ✅ PASS
 - **pass**: `True`
 - **total_scripts**: `783`
-- **executed_scripts**: `259`
-- **status_counts**: `2 keys` (`PASS=259`, `BLOCKED=524`)
+- **executed_scripts**: `272`
+- **status_counts**: `2 keys` (`PASS=272`, `BLOCKED=521`)
 - **timeout_sec**: `15`
 - **records**: `783 items`
 - **failures**: `0 items`

@@ -5,9 +5,9 @@ Source: `experiments/m624_full_test_inventory_results.json`
 
 ## Summary
 
-- Total scripts: `783`
-- Blocked scripts: `524`
-- Assigned scripts: `524`
+- Total scripts: `793`
+- Blocked scripts: `521`
+- Assigned scripts: `521`
 - Unassigned scripts: `0`
 
 ## Runner Classes
@@ -17,7 +17,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `DOCS_PUBLIC_CLAIMS` | 90 | Docs and public-claim generators behind truthfulness gates. |
 | `GPU_HEAVY` | 385 | CUDA/Triton/local-model scripts with explicit hardware requirements. |
 | `MODEL_CONTROLLED` | 3 | Model/tokenizer/dataset loading under pinned small/medium model protocols. |
-| `MUTATION_DRY_RUN` | 40 | Git/archive/destructive operations in temp repos or temp directories only. |
+| `MUTATION_DRY_RUN` | 37 | Git/archive/destructive operations in temp repos or temp directories only. |
 | `SLOW_PROFILE` | 1 | Timeout-prone scripts measured in slow profiling suite. |
 | `SUBPROCESS_REVIEW` | 5 | Scripts that spawn commands and need command-level review. |
 
@@ -38,7 +38,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `mass_export` | 4 | `DOCS_PUBLIC_CLAIMS` |
 | `mass_regeneration` | 4 | `DOCS_PUBLIC_CLAIMS` |
 | `mass_rewrite` | 2 | `DOCS_PUBLIC_CLAIMS` |
-| `merge_simulation_or_mutation` | 7 | `MUTATION_DRY_RUN` |
+| `merge_simulation_or_mutation` | 4 | `MUTATION_DRY_RUN` |
 | `model_artifact` | 33 | `GPU_HEAVY` |
 | `model_load` | 313 | `MODEL_CONTROLLED` |
 | `public_claim_generator` | 58 | `DOCS_PUBLIC_CLAIMS` |

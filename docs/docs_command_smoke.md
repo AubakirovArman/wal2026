@@ -8,14 +8,14 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `35`
-- Runnable commands passed: `35`
+- Runnable commands: `45`
+- Runnable commands passed: `45`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
 ## Commands
 
-- Commands with embedded blocked result status: `7`
+- Commands with embedded blocked result status: `8`
 
 | Mode | Command | Command Status | Result Status |
 |------|---------|----------------|---------------|
@@ -28,6 +28,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `doc` | `doc exists: docs/robustness_data_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/ci_hardening_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/security_hardening_protocol.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/deployment_reality_protocol.md` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m pytest -q tests` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid` | `PASS` | `—` |
 | `run` | `python experiments/m626_technical_report.py` | `PASS` | `PASS` |
@@ -62,6 +63,16 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m656_prompt_injection_retrieval_context.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m657_provenance_tamper_test.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m658_signed_package_verification.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m659_shadow_deploy_real_server.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m660_canary_real_traffic_simulation.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m661_live_patch_consistency.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m662_emergency_stop_during_build.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m663_emergency_stop_during_inference.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m664_rollback_under_load.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m665_hotfix_with_audit_trail.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m666_24h_soak_test.py` | `PASS` | `BLOCKED` |
+| `run` | `python experiments/m667_memory_leak_long_run.py` | `PASS` | `SIMULATED` |
+| `run` | `python experiments/m668_log_volume_storage_growth.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |
