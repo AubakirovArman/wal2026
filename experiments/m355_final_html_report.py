@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M355 — Final HTML Report
 
 Generate final HTML report of entire project.

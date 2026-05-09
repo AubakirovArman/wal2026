@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M1c: sweep calibration modes on mlp.up_proj (the hardest layer-0 tensor)."""
 from __future__ import annotations
 

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M235 v2 — Batch + Rehearsal Compiler (Reduced Scope)
 
 Hypothesis: Batch editing + rehearsal provides better lifecycle.

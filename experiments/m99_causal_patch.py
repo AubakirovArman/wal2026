@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M99: Causal Patch Verification — surgical weight editing via WAL Coeff-LoRA.
 

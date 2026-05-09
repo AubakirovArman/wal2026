@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M228 — Rehearsal Buffer Against Forgetting
 
 Compare sequential editing:

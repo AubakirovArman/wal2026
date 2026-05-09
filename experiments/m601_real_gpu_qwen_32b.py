@@ -12,7 +12,14 @@ print("=" * 60)
 print("M601 — REAL GPU INFERENCE (Qwen-VL-32B)")
 print("=" * 60)
 
-result = {"model_loaded": False, "inference_done": False, "error": None}
+result = {
+    "schema_version": "wal.results.v1",
+    "status": "NO_DATA",
+    "pass": False,
+    "model_loaded": False,
+    "inference_done": False,
+    "error": None,
+}
 
 try:
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -41,6 +48,8 @@ try:
     
     answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
     result["inference_done"] = True
+    result["status"] = "PASS"
+    result["pass"] = True
     result["answer"] = answer
     print(f"  ✅ Inference complete")
     print(f"  Input:  '{text}'")
@@ -48,6 +57,14 @@ try:
     
 except Exception as e:
     result["error"] = str(e)
+    error_text = str(e).lower()
+    if "unrecognized configuration" in error_text or "unsupported" in error_text:
+        result["status"] = "UNSUPPORTED"
+        result["reason"] = "UNSUPPORTED_CONFIG"
+    else:
+        result["status"] = "FAIL"
+        result["reason"] = "INFERENCE_ERROR"
+    result["pass"] = False
     print(f"  ❌ Error: {e}")
     import traceback
     traceback.print_exc()
@@ -55,4 +72,4 @@ except Exception as e:
 with open("experiments/m601_gpu_qwen_results.json", "w") as f:
     json.dump(result, f, indent=2)
 
-print("\n✅ M601: Real GPU inference test complete")
+print(f"\nM601: Real GPU inference status={result['status']}")

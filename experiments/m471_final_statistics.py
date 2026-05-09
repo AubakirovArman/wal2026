@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M471 — Final Project Statistics
 
 Comprehensive statistics for WAL v1.1.

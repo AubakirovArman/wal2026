@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M8a-v2: optimize the FP8 path.
 
 Strategies tested:

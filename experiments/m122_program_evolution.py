@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M122 / Phase 22: Program Evolution via Genetic Algorithm
 

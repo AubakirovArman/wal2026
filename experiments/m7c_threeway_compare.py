@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M7: Three-way compare — baseline vs eager-bf16 vs cached-packed.
 
 Runs WikiText-2 raw PPL + throughput + VRAM for:

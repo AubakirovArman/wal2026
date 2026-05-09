@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M160 v3 — Spectral Energy Map with real model weights."""
 import torch

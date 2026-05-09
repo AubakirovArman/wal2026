@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M37: Entropy-regularized greedy encoder (vectorized 2-pass).
 

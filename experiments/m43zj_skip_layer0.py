@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zj: Scalar smooth on layers 1-79, keep layer 0 original."""
 import torch

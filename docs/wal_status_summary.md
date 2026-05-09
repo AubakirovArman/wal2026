@@ -1,17 +1,17 @@
 # WAL Status Summary: M60–M95
 
 > Date: 2026-04-20
-> Status: **ALL 11 PHASES COMPLETE**. WAL is production-ready.
+> Status: historical M60-M95 technical summary. Current public project status is pre-alpha research framework; see `../TECHNICAL_REPORT.md`.
 
 ## Architecture Evolution
 
 | Version | Core Idea | Bits/Weight | PPL 70B | Status |
 |---------|-----------|-------------|---------|--------|
 | WAL-0 | Scalar multi-call (PUSH_ATOM, MUL, ADD, STOP) | 16–32 | 2.7821 | Legacy |
-| WAL v2 | Single-call + continuous coefficients | 12 | **2.7781** | Production codec |
+| WAL v2 | Single-call + continuous coefficients | 12 | **2.7781** | Best current codec prototype |
 | WAL v1 | Hierarchical atoms (L0 base + L1 composites) | 12 | **2.7809** | Semantic layer on v2 |
 | KV-cache | Per-layer K/V encoding | 12 | — | Long-context inference |
-| Streaming | Shard-by-shard encoder | 12 | — | Large-model deployment |
+| Streaming | Shard-by-shard encoder | 12 | — | Large-model deployment prototype |
 
 ---
 
@@ -127,7 +127,7 @@ weight = atom[atom_id] * coeff[coeff_id] + residual
 
 ## Files by Phase
 
-### WAL v2 (production codec)
+### WAL v2 (best current codec prototype)
 - `src/wal/v2/isa.py` — ISA v2
 - `src/wal/v2/encoder.py` — Two-pass encoder
 - `src/wal/v2/decoder.py` — PyTorch decoder
@@ -335,7 +335,7 @@ weight = atom[atom_id] * coeff[coeff_id] + residual
 **What was built:**
 - **Backend abstraction**: `WALBackend` ABC with decode + benchmark
 - **CPU backend**: NumPy vectorized ops (always available)
-- **CUDA backend**: PyTorch GPU ops (production path)
+- **CUDA backend**: PyTorch GPU ops (target accelerated path)
 - **MPS scaffolding**: Metal Performance Shaders for Apple Silicon
 - **ROCm scaffolding**: AMD GPU via HIP
 - **WebGPU scaffolding**: Browser/native WebGPU with WGSL shader generator

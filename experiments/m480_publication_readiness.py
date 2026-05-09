@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M480 — Publication Readiness Report
 
 Final check before public release.

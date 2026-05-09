@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43u: Full hybrid with threshold 0.03 (only truly spiky layers)."""
 import torch

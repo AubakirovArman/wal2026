@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M365 — Final Integration Test
 
 Run complete pipeline one more time.

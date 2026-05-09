@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M212 — Cross-Architecture Transfer: Qwen2.5-7B
 
 Test if WAL works on Qwen2.5-7B (different architecture from Llama).

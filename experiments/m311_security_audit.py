@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M311 — Security Audit
 
 Check for common vulnerabilities in WAL system.

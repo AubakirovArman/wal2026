@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M100f: Tune WAL atom_values + coeff_values directly (no adapter) for surgical editing."""
 import torch, sys

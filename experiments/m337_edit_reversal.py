@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M337 — Edit Reversal
 
 Undo specific edits without full rollback.

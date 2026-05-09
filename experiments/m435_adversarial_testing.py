@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M435 — Adversarial Testing Suite
 
 Tests model robustness against perturbed inputs.

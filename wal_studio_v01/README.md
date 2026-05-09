@@ -1,6 +1,6 @@
 # WAL Studio v0.1
 
-WeightOps framework for knowledge surgery on LLMs.
+Pre-alpha WeightOps demo for recipe/build/test/debug/rollback workflows.
 
 ## Quick Start
 
@@ -18,26 +18,28 @@ python wal_studio_v01/demo.py
 
 ## Project Statistics
 
-- 507 experiments
-- 314 book entries
-- 95 modules (M291–M385)
-- 5 validation experiments (E1–E5)
+- 756 Python experiment/prototype scripts
+- 424 result JSON files
+- 569 book entries
+- M621-M631 cleanup/report/demo/runner gates
 
 ## Validation Results
 
 | Metric | Value |
 |--------|-------|
-| Survival (synthetic) | 95.2% |
-| Survival (realistic) | 90.4% |
-| CI Score | 94% |
-| Security | 7/8 |
-| 24h Server | 0.85% errors |
+| Core pytest | 12 passing |
+| Result schema | valid |
+| M624 inventory | 0 compile failures |
+| M625 safe sweep | 233 PASS, 0 FAIL, 523 BLOCKED |
+| Demo framing | pre-alpha |
 
 ## Honest Assessment
 
-**Working**: CLI, recipes, DAG, build, CI, rollback, blame, bisect
-**Needs work**: Multi-model validation, prompt injection, memory growth
-**Status**: Pre-alpha, research-grade prototype
+**Working**: CLI concepts, recipes, DAG/build concepts, CI gates, rollback, blame, bisect, release notes.
+**Needs work**: controlled cross-model validation, real GPU-heavy workflows, non-simulated deployment integrations.
+**Status**: Pre-alpha, research-grade prototype.
+
+See `../TECHNICAL_REPORT.md` and `../docs/demo_playbook.md` for current public framing.
 
 ## Architecture
 
@@ -51,4 +53,4 @@ recipes/ → build → wal_weights.bin
 
 ## License
 
-Research prototype. Not for production without further validation.
+MIT

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M40: End-to-end PPL benchmark on Llama 3.1 8B with hybrid encoder.
 

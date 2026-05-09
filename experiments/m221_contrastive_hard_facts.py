@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M221 — Contrastive Loss for Hard Facts (Deletion Problem)
 
 Hypothesis 8: Hard facts are not an addition problem, they're a DELETION problem.

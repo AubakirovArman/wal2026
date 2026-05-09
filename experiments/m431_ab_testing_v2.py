@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M431 — A/B Testing Framework v2
 
 Compares two WAL builds with statistical significance testing.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M214 — Steps Pareto Frontier
 
 Test steps=[50, 100, 200, 300, 400, 600, 800] on compiled mode with K=256.

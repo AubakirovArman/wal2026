@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M97: Fine-tune Llama 3.1 8B on synthetic Q&A using WAL Coeff-LoRA.
 

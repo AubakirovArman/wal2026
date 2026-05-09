@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M302 — Adapter Persistence
 
 Save and load adapter weights for fast recovery.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M227 — Recipe Replay Determinism
 
 Hypothesis: Edit recipes stored in WAL build system are deterministic.

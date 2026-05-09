@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M223 — Counterfactual Sandbox (Parallel Branches)
 
 Hypothesis 6: Since sequential compiled edit works, we can branch models:

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M317 — Temporal Facts
 
 Facts that have expiration dates or versioned updates.

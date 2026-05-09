@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M152 v4 — Safety Score on Structured LoRA Deltas (GPU fast)."""
 import torch

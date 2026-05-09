@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Root-cause diagnostic for FusedIDRouteLinear NaN.
 
 Quantize a single Llama linear, compare fused vs reference on synthetic input,

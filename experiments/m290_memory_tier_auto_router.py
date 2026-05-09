@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M290 — Memory Tier Auto-Router
 
 Hypothesis: We can automatically route facts to the optimal tier

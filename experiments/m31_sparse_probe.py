@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M31 — Sparse Probe: block-sparsity analysis in Block-RVQ encodings.
 
 Tests whether DRL v2 / Block-RVQ stage_id streams contain natural sparsity

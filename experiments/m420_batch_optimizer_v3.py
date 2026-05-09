@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M420 — Batch Optimizer v3
 
 Adaptive batch sizing based on GPU memory availability.

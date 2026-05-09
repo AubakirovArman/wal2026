@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M463 — API Endpoint Simulation
 
 Simulates REST API for WAL inference.

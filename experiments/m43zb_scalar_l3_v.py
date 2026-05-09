@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zb: Test scalar on layer 3 v_proj (std=0.0780)."""
 import torch

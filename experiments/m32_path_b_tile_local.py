@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M32 — Path B Diagnostic: small-vocabulary palette vs global gather vs dense.
 
 Tests whether restricting the active vocabulary to a small global palette

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M342 — Batch Optimizer
 
 Find optimal batch size for training.

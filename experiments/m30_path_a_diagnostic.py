@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Path A Diagnostic: shared-memory codebook gather vs global gather vs dense.
 
 Hypothesis: A 3KB codebook fits in shared memory / L1 cache.

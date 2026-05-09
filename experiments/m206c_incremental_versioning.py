@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M206c — Incremental Editing with Versioning
 
 Test sequential editing with 3+ groups.

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M53: WAL-0 compression + PPL validation on Llama 3.3 70B.
 Optimized: no programs storage during encode, theoretical compression estimate."""

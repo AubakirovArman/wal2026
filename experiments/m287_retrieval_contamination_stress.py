@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M287 — Retrieval Contamination Stress Test
 
 Hypothesis: Retrieval can be contaminated by wrong context,

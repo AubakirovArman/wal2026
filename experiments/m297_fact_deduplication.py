@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M297 — Fact Deduplication
 
 Detect and merge duplicate or similar facts in recipe sets.

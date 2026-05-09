@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Probe a graph-style shared PQ codebook across multiple weight tensors.
 
 Hypothesis (route-graph idea):

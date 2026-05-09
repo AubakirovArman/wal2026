@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M251 — Batch Rehearsal with FP32 Fix
 
 Hypothesis: M235's 0/25 survival was caused by fp16 gradient overflow,

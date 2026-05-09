@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M336 — Compression Efficiency Analysis
 
 Analyze compression ratios across different recipe types.

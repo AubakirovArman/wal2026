@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M402 — Prompt Injection Hardening
 
 Implements input sanitization, keyword filtering, and template guards

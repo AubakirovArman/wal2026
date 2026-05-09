@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M236 — True Causal Tracing Selector
 
 Hypothesis: Editability is determined by causal influence, not activation norm.

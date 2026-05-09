@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M100c: Surgical Edit — 10 contrafactual facts, 64 params (8 layers, C=8)."""
 import torch, sys, json, os

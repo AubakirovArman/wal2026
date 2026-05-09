@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M262 — Rollback Speed Test
 
 Hypothesis: Rolling back to a previous version should be instant

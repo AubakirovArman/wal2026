@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M448 — Health Check Endpoint
 
 Simulates /health API returning system status.

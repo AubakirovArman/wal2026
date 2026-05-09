@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zg: Encode only smooth params in early layers (0-19), skip spiky q/k/v."""
 import torch

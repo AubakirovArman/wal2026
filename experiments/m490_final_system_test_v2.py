@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M490 — Final System Test v2
 
 Ultimate end-to-end validation.

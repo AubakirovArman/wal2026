@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M361 — Model Warmup
 
 Pre-warm model for faster first inference.

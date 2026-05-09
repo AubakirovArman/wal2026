@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M301 — Real-Time Editing
 
 Apply edits to model without stopping inference.

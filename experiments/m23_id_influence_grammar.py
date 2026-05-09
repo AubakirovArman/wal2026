@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M23: activation-weighted ID influence grammar for packed Block-RVQ layers.
 
 Builds a per-layer "grammar" over discrete weight tokens. For every packed

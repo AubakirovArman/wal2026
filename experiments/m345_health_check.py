@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M345 — System Health Check
 
 Comprehensive diagnostics of WAL system.

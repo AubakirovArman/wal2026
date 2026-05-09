@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M399 — Contributing Guide
 
 Generate CONTRIBUTING.md for future collaborators.

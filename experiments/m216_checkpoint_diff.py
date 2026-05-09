@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M216 — WAL Checkpoint Diff After Compiled Edit
 
 Compare WAL_v0 vs WAL_v1 vs WAL_v2 to understand:

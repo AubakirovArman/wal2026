@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M9b: Codebook compression probe.
 
 Question: can we cap the route codebook to M' << ~1500 with negligible quality loss?

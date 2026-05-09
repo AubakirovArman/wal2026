@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M2: count unique routes per layer-0 tensor and compute effective bpw."""
 from __future__ import annotations
 

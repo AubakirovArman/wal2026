@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-LRT Step 6a: learned route-template prototype for l54 gate/up.
 
 This probe moves from mined exact macros to learned full-program templates.

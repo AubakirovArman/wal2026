@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M464 — Load Balancer Simulation
 
 Round-robin load balancing across workers.

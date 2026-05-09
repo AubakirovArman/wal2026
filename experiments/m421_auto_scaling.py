@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M421 — Auto-Scaling Simulation
 
 Scales inference workers based on request queue depth.

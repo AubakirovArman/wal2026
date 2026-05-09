@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M304 — Production Playbook
 
 Step-by-step guide for production deployment.

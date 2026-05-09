@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M313 — Recipe Import/Export
 
 Support JSON and CSV formats for recipe exchange.

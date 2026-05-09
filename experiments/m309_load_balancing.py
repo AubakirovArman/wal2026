@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M309 — Load Balancing
 
 Distribute inference across multiple model instances.

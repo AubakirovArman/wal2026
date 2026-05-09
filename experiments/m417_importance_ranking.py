@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M417 — Importance Ranking
 
 Ranks facts by frequency, confidence, and dependency count.

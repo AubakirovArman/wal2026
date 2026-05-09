@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M250 — Final Report: M235-M246 Summary
 
 Collects all experiment results and generates consolidated report.

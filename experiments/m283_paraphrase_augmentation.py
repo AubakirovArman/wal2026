@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M283 — Paraphrase Augmentation
 
 Hypothesis: Training on paraphrased versions of each fact

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M289 — Retrieval Confidence Threshold
 
 Measure retrieval confidence distribution to find optimal routing threshold.

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M1 probe with per-row normalization (mandatory for real LLM weights).
 
 Strategy mirrors Route B's row_scale:

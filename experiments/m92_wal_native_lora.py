@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M92: WAL-Native LoRA — adaptation in WAL space vs classic LoRA.
 

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M332 — Fact Similarity Matrix
 
 Compute similarity between all facts.

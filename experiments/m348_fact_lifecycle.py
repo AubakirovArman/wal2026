@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M348 — Fact Lifecycle Management
 
 Manage facts through create, update, deprecate, archive stages.

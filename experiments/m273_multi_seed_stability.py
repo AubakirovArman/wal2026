@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M273 — Multi-Seed Stability Test
 
 Hypothesis: Same recipe with different seeds produces models with

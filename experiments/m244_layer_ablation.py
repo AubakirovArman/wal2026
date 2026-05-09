@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M244 — Layer Ablation for Editing
 
 Hypothesis: Not all layers in [14,15,16] are equally important for editing.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M196h — Wave-LoRA with Higher Rank (rank=8)
 
 Hypothesis: At rank=8, wave reg may help because higher capacity = more need for regularization.

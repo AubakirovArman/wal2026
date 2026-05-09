@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M484 — Data Pipeline Validation
 
 Validates data flow from raw facts to compiled weights.

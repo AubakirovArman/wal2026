@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M203 — Dense LoRA vs WAL+LoRA Comparison
 
 The critical question: Is WAL+LoRA actually better/equal to dense+LoRA,

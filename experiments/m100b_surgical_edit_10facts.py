@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M100b: Surgical Edit — 10 contrafactual facts, test if coeff-LoRA can implant."""
 import torch, sys, json, os

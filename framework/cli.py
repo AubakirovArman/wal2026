@@ -107,6 +107,24 @@ def cmd_pipeline(args):
     print(f"[WAL] Pipeline complete. Output: {args.output}")
 
 
+def cmd_validate_results(args):
+    """Validate experiment result JSON files."""
+    from wal.results import validate_results, write_json
+
+    summary = validate_results(args.path, strict=args.strict)
+    payload = summary.to_dict()
+    print(
+        "[WAL] Result validation: "
+        f"{payload['valid']}/{payload['total']} valid, "
+        f"{payload['invalid']} invalid, {payload['warnings']} warnings"
+    )
+    if args.output:
+        write_json(args.output, payload)
+        print(f"[WAL] Wrote report: {args.output}")
+    if args.fail_on_invalid and not summary.passed:
+        raise SystemExit(1)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="wal",
@@ -230,6 +248,14 @@ Examples:
     p.add_argument("--device", default="cuda", help="Device")
     p.add_argument("--trust-pickle", action="store_true", help="Allow pickle-backed torch.load for trusted files")
     p.set_defaults(func=cmd_pipeline)
+
+    # validate-results
+    p = subparsers.add_parser("validate-results", help="Validate experiment result JSON files")
+    p.add_argument("path", nargs="?", default="experiments", help="Directory containing *_results.json files")
+    p.add_argument("--strict", action="store_true", help="Require explicit schema_version/status/pass keys")
+    p.add_argument("--output", "-o", help="Write validation report JSON")
+    p.add_argument("--fail-on-invalid", action="store_true", help="Exit non-zero when invalid files are found")
+    p.set_defaults(func=cmd_validate_results)
 
     args = parser.parse_args(argv)
     if not args.command:

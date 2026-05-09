@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M265 — CI Gate Threshold Calibration
 
 Hypothesis: We can determine optimal thresholds for CI gates

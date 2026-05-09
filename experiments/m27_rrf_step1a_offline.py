@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 RRF Step 1a (offline analysis): RRF allocator vs baselines + tile sweep.
 
 Loads ``results/m23_influence/l54_gate_up.pt`` produced by m27_rrf_collect.py

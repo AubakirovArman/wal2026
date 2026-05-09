@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M419 — Comparison Matrix Generator
 
 Generates side-by-side comparison of WAL vs baselines.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M300 — Mega Test: 500 Facts
 
 Ultimate stress test with 500 diverse facts.

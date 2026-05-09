@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zk: VRE only on q/k/v/gate/up in layer 0, scalar on o_proj/down_proj and all smooth."""
 import torch

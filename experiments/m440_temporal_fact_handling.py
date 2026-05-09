@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M440 — Temporal Fact Handling
 
 Handles facts that change over time (e.g., presidents).

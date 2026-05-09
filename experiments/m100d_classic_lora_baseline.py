@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M100d: Classic LoRA baseline — can rank-4 LoRA implant 10 contrafactual facts?"""
 import torch, sys, math

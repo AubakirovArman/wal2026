@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M59 v3: Fast global codebook analysis — ALL GPU, zero CPU materialization.
 

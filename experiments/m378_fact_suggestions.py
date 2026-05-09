@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M378 — Fact Suggestions
 
 Suggest related facts based on existing ones.

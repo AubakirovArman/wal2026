@@ -1,27 +1,26 @@
-"""
-M544 — Result Validation
+"""M544 — Result Validation.
 
-Validates result files have required fields.
+Validates result files against the WAL result schema.
 """
-import json, glob
+import json
+import sys
+from pathlib import Path
 
-valid = 0
-invalid = 0
-for path in glob.glob("experiments/*_results.json"):
-    with open(path) as f:
-        data = json.load(f)
-    if isinstance(data, dict):
-        valid += 1
-    else:
-        invalid += 1
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from wal.results import validate_results
 
 print("=" * 60)
 print("M544 — RESULT VALIDATION")
 print("=" * 60)
-print(f"  Valid: {valid}")
-print(f"  Invalid: {invalid}")
+summary = validate_results("experiments")
+payload = summary.to_dict()
+print(f"  Valid: {payload['valid']}")
+print(f"  Invalid: {payload['invalid']}")
+print(f"  Warnings: {payload['warnings']}")
 
 with open("experiments/m544_result_validation_results.json", "w") as f:
-    json.dump({"valid": valid, "invalid": invalid, "pass": invalid == 0}, f, indent=2)
+    json.dump(payload, f, indent=2)
 
-print("\n✅ M544: Result validation complete")
+print(f"\nM544: Result validation status={payload['status']}")

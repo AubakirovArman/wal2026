@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M368 — Model Ensemble
 
 Combine multiple adapters for better accuracy.

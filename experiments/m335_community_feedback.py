@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M335 — Community Feedback
 
 Simulate user feedback loop for continuous improvement.

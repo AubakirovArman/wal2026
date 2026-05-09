@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M460 — Project Health Score
 
 Computes composite health score from multiple dimensions.

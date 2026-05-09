@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M489 — Final Executive Summary
 
 One-page summary for stakeholders.

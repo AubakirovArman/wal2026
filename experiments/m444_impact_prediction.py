@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M444 — Impact Prediction Model
 
 Predicts impact of a new edit on existing facts.

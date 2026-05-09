@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M292 — Full Integration Test
 
 End-to-end test of the entire WAL pipeline.

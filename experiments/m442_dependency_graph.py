@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M442 — Dependency Graph Builder
 
 Tracks which facts depend on others.

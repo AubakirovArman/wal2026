@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M233 v2 — WAL Garbage Collection (Simplified)
 
 Test if removing old edits from a sequential chain frees capacity.

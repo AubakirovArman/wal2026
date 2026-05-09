@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M428 — Edit Prioritization
 
 Ranks pending edits by urgency and impact.

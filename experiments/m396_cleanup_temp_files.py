@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M396 — Cleanup Temporary Files
 
 Remove old temp files and validate directory structure.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M306 — Response Caching
 
 Cache frequent answers to reduce inference load.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M9c: Activation sparsity probe for `down_proj` inputs (post-SwiGLU).
 
 Question: how much of `x` going into down_proj is near-zero?

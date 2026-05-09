@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M367 — Three-Way Merge
 
 Resolve edit conflicts with 3-way merge.

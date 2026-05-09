@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M259 — Build Cache Idempotency
 
 Hypothesis: Re-running the same build recipe twice produces

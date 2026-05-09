@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M231 — Logit-Level Old Answer Suppression
 
 Hypothesis: Directly penalizing old answer tokens at the logits level

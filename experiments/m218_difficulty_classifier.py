@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M218 — Difficulty Classifier
 
 Build a classifier to predict fact difficulty BEFORE expensive training.

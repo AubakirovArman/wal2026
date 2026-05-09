@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M454 — Results Trend Analyzer
 
 Analyzes pass/fail trends across recent experiments.

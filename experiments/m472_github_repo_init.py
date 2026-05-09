@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M472 — GitHub Repository Init
 
 Simulates git init and first commit for WAL project.

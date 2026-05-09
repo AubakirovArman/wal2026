@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M432 — Canary Deployment Simulation
 
 Rolls out new build to fraction of traffic, monitors, then full rollout.

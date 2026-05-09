@@ -1,32 +1,35 @@
 # M501 — Real Gpu Inference
 
 ## Описание эксперимента
-M501 — Real GPU Inference on Kimi-K2-Thinking Attempts to load model on GPU and run inference.
+Real GPU inference is resource-blocked on the available Kimi-K2-Thinking setup; this is not a PASS.
 
 ## Исходный файл
 `m501_real_gpu_inference.py`
 
-## Результаты (полные данные)
+## Результаты
 
+- **schema_version**: `wal.results.v1`
+- **status**: ⛔ BLOCKED
+- **pass**: `False`
 - **model_loaded**: `False`
 - **inference_done**: `False`
-- **error**: `CUDA error: out of memory
-CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
-For debugging consider passing CUDA_LAUNCH_BLOCKING=1
-Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
-`
-- **gpu_memory_before_mb**: 1 items
-  - 0.0
-- **gpu_memory_after_mb**: 0 items
-- **pass**: ✅ PASS
+- **error**: `CUDA error: out of memory CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect. For debugging consider passing ...`
+- **gpu_memory_before_mb**: `1 items`
+- **gpu_memory_after_mb**: `0 items`
+- **reason**: `RESOURCE_LIMIT_OOM`
 
 ## Анализ
 
 - **Модуль**: M501
 - **Название**: Real Gpu Inference
-- **Дата выполнения**: 2026-04-20 – 2026-05-06
-- **Статус**: ✅ Успешно завершён
+- **Дата обновления**: 2026-05-09
+- **Статус**: ⛔ BLOCKED
+
+## Лог аудита
+
+- Обновлено вручную в рамках cleanup release M621–M623.
+- Исторические данные сохранены; статусная интерпретация приведена к WAL result schema v1.
 
 ---
 
-*Запись сгенерирована автоматически.*
+*Запись обновлена после технического аудита.*

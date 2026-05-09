@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M255 — Encode Seed Sensitivity Audit
 
 Hypothesis: Different encode seeds produce different but equally valid 

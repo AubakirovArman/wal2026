@@ -1,24 +1,31 @@
 # M544 — Result Validation
 
 ## Описание эксперимента
-M544 — Result Validation Validates result files have required fields.
+Result validation now uses wal.results.v1 and the wal validate-results CLI.
 
 ## Исходный файл
 `m544_result_validation.py`
 
-## Результаты (полные данные)
+## Результаты
 
-- **valid**: `308`
-- **invalid**: `27`
-- **pass**: ❌ FAIL
+- **schema_version**: `wal.results.v1`
+- **status**: ✅ PASS
+- **pass**: `True`
+- **total**: `424`
+- **valid**: `424`
+- **invalid**: `0`
+- **warnings**: `576`
+- **status_counts**: `5 keys` (`PASS=414`, `FAIL=5`, `BLOCKED=1`, `SIMULATED=3`, `UNSUPPORTED=1`)
+- **invalid_files**: `0 items`
+- **warning_files**: `383 items`
 
 ## Анализ
 
 - **Модуль**: M544
 - **Название**: Result Validation
-- **Дата выполнения**: 2026-04-20 – 2026-05-06
-- **Статус**: ❌ FAIL
+- **Дата обновления**: 2026-05-09
+- **Статус**: ✅ PASS
 
 ---
 
-*Запись сгенерирована автоматически.*
+*Запись обновлена после полного sweep-аудита.*

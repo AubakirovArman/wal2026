@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M120 / Phase 20: Behavioural Patch — Style Transfer to Concise Answers
 

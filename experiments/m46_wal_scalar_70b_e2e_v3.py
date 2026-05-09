@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M46v3: WAL Scalar end-to-end on Llama 3.3 70B — lmax=2, K=128, skip spiky.
 Optimized: encode on param's native device, no programs storage, larger batch."""

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43b: Quick analysis — how many spiky vs smooth layers in 70B?"""
 import torch

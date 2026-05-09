@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M200 — Merge + Re-encode with K=1024
 
 Hypothesis: Higher K = finer quantization = less re-encode loss.

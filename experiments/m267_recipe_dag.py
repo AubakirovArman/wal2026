@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M267 — Recipe DAG: Branch, Fork, Merge
 
 Hypothesis: Recipe history should be a DAG, not linear.

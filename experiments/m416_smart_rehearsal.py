@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M416 — Smart Rehearsal System
 
 Selects facts for rehearsal based on forgetting curve.

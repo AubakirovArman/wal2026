@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M450 — Emergency Stop v2
 
 Circuit breaker with automatic recovery attempt.

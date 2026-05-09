@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M476 — Issue Templates
 
 GitHub issue templates for bugs and features.

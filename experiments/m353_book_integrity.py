@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M353 — Book Integrity Check
 
 Verify all book entries are valid.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M449 — Version Compatibility Check
 
 Ensures WAL weights are compatible with model version.

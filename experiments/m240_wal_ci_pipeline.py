@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M240 — WAL CI Pipeline
 
 Hypothesis: Edit validation can be fully automated into a CI-style

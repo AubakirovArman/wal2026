@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M467 — Backup & Restore System
 
 Simulates WAL project backup and restore.

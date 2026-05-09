@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M246 — Production Stack v9 Validation
 
 Integrates all confirmed best practices:

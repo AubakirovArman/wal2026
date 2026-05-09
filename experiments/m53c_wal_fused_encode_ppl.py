@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M53c: WAL-0 with fused Triton encode + PPL on Llama 3.3 70B."""
 import torch

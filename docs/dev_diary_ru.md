@@ -4701,3 +4701,173 @@ Model type should be one of ApertusConfig, ArceeConfig, AriaTextConfig, BambaCon
 - **Процент успеха**: 88.4%
 
 ---
+
+---
+
+## M621-623 — Cleanup Release Audit (2026-05-09)
+
+### Контекст
+После технического аудита публичная формулировка проекта приведена к честному статусу: **pre-alpha research framework**, а не production-ready/complete/certified. Для всех новых cleanup-экспериментов теперь обязательны три артефакта: `experiments/*_results.json`, запись в `book/`, запись в этом дневнике.
+
+### Исправленные исторические статусы
+- **M501 — Real GPU Inference**: был ложный PASS при CUDA OOM; теперь `status=BLOCKED`, `reason=RESOURCE_LIMIT_OOM`, `pass=false`.
+- **M601 — Real GPU Qwen 32B**: был ложный PASS при unsupported Qwen3VL config; теперь `status=UNSUPPORTED`, `reason=UNSUPPORTED_CONFIG`, `pass=false`.
+- **M510 — Naming Convention Check**: старый regex ошибочно считал legacy имена invalid; теперь `valid=721`, `legacy_named=2`, `invalid=0`, `status=PASS`.
+- **M518 — Automated Test Suite**: старый gate запускал произвольные M5xx GPU/doc scripts; теперь gate — поддерживаемый `pytest -q tests`, результат `12 passed`, `status=PASS`.
+- **M544 — Result Validation**: 27 list-shaped legacy results нормализованы в `wal.results.v1` wrappers без потери `records`; теперь `valid=414`, `invalid=0`, `status=PASS`.
+
+### M621 — Release Truthfulness Audit
+- **Файл**: `m621_release_truthfulness_audit.py`
+- **Результат**: checks_passed=37, checks_failed=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M621_Release_Truthfulness_Audit.md`
+
+### M622 — Result Schema Gate
+- **Файл**: `m622_result_schema_gate.py`
+- **Результат**: valid=424, invalid=0, warnings=576
+- **Статус**: ✅ PASS
+- **Book**: `book/M622_Result_Schema_Gate.md`
+
+### M623 — Core Release Gate
+- **Файл**: `m623_core_release_gate.py`
+- **Результат**: `pytest -q tests` → 12 passed, 1 warning
+- **Статус**: ✅ PASS
+- **Book**: `book/M623_Core_Release_Gate.md`
+
+### Новые release gates
+```bash
+python -m pytest -q tests
+wal validate-results experiments --fail-on-invalid
+python experiments/m510_naming_convention_check.py
+python experiments/m518_automated_test_suite.py
+python experiments/m544_result_validation.py
+```
+
+### Ограничения, зафиксированные публично
+- WAL остаётся pre-alpha research framework.
+- Deployment/ops модули считать prototypes/simulations, если явно не доказано обратное.
+- Исторические `A+`, `complete`, `certified` остаются как generated history, не как текущие release claims.
+- Полный cross-model WAL workflow ещё требует small text-only моделей с единым protocol.
+
+---
+
+## M624-625 — Full Test Sweep (2026-05-09)
+
+### Цель
+Перепроверить все experiment/test scripts начиная с первых M1-модулей, записать результаты, исправить обнаруженные ошибки и не запускать вслепую тяжёлые GPU/модельные или destructive scripts.
+
+### M624 — Full Test Inventory
+- **Файл**: `m624_full_test_inventory.py`
+- **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
+- **Результат**: total_scripts=756, parse_failures=0, runnable_scripts=233, blocked_scripts=523
+- **Статус**: ✅ PASS
+- **Book**: `book/M624_Full_Test_Inventory.md`
+
+### Найденные и исправленные ошибки
+- **49 compile-time SyntaxError**: старый M481 license-header injection добавил docstring перед `from __future__ import annotations`; удалён injected header из 723 experiment scripts.
+- **M543 list-result bug**: `m543_success_rate_by_phase.py` падал на legacy list-shaped result JSON (`AttributeError: 'list' object has no attribute 'get'`); добавлен `result_passed()` для dict/list payloads и schema v1 output.
+- **M624 проверка усилена**: вместо одного AST parse используется `compile()`, который ловит неправильное расположение future imports.
+- **M625 policy усилен**: public-claim generators, git-mutating, archive/backup/restore, destructive, heavy model/CUDA и timeout-prone scripts блокируются как `BLOCKED` by policy.
+
+### M625 — Safe Runtime Sweep
+- **Файл**: `m625_safe_runtime_sweep.py`
+- **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
+- **Результат**: total_scripts=756, executed_scripts=233, status_counts={PASS: 233, BLOCKED: 523}, FAIL=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M625_Safe_Runtime_Sweep.md`
+
+### Почему 523 BLOCKED не являются FAIL
+Заблокированы скрипты, которые требуют локальные 70B+/594GB модели, CUDA/device_map, HF downloads/datasets, Triton/GPU runtime, git mutations, destructive file ops, backup/archive/restore, mass regeneration или public-claim generation. Это осознанный safety gate, а не результат runtime failure.
+
+### Финальные gates после sweep
+- `M621`: truthfulness audit PASS
+- `M622`: result schema gate PASS, valid=424, invalid=0
+- `M623`: core release gate PASS, `12 passed, 1 warning`
+- `M544`: result validation PASS, valid=424, invalid=0
+- `M518`: automated suite PASS, `12 passed, 1 warning`
+
+### Следующий практический шаг
+Для BLOCKED-группы нужен отдельный controlled runner по категориям: GPU-small, GPU-large, git/meta dry-run, docs-generator dry-run. Их нельзя смешивать с обычным safe sweep.
+
+---
+
+## M626-627 — Technical Report и Polished Demo (2026-05-09)
+
+### Цель
+После полного safe sweep добавить публичный слой, который не перепродаёт зрелость проекта: один честный технический отчёт и один короткий demo playbook для reviewer walkthrough.
+
+### M626 — Technical Report Gate
+- **Файл**: `m626_technical_report.py`
+- **Документ**: `TECHNICAL_REPORT.md`
+- **Метод**: проверка обязательных секций, conservative public claims, статусов `BLOCKED`/`UNSUPPORTED`/`SIMULATED`, упоминания M624/M625 и next cross-model protocol.
+- **Результат**: checks_passed=20, checks_failed=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M626_Technical_Report.md`
+
+### M627 — Polished Demo Playbook Gate
+- **Файл**: `m627_polished_demo_playbook.py`
+- **Документ**: `docs/demo_playbook.md`
+- **Метод**: проверка 9-step сценария `init → recipe → build → tests → bad edit → CI fail → blame/bisect → rollback → release notes`, reviewer commands и pre-alpha framing.
+- **Результат**: checks_passed=20, checks_failed=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M627_Polished_Demo_Playbook.md`
+
+### Изменение публичного представления
+- `README.md` теперь ссылается на `TECHNICAL_REPORT.md` и `docs/demo_playbook.md`.
+- `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M631.
+- `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
+- `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `233 PASS / 523 BLOCKED`.
+
+### Практический вывод
+Для публичного GitHub входа теперь есть две разные двери:
+- **technical reviewer** → `TECHNICAL_REPORT.md`
+- **demo reviewer** → `docs/demo_playbook.md`
+
+---
+
+## M628-631 — Controlled Runner Hardening (2026-05-09)
+
+### Цель
+Перевести `BLOCKED` из плоского счётчика в управляемую систему runner-классов: safe-core отдельно, модели отдельно, GPU отдельно, destructive/git отдельно, docs/public claims отдельно.
+
+### M628 — Blocked Script Taxonomy
+- **Файл**: `m628_blocked_script_taxonomy.py`
+- **Документ**: `docs/blocked_script_taxonomy.md`
+- **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
+- **Результат**: total_scripts=756, blocked_scripts=523, assigned_scripts=523, unassigned_scripts=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M628_Blocked_Script_Taxonomy.md`
+
+### M629 — Controlled Runner Matrix
+- **Файл**: `m629_controlled_runner_matrix.py`
+- **Документ**: `docs/controlled_runners.md`
+- **Метод**: формализация 7 runners: `SAFE_CORE`, `MODEL_SMALL`, `MODEL_MEDIUM`, `GPU_HEAVY`, `MUTATION_DRY_RUN`, `DOCS_PUBLIC_CLAIMS`, `SECURITY_ABUSE`.
+- **Результат**: runners_total=7, taxonomy_unassigned_scripts=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M629_Controlled_Runner_Matrix.md`
+
+### M630 — Public Claim Checker
+- **Файл**: `m630_public_claim_checker.py`
+- **Документ**: `docs/public_claim_policy.md`
+- **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
+- **Результат**: files_scanned=20, violations_total=0, required_phrase_misses=0
+- **Статус**: ✅ PASS
+- **Book**: `book/M630_Public_Claim_Checker.md`
+
+### M631 — Docs Command Smoke
+- **Файл**: `m631_docs_command_smoke.py`
+- **Документ**: `docs/docs_command_smoke.md`
+- **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
+- **Результат**: run_commands=8/8 PASS, exists_only_commands=2/2 PASS
+- **Статус**: ✅ PASS
+- **Book**: `book/M631_Docs_Command_Smoke.md`
+
+### Исправление M624 policy
+- M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
+- Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
+- Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
+- Финальный M624 после M628-M631: total_scripts=756, parse_failures=0, runnable_scripts=233, blocked_scripts=523.
+
+### Практический вывод
+Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.

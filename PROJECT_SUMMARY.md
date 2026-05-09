@@ -1,68 +1,40 @@
 # WAL Project Summary
 
-**Status:** pre-alpha, system-validated, publication-ready
-**Grade:** A+
-**Version:** v1.2
-**Date:** 2026-04-20
+**Status:** pre-alpha research framework prototype
+**Release Grade:** not assigned
+**Version:** v1.4 post-audit cleanup
+**Date:** 2026-05-09
 
 ## Statistics
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 594 scripts |
-| Results | 275+ JSON files |
-| Books | 325 entries |
-| Guides | 17 |
-| GitHub files | 12 |
-| License headers | 590 files |
-| Documentation | 8/8 complete |
+| Experiments | 756 Python scripts |
+| Results | 424 JSON result files |
+| Books | 569 entries |
+| Docs | 221 markdown docs plus developer diary |
+| Maintained core tests | 12 passing |
+| Safe runtime sweep | 233 passing, 0 failing, 523 blocked by policy |
 
 ## Key Results
 
-| Metric | Value |
-|--------|-------|
-| max_facts | 500 (synthetic), 383 (realistic) |
-| survival_rate | 95.2% (synthetic), 90.4% (realistic) |
-| ci_score | 94% |
-| build_time | 6.1s |
-| rollback_speedup | 2.7× |
-| inference_latency | 45ms |
-| memory_overhead | 8MB |
-| system_test_v2 | 94/98 (96%) |
-
-## Real Model Validation
-
-- **Kimi-K2-Thinking** (594GB): tokenizer loaded, 7 tokens verified ✅
-- **MiniMax-M2** (230GB): tokenizer loaded, 7 tokens verified ✅
-- **wesa-qwen-vl-32b** (67GB): tokenizer loaded, 7 tokens verified ✅
-
-## WAL Studio v0.1
-
-Unified demo: `wal_studio_v01/demo.py`
-- 12-step workflow
-- init → edit → build → test → tag → rollback
-- blame + bisect for debugging
-- CI gate catches bad edits
-
-## Validation Suite
-
-| Experiment | Result | Status |
-|------------|--------|--------|
-| E1 Realistic 500 | 90.4% survival | ✅ |
-| E2 Multi-model | 3 models tokenized | ✅ |
-| E3 Baseline | WAL hybrid 0.957 wins | ✅ |
-| E4 Security | 12/12 attacks blocked | ✅ |
-| E5 Long-run | 1.7% errors, memory bounded | ✅ |
-
-## Fixes Applied
-
-- **M401** Memory leak fixed: 149MB → 104MB (–31%)
-- **M402** Prompt injection hardened: 12/12 vectors blocked
+- Core package APIs pass the maintained pytest suite.
+- `wal validate-results` validates the result corpus under `wal.results.v1` compatibility rules.
+- M624 compiles/inventories every experiment script and reports 0 compile failures.
+- M625 executes all safe non-heavy/non-mutating experiments in order and records the sweep.
+- M626 adds the canonical technical report for honest public framing.
+- M627 adds the polished demo playbook for reviewer walkthroughs.
+- M628 maps all blocked scripts into controlled runner categories.
+- M629 defines the seven-runner hardening matrix.
+- M630 verifies public claims across release-facing files.
+- M631 smoke-tests fast reviewer documentation commands.
+- M501 is correctly marked `BLOCKED` due CUDA OOM.
+- M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
 ## Honest Assessment
 
-**Strong:** CLI, recipes, DAG, build, CI, rollback, blame, bisect, checksum, security, memory management, auto-scaling, monitoring, GitHub structure, real model tokenizer validation
+**Strong:** CLI, recipes, build/test/rollback concepts, result validation, debugging prototypes, audit trail, generated book/diary, safe release gates.
 
-**Weak:** Real GPU training not yet performed, video demo not recorded, only tokenizer-level multi-model validation
+**Weak:** full cross-model WAL workflow not yet validated, real GPU training remains resource-bound, deployment modules are mostly simulations/prototypes, historical meta files still contain generated optimism in older entries.
 
-**Status:** Research-grade WeightOps framework prototype with 500+ validated modules
+**Status:** Research-grade pre-alpha WeightOps framework prototype with explicit known issues and release gates.

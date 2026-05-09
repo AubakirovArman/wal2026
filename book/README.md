@@ -4,12 +4,12 @@
 
 ## What This Book Is
 
-This book documents the full journey of WAL — from its origins as a failed dynamic-route compression system, through 13 phases of iterative refinement, to a production-ready framework for encoding neural network weights as programs.
+This book documents the full journey of WAL — from its origins as a failed dynamic-route compression system, through iterative research phases, to a pre-alpha WeightOps framework prototype for representing and managing model edits as reproducible artifacts.
 
 It is written for:
 - **Future maintainers** who need to understand why WAL works the way it does
 - **Researchers** who want to build on WAL without repeating our mistakes
-- **Engineers** who want to use WAL in production
+- **Engineers** who want to evaluate WAL as a prototype, not as a production dependency
 
 ## How to Read This Book
 
@@ -92,11 +92,11 @@ It is written for:
 |--------|-------|
 | Total experiments | ~170+ (M1-M129) |
 | Failed approaches documented | 20+ |
-| Phases completed | 18/18 |
-| Tests passing | 65/65 |
+| Phases documented | 18+ |
+| Maintained core tests | 12 passing |
 | Lines of source code | ~3,500 |
 | Lines of diary entries | ~2,000+ |
-| Model size validated | Llama 3.3 70B (70 billion parameters) |
+| Model size probed | Up to local 70B-class setups, with resource caveats |
 | Best PPL achieved | 2.7781 (vs baseline 2.7805) |
 | Compression ratio | 1.33× vs bf16 |
 
@@ -115,6 +115,6 @@ The next phase of WAL research is defined in [`WAL_v2_GLOBAL_PROGRAM.md`](../WAL
 
 > **Weight = Program**
 >
-> Every weight in a neural network can be represented as a short program that multiplies an atom by a coefficient. The atoms are learned. The programs are discrete. The decode is fast. The quality is dense-level.
+> The working hypothesis is that neural weights can be represented as structured programs over learned atoms and coefficients.
 
-This sounds simple. It took 95 experiments to make it true.
+The experiments show where the idea works, where it fails, and what remains unproven.

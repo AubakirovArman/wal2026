@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M205b — Stratified Risk Dataset
 
 Add extreme configs for balanced survival spectrum:

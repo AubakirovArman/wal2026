@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zo: Scalar DRL v2 with lmax=10, K=256 TOP-K only (no Lloyd-Max), skip spiky."""
 import torch

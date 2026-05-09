@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M465 — Monitoring Dashboard
 
 Simulates metrics collection for Grafana-like dashboard.

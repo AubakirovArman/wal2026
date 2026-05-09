@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M400 — Final System Test
 
 End-to-end validation of entire WAL system.

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 FGRL Step 3a: finer-grained route-language re-encode for l54.gate/up.
 
 This script tests the user's "change the language, not the selector" idea on

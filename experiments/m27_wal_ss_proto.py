@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-SS Step 4a: structured-syntax macro prototype for l54.gate/up.
 
 This is a first-level WAL syntax prototype, not a new runtime.

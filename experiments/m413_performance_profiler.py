@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M413 — Performance Profiler
 
 Profiles WAL pipeline stages: build, test, inference.

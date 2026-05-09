@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-SBC: budgeted exactness on top of WAL-LHA expressive atoms."""
 from __future__ import annotations
 

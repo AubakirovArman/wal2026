@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M4a: encode EVERY linear layer in the model and record relMSE/bpw.
 
 This catches any layer where the recipe fails (e.g., unusual weight distribution)

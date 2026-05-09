@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M229 — Edit Conflict Graph
 
 Hypothesis: Some facts interfere with each other when edited together.

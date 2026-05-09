@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M282 — Context Robustness Training
 
 Hypothesis: Training facts with context-wrapped prompts improves

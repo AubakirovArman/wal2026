@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """
 M146 / Track 9: Cross-Model Frozen Vocabulary (FAST VERSION)

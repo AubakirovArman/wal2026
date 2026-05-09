@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M296 — Multi-Model Support
 
 Test if WAL recipes transfer across different model sizes.

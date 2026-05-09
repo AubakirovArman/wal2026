@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M217 — Hard Fact Strategy
 
 M209 showed author/inventor facts are "impossible" with standard LoRA.

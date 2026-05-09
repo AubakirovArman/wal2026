@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M424 — Webhook System
 
 Simulates webhook delivery with retry logic.

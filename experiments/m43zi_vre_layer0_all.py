@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zi: VRE on all 5 params of layer 0, scalar on all smooth, skip other spiky."""
 import torch

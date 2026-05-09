@@ -1,0 +1,6839 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M628",
+  "name": "Blocked Script Taxonomy",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-09T20:54:05.942780+00:00",
+  "total_scripts": 756,
+  "blocked_scripts": 523,
+  "assigned_scripts": 523,
+  "unassigned_scripts": 0,
+  "runner_counts": {
+    "DOCS_PUBLIC_CLAIMS": 90,
+    "GPU_HEAVY": 385,
+    "MODEL_CONTROLLED": 3,
+    "MUTATION_DRY_RUN": 40,
+    "SLOW_PROFILE": 1,
+    "SUBPROCESS_REVIEW": 4
+  },
+  "reason_counts": {
+    "archive_mutation": 6,
+    "cuda": 305,
+    "dataset_load": 159,
+    "destructive_file_op": 10,
+    "destructive_shell_op": 3,
+    "device_map": 268,
+    "git_metadata_generator": 1,
+    "git_mutation": 16,
+    "hf_download": 3,
+    "local_model_path": 243,
+    "mass_export": 4,
+    "mass_regeneration": 4,
+    "mass_rewrite": 2,
+    "merge_simulation_or_mutation": 7,
+    "model_artifact": 33,
+    "model_load": 313,
+    "public_claim_generator": 58,
+    "public_doc_generator": 31,
+    "runtime_timeout_in_safe_sweep": 3,
+    "self_referential_audit_script": 2,
+    "subprocess": 14,
+    "tokenizer_load": 237,
+    "triton": 22
+  },
+  "unassigned_files": [],
+  "records": [
+    {
+      "file": "m1_probe_mlp_up.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m1b_probe_rownorm.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m1c_calibration_sweep.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m2_codebook_stats.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m3_runtime_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m4a_full_model_encode.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m4b_ppl_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m4c_humaneval_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m5a_route_frequency.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6_route_distill_pilot.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6b_route_distill_sweep.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6c_route_distill_layer_suite.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6d_route_distill_depth_sweep.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6e_local_palette_kernel_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6g_full_layer_tiled_runtime_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6h_grouped_local_runtime_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6i_grouped_2d_runtime_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6j_grouped_shape_frontier_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6o_palette_hotness_profile.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6p_hotprefix_frontier_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6t_selective_runtime_gate.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m6v_baseline_vs_deployment_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m7a_fused_diag.py",
+      "blocked_reasons": [
+        "cuda"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m7a_fused_real_diag.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m7a_fused_realweight_diag.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m7b_runtime_speed_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m7c_threeway_compare.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m8a_fp8_microbench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m8a_fp8_v2_microbench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m9a_row_archetype_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m9b_codebook_cap_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m9c_act_sparsity_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m10a_block_rvq_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m10b_projection_family_scan.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m10c_block_rvq_global_eval.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m12a_pq_lowrank_overlay_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m13a_shared_codebook_graph_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m20_fast_recon_microbench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m21_stage_drop_microbench.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m23_id_influence_grammar.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m24_per_layer_stage_calibration.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m25_same_encoding_runtime_compare.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m26_b2_narrow_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m26_b3_narrow_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_fgrl_reencode.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_ptdp_collect.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_rrf_collect.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_asm_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_cda_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_dr_proto.py",
+      "blocked_reasons": [
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "MODEL_CONTROLLED"
+    },
+    {
+      "file": "m27_wal_e2e_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_fg_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_hp_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_ldi_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_lha_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_lo_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_lrt_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_sbc_budget_profile.py",
+      "blocked_reasons": [
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "MODEL_CONTROLLED"
+    },
+    {
+      "file": "m27_wal_sbc_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_sbc_tune_proto.py",
+      "blocked_reasons": [
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "MODEL_CONTROLLED"
+    },
+    {
+      "file": "m27_wal_ss_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m27_wal_ts_proto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m30_path_a_diagnostic.py",
+      "blocked_reasons": [
+        "cuda",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m31_sparse_probe.py",
+      "blocked_reasons": [
+        "runtime_timeout_in_safe_sweep"
+      ],
+      "candidate_runners": [
+        "SLOW_PROFILE"
+      ],
+      "primary_runner": "SLOW_PROFILE"
+    },
+    {
+      "file": "m32_path_b_tile_local.py",
+      "blocked_reasons": [
+        "cuda",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m34_m35_m36_encoder_redesign.py",
+      "blocked_reasons": [
+        "cuda"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m37_entropy_regularized_encoder.py",
+      "blocked_reasons": [
+        "cuda",
+        "runtime_timeout_in_safe_sweep"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "SLOW_PROFILE"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m38_vector_route_encoder.py",
+      "blocked_reasons": [
+        "cuda"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m39_hybrid_encoder.py",
+      "blocked_reasons": [
+        "cuda",
+        "runtime_timeout_in_safe_sweep"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "SLOW_PROFILE"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m40_end_to_end_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m40b_exclude_embeddings.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m40c_higher_quality.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m41_load_70b.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m41b_forward_70b.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m41c_inspect_params.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m41d_load_on_gpus_2_3.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m42_baseline_ppl_70b.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43_encode_70b.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43b_analyze_layers.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43c_encode_70b_fast.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43d_encode_70b_batched.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43e_debug_encoder.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43f_debug_vre.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43g_check_dtypes.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43h_check_all_params.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43i_scalar_only.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43j_vre_only.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43k_check_and_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43l_vre_gate_proj.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43m_vre_all_spiky.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43n_block_mean.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43o_vre_k_proj.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43p_check_devices.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43q_list_spiky.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43r_vre_layer0.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43s_vre_l8_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43t_spiky_threshold.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43u_hybrid_threshold_003.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43v_scalar_l2_q.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43w_scalar_l3_gate.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43x_vre_output_norm.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43y_scalar_k256.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43z_scalar_gate.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43za_scalar_l8_gate.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zb_scalar_l3_v.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zc_scalar_lmax12.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zd_late_layers.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43ze_early_layers.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zf_early_od.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zg_early_smooth.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zh_hybrid_vre_early.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zi_vre_layer0_all.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zj_skip_layer0.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zk_vre_layer0_selective.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zl_scalar_skip_early_spiky.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zm_scalar_lmax10_k256.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zo_scalar_topk_no_lloydmax.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zp_scalar_lmax10_k512.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zq_scalar_lmax10_k1024.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zr_scalar_lmax10_k1024_all_layers.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zs_scalar_lmax10_k2048.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zt_scalar_lmax10_k2048_20steps.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zu_baseline_20steps.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zv_compression_ratio.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m43zw_compression_sweep.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m44_baseline_16steps.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m44_full_wikitext2_baseline.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m45_wal_scalar_proto.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m46_test_load.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m46_wal_scalar_70b_e2e.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m46_wal_scalar_70b_e2e_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m46_wal_scalar_70b_e2e_v3.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m47_wal_runtime_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m48_wal_roundtrip_70b_layer.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m49_wal1_vector_atoms.py",
+      "blocked_reasons": [
+        "cuda"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m50_wal1_svd_atoms.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m51_wal_compiler.py",
+      "blocked_reasons": [
+        "cuda",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m52_cross_layer_atom_sharing.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m53_wal_compression_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m53b_fused_triton_encode.py",
+      "blocked_reasons": [
+        "cuda",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m53c_wal_fused_encode_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m54a_wal_codebook_mining.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m54b_wal_codebook_decode.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m55a_wal_variable_length.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m56a_wal_grammar_analysis.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m57_debug_codebook.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m57_debug_codebook_detail.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m57_wal_codebook_70b_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m58_wal_codec_v2_global.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m59_wal_global_codebook_fast.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m59_wal_global_codebook_fast_v3.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m59a_wal_global_codebook.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m60_wal_v2_scalar_prototype.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m61_wal_v2_70b_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m62_wal_v2_grammar_asm.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m63_wal_v2_vm_runtime.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m64_wal_v2_compression.py",
+      "blocked_reasons": [
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m65_wal_v1_tile_prototype.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m66_wal_v1_pq_prototype.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m67_pq_systematic.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m68_svd_prototype.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m69_pq_varying_k.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m70_ppl_position_specific.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m71_single_layer_ppl_validation.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m72_full_ppl_m69_sweep.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m73_full_ppl_twotier.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m74_wal_v1_two_term_prototype.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m75_wal_v1_70b_ppl.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m76_wal_v1_roundtrip.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m77_pytorch_integration.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m78_wal_v1_debugger.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m79_stdlib_prototype.py",
+      "blocked_reasons": [
+        "destructive_file_op",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m80_hardware_backends.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m81_meta_learning.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m82_adapter_integration.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m83_ecosystem.py",
+      "blocked_reasons": [
+        "cuda",
+        "destructive_file_op",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m84_kv_cache_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m85_kv_cache_encode.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m86_kv_cache_quality.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m87_kv_cache_speed.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m88_kv_cache_integration.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m89_streaming_encoder.py",
+      "blocked_reasons": [
+        "cuda",
+        "hf_download",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m90_streaming_encoder_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "destructive_file_op",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m91_qat_differentiable_decode.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m92_wal_native_lora.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m93_qat_ppl_prototype.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m94_qat_reencode.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m95_qat_full_pipeline.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m96_atom_transfer_70b_to_8b.py",
+      "blocked_reasons": [
+        "hf_download",
+        "local_model_path",
+        "model_artifact"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m97_finetune_qa.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m98_1k_qa_finetune.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m98_large_qa_finetune.py",
+      "blocked_reasons": [
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m99_causal_patch.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100_surgical_edit.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100b_surgical_edit_10facts.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100c_surgical_edit_10facts_64params.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100d_classic_lora_baseline.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100e_wal_program_adapter.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m100f_wal_table_tune.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m101_periodic_reencode.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m110_hybrid_lora_wal_workflow.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m110b_manual_train.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m111_targeted_unlearning.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m116_global_atoms.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m117_program_soup.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m118_sparse_residuals.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m119_kl_unlearning.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m120_style_transfer.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m121_program_heatmap.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m122_program_evolution.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m123_wal_size_benchmark.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m124_cross_layer_correlation.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m126_reproducibility_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m126_reproducibility_gate_v3.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m126_reproducibility_gate_v4.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m127_wal_diff_after_lora.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m128_reencode_stability.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m129_canonicalization.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m130_causal_wal_patch_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m131_edit_compilation.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m132_runtime_bench.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m133_fixed_atom_table.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m134_patch_size_frozen.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m135_wal_lora_overlay.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m136_12bit_packing.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m137_semantic_fingerprints.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m138_reencode_loss_sweep.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m139_wal_patch_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m140_wal_lora_multi.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m141_reencode_geometry.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m142_transform_wal_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m143_wave_atom_isa.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m144_graph_wal_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m145_semantic_fingerprints_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m146_cross_model_vocab.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m147_wal_friendly_training.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m149_frozen_vocab_ppl_matrix.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m149_frozen_vocab_ppl_matrix_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m150_real_lora_patch_compression.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m150_real_lora_patch_compression_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m151_multi_lora_routing_v2.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m152_safety_score_fast.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m152_safety_score_real_lora_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m152_safety_score_structured_v3.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m152_safety_score_structured_v4.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m153_transform_wal_encoder.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m153_transform_wal_encoder_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m154_fix_hadamard.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m155_partial_model_transform_ppl_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m156_transform_wal_diff_locality.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m156_transform_wal_diff_locality_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m157_transform_vocab_study_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m158_transform_selection_per_module_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m159_transform_metadata_cost.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m160_spectral_energy_map.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m160_spectral_energy_map_v2.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m160_spectral_energy_map_v3.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m161_spectral_delta_lora.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m162_fingerprint_benchmark_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m163_fingerprint_drift_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m164_m165_cross_model_cross_arch_v2.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m166_soft_wallinear_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m167_ste_gumbel_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m168_standard_benchmark.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m169_wal_ablation_dashboard.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m171_unified_runtime_pipeline.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m175_gumbel_scale_up.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m176_factorized_logits.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m177_temperature_schedule.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m180_gpu_high_k_transform_wal.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m181_high_k_ppl_gate.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m182_transform_wal_editability.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m183_transform_selection_k256.py",
+      "blocked_reasons": [
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m186_wave_depth_map.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m187_program_wave.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m188_lora_delta_wave_risk.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m189_phase_coherence.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m190_wave_guided_budget.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m191_wave_regularized_lora.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m192_gumbel_wave_regularization.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m193_real_lora_wave_risk.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m193_real_lora_wave_risk_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m193b_learned_risk_model.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m195_hadamard_wave_budget_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m195b_hadamard_adaptive_kmeans.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m195b_hadamard_adaptive_kmeans_v3.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m195b_plus_hadamard_adaptive_kmeans.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196_wave_regularized_real_lora.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196b_wave_lora_extended.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196c_penalty_schedule.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196d_wave_lora_lambda_scaled.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196e_wave_lora_variance_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196f_wave_lora_grid_search.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196g_wave_reg_single_module.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m196h_wave_reg_high_rank.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m198_depth_wave_budget.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m200_end_to_end_wal_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m200_fixed_k256.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m200_wal_v2_end_to_end.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m200b_merge_reencode_k1024.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "merge_simulation_or_mutation",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m201_production_overlay_demo.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m202_production_pipeline.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m203_dense_vs_wal_lora.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m204_survival_improvement_search.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m204b_steps400_merge_reencode.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "merge_simulation_or_mutation",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m205_risk_dataset_expansion.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m205b_stratified_risk_dataset.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m206_multi_lora_overlay.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m206b_sequential_multi_edit.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m206c_incremental_versioning.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m207_batch_concurrent_edits.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m208_edit_isolation_overwrite.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m209_adaptive_steps_per_fact.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m210_cross_model_transfer.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m211_higher_rank_1b.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m212_mistral_7b.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m212_qwen_7b.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m213_k_sweep_compiled.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m214_steps_pareto.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m215_sequential_long_chain.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m216_checkpoint_diff.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m217_hard_fact_strategy.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m218_difficulty_classifier.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m219_survival_dataset.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m220_baseline_comparison.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m221_contrastive_hard_facts.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m223_counterfactual_sandbox.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m224_wal_probe.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m225_memory_tier_compiler.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m226_rome_backend.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m227_recipe_replay.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m228_rehearsal_buffer.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m229_edit_conflict_graph.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m230_activation_guided.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m231_logit_suppression.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "git_mutation",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m232_branch_registry.py",
+      "blocked_reasons": [
+        "git_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m233_wal_gc.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m233_wal_gc_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m234_edit_unit_tests.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m235_batch_rehearsal_compiler.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m235_batch_rehearsal_compiler_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m236_causal_tracing_selector.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m237_memit_batch_editor.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m238_retrieval_tier.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m239_frozen_encode_determinism.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m240_wal_ci_pipeline.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m241_float32_training_fix.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m242_retrieval_fix.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m243_encode_seed_determinism.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m244_layer_ablation.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m245_rebuild_from_recipes.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m246_production_stack_v9.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m250_final_report.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m251_batch_rehearsal_fp32.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m252_wal_ci_fp32.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m253_deterministic_build_audit.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m254_recipe_replay.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m255_encode_seed_sensitivity.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m256_retrieval_matcher.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m258_tier_compiler.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m259_build_cache_idempotency.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m260_recipe_diff.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m261_anti_forgetting_rehearsal.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m262_rollback_speed.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m263_version_delta.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m264_tag_stability.py",
+      "blocked_reasons": [
+        "cuda",
+        "destructive_file_op",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m265_ci_gate_threshold.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m266_cli_smoke_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "destructive_file_op",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m267_recipe_dag.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m270_ci_report_schema.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m271_semantic_diff_dashboard.py",
+      "blocked_reasons": [
+        "local_model_path"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m272_rollback_chain_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m273_multi_seed_stability.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m276_layer16_scale_test.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m277_layer_aperture_sweep.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m278_module_aperture_search.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m279_long_chain_rehearsal.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m280_batch_size_frontier.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m281_negative_aware_training.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m282_context_robustness_training.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m283_paraphrase_augmentation.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m284_old_answer_lure_training.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m287_retrieval_contamination_stress.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m288_hybrid_arbitration.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m290_memory_tier_auto_router.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m312_backup_restore.py",
+      "blocked_reasons": [
+        "archive_mutation",
+        "destructive_file_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m313_recipe_import_export.py",
+      "blocked_reasons": [
+        "mass_export"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m321_doc_generator.py",
+      "blocked_reasons": [
+        "mass_regeneration",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m326_project_summary.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m329_contribution_guide.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m347_emergency_stop.py",
+      "blocked_reasons": [
+        "merge_simulation_or_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m355_final_html_report.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m367_three_way_merge.py",
+      "blocked_reasons": [
+        "merge_simulation_or_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m381_recipe_export.py",
+      "blocked_reasons": [
+        "mass_export"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m392_wal_studio_readme.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m393_citation_bibtex.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m394_final_book_consolidation.py",
+      "blocked_reasons": [
+        "mass_regeneration"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m395_milestone_v10_declaration.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m396_cleanup_temp_files.py",
+      "blocked_reasons": [
+        "destructive_file_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m398_generate_experiment_index.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m399_contributing_guide.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m402_prompt_injection_hardening.py",
+      "blocked_reasons": [
+        "destructive_shell_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m414_emergency_stop.py",
+      "blocked_reasons": [
+        "merge_simulation_or_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m450_emergency_stop_v2.py",
+      "blocked_reasons": [
+        "merge_simulation_or_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m452_book_entry_generator.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m457_readme_updater.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m458_release_notes_generator.py",
+      "blocked_reasons": [
+        "public_claim_generator",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m460_project_health_score.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m467_backup_restore.py",
+      "blocked_reasons": [
+        "archive_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m469_cli_help_generator.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m471_final_statistics.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m472_github_repo_init.py",
+      "blocked_reasons": [
+        "git_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m473_contributing_update.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m474_security_policy.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m475_code_of_conduct.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m476_issue_templates.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m477_pr_template.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m479_final_validation_suite.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m480_publication_readiness.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m481_license_header_injection.py",
+      "blocked_reasons": [
+        "mass_rewrite"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m482_real_model_probe.py",
+      "blocked_reasons": [
+        "cuda",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m489_final_executive_summary.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m491_real_inference_kimi.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m492_multi_model_tokenizer.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m499_changelog_generator.py",
+      "blocked_reasons": [
+        "public_claim_generator",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m500_milestone_v12_declaration.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m501_real_gpu_inference.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m503_qwen_32b_real_inference.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m504_git_status_check.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m505_batch_experiment_runner.py",
+      "blocked_reasons": [
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "SUBPROCESS_REVIEW"
+    },
+    {
+      "file": "m511_git_log_analyzer.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m515_achievement_tracker.py",
+      "blocked_reasons": [
+        "git_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m520_final_status_dashboard.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m521_git_tag.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m522_branch_management.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m523_merge_simulation.py",
+      "blocked_reasons": [
+        "merge_simulation_or_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m527_experiment_pruning.py",
+      "blocked_reasons": [
+        "destructive_file_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m528_result_archiving.py",
+      "blocked_reasons": [
+        "archive_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m529_book_consolidation_v2.py",
+      "blocked_reasons": [
+        "mass_regeneration"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m530_final_export.py",
+      "blocked_reasons": [
+        "mass_export"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m531_git_log_v2.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m532_project_growth_chart.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m533_milestone_tracker.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m535_project_cleanup.py",
+      "blocked_reasons": [
+        "destructive_file_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m536_project_stats_v2.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m540_completion_certificate.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m541_git_diff_analyzer.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m542_commit_frequency.py",
+      "blocked_reasons": [
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "SUBPROCESS_REVIEW"
+    },
+    {
+      "file": "m549_readme_generator_v2.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "public_claim_generator",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS",
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m550_final_report.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m551_git_tag_v13.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m552_commit_message_gen.py",
+      "blocked_reasons": [
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "SUBPROCESS_REVIEW"
+    },
+    {
+      "file": "m553_badge_generator.py",
+      "blocked_reasons": [
+        "public_claim_generator",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m554_test_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m555_license_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m556_version_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m557_build_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m558_exp_count_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m559_result_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m560_grade_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m561_perf_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m562_memory_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m563_security_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m564_docs_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m565_community_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m566_release_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m567_maintenance_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m568_quality_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m569_stability_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m570_badge_dashboard.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m571_readme_badges.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m572_project_manifest.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m573_project_inventory.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m574_project_sitemap.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m575_project_glossary.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m576_project_faq.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m577_project_roadmap_v2.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m578_project_todo.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m579_project_acknowledgments.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m580_project_completion.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m581_git_stats.py",
+      "blocked_reasons": [
+        "git_mutation",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m582_project_metrics.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m583_project_kpis.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m584_project_scorecard.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m585_project_audit.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m586_project_certification.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m587_project_export_v2.py",
+      "blocked_reasons": [
+        "mass_export"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m588_project_backup_v2.py",
+      "blocked_reasons": [
+        "archive_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m589_project_restore_test.py",
+      "blocked_reasons": [
+        "archive_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m590_milestone_v14_prep.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m600_milestone_v14_declaration.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m601_real_gpu_qwen_32b.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m602_project_index.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m603_project_archive.py",
+      "blocked_reasons": [
+        "archive_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m604_project_retrospective.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m605_project_lessons.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m606_project_best_practices.py",
+      "blocked_reasons": [
+        "git_mutation"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m607_project_guidelines.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m608_project_standards.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m609_project_policies.py",
+      "blocked_reasons": [
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m610_project_wrap_up.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m611_real_gpu_qwen_v2.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m612_project_summary_v2.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m613_project_final_commit.py",
+      "blocked_reasons": [
+        "git_metadata_generator",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m614_project_release_notes_v2.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m615_project_status_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m616_project_module_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m617_project_cert_badge.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m618_project_final_badge_set.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m619_project_readme_final.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m620_project_final_declaration.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "m624_full_test_inventory.py",
+      "blocked_reasons": [
+        "cuda",
+        "dataset_load",
+        "destructive_file_op",
+        "destructive_shell_op",
+        "device_map",
+        "git_mutation",
+        "hf_download",
+        "local_model_path",
+        "mass_regeneration",
+        "mass_rewrite",
+        "model_artifact",
+        "model_load",
+        "self_referential_audit_script",
+        "subprocess",
+        "tokenizer_load",
+        "triton"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS",
+        "GPU_HEAVY",
+        "INTERNAL_AUDIT",
+        "MODEL_CONTROLLED",
+        "MUTATION_DRY_RUN",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "m625_safe_runtime_sweep.py",
+      "blocked_reasons": [
+        "self_referential_audit_script",
+        "subprocess"
+      ],
+      "candidate_runners": [
+        "INTERNAL_AUDIT",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "SUBPROCESS_REVIEW"
+    },
+    {
+      "file": "_generate_diary.py",
+      "blocked_reasons": [
+        "local_model_path",
+        "public_doc_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS",
+        "GPU_HEAVY"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "auto_generated_unit_tests.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "auto_release_notes.py",
+      "blocked_reasons": [
+        "public_claim_generator"
+      ],
+      "candidate_runners": [
+        "DOCS_PUBLIC_CLAIMS"
+      ],
+      "primary_runner": "DOCS_PUBLIC_CLAIMS"
+    },
+    {
+      "file": "behavioral_checksum.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "canary_edits.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "e4_security_hardening.py",
+      "blocked_reasons": [
+        "destructive_shell_op"
+      ],
+      "candidate_runners": [
+        "MUTATION_DRY_RUN"
+      ],
+      "primary_runner": "MUTATION_DRY_RUN"
+    },
+    {
+      "file": "edit_fuzzing.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "knowledge_half_life.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "memory_provenance.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "model_time_travel.py",
+      "blocked_reasons": [
+        "cuda",
+        "device_map",
+        "local_model_path",
+        "model_load",
+        "tokenizer_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    }
+  ],
+  "docs": "docs/blocked_script_taxonomy.md"
+}

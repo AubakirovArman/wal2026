@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M305 — Edit Validation Gate
 
 Pre-build validation to catch bad edits before they reach the model.

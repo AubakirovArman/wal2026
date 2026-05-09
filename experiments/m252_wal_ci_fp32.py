@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M252 — WAL CI Pipeline with FP32 Fix
 
 Hypothesis: M240's FAIL was caused by fp16 gradient overflow.

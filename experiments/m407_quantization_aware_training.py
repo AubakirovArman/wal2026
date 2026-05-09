@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M407 — Quantization-Aware Training Analysis
 
 Analyzes impact of INT8/INT4 quantization on WAL weights.

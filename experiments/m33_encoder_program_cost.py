@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M33 — Encoder Prototype: Program-Cost Regularized Route Encoding.
 
 Demonstrates that post-hoc smoothing of the ID field can reduce program cost

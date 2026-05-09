@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M343 — Crowdsourced Validation
 
 Multiple validators check facts for accuracy.

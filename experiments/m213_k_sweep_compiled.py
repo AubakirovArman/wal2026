@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M213 — K Sweep for Compiled Edits
 
 Test K=[128, 256, 512, 1024] on compiled mode:

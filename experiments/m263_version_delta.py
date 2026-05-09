@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M263 — Version Delta: Full Model Diff Between Versions
 
 Hypothesis: We can compute a semantic diff between two model versions

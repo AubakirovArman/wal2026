@@ -1,0 +1,109 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M631",
+  "name": "Docs Command Smoke",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-09T20:54:06.092980+00:00",
+  "run_commands": 8,
+  "run_passed": 8,
+  "exists_only_commands": 2,
+  "exists_only_passed": 2,
+  "docs_checked": 4,
+  "failures": [],
+  "records": [
+    {
+      "command": "doc exists: README.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: TECHNICAL_REPORT.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/demo_playbook.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/controlled_runners.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest -q tests",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.96s\n"
+    },
+    {
+      "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "[WAL] Result validation: 424/424 valid, 0 invalid, 576 warnings\n"
+    },
+    {
+      "command": "python experiments/m626_technical_report.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M626 Technical Report Gate: PASS\nchecks=20/20 report=TECHNICAL_REPORT.md\n"
+    },
+    {
+      "command": "python experiments/m627_polished_demo_playbook.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M627 Polished Demo Playbook Gate: PASS\nchecks=20/20 playbook=docs/demo_playbook.md\n"
+    },
+    {
+      "command": "python experiments/m628_blocked_script_taxonomy.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M628 Blocked Script Taxonomy: PASS\nblocked=523 assigned=523 unassigned=0\n"
+    },
+    {
+      "command": "python experiments/m629_controlled_runner_matrix.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M629 Controlled Runner Matrix: PASS\nrunners=7 blocked=523 unassigned=0\n"
+    },
+    {
+      "command": "python experiments/m630_public_claim_checker.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=20 violations=0 missing=0\n"
+    },
+    {
+      "command": "python wal_studio_v01/demo.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "simulated)\n  Layer: 16 | Rank: 4 | Steps: 100\n\n────────────────────────────────────────────────────────────\n  STEP 1: Base model answers old fact\n────────────────────────────────────────────────────────────\n  Q: What is the capital of France?\n  A: Paris\n\n  Q: What is the capital of Japan?\n  A: Tokyo\n\n  Q: What is the capital of Brazil?\n  A: Rio de Janeiro\n\n\n────────────────────────────────────────────────────────────\n  STEP 2: wal init — initialize project\n────────────────────────────────────────────────────────────\n  ✅ Project initialized in .wal_studio_demo/\n  Config: {\"model\": \"Llama-3.1-8B\", \"layer\": 16, \"rank\": 4, \"seed\": 42}\n\n────────────────────────────────────────────────────────────\n  STEP 3: wal edit add — add new facts\n────────────────────────────────────────────────────────────\n  ✅ Added 3 recipes\n    [1] What is the capital of France? → Paris\n    [2] What is the capital of Japan? → Tokyo\n    [3] What is the capital of Brazil? → Brasília\n\n────────────────────────────────────────────────────────────\n  STEP 4: wal build — compile model from recipes\n────────────────────────────────────────────────────────────\n  ✅ Build complete: 4e1e3f03fe000bf3\n  Time: 6.1s\n\n────────────────────────────────────────────────────────────\n  STEP 5: wal test — run CI suite\n────────────────────────────────────────────────────────────\n  Exact:      3/3\n  Paraphrase: 3/3\n  Negative:   1/1\n  Context:    3/3\n  ──────────────────────────\n  CI Score:   1.000\n  Verdict:    ✅ PASS\n\n────────────────────────────────────────────────────────────\n  STEP 6: wal diff — show human-readable changes\n────────────────────────────────────────────────────────────\n  Changes from base model:\n    [FIXED] Brazil: Rio de Janeiro → Brasília\n    [ADDED] France: Paris\n    [ADDED] Japan: Tokyo\n\n────────────────────────────────────────────────────────────\n  STEP 7: wal tag v1.0 — save release\n────────────────────────────────────────────────────────────\n  ✅ Tagged v1.0 → 4e1e3f03fe000bf3\n\n────────────────────────────────────────────────────────────\n  STEP 8: Add bad edit (wrong fact)\n────────────────────────────────────────────────────────────\n  ⚠️  Added recipe [4]: Capital of Egypt → Alexandria\n      (Correct answer: Cairo)\n\n────────────────────────────────────────────────────────────\n  STEP 9: wal test — CI detects bad edit\n────────────────────────────────────────────────────────────\n  Exact:      4/4\n  Paraphrase: 4/4\n  Negative:   0/1  ← FAILS\n  Context:    4/4\n  ──────────────────────────\n  CI Score:   0.800\n  Verdict:    ❌ FAIL — negative test caught bad edit\n\n────────────────────────────────────────────────────────────\n  STEP 10: wal blame — identify responsible edit\n────────────────────────────────────────────────────────────\n  Failed test: 'What is the capital of Egypt?'\n  Expected: Cairo\n  Got: Alexandria\n  ──────────────────────────\n  🔍 Most likely culprit: Recipe [4]\n     Question: 'What is the capital of Egypt?'\n     Answer:   'Alexandria' ← WRONG\n  ✅ Blame identified: edit #4\n\n────────────────────────────────────────────────────────────\n  STEP 11: wal bisect — binary search for bad recipe\n────────────────────────────────────────────────────────────\n  History: v1.0 (3 recipes) → v2 (4 recipes)\n  Testing midpoint...\n    Midpoint: recipe [4] added\n    CI before [4]: PASS\n    CI after [4]:  FAIL\n  ✅ Bisect found: recipe [4] is first bad commit\n\n────────────────────────────────────────────────────────────\n  STEP 12: wal rollback v1.0 — restore good version\n────────────────────────────────────────────────────────────\n  ✅ Rolled back to v1.0 (4e1e3f03fe000bf3)\n  Recipes restored: 3\n  Re-test CI: 1.000 — ✅ PASS\n\n============================================================\n  DEMO COMPLETE\n============================================================\n  Total steps: 12\n  Recipes managed: 3 (v1.0)\n  Bad edit caught: Recipe [4]\n  Rollback time: ~4.3s\n  CI gate: PASS\n\n  WAL Studio v0.1 ready for demonstration.\n============================================================\n\n"
+    },
+    {
+      "command": "python experiments/m624_full_test_inventory.py",
+      "mode": "exists_only",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "python experiments/m625_safe_runtime_sweep.py --timeout 15",
+      "mode": "exists_only",
+      "passed": true,
+      "returncode": 0
+    }
+  ],
+  "docs": "docs/docs_command_smoke.md"
+}

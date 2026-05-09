@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M485 — Energy Efficiency Metrics
 
 Estimates energy consumption per inference.

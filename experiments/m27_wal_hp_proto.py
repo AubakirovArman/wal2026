@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-HP Step 5a: hierarchical shared-subroutine prototype.
 
 This prototype keeps the current Block-RVQ encoding exact, but changes the

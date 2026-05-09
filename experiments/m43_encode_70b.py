@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43: Apply hybrid encoder to Llama 3.3 70B and measure PPL."""
 import torch

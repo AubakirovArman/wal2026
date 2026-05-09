@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M286 — Retrieval Matcher v2
 
 Hypothesis: Better matching than exact: fuzzy + token overlap + embedding similarity.

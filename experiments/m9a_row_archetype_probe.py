@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M9a: Row-archetype redundancy probe.
 
 Measures whether rows of the encoded `ids` tensor are clusterable enough

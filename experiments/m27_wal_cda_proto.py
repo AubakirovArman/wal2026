@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-CDA Step 12f: constrained context-dependent atom deltas.
 
 This probe keeps the old WAL-LHA / WAL-SBC semantic assignments fixed and only

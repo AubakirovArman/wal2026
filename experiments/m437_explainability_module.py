@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M437 — Explainability Module
 
 Traces which recipe contributed to an answer.

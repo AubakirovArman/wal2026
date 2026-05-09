@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M278 — Module Aperture Search in Layer 16
 
 Hypothesis: Different modules (q/k/v/o/gate/up/down) have different

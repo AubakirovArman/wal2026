@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M340 — Model Fingerprinting
 
 Create unique signature for model instance.

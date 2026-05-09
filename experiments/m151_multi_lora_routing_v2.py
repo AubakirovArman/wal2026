@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M151 v2 — Multi-LoRA Routing / Conflict Test (synthetic).
 

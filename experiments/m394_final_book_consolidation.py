@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M394 — Final Book Consolidation
 
 Append E1-E5 summaries to COMBINED_M291_M385.md.

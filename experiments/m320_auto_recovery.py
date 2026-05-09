@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M320 — Auto-Recovery
 
 Detect and fix corrupted facts automatically.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M395 — Milestone v1.0 Declaration
 
 Official declaration of WAL v1.0 milestone.

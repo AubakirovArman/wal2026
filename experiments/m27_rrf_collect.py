@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 RRF Step 1a: collect per-(stage,id) influence + structural interference.
 
 Targets only ``model.layers.54.mlp.gate_proj`` and ``model.layers.54.mlp.up_proj``

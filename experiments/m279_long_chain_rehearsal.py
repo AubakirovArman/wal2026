@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M279 — Long Chain: 10 Sequential Batches with Rehearsal
 
 Hypothesis: Rehearsal prevents forgetting across many sequential batches.

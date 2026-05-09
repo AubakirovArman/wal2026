@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M398 — Generate Experiment Index
 
 Create index.md with all experiments listed.

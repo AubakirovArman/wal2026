@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-LO Step 12b: layer-output reconstruction with strong program cost.
 
 This probe pushes the WAL-DR objective one level closer to the real target.

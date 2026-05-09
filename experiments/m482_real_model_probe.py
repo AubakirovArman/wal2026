@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M482 — Real Model Probe
 
 Attempts to load and run inference on available local model.

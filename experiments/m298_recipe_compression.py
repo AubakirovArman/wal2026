@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M298 — Recipe Compression
 
 Compress recipe storage using delta encoding and deduplication.

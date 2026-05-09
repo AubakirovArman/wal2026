@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M354 — Result Aggregation
 
 Combine all experiment results into one file.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M291 — Performance Benchmark
 
 Measure latency and throughput of the WAL editing pipeline.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M225 — Memory Tier Compiler
 
 Hypothesis: Not all knowledge should go into weights.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M204 — Survival Improvement Search
 
 Goal: Find config with survival >= 20/50.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M475 — CODE_OF_CONDUCT.md
 
 Community standards for WAL project.

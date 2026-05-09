@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M254 — Recipe Replay: Bit-Exact Rebuild from Stored Recipes
 
 Hypothesis: If we store all hyperparameters and random seeds in a recipe,

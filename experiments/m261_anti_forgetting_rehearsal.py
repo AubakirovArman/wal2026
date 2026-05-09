@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M261 — Anti-Forgetting Rehearsal Test
 
 Hypothesis: Rehearsing previously learned facts during new training

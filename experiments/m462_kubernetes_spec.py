@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M462 — Kubernetes Deployment Spec
 
 Generates K8s deployment YAML for WAL.

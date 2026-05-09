@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M237 — True MEMIT Batch Editor
 
 Hypothesis: Batch rank-one updates with proper least-squares formulation

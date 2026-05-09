@@ -5,6 +5,16 @@
 **Всего модулей**: 233  
 ---
 
+## Post-publication correction
+
+Этот отчёт является историческим срезом M386–M620. После технического аудита статусы и claims уточнены:
+
+- M501 теперь классифицируется как `BLOCKED` из-за CUDA OOM, а не PASS.
+- M601 теперь классифицируется как `UNSUPPORTED` для текущего `AutoModelForCausalLM` пути, а не PASS.
+- M518 переведён на поддерживаемый core pytest gate и проходит.
+- M544 переведён на `wal.results.v1`; legacy list-results нормализованы без потери records.
+- Публичное позиционирование: **pre-alpha research framework**, не production-ready/complete/certified.
+
 ## Сводная статистика
 
 | Метрика | Значение |

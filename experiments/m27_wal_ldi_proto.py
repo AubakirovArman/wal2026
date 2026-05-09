@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-LDI Step 10a: learned discrete ISA with semantic constraints.
 
 This probe stops trying to wrap the current flat language from above and instead

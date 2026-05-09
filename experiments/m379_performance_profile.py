@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M379 — Performance Profile
 
 Profile system performance bottlenecks.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M411 — Video Demo Script
 
 Generates narrated walkthrough of WAL Studio v0.1 for screen recording.

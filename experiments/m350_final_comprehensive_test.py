@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M350 — Final Comprehensive Test
 
 Run all critical tests one final time.

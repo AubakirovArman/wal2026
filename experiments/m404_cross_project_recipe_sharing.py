@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M404 — Cross-Project Recipe Sharing
 
 Tests importing and exporting recipes between projects.

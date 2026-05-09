@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M258 — Tier Compiler: Auto-Routing Easy vs Hard Facts
 
 Hypothesis: A simple confidence-based classifier can route facts

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M324 — Audit Trail
 
 Complete history of all edits with timestamps and users.

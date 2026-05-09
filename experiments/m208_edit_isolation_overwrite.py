@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M208 — Edit Isolation & Overwrite Testing
 
 Test if sequential edits are truly isolated:

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M8a: FP8 vs BF16 microbench + correctness check on real Llama-70B weights.
 
 Validates whether torch._scaled_mm fp8 rowwise path matches bf16 F.linear

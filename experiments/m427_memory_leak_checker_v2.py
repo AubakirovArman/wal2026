@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M427 — Memory Leak Checker v2
 
 Tracks memory growth over time with regression detection.

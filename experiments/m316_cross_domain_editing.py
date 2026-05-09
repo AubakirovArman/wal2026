@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M316 — Cross-Domain Editing
 
 Mix facts from geography, science, history in one model.

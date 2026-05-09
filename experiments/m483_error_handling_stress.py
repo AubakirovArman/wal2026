@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M483 — Error Handling Stress Test
 
 Tests system resilience under various error conditions.

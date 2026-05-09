@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M42: Baseline PPL on Llama 3.3 70B (WikiText-2)."""
 import torch

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 PTDP Step 2a: per-tile dynamic palette offline gate.
 
 For ``model.layers.54.mlp.gate_proj`` and ``model.layers.54.mlp.up_proj`` this

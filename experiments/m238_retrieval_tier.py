@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M238 — Real Retrieval Tier
 
 Hypothesis: Hard facts (author/inventor) should be routed to retrieval

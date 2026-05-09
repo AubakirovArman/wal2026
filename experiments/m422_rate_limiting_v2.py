@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M422 — Rate Limiting v2
 
 Token bucket + sliding window hybrid rate limiter.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M270 — CI Report Schema: Unified JSON for Every Edit
 
 Hypothesis: Every edit should produce a standardized CI report

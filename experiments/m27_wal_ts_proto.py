@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-TS Step 8a: typed WAL prototype for l54 gate/up.
 
 This probe extends WAL-FG with a simple route type system.

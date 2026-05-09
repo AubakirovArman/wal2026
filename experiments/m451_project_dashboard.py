@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M451 — Project Statistics Dashboard
 
 Aggregates all project metrics into a single view.

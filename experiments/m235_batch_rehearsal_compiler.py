@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M235 — Batch + Rehearsal Compiler
 
 Hypothesis: Batch editing (5-10-20 facts simultaneously) + rehearsal

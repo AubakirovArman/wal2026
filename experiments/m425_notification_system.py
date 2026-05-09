@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M425 — Notification System
 
 Routes notifications based on severity and user preferences.

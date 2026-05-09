@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M272 — Rollback Chain Test
 
 Hypothesis: We can build a chain v0→v1→v2→v3, rollback to v1,

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M458 — Release Notes Generator
 
 Generates release notes from recent experiment results.

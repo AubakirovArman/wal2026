@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M447 — Recipe Template Library
 
 Standardized templates for common fact types.

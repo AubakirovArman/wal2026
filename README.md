@@ -1,7 +1,7 @@
 # WAL — WeightOps Research Framework
 
 ![Modules](https://img.shields.io/badge/modules-600+-blue)
-![Experiments](https://img.shields.io/badge/experiments-745-blue)
+![Experiments](https://img.shields.io/badge/experiments-756-blue)
 ![Status](https://img.shields.io/badge/status-research--prototype-orange)
 
 ## Overview
@@ -13,22 +13,24 @@ The repository contains two related tracks:
 - **DRL/runtime experiments** — route-codebook and Block-RVQ runtime layers for large LLM linear weights.
 - **Experiment chronicle** — reproducible milestone scripts, generated result JSON, and a book-style development log.
 
+Current public status: **pre-alpha, fully instrumented research prototype**. See `TECHNICAL_REPORT.md`, `docs/demo_playbook.md`, and `KNOWN_ISSUES.md` for the technical framing, demo path, limitations, and release gates.
+
 ## Stats
 
-- 723 milestone experiment scripts in `experiments/m*.py`
-- 745 Python scripts total in `experiments/`
-- 417 experiment result JSON files in `experiments/`
-- 558 book/diary entries in `book/`
+- 734 milestone experiment scripts in `experiments/m*.py`
+- 756 Python scripts total in `experiments/`
+- 424 experiment result JSON files in `experiments/`
+- 569 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 215 docs files in `docs/`
-- 4703 lines in `docs/dev_diary_ru.md`
-- 65 Python source modules in `src/`
-- 9 pytest tests for the packaged core
+- 221 docs files in `docs/`
+- 4750+ lines in `docs/dev_diary_ru.md`
+- 67 Python source modules in `src/`
+- 12 pytest tests for the packaged core
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M620+
+experiments/        milestone scripts and result JSON for M1-M631+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -55,30 +57,34 @@ Demo workflow:
 python wal_studio_v01/demo.py
 ```
 
+Technical framing:
+
+```text
+TECHNICAL_REPORT.md
+docs/demo_playbook.md
+```
+
 Run a single milestone:
 
 ```bash
 python experiments/m401_memory_leak_fix.py
 ```
 
-Run a milestone range:
+Result validation:
 
 ```bash
-for i in $(seq 401 410); do
-  py_file=$(ls experiments/m${i}_*.py 2>/dev/null | head -1)
-  if [ -n "$py_file" ]; then
-    echo "=== $(basename "$py_file") ==="
-    python "$py_file"
-  fi
-done
-```
-
-Core validation:
-
-```bash
-python experiments/m391_final_health_check.py
-python experiments/m400_final_system_test.py
-python experiments/m412_final_integration_test.py
+wal validate-results experiments --fail-on-invalid
+python experiments/m510_naming_convention_check.py
+python experiments/m518_automated_test_suite.py
+python experiments/m544_result_validation.py
+python experiments/m624_full_test_inventory.py
+python experiments/m625_safe_runtime_sweep.py --timeout 15
+python experiments/m626_technical_report.py
+python experiments/m627_polished_demo_playbook.py
+python experiments/m628_blocked_script_taxonomy.py
+python experiments/m629_controlled_runner_matrix.py
+python experiments/m630_public_claim_checker.py
+python experiments/m631_docs_command_smoke.py
 ```
 
 ## Artifact Policy

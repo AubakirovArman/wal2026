@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M392 — WAL Studio README Generator
 
 Auto-generates README for wal_studio_v01/.

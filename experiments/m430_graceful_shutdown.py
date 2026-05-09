@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M430 — Graceful Shutdown
 
 Handles shutdown signal by finishing in-flight requests.

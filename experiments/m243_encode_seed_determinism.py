@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M243 — Encode Seed Determinism
 
 Hypothesis: M239 showed encode is non-deterministic because kmeans

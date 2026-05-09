@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M277 — Layer Aperture Sweep: Find Optimal Layer 0-31
 
 Hypothesis: Layer 16 is optimal, but we verify with a sweep.

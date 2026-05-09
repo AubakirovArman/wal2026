@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M40c: Higher-quality hybrid encoder (scalar K=128, VRE cb=1024)."""
 import math

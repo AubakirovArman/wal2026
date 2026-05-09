@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M433 — Shadow Deployment System
 
 Mirrors traffic to new build without affecting users.

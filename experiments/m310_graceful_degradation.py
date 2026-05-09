@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M310 — Graceful Degradation
 
 System degrades gracefully under high load or errors.

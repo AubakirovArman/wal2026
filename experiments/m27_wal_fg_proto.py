@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-FG Step 7a: formal-grammar prototype for l54 gate/up.
 
 This probe treats the current 12-token stage-id stream as a formal language.

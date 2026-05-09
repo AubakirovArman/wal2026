@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M434 — Behavioral Checksum v2
 
 Deterministic hash of model responses for regression detection.

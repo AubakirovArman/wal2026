@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M405 — Model Warmup Optimization
 
 Simulates warmup time reduction through caching and preloading.

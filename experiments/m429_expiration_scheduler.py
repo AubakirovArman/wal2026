@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M429 — Expiration Scheduler
 
 Schedules facts for review based on TTL and last verified date.

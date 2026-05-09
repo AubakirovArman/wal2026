@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M479 — Final Validation Suite
 
 Comprehensive validation of all WAL components.

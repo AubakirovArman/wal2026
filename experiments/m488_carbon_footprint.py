@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M488 — Carbon Footprint Calculator
 
 Total carbon footprint of WAL training and inference.

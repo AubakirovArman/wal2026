@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M242 — Retrieval Prompt Injection Fix
 
 Hypothesis: M238's retrieval-only mode failed (0/3 easy) because

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M100e: WAL Program Adapter (rank=4) — can WAL-native LoRA implant facts?"""
 import torch, sys, math

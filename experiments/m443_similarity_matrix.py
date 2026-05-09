@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M443 — Similarity Matrix Generator
 
 Computes cosine similarity between fact embeddings.

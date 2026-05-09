@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M206b — Sequential Multi-Edit (Compiled Multi-Task)
 
 Instead of simultaneous LoRA overlay, do:

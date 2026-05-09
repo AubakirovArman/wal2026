@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M256 — Retrieval Matcher: Auto-Tier Classification
 
 Hypothesis: We can build a classifier that automatically decides

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M338 — Smart Rehearsal
 
 Rehearse only the weakest facts.

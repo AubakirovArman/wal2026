@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M439 — Cross-Domain Validation
 
 Tests if facts transfer across subject domains.

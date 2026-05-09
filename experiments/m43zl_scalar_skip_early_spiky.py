@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zl: Scalar all layers, skip q/k/v/gate/up in layers 0-3, encode rest."""
 import torch

@@ -1,7 +1,8 @@
-# Final Badges
+# Public Badges
 
+![Status](https://img.shields.io/badge/status-pre--alpha-orange)
 ![Modules](https://img.shields.io/badge/modules-600+-blue)
-![Experiments](https://img.shields.io/badge/experiments-713-blue)
-![Grade](https://img.shields.io/badge/grade-A+-brightgreen)
-![Certified](https://img.shields.io/badge/certified-yes-brightgreen)
-![Status](https://img.shields.io/badge/status-wrapped-brightgreen)
+![Experiments](https://img.shields.io/badge/experiments-756-blue)
+![Core Tests](https://img.shields.io/badge/core_tests-12%20passing-brightgreen)
+![Safe Sweep](https://img.shields.io/badge/safe_sweep-233%20passing-brightgreen)
+![Result Schema](https://img.shields.io/badge/result_schema-valid-brightgreen)

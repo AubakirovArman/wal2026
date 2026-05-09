@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M41: Load Llama 3.3 70B via unsloth mirror and inspect memory layout."""
 import torch

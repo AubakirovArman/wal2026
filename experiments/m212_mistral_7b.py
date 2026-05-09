@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M212 — Cross-Architecture Transfer: Mistral-7B
 
 Test if WAL works on Mistral-7B (different architecture family from Llama).

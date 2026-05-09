@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43s: Test VRE on layer 8 gate_proj (std=0.0728, near threshold)."""
 import torch

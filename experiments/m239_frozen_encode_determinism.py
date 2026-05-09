@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M239 — Frozen Encode Determinism
 
 Hypothesis: WAL-encoded weights that are NOT edited (frozen) produce

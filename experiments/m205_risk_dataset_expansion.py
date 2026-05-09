@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M205 — Risk Dataset Expansion
 
 1. Load existing m193b_data.csv

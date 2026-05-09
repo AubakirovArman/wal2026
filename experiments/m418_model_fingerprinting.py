@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M418 — Model Fingerprinting
 
 Generates unique fingerprint from model weights hash.

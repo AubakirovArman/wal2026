@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 Wild Idea #25 — Model Time Travel
 
 Run model "as it was on version v3" and compare with v8.

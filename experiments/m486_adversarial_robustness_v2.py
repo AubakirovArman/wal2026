@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M486 — Adversarial Robustness v2
 
 Tests against more aggressive perturbations.

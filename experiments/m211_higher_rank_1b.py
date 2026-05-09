@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M211 — Higher LoRA Rank on Llama-3.2-1B
 
 Test if increasing LoRA rank improves survival on the smaller model.

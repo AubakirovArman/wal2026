@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M219 — Survival Dataset Expansion (Stratified)
 
 Aggregate all previous experiment data into a stratified dataset for risk/survival modeling.

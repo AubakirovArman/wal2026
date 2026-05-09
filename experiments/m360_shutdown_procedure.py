@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M360 — Shutdown Procedure
 
 Graceful system shutdown.

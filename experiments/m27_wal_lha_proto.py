@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-LHA Step 12c: learnable high-expressivity atoms.
 
 This probe keeps the WAL-LO objective surface but changes the atom surface

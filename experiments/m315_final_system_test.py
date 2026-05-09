@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M315 — Final System Test
 
 Comprehensive end-to-end test of entire WAL system.

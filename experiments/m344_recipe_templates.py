@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M344 — Recipe Templates
 
 Reusable templates for common fact patterns.

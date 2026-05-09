@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M260 — Recipe Diff: Compare Two Edit Recipes
 
 Hypothesis: Recipes can be diff'd like source code, showing

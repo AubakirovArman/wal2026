@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M202 — Production Pipeline with Learned Risk Scoring
 
 End-to-end: encode → train LoRA overlay → eval PPL + survival + RF risk score

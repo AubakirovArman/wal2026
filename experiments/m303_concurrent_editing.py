@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M303 — Concurrent Editing
 
 Multiple users editing simultaneously without conflicts.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M233 — WAL Garbage Collection
 
 Hypothesis: Old edits in a sequential chain can be removed (GC'd) without

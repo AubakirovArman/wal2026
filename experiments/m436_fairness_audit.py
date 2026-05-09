@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M436 — Fairness Audit
 
 Checks for demographic bias in fact answers.

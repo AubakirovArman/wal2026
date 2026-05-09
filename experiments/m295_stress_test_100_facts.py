@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M295 — Stress Test: 100 Facts
 
 Test system stability with 100 consecutive facts.

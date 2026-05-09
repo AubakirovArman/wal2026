@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M24: per-layer calibrated stage cap.
 
 Idea: at calibration time, push N batches of real activations through each

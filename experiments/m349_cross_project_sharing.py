@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M349 — Cross-Project Recipe Sharing
 
 Share recipes between different WAL projects.

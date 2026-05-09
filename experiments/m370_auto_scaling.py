@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M370 — Auto-Scaling Inference
 
 Dynamic batch size based on load.

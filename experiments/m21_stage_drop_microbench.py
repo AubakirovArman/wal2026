@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M21: variable-stage decoding microbench on l54.self_attn.q_proj.
 
 Encodes once with num_stages=3, then sweeps `effective_stages` ∈ {3, 2, 1}

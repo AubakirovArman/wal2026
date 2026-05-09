@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M269 — Build Cache Invalidation Rules
 
 Hypothesis: We can define precise rules for when a cached build

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M426 — Token Efficiency Optimizer
 
 Reduces token usage through prompt compression.

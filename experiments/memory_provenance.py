@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 Wild Idea #23 — Memory Provenance
 
 Each answer says: "this comes from weights / retrieval / branch X".

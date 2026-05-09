@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M288 — Hybrid Answer Arbitration
 
 Hypothesis: When weight-edited model and retrieval disagree,

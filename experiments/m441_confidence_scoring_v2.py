@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M441 — Confidence Scoring v2
 
 Scores model confidence per answer with calibration.

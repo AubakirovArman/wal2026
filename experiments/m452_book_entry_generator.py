@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M452 — Book Entry Generator
 
 Auto-generates a book entry for the latest experiment batch.

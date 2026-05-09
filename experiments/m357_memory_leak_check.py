@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M357 — Memory Leak Check
 
 Detect memory leaks in the system.

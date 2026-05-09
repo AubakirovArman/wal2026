@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Fast real-weight fused kernel diag — loads single weights via safetensors.
 """
 from __future__ import annotations

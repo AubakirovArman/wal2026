@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M415 — Fact Lifecycle Management
 
 Tracks facts through creation, validation, deployment, deprecation.

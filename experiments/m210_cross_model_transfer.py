@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M210 — Cross-Model Transfer
 
 Test if WAL works on a different model architecture/size.

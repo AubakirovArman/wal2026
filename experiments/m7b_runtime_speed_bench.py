@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Runtime microbench for ID-route and Block-RVQ layer variants.
 
 Supports:

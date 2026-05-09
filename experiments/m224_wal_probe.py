@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M224 — WAL Probe / Model Forensics
 
 Hypothesis 7: Even if WAL doesn't improve quality, it provides structured audit:

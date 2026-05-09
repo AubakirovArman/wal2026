@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M253 — Deterministic Build Full Audit
 
 Hypothesis: M243 showed bit-exact determinism for one run.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M209 — Adaptive Steps Per Fact
 
 Test if different facts require different training effort.

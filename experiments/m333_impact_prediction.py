@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M333 — Impact Prediction
 
 Predict the impact of an edit before building.

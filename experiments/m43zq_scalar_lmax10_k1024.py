@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zq: Scalar DRL v2 with lmax=10, K=1024 on smooth layers, skip spiky."""
 import torch

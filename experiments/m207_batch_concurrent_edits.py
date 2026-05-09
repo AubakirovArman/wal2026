@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M207 — Batch Concurrent Edits
 
 Test if training ONE LoRA on multiple facts simultaneously is better than sequential.

@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-E2E Step 11a: end-to-end learned ISA with a semantic encoder.
 
 This probe stops learning a semantic ISA purely post-hoc from an already fixed

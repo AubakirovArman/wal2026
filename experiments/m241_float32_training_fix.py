@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M241 — Float32 Training Fix
 
 Hypothesis: M235/M240's 0% survival + nan PPL is caused by float16

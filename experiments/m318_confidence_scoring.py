@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M318 — Confidence Scoring
 
 Track per-fact confidence based on model behavior.

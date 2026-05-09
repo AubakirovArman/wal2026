@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M264 — Tag Stability: Checkpoint Integrity
 
 Hypothesis: A tagged checkpoint (saved model state) remains bit-exact

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M284 — Old-Answer Lure Training
 
 Hypothesis: Training on provocative prompts that lure the model

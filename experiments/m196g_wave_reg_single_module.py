@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M196g — Wave-LoRA on Single-Module Targets (o_proj only)
 
 Hypothesis: Wave reg helped in M196 (o_proj only, n=1) but failed on mixed targets.

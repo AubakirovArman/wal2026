@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M453 — Experiment Dependency Map
 
 Maps which experiments depend on others.

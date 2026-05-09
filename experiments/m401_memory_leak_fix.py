@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M401 — Memory Leak Fix
 
 Diagnoses and fixes memory growth in long-running WAL server.

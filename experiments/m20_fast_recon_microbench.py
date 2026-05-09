@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M20 microbench: cached fast reconstruct vs reference per_group / full_weight.
 
 Loads one real Llama-3.3-70B linear weight (l54.self_attn.q_proj), encodes it

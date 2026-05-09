@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-ASM Step 9a: classic-assembly prototype for l54 gate/up.
 
 This probe turns the current stage-id stream into a classic assembly surface:

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M409 — Config Validation Schema
 
 Validates WAL config files against JSON Schema.

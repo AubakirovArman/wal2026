@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43w: Test scalar encoder on layer 3 gate_proj (std=0.0541)."""
 import torch

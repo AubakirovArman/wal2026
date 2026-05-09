@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M275 — Recipe Signing / Tamper Detection
 
 Hypothesis: Recipes can be cryptographically signed to detect

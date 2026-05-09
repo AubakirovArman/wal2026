@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M307 — Monitoring Dashboard
 
 Track system metrics over time.

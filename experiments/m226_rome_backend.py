@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M226 — ROME/MEMIT-Style Backend for Hard Facts
 
 Hypothesis: Hard facts (author/inventor) may be editable via rank-one

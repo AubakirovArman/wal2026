@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M331 — Knowledge Graph
 
 Visualize relationships between facts.

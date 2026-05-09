@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M280 — Batch Size Frontier: 1/3/5/10/20 Facts per Batch
 
 Hypothesis: Larger batches train faster but may have lower survival

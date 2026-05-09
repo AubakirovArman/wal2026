@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M366 — Fact Deduplication v2
 
 Embedding-based deduplication.

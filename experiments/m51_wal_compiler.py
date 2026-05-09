@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M51: WAL Compiler — JIT specialized kernels with inline atom tables."""
 import torch

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M380 — Migration Tool
 
 Migrate recipes between WAL versions.

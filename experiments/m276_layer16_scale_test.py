@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M276 — Layer 16 Scale Test: 50/100 Facts
 
 Hypothesis: Layer 16 remains effective as the edit aperture

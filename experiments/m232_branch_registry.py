@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M232 — Branch Registry / Marketplace
 
 Prototype: Registry for sharing and discovering WAL edit branches.

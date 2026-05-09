@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M281 — Negative-Test-Aware Training
 
 Hypothesis: Adding negative prompts (with correct answers) to the

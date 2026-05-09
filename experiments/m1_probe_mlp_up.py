@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M1 probe: encode one mlp.up_proj tensor of Llama 3.3 70B with dynamic-depth routes.
 
 Loads the single weight from the HF safetensors shard using safetensors' lazy API

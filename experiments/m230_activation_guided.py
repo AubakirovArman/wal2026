@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M230 — Activation-Guided Editing (Auto-Select Modules)
 
 Hypothesis: By tracing which modules have highest activation variance

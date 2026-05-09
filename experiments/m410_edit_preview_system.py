@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M410 — Edit Preview System
 
 Shows predicted impact of a recipe before applying it.

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M271 — Semantic Diff Dashboard
 
 Hypothesis: We can visualize model changes in a human-readable

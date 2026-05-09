@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M215 — Sequential Long Chain (10 edits)
 
 Test 10 sequential compiled edits:

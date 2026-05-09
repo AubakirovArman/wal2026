@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M414 — Emergency Stop System
 
 Implements circuit breaker for WAL server under high load.

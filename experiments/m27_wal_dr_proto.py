@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M27 WAL-DR Step 12a: direct block reconstruction with explicit program cost.
 
 This probe keeps the learned semantic ISA direction from WAL-E2E, but changes

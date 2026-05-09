@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M206 — Multi-LoRA Overlay on WAL Base
 
 Test if multiple independent LoRAs can coexist on one WAL base.

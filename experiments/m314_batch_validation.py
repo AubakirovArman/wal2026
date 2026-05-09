@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M314 — Batch Validation
 
 Validate large batches of recipes before building.

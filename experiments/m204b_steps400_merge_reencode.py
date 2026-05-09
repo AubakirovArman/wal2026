@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M204b — steps=400 with Merge + Re-encode (Compiled Mode)
 
 Test if compiled mode (merge+re-encode) survives strong edit (steps=400).

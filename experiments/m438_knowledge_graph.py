@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M438 — Knowledge Graph Integration
 
 Builds graph of facts and their relationships.

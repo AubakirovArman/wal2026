@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """Real-weight diagnostic for FusedIDRouteLinear NaN on Llama-3.3-70B.
 
 Load one real linear, quantize, compare fused vs materialize on realistic seq_len.

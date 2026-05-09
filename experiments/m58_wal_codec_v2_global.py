@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M58: WAL-0 Codec v2 — Global atoms + Global codebook + Bit-packed IDs.
 

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M371 — Fact Embeddings
 
 Generate embeddings for facts (mock).

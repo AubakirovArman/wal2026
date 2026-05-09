@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M359 — Expiration Scheduler
 
 Auto-expire old facts based on schedule.

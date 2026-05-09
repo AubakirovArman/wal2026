@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 """M3: correctness + speed benchmark of PackedIDRouteLinear.
 
 For each tensor type in layer 0 we:

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M406 — Batch Inference Optimizer v2
 
 Improved batching with dynamic batch sizing and padding optimization.

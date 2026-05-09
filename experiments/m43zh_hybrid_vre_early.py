@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M43zh: VRE for std<0.03, scalar K=128 for smooth, skip 0.03<=std<0.08."""
 import torch

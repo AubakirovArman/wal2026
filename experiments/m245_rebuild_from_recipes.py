@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M245 — Rebuild From Recipes vs Sequential Accumulation
 
 Hypothesis: Rebuilding from recipes (batch training on multiple facts)

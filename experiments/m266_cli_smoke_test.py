@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M266 — Full WAL CLI Smoke Test
 
 Hypothesis: We can build a complete CLI workflow:

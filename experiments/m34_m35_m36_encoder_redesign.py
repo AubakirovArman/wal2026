@@ -1,7 +1,3 @@
-"""
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
 #!/usr/bin/env python3
 """M34-M36: Encoder redesign prototypes on real reconstructed Llama 70B weights.
 

@@ -1,8 +1,4 @@
 """
-WAL Project — MIT License
-Copyright (c) 2026 WAL Research Team
-"""
-"""
 M408 — Distributed Training Simulation
 
 Simulates multi-GPU training with gradient synchronization.
