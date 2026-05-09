@@ -4,13 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T21:56:03.725780+00:00",
-  "run_commands": 28,
-  "run_passed": 28,
+  "timestamp": "2026-05-09T22:04:50.881938+00:00",
+  "run_commands": 35,
+  "run_passed": 35,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
   "blocked_result_commands": 7,
-  "docs_checked": 8,
+  "docs_checked": 9,
   "failures": [],
   "records": [
     {
@@ -62,18 +62,24 @@
       "returncode": 0
     },
     {
+      "command": "doc exists: docs/security_hardening_protocol.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
       "command": "PYTHONPATH=src python -m pytest -q tests",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.88s\n"
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.85s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 444/444 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 451/451 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -120,7 +126,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=24 violations=0 missing=0\n",
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=25 violations=0 missing=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m630_public_claim_checker_results.json"
@@ -324,6 +330,76 @@
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m651_behavioral_checksum_drift_results.json"
+    },
+    {
+      "command": "python experiments/m652_recipe_secret_scanner.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M652 Recipe Secret Scanner: PASS\nrecipes=6 blocked=5 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m652_recipe_secret_scanner_results.json"
+    },
+    {
+      "command": "python experiments/m653_malicious_recipe_injection.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M653 Malicious Recipe Injection: PASS\nvectors=5 blocked=5 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m653_malicious_recipe_injection_results.json"
+    },
+    {
+      "command": "python experiments/m654_registry_poisoning_test.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M654 Registry Poisoning Test: PASS\npackages=4 blocked=3 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m654_registry_poisoning_test_results.json"
+    },
+    {
+      "command": "python experiments/m655_hotfix_abuse_test.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M655 Hotfix Abuse Test: PASS\nrequests=4 blocked=2 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m655_hotfix_abuse_test_results.json"
+    },
+    {
+      "command": "python experiments/m656_prompt_injection_retrieval_context.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M656 Prompt Injection in Retrieval Context: PASS\ncontexts=5 blocked=4 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m656_prompt_injection_retrieval_context_results.json"
+    },
+    {
+      "command": "python experiments/m657_provenance_tamper_test.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M657 Provenance Tamper Test: PASS\nchecks=3 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m657_provenance_tamper_test_results.json"
+    },
+    {
+      "command": "python experiments/m658_signed_package_verification.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M658 Signed Package Verification: PASS\nchecks=3 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m658_signed_package_verification_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

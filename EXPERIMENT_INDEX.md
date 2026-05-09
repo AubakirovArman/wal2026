@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 776 Python experiment/prototype scripts
+Total: 783 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -754,6 +754,13 @@ Total: 776 Python experiment/prototype scripts
 - [m649_auto_test_quality_audit.py](experiments/m649_auto_test_quality_audit.py)
 - [m650_ci_score_calibration.py](experiments/m650_ci_score_calibration.py)
 - [m651_behavioral_checksum_drift.py](experiments/m651_behavioral_checksum_drift.py)
+- [m652_recipe_secret_scanner.py](experiments/m652_recipe_secret_scanner.py)
+- [m653_malicious_recipe_injection.py](experiments/m653_malicious_recipe_injection.py)
+- [m654_registry_poisoning_test.py](experiments/m654_registry_poisoning_test.py)
+- [m655_hotfix_abuse_test.py](experiments/m655_hotfix_abuse_test.py)
+- [m656_prompt_injection_retrieval_context.py](experiments/m656_prompt_injection_retrieval_context.py)
+- [m657_provenance_tamper_test.py](experiments/m657_provenance_tamper_test.py)
+- [m658_signed_package_verification.py](experiments/m658_signed_package_verification.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

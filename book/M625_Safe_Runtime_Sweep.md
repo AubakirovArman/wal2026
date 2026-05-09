@@ -11,11 +11,11 @@ Executes all scripts classified safe by M624 in M-order with a per-script timeou
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **total_scripts**: `776`
-- **executed_scripts**: `252`
-- **status_counts**: `2 keys` (`PASS=252`, `BLOCKED=524`)
+- **total_scripts**: `783`
+- **executed_scripts**: `259`
+- **status_counts**: `2 keys` (`PASS=259`, `BLOCKED=524`)
 - **timeout_sec**: `15`
-- **records**: `776 items`
+- **records**: `783 items`
 - **failures**: `0 items`
 
 ## Анализ

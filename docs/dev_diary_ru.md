@@ -4759,7 +4759,7 @@ python experiments/m544_result_validation.py
 ### M624 — Full Test Inventory
 - **Файл**: `m624_full_test_inventory.py`
 - **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
-- **Результат**: total_scripts=776, parse_failures=0, runnable_scripts=252, blocked_scripts=524
+- **Результат**: total_scripts=783, parse_failures=0, runnable_scripts=259, blocked_scripts=524
 - **Статус**: ✅ PASS
 - **Book**: `book/M624_Full_Test_Inventory.md`
 
@@ -4772,7 +4772,7 @@ python experiments/m544_result_validation.py
 ### M625 — Safe Runtime Sweep
 - **Файл**: `m625_safe_runtime_sweep.py`
 - **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
-- **Результат**: total_scripts=776, executed_scripts=252, status_counts={PASS: 252, BLOCKED: 524}, FAIL=0
+- **Результат**: total_scripts=783, executed_scripts=259, status_counts={PASS: 259, BLOCKED: 524}, FAIL=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M625_Safe_Runtime_Sweep.md`
 
@@ -4817,7 +4817,7 @@ python experiments/m544_result_validation.py
 - `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M638.
 - `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
 - `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
-- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `252 PASS / 524 BLOCKED`.
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `259 PASS / 524 BLOCKED`.
 
 ### Практический вывод
 Для публичного GitHub входа теперь есть две разные двери:
@@ -4835,7 +4835,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m628_blocked_script_taxonomy.py`
 - **Документ**: `docs/blocked_script_taxonomy.md`
 - **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
-- **Результат**: total_scripts=776, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
+- **Результат**: total_scripts=783, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M628_Blocked_Script_Taxonomy.md`
 
@@ -4851,7 +4851,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m630_public_claim_checker.py`
 - **Документ**: `docs/public_claim_policy.md`
 - **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
-- **Результат**: files_scanned=24, violations_total=0, required_phrase_misses=0
+- **Результат**: files_scanned=25, violations_total=0, required_phrase_misses=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M630_Public_Claim_Checker.md`
 
@@ -4859,7 +4859,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m631_docs_command_smoke.py`
 - **Документ**: `docs/docs_command_smoke.md`
 - **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
-- **Результат**: run_commands=28/28 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
+- **Результат**: run_commands=35/35 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
 - **Статус**: ✅ PASS
 - **Book**: `book/M631_Docs_Command_Smoke.md`
 
@@ -4867,7 +4867,7 @@ python experiments/m544_result_validation.py
 - M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
 - Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
 - Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
-- Финальный M624 после M628-M631: total_scripts=776, parse_failures=0, runnable_scripts=252, blocked_scripts=524.
+- Финальный M624 после M628-M631: total_scripts=783, parse_failures=0, runnable_scripts=259, blocked_scripts=524.
 
 ### Практический вывод
 Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.
@@ -5027,3 +5027,57 @@ M639-M645 не доказывают model behavior. Они закрывают co
 
 ### Практический вывод
 M646-M651 — это pre-alpha CI contract layer. Он не доказывает поведение реальной модели, но делает будущие model runners жёстче: меньше toy prompts, больше negative/lure/context checks и явный score policy.
+
+---
+
+## M652-658 — Security Hardening Layer (2026-05-09)
+
+### Цель
+Добавить controlled security/abuse gates без исполнения недоверенного кода: secret scan, malicious recipe injection, registry poisoning, hotfix abuse, retrieval prompt injection, provenance tamper и signed package verification.
+
+### M652 — Recipe Secret Scanner
+- **Файл**: `m652_recipe_secret_scanner.py`
+- **Artifact**: `corpora/security_recipe_secret_scan.json`
+- **Результат**: status=PASS, recipes_checked=6, blocked_recipes=5, failures=0
+- **Book**: `book/M652_Recipe_Secret_Scanner.md`
+
+### M653 — Malicious Recipe Injection
+- **Файл**: `m653_malicious_recipe_injection.py`
+- **Artifact**: `corpora/security_malicious_recipe_vectors.jsonl`
+- **Результат**: status=PASS, vectors=5, blocked_vectors=5, failures=0
+- **Book**: `book/M653_Malicious_Recipe_Injection.md`
+
+### M654 — Registry Poisoning Test
+- **Файл**: `m654_registry_poisoning_test.py`
+- **Artifact**: `corpora/security_registry_poisoning.json`
+- **Результат**: status=PASS, packages_checked=4, blocked_packages=3, failures=0
+- **Book**: `book/M654_Registry_Poisoning_Test.md`
+
+### M655 — Hotfix Abuse Test
+- **Файл**: `m655_hotfix_abuse_test.py`
+- **Результат**: status=PASS, requests_checked=4, blocked_requests=2, failures=0
+- **Book**: `book/M655_Hotfix_Abuse_Test.md`
+
+### M656 — Prompt Injection in Retrieval Context
+- **Файл**: `m656_prompt_injection_retrieval_context.py`
+- **Artifact**: `corpora/security_retrieval_injection.jsonl`
+- **Результат**: status=PASS, contexts_checked=5, blocked_contexts=4, failures=0
+- **Book**: `book/M656_Prompt_Injection_Retrieval_Context.md`
+
+### M657 — Provenance Tamper Test
+- **Файл**: `m657_provenance_tamper_test.py`
+- **Artifact**: `corpora/security_provenance_tamper.json`
+- **Результат**: status=PASS, checks=3, failures=0
+- **Book**: `book/M657_Provenance_Tamper_Test.md`
+
+### M658 — Signed Package Verification
+- **Файл**: `m658_signed_package_verification.py`
+- **Artifact**: `corpora/security_signed_package_verification.json`
+- **Результат**: status=PASS, checks=3, failures=0
+- **Book**: `book/M658_Signed_Package_Verification.md`
+
+### Документ
+- `docs/security_hardening_protocol.md`
+
+### Практический вывод
+M652-M658 — это не внешний security audit и не production claim. Это локальные deterministic gates, которые закрывают базовые abuse-контракты перед будущими registry/package/model runners.

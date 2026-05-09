@@ -1,0 +1,56 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M655",
+  "name": "Hotfix Abuse Test",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-09T22:04:50.699121+00:00",
+  "requests_checked": 4,
+  "blocked_requests": 2,
+  "records": [
+    {
+      "id": "hotfix-safe",
+      "bypass_ci": false,
+      "approval": null,
+      "audit_reason": "normal patch",
+      "rollback_id": "build-001",
+      "allowed": true,
+      "reasons": []
+    },
+    {
+      "id": "hotfix-approved",
+      "bypass_ci": true,
+      "approval": "human-approval-001",
+      "audit_reason": "critical fix with post-check",
+      "rollback_id": "build-001",
+      "allowed": true,
+      "reasons": []
+    },
+    {
+      "id": "hotfix-no-approval",
+      "bypass_ci": true,
+      "approval": null,
+      "audit_reason": "urgent",
+      "rollback_id": "build-001",
+      "allowed": false,
+      "reasons": [
+        "missing_approval",
+        "weak_audit_reason"
+      ]
+    },
+    {
+      "id": "hotfix-no-rollback",
+      "bypass_ci": true,
+      "approval": "human-approval-002",
+      "audit_reason": "critical fix with post-check",
+      "rollback_id": null,
+      "allowed": false,
+      "reasons": [
+        "missing_rollback"
+      ]
+    }
+  ],
+  "failures": [],
+  "scope": "hotfix approval policy contract",
+  "docs": "docs/security_hardening_protocol.md"
+}

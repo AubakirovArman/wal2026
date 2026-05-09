@@ -40,6 +40,13 @@ RUN_COMMANDS = [
     "python experiments/m649_auto_test_quality_audit.py",
     "python experiments/m650_ci_score_calibration.py",
     "python experiments/m651_behavioral_checksum_drift.py",
+    "python experiments/m652_recipe_secret_scanner.py",
+    "python experiments/m653_malicious_recipe_injection.py",
+    "python experiments/m654_registry_poisoning_test.py",
+    "python experiments/m655_hotfix_abuse_test.py",
+    "python experiments/m656_prompt_injection_retrieval_context.py",
+    "python experiments/m657_provenance_tamper_test.py",
+    "python experiments/m658_signed_package_verification.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -57,6 +64,7 @@ DOC_FILES = [
     "docs/cross_model_validation_plan.md",
     "docs/robustness_data_protocol.md",
     "docs/ci_hardening_protocol.md",
+    "docs/security_hardening_protocol.md",
 ]
 
 

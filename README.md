@@ -17,12 +17,12 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 754 milestone experiment scripts in `experiments/m*.py`
-- 776 Python scripts total in `experiments/`
-- 444 experiment result JSON files in `experiments/`
-- 589 book/diary entries in `book/`
+- 761 milestone experiment scripts in `experiments/m*.py`
+- 783 Python scripts total in `experiments/`
+- 451 experiment result JSON files in `experiments/`
+- 596 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 225 docs files in `docs/`
+- 226 docs files in `docs/`
 - 4750+ lines in `docs/dev_diary_ru.md`
 - 68 Python source modules in `src/`
 - 12 pytest tests for the packaged core
@@ -30,7 +30,7 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M651+
+experiments/        milestone scripts and result JSON for M1-M658+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -105,6 +105,13 @@ python experiments/m648_context_stress_8k_32k.py
 python experiments/m649_auto_test_quality_audit.py
 python experiments/m650_ci_score_calibration.py
 python experiments/m651_behavioral_checksum_drift.py
+python experiments/m652_recipe_secret_scanner.py
+python experiments/m653_malicious_recipe_injection.py
+python experiments/m654_registry_poisoning_test.py
+python experiments/m655_hotfix_abuse_test.py
+python experiments/m656_prompt_injection_retrieval_context.py
+python experiments/m657_provenance_tamper_test.py
+python experiments/m658_signed_package_verification.py
 ```
 
 ## Artifact Policy

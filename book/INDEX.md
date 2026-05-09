@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 588
+Total entries: 595
 
 ## Early (M1-M99)
 
@@ -375,6 +375,13 @@ Total entries: 588
 - [M649 Auto Test Quality Audit](M649_Auto_Test_Quality_Audit.md)
 - [M650 CI Score Calibration](M650_CI_Score_Calibration.md)
 - [M651 Behavioral Checksum Drift](M651_Behavioral_Checksum_Drift.md)
+- [M652 Recipe Secret Scanner](M652_Recipe_Secret_Scanner.md)
+- [M653 Malicious Recipe Injection](M653_Malicious_Recipe_Injection.md)
+- [M654 Registry Poisoning Test](M654_Registry_Poisoning_Test.md)
+- [M655 Hotfix Abuse Test](M655_Hotfix_Abuse_Test.md)
+- [M656 Prompt Injection Retrieval Context](M656_Prompt_Injection_Retrieval_Context.md)
+- [M657 Provenance Tamper Test](M657_Provenance_Tamper_Test.md)
+- [M658 Signed Package Verification](M658_Signed_Package_Verification.md)
 
 ## Phase 1 (M100-M149)
 

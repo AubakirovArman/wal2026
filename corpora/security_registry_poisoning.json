@@ -1,0 +1,57 @@
+{
+  "packages": [
+    {
+      "name": "wal-safe-facts",
+      "maintainer": "wal-core",
+      "payload": "safe package payload",
+      "declared_digest": "38c89a243f5918bde263d6dee51ff6eb2286f573c7e9c1d5136be0544d25fd98",
+      "capabilities": [
+        "read_recipes"
+      ],
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "name": "wal-safe-facts",
+      "maintainer": "unknown",
+      "payload": "tampered payload",
+      "declared_digest": "38c89a243f5918bde263d6dee51ff6eb2286f573c7e9c1d5136be0544d25fd98",
+      "capabilities": [
+        "read_recipes"
+      ],
+      "blocked": true,
+      "reasons": [
+        "untrusted_maintainer",
+        "digest_mismatch"
+      ]
+    },
+    {
+      "name": "wa1-safe-facts",
+      "maintainer": "unknown",
+      "payload": "typosquat payload",
+      "declared_digest": "b64db747e6f85ef6b9f4a925caf8b57f1d8c40dcd582b5b53b5abea3a2c314b4",
+      "capabilities": [
+        "read_recipes"
+      ],
+      "blocked": true,
+      "reasons": [
+        "untrusted_maintainer",
+        "typosquat_name"
+      ]
+    },
+    {
+      "name": "wal-admin-package",
+      "maintainer": "arman",
+      "payload": "excess capability payload",
+      "declared_digest": "64d86035d0efb91e865c232e06cfba4da73ee8cab364bedae478dd0682028646",
+      "capabilities": [
+        "read_recipes",
+        "write_registry"
+      ],
+      "blocked": true,
+      "reasons": [
+        "excess_capability"
+      ]
+    }
+  ]
+}
