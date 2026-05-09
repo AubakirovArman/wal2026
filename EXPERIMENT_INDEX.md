@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 763 Python experiment/prototype scripts
+Total: 770 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -741,6 +741,13 @@ Total: 763 Python experiment/prototype scripts
 - [m636_cross_model_recipe_replay.py](experiments/m636_cross_model_recipe_replay.py)
 - [m637_cross_model_layer_aperture.py](experiments/m637_cross_model_layer_aperture.py)
 - [m638_cross_model_ci_behavior.py](experiments/m638_cross_model_ci_behavior.py)
+- [m639_dirty_facts_corpus.py](experiments/m639_dirty_facts_corpus.py)
+- [m640_ambiguous_facts_test.py](experiments/m640_ambiguous_facts_test.py)
+- [m641_temporal_facts_date_logic.py](experiments/m641_temporal_facts_date_logic.py)
+- [m642_long_answer_facts.py](experiments/m642_long_answer_facts.py)
+- [m643_procedural_knowledge_routing.py](experiments/m643_procedural_knowledge_routing.py)
+- [m644_policy_refusal_edits.py](experiments/m644_policy_refusal_edits.py)
+- [m645_hard_facts_hybrid_backend.py](experiments/m645_hard_facts_hybrid_backend.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

@@ -27,6 +27,13 @@ RUN_COMMANDS = [
     "python experiments/m636_cross_model_recipe_replay.py",
     "python experiments/m637_cross_model_layer_aperture.py",
     "python experiments/m638_cross_model_ci_behavior.py",
+    "python experiments/m639_dirty_facts_corpus.py",
+    "python experiments/m640_ambiguous_facts_test.py",
+    "python experiments/m641_temporal_facts_date_logic.py",
+    "python experiments/m642_long_answer_facts.py",
+    "python experiments/m643_procedural_knowledge_routing.py",
+    "python experiments/m644_policy_refusal_edits.py",
+    "python experiments/m645_hard_facts_hybrid_backend.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -42,6 +49,7 @@ DOC_FILES = [
     "docs/controlled_runners.md",
     "docs/model_small_protocol.md",
     "docs/cross_model_validation_plan.md",
+    "docs/robustness_data_protocol.md",
 ]
 
 

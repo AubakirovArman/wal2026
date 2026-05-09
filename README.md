@@ -1,7 +1,7 @@
 # WAL — WeightOps Research Framework
 
 ![Modules](https://img.shields.io/badge/modules-600+-blue)
-![Experiments](https://img.shields.io/badge/experiments-763-blue)
+![Experiments](https://img.shields.io/badge/experiments-770-blue)
 ![Status](https://img.shields.io/badge/status-research--prototype-orange)
 
 ## Overview
@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 741 milestone experiment scripts in `experiments/m*.py`
-- 763 Python scripts total in `experiments/`
-- 431 experiment result JSON files in `experiments/`
-- 576 book/diary entries in `book/`
+- 748 milestone experiment scripts in `experiments/m*.py`
+- 770 Python scripts total in `experiments/`
+- 438 experiment result JSON files in `experiments/`
+- 583 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 223 docs files in `docs/`
+- 224 docs files in `docs/`
 - 4750+ lines in `docs/dev_diary_ru.md`
-- 67 Python source modules in `src/`
+- 68 Python source modules in `src/`
 - 12 pytest tests for the packaged core
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M638+
+experiments/        milestone scripts and result JSON for M1-M645+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -92,6 +92,13 @@ python experiments/m635_tinyllama_mistral_full_workflow.py
 python experiments/m636_cross_model_recipe_replay.py
 python experiments/m637_cross_model_layer_aperture.py
 python experiments/m638_cross_model_ci_behavior.py
+python experiments/m639_dirty_facts_corpus.py
+python experiments/m640_ambiguous_facts_test.py
+python experiments/m641_temporal_facts_date_logic.py
+python experiments/m642_long_answer_facts.py
+python experiments/m643_procedural_knowledge_routing.py
+python experiments/m644_policy_refusal_edits.py
+python experiments/m645_hard_facts_hybrid_backend.py
 ```
 
 ## Artifact Policy

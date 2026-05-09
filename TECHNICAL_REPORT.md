@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M638.
+The current release-cleanup line is M621-M645.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -97,12 +97,21 @@ The current release-cleanup line is M621-M638.
 | M636 | Cross-model recipe replay | BLOCKED |
 | M637 | Cross-model layer aperture | BLOCKED |
 | M638 | Cross-model CI behavior | BLOCKED |
+| M639 | Dirty facts corpus | PASS |
+| M640 | Ambiguous facts test | PASS |
+| M641 | Temporal facts date logic | PASS |
+| M642 | Long answer facts | PASS |
+| M643 | Procedural knowledge routing | PASS |
+| M644 | Policy/refusal edits | PASS |
+| M645 | Hard facts hybrid backend | SIMULATED |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
 M628-M631 convert that blocked group into a controlled runner plan: model runners, GPU-heavy runners, mutation dry-runs, docs/public-claim gates, and security/abuse runners are tracked separately from safe-core checks.
 
 M632-M638 start the `MODEL_SMALL` runner. They are currently `BLOCKED`, not failed: the machine does not have pinned small text-only models for Llama/Qwen/Gemma/TinyLlama-family workflows.
+
+M639-M645 add corpus and routing contracts for robustness. These are not model-behavior claims; M645 is explicitly `SIMULATED` because no real hybrid backend is executed.
 
 ## Status Semantics
 

@@ -9,12 +9,12 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 763 Python scripts |
-| Results | 431 JSON result files |
-| Books | 576 entries |
-| Docs | 223 markdown docs plus developer diary |
+| Experiments | 770 Python scripts |
+| Results | 438 JSON result files |
+| Books | 583 entries |
+| Docs | 224 markdown docs plus developer diary |
 | Maintained core tests | 12 passing |
-| Safe runtime sweep | 239 passing, 0 failing, 524 blocked by policy |
+| Safe runtime sweep | 246 passing, 0 failing, 524 blocked by policy |
 
 ## Key Results
 
@@ -28,6 +28,9 @@
 - M629 defines the seven-runner hardening matrix.
 - M630 verifies public claims across release-facing files.
 - M631 smoke-tests fast reviewer documentation commands.
+- M632-M638 are correctly `BLOCKED` until pinned local small text-only models are available.
+- M639-M644 add dirty/ambiguous/temporal/long-answer/procedural/refusal robustness corpora and routing contracts.
+- M645 records hard-facts hybrid backend work as `SIMULATED`, not a real backend claim.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 

@@ -4759,7 +4759,7 @@ python experiments/m544_result_validation.py
 ### M624 — Full Test Inventory
 - **Файл**: `m624_full_test_inventory.py`
 - **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
-- **Результат**: total_scripts=763, parse_failures=0, runnable_scripts=239, blocked_scripts=524
+- **Результат**: total_scripts=770, parse_failures=0, runnable_scripts=246, blocked_scripts=524
 - **Статус**: ✅ PASS
 - **Book**: `book/M624_Full_Test_Inventory.md`
 
@@ -4772,7 +4772,7 @@ python experiments/m544_result_validation.py
 ### M625 — Safe Runtime Sweep
 - **Файл**: `m625_safe_runtime_sweep.py`
 - **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
-- **Результат**: total_scripts=763, executed_scripts=239, status_counts={PASS: 239, BLOCKED: 524}, FAIL=0
+- **Результат**: total_scripts=770, executed_scripts=246, status_counts={PASS: 246, BLOCKED: 524}, FAIL=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M625_Safe_Runtime_Sweep.md`
 
@@ -4817,7 +4817,7 @@ python experiments/m544_result_validation.py
 - `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M638.
 - `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
 - `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
-- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `239 PASS / 524 BLOCKED`.
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `246 PASS / 524 BLOCKED`.
 
 ### Практический вывод
 Для публичного GitHub входа теперь есть две разные двери:
@@ -4835,7 +4835,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m628_blocked_script_taxonomy.py`
 - **Документ**: `docs/blocked_script_taxonomy.md`
 - **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
-- **Результат**: total_scripts=763, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
+- **Результат**: total_scripts=770, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M628_Blocked_Script_Taxonomy.md`
 
@@ -4851,7 +4851,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m630_public_claim_checker.py`
 - **Документ**: `docs/public_claim_policy.md`
 - **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
-- **Результат**: files_scanned=22, violations_total=0, required_phrase_misses=0
+- **Результат**: files_scanned=23, violations_total=0, required_phrase_misses=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M630_Public_Claim_Checker.md`
 
@@ -4859,7 +4859,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m631_docs_command_smoke.py`
 - **Документ**: `docs/docs_command_smoke.md`
 - **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
-- **Результат**: run_commands=15/15 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
+- **Результат**: run_commands=22/22 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
 - **Статус**: ✅ PASS
 - **Book**: `book/M631_Docs_Command_Smoke.md`
 
@@ -4867,7 +4867,7 @@ python experiments/m544_result_validation.py
 - M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
 - Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
 - Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
-- Финальный M624 после M628-M631: total_scripts=763, parse_failures=0, runnable_scripts=239, blocked_scripts=524.
+- Финальный M624 после M628-M631: total_scripts=770, parse_failures=0, runnable_scripts=246, blocked_scripts=524.
 
 ### Практический вывод
 Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.
@@ -4927,3 +4927,55 @@ python experiments/m544_result_validation.py
 
 ### Практический вывод
 Cross-model proof пока не выполнен, но теперь он формализован как controlled gate. Следующий реальный шаг — положить локально хотя бы одну small text-only модель и повторить M632-M638.
+
+---
+
+## M639-645 — Robustness Data Layer (2026-05-09)
+
+### Цель
+Добавить первый слой real-world robustness без model loading: messy facts, ambiguous answers, temporal logic, long answers, procedural routing, refusal routing и hard-facts hybrid policy.
+
+### M639 — Dirty Facts Corpus
+- **Файл**: `m639_dirty_facts_corpus.py`
+- **Corpus**: `corpora/dirty_facts_500.jsonl`
+- **Результат**: status=PASS, records=500, domains=8, noise_types=5
+- **Book**: `book/M639_Dirty_Facts_Corpus.md`
+
+### M640 — Ambiguous Facts Test
+- **Файл**: `m640_ambiguous_facts_test.py`
+- **Corpus**: `corpora/ambiguous_facts.jsonl`
+- **Результат**: status=PASS, records=60, missing_multi_answer_records=0
+- **Book**: `book/M640_Ambiguous_Facts_Test.md`
+
+### M641 — Temporal Facts Date Logic
+- **Файл**: `m641_temporal_facts_date_logic.py`
+- **Corpus**: `corpora/temporal_facts.jsonl`
+- **Результат**: status=PASS, records=80, date_logic_failures=0
+- **Book**: `book/M641_Temporal_Facts_Date_Logic.md`
+
+### M642 — Long Answer Facts
+- **Файл**: `m642_long_answer_facts.py`
+- **Corpus**: `corpora/long_answer_facts.jsonl`
+- **Результат**: status=PASS, records=70, average_answer_words=22.0
+- **Book**: `book/M642_Long_Answer_Facts.md`
+
+### M643 — Procedural Knowledge Routing
+- **Файл**: `m643_procedural_knowledge_routing.py`
+- **Результат**: status=PASS, procedural_errors=0
+- **Book**: `book/M643_Procedural_Knowledge_Routing.md`
+
+### M644 — Policy Refusal Edits
+- **Файл**: `m644_policy_refusal_edits.py`
+- **Результат**: status=PASS, policy_errors=0
+- **Book**: `book/M644_Policy_Refusal_Edits.md`
+
+### M645 — Hard Facts Hybrid Backend
+- **Файл**: `m645_hard_facts_hybrid_backend.py`
+- **Результат**: status=SIMULATED, routing_errors=0
+- **Book**: `book/M645_Hard_Facts_Hybrid_Backend.md`
+
+### Документ
+- `docs/robustness_data_protocol.md`
+
+### Практический вывод
+M639-M645 не доказывают model behavior. Они закрывают corpus/routing contract layer, чтобы будущие model runners проверяли не только toy facts.

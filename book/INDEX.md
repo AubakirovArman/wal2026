@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 575
+Total entries: 582
 
 ## Early (M1-M99)
 
@@ -362,6 +362,13 @@ Total entries: 575
 - [M636 Cross Model Recipe Replay](M636_Cross_Model_Recipe_Replay.md)
 - [M637 Cross Model Layer Aperture](M637_Cross_Model_Layer_Aperture.md)
 - [M638 Cross Model CI Behavior](M638_Cross_Model_CI_Behavior.md)
+- [M639 Dirty Facts Corpus](M639_Dirty_Facts_Corpus.md)
+- [M640 Ambiguous Facts Test](M640_Ambiguous_Facts_Test.md)
+- [M641 Temporal Facts Date Logic](M641_Temporal_Facts_Date_Logic.md)
+- [M642 Long Answer Facts](M642_Long_Answer_Facts.md)
+- [M643 Procedural Knowledge Routing](M643_Procedural_Knowledge_Routing.md)
+- [M644 Policy Refusal Edits](M644_Policy_Refusal_Edits.md)
+- [M645 Hard Facts Hybrid Backend](M645_Hard_Facts_Hybrid_Backend.md)
 
 ## Phase 1 (M100-M149)
 

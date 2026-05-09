@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `15`
-- Runnable commands passed: `15`
+- Runnable commands: `22`
+- Runnable commands passed: `22`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -25,6 +25,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `doc` | `doc exists: docs/controlled_runners.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/model_small_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/cross_model_validation_plan.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/robustness_data_protocol.md` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m pytest -q tests` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid` | `PASS` | `—` |
 | `run` | `python experiments/m626_technical_report.py` | `PASS` | `PASS` |
@@ -39,6 +40,13 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m636_cross_model_recipe_replay.py` | `PASS` | `BLOCKED` |
 | `run` | `python experiments/m637_cross_model_layer_aperture.py` | `PASS` | `BLOCKED` |
 | `run` | `python experiments/m638_cross_model_ci_behavior.py` | `PASS` | `BLOCKED` |
+| `run` | `python experiments/m639_dirty_facts_corpus.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m640_ambiguous_facts_test.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m641_temporal_facts_date_logic.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m642_long_answer_facts.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m643_procedural_knowledge_routing.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m644_policy_refusal_edits.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m645_hard_facts_hybrid_backend.py` | `PASS` | `SIMULATED` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |
