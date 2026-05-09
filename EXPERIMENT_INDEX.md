@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 770 Python experiment/prototype scripts
+Total: 776 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -748,6 +748,12 @@ Total: 770 Python experiment/prototype scripts
 - [m643_procedural_knowledge_routing.py](experiments/m643_procedural_knowledge_routing.py)
 - [m644_policy_refusal_edits.py](experiments/m644_policy_refusal_edits.py)
 - [m645_hard_facts_hybrid_backend.py](experiments/m645_hard_facts_hybrid_backend.py)
+- [m646_negative_test_expansion.py](experiments/m646_negative_test_expansion.py)
+- [m647_lure_test_expansion.py](experiments/m647_lure_test_expansion.py)
+- [m648_context_stress_8k_32k.py](experiments/m648_context_stress_8k_32k.py)
+- [m649_auto_test_quality_audit.py](experiments/m649_auto_test_quality_audit.py)
+- [m650_ci_score_calibration.py](experiments/m650_ci_score_calibration.py)
+- [m651_behavioral_checksum_drift.py](experiments/m651_behavioral_checksum_drift.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

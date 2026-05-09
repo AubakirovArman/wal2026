@@ -9,12 +9,12 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 770 Python scripts |
-| Results | 438 JSON result files |
-| Books | 583 entries |
-| Docs | 224 markdown docs plus developer diary |
+| Experiments | 776 Python scripts |
+| Results | 444 JSON result files |
+| Books | 589 entries |
+| Docs | 225 markdown docs plus developer diary |
 | Maintained core tests | 12 passing |
-| Safe runtime sweep | 246 passing, 0 failing, 524 blocked by policy |
+| Safe runtime sweep | 252 passing, 0 failing, 524 blocked by policy |
 
 ## Key Results
 
@@ -31,6 +31,7 @@
 - M632-M638 are correctly `BLOCKED` until pinned local small text-only models are available.
 - M639-M644 add dirty/ambiguous/temporal/long-answer/procedural/refusal robustness corpora and routing contracts.
 - M645 records hard-facts hybrid backend work as `SIMULATED`, not a real backend claim.
+- M646-M651 add CI hardening corpora, long-context payloads, scoring calibration, and checksum drift checks.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 

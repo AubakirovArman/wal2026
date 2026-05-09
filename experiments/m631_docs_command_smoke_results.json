@@ -4,13 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T21:47:47.629449+00:00",
-  "run_commands": 22,
-  "run_passed": 22,
+  "timestamp": "2026-05-09T21:56:03.725780+00:00",
+  "run_commands": 28,
+  "run_passed": 28,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
   "blocked_result_commands": 7,
-  "docs_checked": 7,
+  "docs_checked": 8,
   "failures": [],
   "records": [
     {
@@ -56,18 +56,24 @@
       "returncode": 0
     },
     {
+      "command": "doc exists: docs/ci_hardening_protocol.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
       "command": "PYTHONPATH=src python -m pytest -q tests",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.84s\n"
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.88s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 438/438 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 444/444 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -114,7 +120,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=23 violations=0 missing=0\n",
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=24 violations=0 missing=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m630_public_claim_checker_results.json"
@@ -258,6 +264,66 @@
       "result_status": "SIMULATED",
       "result_pass": false,
       "result_file": "experiments/m645_hard_facts_hybrid_backend_results.json"
+    },
+    {
+      "command": "python experiments/m646_negative_test_expansion.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M646 Negative Test Expansion: PASS\nrecords=100 malformed=0 duplicates=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m646_negative_test_expansion_results.json"
+    },
+    {
+      "command": "python experiments/m647_lure_test_expansion.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M647 Lure Test Expansion: PASS\nrecords=100 malformed=0 duplicates=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m647_lure_test_expansion_results.json"
+    },
+    {
+      "command": "python experiments/m648_context_stress_8k_32k.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M648 Context Stress 8K/32K: PASS\nrecords=2 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m648_context_stress_8k_32k_results.json"
+    },
+    {
+      "command": "python experiments/m649_auto_test_quality_audit.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M649 Auto-Test Quality Audit: PASS\nrecords_checked=202 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m649_auto_test_quality_audit_results.json"
+    },
+    {
+      "command": "python experiments/m650_ci_score_calibration.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M650 CI Score Calibration: PASS\nscenarios=3 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m650_ci_score_calibration_results.json"
+    },
+    {
+      "command": "python experiments/m651_behavioral_checksum_drift.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M651 Behavioral Checksum Drift: PASS\nfailures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m651_behavioral_checksum_drift_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

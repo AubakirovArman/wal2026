@@ -34,6 +34,12 @@ RUN_COMMANDS = [
     "python experiments/m643_procedural_knowledge_routing.py",
     "python experiments/m644_policy_refusal_edits.py",
     "python experiments/m645_hard_facts_hybrid_backend.py",
+    "python experiments/m646_negative_test_expansion.py",
+    "python experiments/m647_lure_test_expansion.py",
+    "python experiments/m648_context_stress_8k_32k.py",
+    "python experiments/m649_auto_test_quality_audit.py",
+    "python experiments/m650_ci_score_calibration.py",
+    "python experiments/m651_behavioral_checksum_drift.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -50,6 +56,7 @@ DOC_FILES = [
     "docs/model_small_protocol.md",
     "docs/cross_model_validation_plan.md",
     "docs/robustness_data_protocol.md",
+    "docs/ci_hardening_protocol.md",
 ]
 
 

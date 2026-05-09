@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `22`
-- Runnable commands passed: `22`
+- Runnable commands: `28`
+- Runnable commands passed: `28`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -26,6 +26,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `doc` | `doc exists: docs/model_small_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/cross_model_validation_plan.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/robustness_data_protocol.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/ci_hardening_protocol.md` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m pytest -q tests` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid` | `PASS` | `—` |
 | `run` | `python experiments/m626_technical_report.py` | `PASS` | `PASS` |
@@ -47,6 +48,12 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m643_procedural_knowledge_routing.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m644_policy_refusal_edits.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m645_hard_facts_hybrid_backend.py` | `PASS` | `SIMULATED` |
+| `run` | `python experiments/m646_negative_test_expansion.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m647_lure_test_expansion.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m648_context_stress_8k_32k.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m649_auto_test_quality_audit.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m650_ci_score_calibration.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m651_behavioral_checksum_drift.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |

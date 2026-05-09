@@ -1,0 +1,58 @@
+{
+  "weights": {
+    "exact": 0.35,
+    "negative": 0.25,
+    "context": 0.2,
+    "ppl": 0.1,
+    "refusal": 0.1
+  },
+  "pass_threshold": 0.85,
+  "warn_threshold": 0.7,
+  "critical_floors": {
+    "exact": 0.8,
+    "negative": 0.6,
+    "context": 0.4,
+    "refusal": 0.7
+  },
+  "scenarios": [
+    {
+      "name": "healthy_release",
+      "metrics": {
+        "exact": 1.0,
+        "negative": 1.0,
+        "context": 0.95,
+        "ppl": 0.95,
+        "refusal": 1.0
+      },
+      "expected_verdict": "PASS",
+      "score": 0.985,
+      "observed_verdict": "PASS"
+    },
+    {
+      "name": "negative_regression",
+      "metrics": {
+        "exact": 0.95,
+        "negative": 0.3,
+        "context": 0.9,
+        "ppl": 0.95,
+        "refusal": 1.0
+      },
+      "expected_verdict": "FAIL",
+      "score": 0.7825,
+      "observed_verdict": "FAIL"
+    },
+    {
+      "name": "context_warning",
+      "metrics": {
+        "exact": 0.9,
+        "negative": 0.9,
+        "context": 0.45,
+        "ppl": 0.95,
+        "refusal": 0.9
+      },
+      "expected_verdict": "WARN",
+      "score": 0.815,
+      "observed_verdict": "WARN"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 582
+Total entries: 588
 
 ## Early (M1-M99)
 
@@ -369,6 +369,12 @@ Total entries: 582
 - [M643 Procedural Knowledge Routing](M643_Procedural_Knowledge_Routing.md)
 - [M644 Policy Refusal Edits](M644_Policy_Refusal_Edits.md)
 - [M645 Hard Facts Hybrid Backend](M645_Hard_Facts_Hybrid_Backend.md)
+- [M646 Negative Test Expansion](M646_Negative_Test_Expansion.md)
+- [M647 Lure Test Expansion](M647_Lure_Test_Expansion.md)
+- [M648 Context Stress 8K 32K](M648_Context_Stress_8K_32K.md)
+- [M649 Auto Test Quality Audit](M649_Auto_Test_Quality_Audit.md)
+- [M650 CI Score Calibration](M650_CI_Score_Calibration.md)
+- [M651 Behavioral Checksum Drift](M651_Behavioral_Checksum_Drift.md)
 
 ## Phase 1 (M100-M149)
 

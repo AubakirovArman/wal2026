@@ -17,12 +17,12 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 748 milestone experiment scripts in `experiments/m*.py`
-- 770 Python scripts total in `experiments/`
-- 438 experiment result JSON files in `experiments/`
-- 583 book/diary entries in `book/`
+- 754 milestone experiment scripts in `experiments/m*.py`
+- 776 Python scripts total in `experiments/`
+- 444 experiment result JSON files in `experiments/`
+- 589 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 224 docs files in `docs/`
+- 225 docs files in `docs/`
 - 4750+ lines in `docs/dev_diary_ru.md`
 - 68 Python source modules in `src/`
 - 12 pytest tests for the packaged core
@@ -30,7 +30,7 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M645+
+experiments/        milestone scripts and result JSON for M1-M651+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -99,6 +99,12 @@ python experiments/m642_long_answer_facts.py
 python experiments/m643_procedural_knowledge_routing.py
 python experiments/m644_policy_refusal_edits.py
 python experiments/m645_hard_facts_hybrid_backend.py
+python experiments/m646_negative_test_expansion.py
+python experiments/m647_lure_test_expansion.py
+python experiments/m648_context_stress_8k_32k.py
+python experiments/m649_auto_test_quality_audit.py
+python experiments/m650_ci_score_calibration.py
+python experiments/m651_behavioral_checksum_drift.py
 ```
 
 ## Artifact Policy

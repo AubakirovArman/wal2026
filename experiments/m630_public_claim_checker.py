@@ -24,6 +24,7 @@ PUBLIC_FILES = [
     "docs/model_small_protocol.md",
     "docs/cross_model_validation_plan.md",
     "docs/robustness_data_protocol.md",
+    "docs/ci_hardening_protocol.md",
     "docs/wal_status_summary.md",
     "wal_studio_v01/README.md",
     "FINAL_REPORT.html",
