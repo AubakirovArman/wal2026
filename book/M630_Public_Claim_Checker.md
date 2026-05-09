@@ -11,7 +11,7 @@ M630 adds a standalone public-claim scanner for README, reports, milestone JSON,
 
 ## Result
 
-- Files scanned: `20`
+- Files scanned: `22`
 - Violations: `0`
 - Required phrase misses: `0`
 

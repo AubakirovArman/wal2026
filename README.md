@@ -1,7 +1,7 @@
 # WAL — WeightOps Research Framework
 
 ![Modules](https://img.shields.io/badge/modules-600+-blue)
-![Experiments](https://img.shields.io/badge/experiments-756-blue)
+![Experiments](https://img.shields.io/badge/experiments-763-blue)
 ![Status](https://img.shields.io/badge/status-research--prototype-orange)
 
 ## Overview
@@ -17,12 +17,12 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 734 milestone experiment scripts in `experiments/m*.py`
-- 756 Python scripts total in `experiments/`
-- 424 experiment result JSON files in `experiments/`
-- 569 book/diary entries in `book/`
+- 741 milestone experiment scripts in `experiments/m*.py`
+- 763 Python scripts total in `experiments/`
+- 431 experiment result JSON files in `experiments/`
+- 576 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 221 docs files in `docs/`
+- 223 docs files in `docs/`
 - 4750+ lines in `docs/dev_diary_ru.md`
 - 67 Python source modules in `src/`
 - 12 pytest tests for the packaged core
@@ -30,7 +30,7 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M631+
+experiments/        milestone scripts and result JSON for M1-M638+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -85,6 +85,13 @@ python experiments/m628_blocked_script_taxonomy.py
 python experiments/m629_controlled_runner_matrix.py
 python experiments/m630_public_claim_checker.py
 python experiments/m631_docs_command_smoke.py
+python experiments/m632_llama_1b_full_workflow.py
+python experiments/m633_qwen_small_full_workflow.py
+python experiments/m634_gemma_small_full_workflow.py
+python experiments/m635_tinyllama_mistral_full_workflow.py
+python experiments/m636_cross_model_recipe_replay.py
+python experiments/m637_cross_model_layer_aperture.py
+python experiments/m638_cross_model_ci_behavior.py
 ```
 
 ## Artifact Policy

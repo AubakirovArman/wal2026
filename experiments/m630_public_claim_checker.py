@@ -21,6 +21,8 @@ PUBLIC_FILES = [
     "docs/controlled_runners.md",
     "docs/public_claim_policy.md",
     "docs/docs_command_smoke.md",
+    "docs/model_small_protocol.md",
+    "docs/cross_model_validation_plan.md",
     "docs/wal_status_summary.md",
     "wal_studio_v01/README.md",
     "FINAL_REPORT.html",

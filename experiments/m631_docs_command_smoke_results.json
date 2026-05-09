@@ -4,12 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T20:54:06.092980+00:00",
-  "run_commands": 8,
-  "run_passed": 8,
+  "timestamp": "2026-05-09T21:36:44.981763+00:00",
+  "run_commands": 15,
+  "run_passed": 15,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
-  "docs_checked": 4,
+  "blocked_result_commands": 7,
+  "docs_checked": 6,
   "failures": [],
   "records": [
     {
@@ -37,53 +38,150 @@
       "returncode": 0
     },
     {
+      "command": "doc exists: docs/model_small_protocol.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/cross_model_validation_plan.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
       "command": "PYTHONPATH=src python -m pytest -q tests",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.96s\n"
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 2.25s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 424/424 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 431/431 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M626 Technical Report Gate: PASS\nchecks=20/20 report=TECHNICAL_REPORT.md\n"
+      "output_tail": "M626 Technical Report Gate: PASS\nchecks=20/20 report=TECHNICAL_REPORT.md\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m626_technical_report_results.json"
     },
     {
       "command": "python experiments/m627_polished_demo_playbook.py",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M627 Polished Demo Playbook Gate: PASS\nchecks=20/20 playbook=docs/demo_playbook.md\n"
+      "output_tail": "M627 Polished Demo Playbook Gate: PASS\nchecks=20/20 playbook=docs/demo_playbook.md\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m627_polished_demo_playbook_results.json"
     },
     {
       "command": "python experiments/m628_blocked_script_taxonomy.py",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M628 Blocked Script Taxonomy: PASS\nblocked=523 assigned=523 unassigned=0\n"
+      "output_tail": "M628 Blocked Script Taxonomy: PASS\nblocked=524 assigned=524 unassigned=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m628_blocked_script_taxonomy_results.json"
     },
     {
       "command": "python experiments/m629_controlled_runner_matrix.py",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M629 Controlled Runner Matrix: PASS\nrunners=7 blocked=523 unassigned=0\n"
+      "output_tail": "M629 Controlled Runner Matrix: PASS\nrunners=7 blocked=524 unassigned=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m629_controlled_runner_matrix_results.json"
     },
     {
       "command": "python experiments/m630_public_claim_checker.py",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=20 violations=0 missing=0\n"
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=22 violations=0 missing=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m630_public_claim_checker_results.json"
+    },
+    {
+      "command": "python experiments/m632_llama_1b_full_workflow.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M632 Llama 1B Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m632_llama_1b_full_workflow_results.json"
+    },
+    {
+      "command": "python experiments/m633_qwen_small_full_workflow.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M633 Qwen Small Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m633_qwen_small_full_workflow_results.json"
+    },
+    {
+      "command": "python experiments/m634_gemma_small_full_workflow.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M634 Gemma Small Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m634_gemma_small_full_workflow_results.json"
+    },
+    {
+      "command": "python experiments/m635_tinyllama_mistral_full_workflow.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M635 TinyLlama/Mistral Small Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m635_tinyllama_mistral_full_workflow_results.json"
+    },
+    {
+      "command": "python experiments/m636_cross_model_recipe_replay.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M636 Cross-Model Recipe Replay: BLOCKED\nreal_passes=0 blocked_inputs=4\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m636_cross_model_recipe_replay_results.json"
+    },
+    {
+      "command": "python experiments/m637_cross_model_layer_aperture.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M637 Cross-Model Layer Aperture: BLOCKED\ncandidate_models=0 real_passes=0\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m637_cross_model_layer_aperture_results.json"
+    },
+    {
+      "command": "python experiments/m638_cross_model_ci_behavior.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M638 Cross-Model CI Behavior: BLOCKED\nreal_model_passes=0 replay_pass=False\n",
+      "result_status": "BLOCKED",
+      "result_pass": false,
+      "result_file": "experiments/m638_cross_model_ci_behavior_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

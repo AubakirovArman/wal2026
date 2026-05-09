@@ -11,10 +11,10 @@ Audits public wording and false-positive GPU statuses before public release.
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **checks_total**: `37`
-- **checks_passed**: `37`
+- **checks_total**: `41`
+- **checks_passed**: `41`
 - **checks_failed**: `0`
-- **checks**: `37 items`
+- **checks**: `41 items`
 
 ## Анализ
 

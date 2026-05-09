@@ -23,7 +23,7 @@ M629 defines the seven-runner hardening structure for moving from managed pre-al
 
 - Runners defined: `7`
 - Taxonomy status: `PASS`
-- Taxonomy blocked scripts: `523`
+- Taxonomy blocked scripts: `524`
 - Taxonomy unassigned scripts: `0`
 
 ## Outcome

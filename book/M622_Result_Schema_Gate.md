@@ -11,11 +11,11 @@ Runs the WAL result schema validator across experiment result files.
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **total**: `424`
-- **valid**: `424`
+- **total**: `431`
+- **valid**: `431`
 - **invalid**: `0`
 - **warnings**: `576`
-- **status_counts**: `5 keys` (`PASS=414`, `FAIL=5`, `BLOCKED=1`, `SIMULATED=3`, `UNSUPPORTED=1`)
+- **status_counts**: `5 keys` (`PASS=414`, `FAIL=5`, `BLOCKED=8`, `SIMULATED=3`, `UNSUPPORTED=1`)
 - **experiment**: `M622`
 - **gate**: `result_schema`
 - **invalid_files**: `0 items`

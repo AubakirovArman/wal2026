@@ -120,7 +120,6 @@ UNSAFE_NAME_FRAGMENTS = {
 SAFE_SUBPROCESS_ALLOWLIST = {
     "m518_automated_test_suite.py",
     "m623_core_release_gate.py",
-    "m631_docs_command_smoke.py",
 }
 
 SAFE_TEXT_ONLY_AUDIT_ALLOWLIST = {

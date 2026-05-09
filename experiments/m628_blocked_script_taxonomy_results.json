@@ -4,10 +4,10 @@
   "name": "Blocked Script Taxonomy",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T20:54:05.942780+00:00",
-  "total_scripts": 756,
-  "blocked_scripts": 523,
-  "assigned_scripts": 523,
+  "timestamp": "2026-05-09T21:36:20.259838+00:00",
+  "total_scripts": 763,
+  "blocked_scripts": 524,
+  "assigned_scripts": 524,
   "unassigned_scripts": 0,
   "runner_counts": {
     "DOCS_PUBLIC_CLAIMS": 90,
@@ -15,7 +15,7 @@
     "MODEL_CONTROLLED": 3,
     "MUTATION_DRY_RUN": 40,
     "SLOW_PROFILE": 1,
-    "SUBPROCESS_REVIEW": 4
+    "SUBPROCESS_REVIEW": 5
   },
   "reason_counts": {
     "archive_mutation": 6,
@@ -38,7 +38,7 @@
     "public_doc_generator": 31,
     "runtime_timeout_in_safe_sweep": 3,
     "self_referential_audit_script": 2,
-    "subprocess": 14,
+    "subprocess": 15,
     "tokenizer_load": 237,
     "triton": 22
   },
@@ -6693,6 +6693,16 @@
       ],
       "candidate_runners": [
         "INTERNAL_AUDIT",
+        "SUBPROCESS_REVIEW"
+      ],
+      "primary_runner": "SUBPROCESS_REVIEW"
+    },
+    {
+      "file": "m631_docs_command_smoke.py",
+      "blocked_reasons": [
+        "subprocess"
+      ],
+      "candidate_runners": [
         "SUBPROCESS_REVIEW"
       ],
       "primary_runner": "SUBPROCESS_REVIEW"

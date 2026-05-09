@@ -18,10 +18,10 @@ python wal_studio_v01/demo.py
 
 ## Project Statistics
 
-- 756 Python experiment/prototype scripts
-- 424 result JSON files
-- 569 book entries
-- M621-M631 cleanup/report/demo/runner gates
+- 763 Python experiment/prototype scripts
+- 431 result JSON files
+- 576 book entries
+- M621-M638 cleanup/report/demo/runner gates
 
 ## Validation Results
 
@@ -30,7 +30,7 @@ python wal_studio_v01/demo.py
 | Core pytest | 12 passing |
 | Result schema | valid |
 | M624 inventory | 0 compile failures |
-| M625 safe sweep | 233 PASS, 0 FAIL, 523 BLOCKED |
+| M625 safe sweep | 239 PASS, 0 FAIL, 524 BLOCKED |
 | Demo framing | pre-alpha |
 
 ## Honest Assessment

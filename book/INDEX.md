@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 568
+Total entries: 575
 
 ## Early (M1-M99)
 
@@ -355,6 +355,13 @@ Total entries: 568
 - [M629 Controlled Runner Matrix](M629_Controlled_Runner_Matrix.md)
 - [M630 Public Claim Checker](M630_Public_Claim_Checker.md)
 - [M631 Docs Command Smoke](M631_Docs_Command_Smoke.md)
+- [M632 Llama 1B Full Workflow](M632_Llama_1B_Full_Workflow.md)
+- [M633 Qwen Small Full Workflow](M633_Qwen_Small_Full_Workflow.md)
+- [M634 Gemma Small Full Workflow](M634_Gemma_Small_Full_Workflow.md)
+- [M635 TinyLlama Mistral Full Workflow](M635_TinyLlama_Mistral_Full_Workflow.md)
+- [M636 Cross Model Recipe Replay](M636_Cross_Model_Recipe_Replay.md)
+- [M637 Cross Model Layer Aperture](M637_Cross_Model_Layer_Aperture.md)
+- [M638 Cross Model CI Behavior](M638_Cross_Model_CI_Behavior.md)
 
 ## Phase 1 (M100-M149)
 

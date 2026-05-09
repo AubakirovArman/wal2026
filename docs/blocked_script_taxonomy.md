@@ -5,9 +5,9 @@ Source: `experiments/m624_full_test_inventory_results.json`
 
 ## Summary
 
-- Total scripts: `756`
-- Blocked scripts: `523`
-- Assigned scripts: `523`
+- Total scripts: `763`
+- Blocked scripts: `524`
+- Assigned scripts: `524`
 - Unassigned scripts: `0`
 
 ## Runner Classes
@@ -19,7 +19,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `MODEL_CONTROLLED` | 3 | Model/tokenizer/dataset loading under pinned small/medium model protocols. |
 | `MUTATION_DRY_RUN` | 40 | Git/archive/destructive operations in temp repos or temp directories only. |
 | `SLOW_PROFILE` | 1 | Timeout-prone scripts measured in slow profiling suite. |
-| `SUBPROCESS_REVIEW` | 4 | Scripts that spawn commands and need command-level review. |
+| `SUBPROCESS_REVIEW` | 5 | Scripts that spawn commands and need command-level review. |
 
 ## Reason Counts
 
@@ -45,7 +45,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `public_doc_generator` | 31 | `DOCS_PUBLIC_CLAIMS` |
 | `runtime_timeout_in_safe_sweep` | 3 | `SLOW_PROFILE` |
 | `self_referential_audit_script` | 2 | `INTERNAL_AUDIT` |
-| `subprocess` | 14 | `SUBPROCESS_REVIEW` |
+| `subprocess` | 15 | `SUBPROCESS_REVIEW` |
 | `tokenizer_load` | 237 | `MODEL_CONTROLLED` |
 | `triton` | 22 | `GPU_HEAVY` |
 

@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M631.
+The current release-cleanup line is M621-M638.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -90,10 +90,19 @@ The current release-cleanup line is M621-M631.
 | M629 | Controlled runner matrix | PASS |
 | M630 | Public claim checker | PASS |
 | M631 | Docs command smoke | PASS |
+| M632 | Llama-family 1B workflow | BLOCKED |
+| M633 | Qwen small workflow | BLOCKED |
+| M634 | Gemma small workflow | BLOCKED |
+| M635 | TinyLlama/Mistral-small workflow | BLOCKED |
+| M636 | Cross-model recipe replay | BLOCKED |
+| M637 | Cross-model layer aperture | BLOCKED |
+| M638 | Cross-model CI behavior | BLOCKED |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
 M628-M631 convert that blocked group into a controlled runner plan: model runners, GPU-heavy runners, mutation dry-runs, docs/public-claim gates, and security/abuse runners are tracked separately from safe-core checks.
+
+M632-M638 start the `MODEL_SMALL` runner. They are currently `BLOCKED`, not failed: the machine does not have pinned small text-only models for Llama/Qwen/Gemma/TinyLlama-family workflows.
 
 ## Status Semantics
 

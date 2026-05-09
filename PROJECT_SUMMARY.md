@@ -9,12 +9,12 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 756 Python scripts |
-| Results | 424 JSON result files |
-| Books | 569 entries |
-| Docs | 221 markdown docs plus developer diary |
+| Experiments | 763 Python scripts |
+| Results | 431 JSON result files |
+| Books | 576 entries |
+| Docs | 223 markdown docs plus developer diary |
 | Maintained core tests | 12 passing |
-| Safe runtime sweep | 233 passing, 0 failing, 523 blocked by policy |
+| Safe runtime sweep | 239 passing, 0 failing, 524 blocked by policy |
 
 ## Key Results
 

@@ -4724,7 +4724,7 @@ Model type should be one of ApertusConfig, ArceeConfig, AriaTextConfig, BambaCon
 
 ### M622 — Result Schema Gate
 - **Файл**: `m622_result_schema_gate.py`
-- **Результат**: valid=424, invalid=0, warnings=576
+- **Результат**: valid=431, invalid=0, warnings=576
 - **Статус**: ✅ PASS
 - **Book**: `book/M622_Result_Schema_Gate.md`
 
@@ -4759,7 +4759,7 @@ python experiments/m544_result_validation.py
 ### M624 — Full Test Inventory
 - **Файл**: `m624_full_test_inventory.py`
 - **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
-- **Результат**: total_scripts=756, parse_failures=0, runnable_scripts=233, blocked_scripts=523
+- **Результат**: total_scripts=763, parse_failures=0, runnable_scripts=239, blocked_scripts=524
 - **Статус**: ✅ PASS
 - **Book**: `book/M624_Full_Test_Inventory.md`
 
@@ -4772,18 +4772,18 @@ python experiments/m544_result_validation.py
 ### M625 — Safe Runtime Sweep
 - **Файл**: `m625_safe_runtime_sweep.py`
 - **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
-- **Результат**: total_scripts=756, executed_scripts=233, status_counts={PASS: 233, BLOCKED: 523}, FAIL=0
+- **Результат**: total_scripts=763, executed_scripts=239, status_counts={PASS: 239, BLOCKED: 524}, FAIL=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M625_Safe_Runtime_Sweep.md`
 
-### Почему 523 BLOCKED не являются FAIL
+### Почему 524 BLOCKED не являются FAIL
 Заблокированы скрипты, которые требуют локальные 70B+/594GB модели, CUDA/device_map, HF downloads/datasets, Triton/GPU runtime, git mutations, destructive file ops, backup/archive/restore, mass regeneration или public-claim generation. Это осознанный safety gate, а не результат runtime failure.
 
 ### Финальные gates после sweep
 - `M621`: truthfulness audit PASS
-- `M622`: result schema gate PASS, valid=424, invalid=0
+- `M622`: result schema gate PASS, valid=431, invalid=0
 - `M623`: core release gate PASS, `12 passed, 1 warning`
-- `M544`: result validation PASS, valid=424, invalid=0
+- `M544`: result validation PASS, valid=431, invalid=0
 - `M518`: automated suite PASS, `12 passed, 1 warning`
 
 ### Следующий практический шаг
@@ -4814,10 +4814,10 @@ python experiments/m544_result_validation.py
 
 ### Изменение публичного представления
 - `README.md` теперь ссылается на `TECHNICAL_REPORT.md` и `docs/demo_playbook.md`.
-- `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M631.
+- `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M638.
 - `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
 - `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
-- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `233 PASS / 523 BLOCKED`.
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `239 PASS / 524 BLOCKED`.
 
 ### Практический вывод
 Для публичного GitHub входа теперь есть две разные двери:
@@ -4835,7 +4835,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m628_blocked_script_taxonomy.py`
 - **Документ**: `docs/blocked_script_taxonomy.md`
 - **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
-- **Результат**: total_scripts=756, blocked_scripts=523, assigned_scripts=523, unassigned_scripts=0
+- **Результат**: total_scripts=763, blocked_scripts=524, assigned_scripts=524, unassigned_scripts=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M628_Blocked_Script_Taxonomy.md`
 
@@ -4851,7 +4851,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m630_public_claim_checker.py`
 - **Документ**: `docs/public_claim_policy.md`
 - **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
-- **Результат**: files_scanned=20, violations_total=0, required_phrase_misses=0
+- **Результат**: files_scanned=22, violations_total=0, required_phrase_misses=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M630_Public_Claim_Checker.md`
 
@@ -4859,7 +4859,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m631_docs_command_smoke.py`
 - **Документ**: `docs/docs_command_smoke.md`
 - **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
-- **Результат**: run_commands=8/8 PASS, exists_only_commands=2/2 PASS
+- **Результат**: run_commands=15/15 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=7
 - **Статус**: ✅ PASS
 - **Book**: `book/M631_Docs_Command_Smoke.md`
 
@@ -4867,7 +4867,63 @@ python experiments/m544_result_validation.py
 - M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
 - Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
 - Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
-- Финальный M624 после M628-M631: total_scripts=756, parse_failures=0, runnable_scripts=233, blocked_scripts=523.
+- Финальный M624 после M628-M631: total_scripts=763, parse_failures=0, runnable_scripts=239, blocked_scripts=524.
 
 ### Практический вывод
 Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.
+
+---
+
+## M632-638 — Cross-Model Small Protocol (2026-05-09)
+
+### Цель
+Начать следующий alpha gate: доказать, что WAL workflow не Llama-only. Проверка сделана честно: скрипты не загружают модели по умолчанию, не скачивают веса и не выдают simulated workflow за real proof.
+
+### Локальное окружение
+Проверены локальные model roots и HF cache. На машине есть тяжёлые/medium assets, но не найдено подтверждённых small text-only моделей:
+- Llama-family 1B: не найдено
+- Qwen 0.5B/1.5B text-only: не найдено
+- Gemma small text-only: не найдено
+- TinyLlama/Mistral-small: не найдено
+
+### M632 — Llama 1B Full Workflow
+- **Файл**: `m632_llama_1b_full_workflow.py`
+- **Результат**: status=BLOCKED, candidate_count=0, reason=LOCAL_SMALL_TEXT_MODEL_NOT_FOUND
+- **Book**: `book/M632_Llama_1B_Full_Workflow.md`
+
+### M633 — Qwen Small Full Workflow
+- **Файл**: `m633_qwen_small_full_workflow.py`
+- **Результат**: status=BLOCKED, candidate_count=0, reason=LOCAL_SMALL_TEXT_MODEL_NOT_FOUND
+- **Book**: `book/M633_Qwen_Small_Full_Workflow.md`
+
+### M634 — Gemma Small Full Workflow
+- **Файл**: `m634_gemma_small_full_workflow.py`
+- **Результат**: status=BLOCKED, candidate_count=0, reason=LOCAL_SMALL_TEXT_MODEL_NOT_FOUND
+- **Book**: `book/M634_Gemma_Small_Full_Workflow.md`
+
+### M635 — TinyLlama/Mistral Small Full Workflow
+- **Файл**: `m635_tinyllama_mistral_full_workflow.py`
+- **Результат**: status=BLOCKED, candidate_count=0, reason=LOCAL_SMALL_TEXT_MODEL_NOT_FOUND
+- **Book**: `book/M635_TinyLlama_Mistral_Full_Workflow.md`
+
+### M636 — Cross-Model Recipe Replay
+- **Файл**: `m636_cross_model_recipe_replay.py`
+- **Результат**: status=BLOCKED, real_passes=0/3, blocked_inputs=4
+- **Book**: `book/M636_Cross_Model_Recipe_Replay.md`
+
+### M637 — Cross-Model Layer Aperture
+- **Файл**: `m637_cross_model_layer_aperture.py`
+- **Результат**: status=BLOCKED, candidate_models=0, reason=NEEDS_REAL_MODEL_MANIFESTS
+- **Book**: `book/M637_Cross_Model_Layer_Aperture.md`
+
+### M638 — Cross-Model CI Behavior
+- **Файл**: `m638_cross_model_ci_behavior.py`
+- **Результат**: status=BLOCKED, real_model_passes=0, replay_pass=false
+- **Book**: `book/M638_Cross_Model_CI_Behavior.md`
+
+### Документы
+- `docs/model_small_protocol.md`
+- `docs/cross_model_validation_plan.md`
+
+### Практический вывод
+Cross-model proof пока не выполнен, но теперь он формализован как controlled gate. Следующий реальный шаг — положить локально хотя бы одну small text-only модель и повторить M632-M638.

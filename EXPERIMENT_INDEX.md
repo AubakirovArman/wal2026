@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 756 Python experiment/prototype scripts
+Total: 763 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -734,6 +734,13 @@ Total: 756 Python experiment/prototype scripts
 - [m629_controlled_runner_matrix.py](experiments/m629_controlled_runner_matrix.py)
 - [m630_public_claim_checker.py](experiments/m630_public_claim_checker.py)
 - [m631_docs_command_smoke.py](experiments/m631_docs_command_smoke.py)
+- [m632_llama_1b_full_workflow.py](experiments/m632_llama_1b_full_workflow.py)
+- [m633_qwen_small_full_workflow.py](experiments/m633_qwen_small_full_workflow.py)
+- [m634_gemma_small_full_workflow.py](experiments/m634_gemma_small_full_workflow.py)
+- [m635_tinyllama_mistral_full_workflow.py](experiments/m635_tinyllama_mistral_full_workflow.py)
+- [m636_cross_model_recipe_replay.py](experiments/m636_cross_model_recipe_replay.py)
+- [m637_cross_model_layer_aperture.py](experiments/m637_cross_model_layer_aperture.py)
+- [m638_cross_model_ci_behavior.py](experiments/m638_cross_model_ci_behavior.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

@@ -20,6 +20,13 @@ RUN_COMMANDS = [
     "python experiments/m628_blocked_script_taxonomy.py",
     "python experiments/m629_controlled_runner_matrix.py",
     "python experiments/m630_public_claim_checker.py",
+    "python experiments/m632_llama_1b_full_workflow.py",
+    "python experiments/m633_qwen_small_full_workflow.py",
+    "python experiments/m634_gemma_small_full_workflow.py",
+    "python experiments/m635_tinyllama_mistral_full_workflow.py",
+    "python experiments/m636_cross_model_recipe_replay.py",
+    "python experiments/m637_cross_model_layer_aperture.py",
+    "python experiments/m638_cross_model_ci_behavior.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -33,6 +40,8 @@ DOC_FILES = [
     "TECHNICAL_REPORT.md",
     "docs/demo_playbook.md",
     "docs/controlled_runners.md",
+    "docs/model_small_protocol.md",
+    "docs/cross_model_validation_plan.md",
 ]
 
 
@@ -44,6 +53,14 @@ def command_exists(command: str) -> bool:
         if part.endswith(".py"):
             return (ROOT / part).exists()
     return True
+
+
+def result_path_for_command(command: str) -> Path | None:
+    for part in command.split():
+        if part.startswith("experiments/") and part.endswith(".py"):
+            path = ROOT / part
+            return path.with_name(path.stem + "_results.json")
+    return None
 
 
 def run_command(command: str) -> dict[str, object]:
@@ -60,13 +77,23 @@ def run_command(command: str) -> dict[str, object]:
         timeout=90,
     )
     output = completed.stdout[-4000:]
-    return {
+    record = {
         "command": command,
         "mode": "run",
         "returncode": completed.returncode,
         "passed": completed.returncode == 0,
         "output_tail": output,
     }
+    result_path = result_path_for_command(command)
+    if result_path and result_path.exists():
+        try:
+            payload = json.loads(result_path.read_text(encoding="utf-8"))
+            record["result_status"] = payload.get("status")
+            record["result_pass"] = payload.get("pass")
+            record["result_file"] = str(result_path.relative_to(ROOT))
+        except Exception as exc:
+            record["result_status_error"] = str(exc)
+    return record
 
 
 def render_doc(result: dict[str, object]) -> str:
@@ -88,12 +115,15 @@ def render_doc(result: dict[str, object]) -> str:
         "",
         "## Commands",
         "",
-        "| Mode | Command | Status |",
-        "|------|---------|--------|",
+        f"- Commands with embedded blocked result status: `{result['blocked_result_commands']}`",
+        "",
+        "| Mode | Command | Command Status | Result Status |",
+        "|------|---------|----------------|---------------|",
     ]
     for record in result["records"]:
         status = "PASS" if record["passed"] else "FAIL"
-        lines.append(f"| `{record['mode']}` | `{record['command']}` | `{status}` |")
+        result_status = record.get("result_status", "—")
+        lines.append(f"| `{record['mode']}` | `{record['command']}` | `{status}` | `{result_status}` |")
     return "\n".join(lines) + "\n"
 
 
@@ -123,6 +153,7 @@ def main() -> int:
     failed = [record for record in records if not record["passed"]]
     run_records = [record for record in records if record["mode"] == "run"]
     exists_records = [record for record in records if record["mode"] == "exists_only"]
+    blocked_result_commands = sum(1 for record in records if record.get("result_status") == "BLOCKED")
     status = "PASS" if not failed else "FAIL"
 
     result = {
@@ -136,6 +167,7 @@ def main() -> int:
         "run_passed": sum(1 for record in run_records if record["passed"]),
         "exists_only_commands": len(exists_records),
         "exists_only_passed": sum(1 for record in exists_records if record["passed"]),
+        "blocked_result_commands": blocked_result_commands,
         "docs_checked": len(DOC_FILES),
         "failures": failed,
         "records": records,
