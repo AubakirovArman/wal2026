@@ -1,0 +1,107 @@
+"""
+WAL Project — MIT License
+Copyright (c) 2026 WAL Research Team
+"""
+"""
+M411 — Video Demo Script
+
+Generates narrated walkthrough of WAL Studio v0.1 for screen recording.
+"""
+import json
+
+scenes = [
+    {
+        "timestamp": "00:00",
+        "narration": "Welcome to WAL Studio — the WeightOps framework for knowledge surgery on language models.",
+        "action": "Show logo and title card",
+    },
+    {
+        "timestamp": "00:15",
+        "narration": "Step 1: Initialize a new WAL project. This creates the recipe directory and build cache.",
+        "action": "Type: wal init --project demo",
+        "command": "wal_init()",
+    },
+    {
+        "timestamp": "00:30",
+        "narration": "Step 2: Add knowledge recipes. Each recipe is a template with variables — atomic and versioned.",
+        "action": "Type: wal edit add --file recipes.json",
+        "command": "wal_edit_add(recipes)",
+    },
+    {
+        "timestamp": "00:50",
+        "narration": "Step 3: Build the WAL weights. Compilation is deterministic and produces a content hash.",
+        "action": "Type: wal build",
+        "command": "wal_build()",
+    },
+    {
+        "timestamp": "01:10",
+        "narration": "Step 4: Run the CI gate. This tests all recipes against exact, paraphrase, and negative queries.",
+        "action": "Type: wal test",
+        "command": "wal_test()",
+    },
+    {
+        "timestamp": "01:30",
+        "narration": "Step 5: View the diff. See exactly what changed compared to the base model.",
+        "action": "Type: wal diff",
+        "command": "wal_diff()",
+    },
+    {
+        "timestamp": "01:45",
+        "narration": "Step 6: Tag a release. Immutable checkpoint for rollback.",
+        "action": "Type: wal tag v1.0",
+        "command": "wal_tag('v1.0')",
+    },
+    {
+        "timestamp": "02:00",
+        "narration": "Now let's simulate a bad edit. Someone adds 'Alexandria' as capital of Egypt.",
+        "action": "Show bad recipe being added",
+    },
+    {
+        "timestamp": "02:15",
+        "narration": "Step 7: CI catches the error. Score drops to 0.800 — FAIL.",
+        "action": "Type: wal test",
+        "command": "wal_test()",
+    },
+    {
+        "timestamp": "02:30",
+        "narration": "Step 8: Blame identifies the culprit recipe in seconds.",
+        "action": "Type: wal blame",
+        "command": "wal_blame()",
+    },
+    {
+        "timestamp": "02:45",
+        "narration": "Step 9: Bisect finds the first bad commit automatically.",
+        "action": "Type: wal bisect",
+        "command": "wal_bisect()",
+    },
+    {
+        "timestamp": "03:00",
+        "narration": "Step 10: Rollback to v1.0. Clean state restored instantly.",
+        "action": "Type: wal rollback v1.0",
+        "command": "wal_rollback('v1.0')",
+    },
+    {
+        "timestamp": "03:15",
+        "narration": "CI passes again. 1.000 score. The bad edit is gone.",
+        "action": "Type: wal test",
+        "command": "wal_test()",
+    },
+    {
+        "timestamp": "03:30",
+        "narration": "Summary: WAL Studio gives you version control for model knowledge. Build, test, blame, bisect, rollback — all in one tool.",
+        "action": "Show final scoreboard and links",
+    },
+]
+
+with open("experiments/m411_video_demo_script.json", "w") as f:
+    json.dump(scenes, f, indent=2)
+
+print("=" * 60)
+print("M411 — VIDEO DEMO SCRIPT")
+print("=" * 60)
+print(f"Generated {len(scenes)} scenes, total duration ~03:30")
+for s in scenes:
+    print(f"\n[{s['timestamp']}] {s['narration']}")
+    print(f"    Action: {s['action']}")
+
+print("\n✅ M411: Video demo script generated")

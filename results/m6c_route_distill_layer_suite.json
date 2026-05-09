@@ -1,0 +1,1257 @@
+{
+  "tile_rows": 128,
+  "tile_cols": 128,
+  "palette_sizes": [
+    16,
+    32
+  ],
+  "bench_tokens": 512,
+  "suite": {
+    "model.layers.0.self_attn.q_proj.weight": {
+      "shape": [
+        8192,
+        8192
+      ],
+      "global_unique_routes": 1593,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 6144,
+          "col0": 4992,
+          "unique_routes": 383,
+          "usage_entropy_bits": 5.159624099731445
+        },
+        {
+          "row0": 5376,
+          "col0": 6400,
+          "unique_routes": 336,
+          "usage_entropy_bits": 4.130995750427246
+        },
+        {
+          "row0": 3584,
+          "col0": 2304,
+          "unique_routes": 239,
+          "usage_entropy_bits": 3.8661746978759766
+        },
+        {
+          "row0": 256,
+          "col0": 3456,
+          "unique_routes": 185,
+          "usage_entropy_bits": 3.746830701828003
+        },
+        {
+          "row0": 5376,
+          "col0": 5632,
+          "unique_routes": 134,
+          "usage_entropy_bits": 3.4460935592651367
+        },
+        {
+          "row0": 5632,
+          "col0": 6144,
+          "unique_routes": 128,
+          "usage_entropy_bits": 4.03352165222168
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 6144,
+          "col0": 4992,
+          "unique_routes": 383,
+          "usage_entropy_bits": 5.159624099731445
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.0012827878817915916,
+          "mean_distilled_weight_mse": 9.272672286897432e-06,
+          "mean_distilled_unique": 15.0,
+          "mean_decode_speedup": 1.0395045569916268,
+          "mean_linear_speedup": 1.0134083706880406,
+          "mean_local_bpw_estimate": 4.0146484375
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.0007291596266441047,
+          "mean_distilled_weight_mse": 6.18677904640208e-06,
+          "mean_distilled_unique": 31.0,
+          "mean_decode_speedup": 1.0493107175677765,
+          "mean_linear_speedup": 1.0285289483770357,
+          "mean_local_bpw_estimate": 5.0302734375
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 6144,
+            "col0": 4992,
+            "base_unique": 383,
+            "base_usage_entropy_bits": 5.1596245765686035,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.0146484375,
+            "distilled_unique": 15,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 2.5416855812072754,
+            "base_output_mse": 4.793100742972456e-07,
+            "distilled_output_mse": 0.0012827878817915916,
+            "base_weight_mse": 3.86252407835741e-09,
+            "distilled_weight_mse": 9.272672286897432e-06,
+            "projected_palette": [
+              -0.006580972578376532,
+              -0.0014615724794566631,
+              -0.0026692384853959084,
+              -0.000661655212752521,
+              -0.0041237217374145985,
+              0.00021198757167439908,
+              -0.0014615724794566631,
+              0.0020075831562280655,
+              -0.0020075831562280655,
+              -0.014779907651245594,
+              0.005373306572437286,
+              0.013433979824185371,
+              -0.04543699324131012,
+              0.035606417804956436,
+              -0.18463286757469177,
+              0.08392614126205444
+            ],
+            "bench_tokens": 512,
+            "local_unique": 15,
+            "ms_decode_global": 0.018798400461673737,
+            "ms_decode_local": 0.018084000051021575,
+            "ms_linear_global": 0.04178079962730408,
+            "ms_linear_local": 0.04122799932956696,
+            "decode_speedup": 1.0395045569916268,
+            "linear_speedup": 1.0134083706880406
+          }
+        ],
+        "32": [
+          {
+            "row0": 6144,
+            "col0": 4992,
+            "base_unique": 383,
+            "base_usage_entropy_bits": 5.1596245765686035,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.0302734375,
+            "distilled_unique": 31,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 3.4333274364471436,
+            "base_output_mse": 4.863869094151596e-07,
+            "distilled_output_mse": 0.0007291596266441047,
+            "base_weight_mse": 3.86252407835741e-09,
+            "distilled_weight_mse": 6.18677904640208e-06,
+            "projected_palette": [
+              0.00288122589699924,
+              0.003918823320418596,
+              -0.0032571679912507534,
+              -0.007618569768965244,
+              -0.004361401777714491,
+              -0.00288122589699924,
+              -0.003706835675984621,
+              -0.0016992526361718774,
+              -0.0008736427989788353,
+              0.00021198757167439908,
+              -0.00021198757167439908,
+              0.0016992526361718774,
+              0.0008736427989788353,
+              0.005161318928003311,
+              -0.00021198757167439908,
+              0.0067929597571492195,
+              -0.002457250840961933,
+              -0.010042564012110233,
+              0.013645967468619347,
+              0.009072578512132168,
+              -0.013196299783885479,
+              0.011080160737037659,
+              0.017822636291384697,
+              -0.006131304893642664,
+              -0.005161318928003311,
+              -0.018648246303200722,
+              -0.031245015561580658,
+              0.09419478476047516,
+              -0.0664118230342865,
+              0.026095297187566757,
+              0.045648980885744095,
+              -0.20990855991840363
+            ],
+            "bench_tokens": 512,
+            "local_unique": 31,
+            "ms_decode_global": 0.0189983993768692,
+            "ms_decode_local": 0.018105599284172057,
+            "ms_linear_global": 0.04205119907855988,
+            "ms_linear_local": 0.040884798765182494,
+            "decode_speedup": 1.0493107175677765,
+            "linear_speedup": 1.0285289483770357
+          }
+        ]
+      }
+    },
+    "model.layers.0.self_attn.k_proj.weight": {
+      "shape": [
+        1024,
+        8192
+      ],
+      "global_unique_routes": 1591,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 256,
+          "col0": 7424,
+          "unique_routes": 481,
+          "usage_entropy_bits": 5.026974678039551
+        },
+        {
+          "row0": 896,
+          "col0": 3584,
+          "unique_routes": 333,
+          "usage_entropy_bits": 5.174490928649902
+        },
+        {
+          "row0": 128,
+          "col0": 7552,
+          "unique_routes": 307,
+          "usage_entropy_bits": 4.32447624206543
+        },
+        {
+          "row0": 256,
+          "col0": 3840,
+          "unique_routes": 286,
+          "usage_entropy_bits": 4.857748508453369
+        },
+        {
+          "row0": 0,
+          "col0": 3968,
+          "unique_routes": 253,
+          "usage_entropy_bits": 3.7637877464294434
+        },
+        {
+          "row0": 0,
+          "col0": 4736,
+          "unique_routes": 217,
+          "usage_entropy_bits": 3.8615212440490723
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 256,
+          "col0": 7424,
+          "unique_routes": 481,
+          "usage_entropy_bits": 5.026974678039551
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.008947329595685005,
+          "mean_distilled_weight_mse": 7.7434116974473e-05,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.0584277600076775,
+          "mean_linear_speedup": 1.037982843992722,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.007906366139650345,
+          "mean_distilled_weight_mse": 6.458963616751134e-05,
+          "mean_distilled_unique": 32.0,
+          "mean_decode_speedup": 1.0449184652624843,
+          "mean_linear_speedup": 1.0215090507120534,
+          "mean_local_bpw_estimate": 5.03125
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 256,
+            "col0": 7424,
+            "base_unique": 481,
+            "base_usage_entropy_bits": 5.026974678039551,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 0.9704620242118835,
+            "base_output_mse": 4.6750386673011235e-07,
+            "distilled_output_mse": 0.008947329595685005,
+            "base_weight_mse": 3.765609157824201e-09,
+            "distilled_weight_mse": 7.7434116974473e-05,
+            "projected_palette": [
+              0.00021137439762242138,
+              -0.0032711285166442394,
+              0.008480452001094818,
+              0.029344795271754265,
+              -0.013414205983281136,
+              -0.02880050241947174,
+              0.042787931859493256,
+              -0.04562896862626076,
+              0.0622982457280159,
+              -0.06294573098421097,
+              -0.10692302882671356,
+              0.0991019457578659,
+              0.621121883392334,
+              0.2197873890399933,
+              -0.21486781537532806,
+              -0.5156249403953552
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.02391200065612793,
+            "ms_decode_local": 0.022592000663280487,
+            "ms_linear_global": 0.048905599117279056,
+            "ms_linear_local": 0.04711599946022034,
+            "decode_speedup": 1.0584277600076775,
+            "linear_speedup": 1.037982843992722
+          }
+        ],
+        "32": [
+          {
+            "row0": 256,
+            "col0": 7424,
+            "base_unique": 481,
+            "base_usage_entropy_bits": 5.026974678039551,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.03125,
+            "distilled_unique": 32,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 1.1885673999786377,
+            "base_output_mse": 4.882863890998124e-07,
+            "distilled_output_mse": 0.007906366139650345,
+            "base_weight_mse": 3.765609157824201e-09,
+            "distilled_weight_mse": 6.458963616751134e-05,
+            "projected_palette": [
+              0.00021137439762242138,
+              -0.00288414116948843,
+              0.005900794640183449,
+              0.016669273376464844,
+              -0.008480452001094818,
+              -0.01628228649497032,
+              0.03250545635819435,
+              -0.023655375465750694,
+              0.03972817584872246,
+              -0.03169571980834007,
+              -0.039068806916475296,
+              0.04541759565472603,
+              0.06185024976730347,
+              0.05321943014860153,
+              -0.04541759565472603,
+              -0.04909541457891464,
+              0.06538187712430954,
+              -0.059625476598739624,
+              0.06839852035045624,
+              0.07076681405305862,
+              -0.05298281088471413,
+              0.07465421408414841,
+              0.09087547659873962,
+              -0.05513972043991089,
+              -0.06441482156515121,
+              0.13281665742397308,
+              0.2695053517818451,
+              -0.0762196034193039,
+              -0.1215248554944992,
+              -0.5156249403953552,
+              -0.22367477416992188,
+              0.6562453508377075
+            ],
+            "bench_tokens": 512,
+            "local_unique": 32,
+            "ms_decode_global": 0.019280000030994414,
+            "ms_decode_local": 0.01845120042562485,
+            "ms_linear_global": 0.04278079867362976,
+            "ms_linear_local": 0.04187999963760376,
+            "decode_speedup": 1.0449184652624843,
+            "linear_speedup": 1.0215090507120534
+          }
+        ]
+      }
+    },
+    "model.layers.0.self_attn.v_proj.weight": {
+      "shape": [
+        1024,
+        8192
+      ],
+      "global_unique_routes": 1589,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 0,
+          "col0": 7040,
+          "unique_routes": 383,
+          "usage_entropy_bits": 3.513288736343384
+        },
+        {
+          "row0": 768,
+          "col0": 6272,
+          "unique_routes": 370,
+          "usage_entropy_bits": 5.016769886016846
+        },
+        {
+          "row0": 256,
+          "col0": 6528,
+          "unique_routes": 207,
+          "usage_entropy_bits": 3.519890308380127
+        },
+        {
+          "row0": 256,
+          "col0": 5120,
+          "unique_routes": 206,
+          "usage_entropy_bits": 3.603891134262085
+        },
+        {
+          "row0": 256,
+          "col0": 6144,
+          "unique_routes": 203,
+          "usage_entropy_bits": 3.573941946029663
+        },
+        {
+          "row0": 256,
+          "col0": 7936,
+          "unique_routes": 138,
+          "usage_entropy_bits": 3.3213000297546387
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 0,
+          "col0": 7040,
+          "unique_routes": 383,
+          "usage_entropy_bits": 3.513288736343384
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.007868871092796326,
+          "mean_distilled_weight_mse": 5.78142462472897e-05,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.072860046009359,
+          "mean_linear_speedup": 1.0677322760738883,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.005973808001726866,
+          "mean_distilled_weight_mse": 4.079129212186672e-05,
+          "mean_distilled_unique": 32.0,
+          "mean_decode_speedup": 1.034373937774719,
+          "mean_linear_speedup": 1.0194338122379492,
+          "mean_local_bpw_estimate": 5.03125
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 0,
+            "col0": 7040,
+            "base_unique": 383,
+            "base_usage_entropy_bits": 3.513288974761963,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 1.2873140573501587,
+            "base_output_mse": 4.432694709066709e-07,
+            "distilled_output_mse": 0.007868871092796326,
+            "base_weight_mse": 3.436700923842295e-09,
+            "distilled_weight_mse": 5.78142462472897e-05,
+            "projected_palette": [
+              -0.010262122377753258,
+              -0.00559438718482852,
+              -0.01754675805568695,
+              -0.003295663045719266,
+              -0.02652961015701294,
+              -0.0017082038102671504,
+              -0.03231622278690338,
+              -0.040766216814517975,
+              -0.0002074831718346104,
+              -0.050381872802972794,
+              0.0006396343815140426,
+              -0.08700822293758392,
+              0.09522940963506699,
+              0.2871522307395935,
+              -0.16012968122959137,
+              -0.40815797448158264
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.02526800036430359,
+            "ms_decode_local": 0.023552000522613525,
+            "ms_linear_global": 0.05060880184173584,
+            "ms_linear_local": 0.04739840030670166,
+            "decode_speedup": 1.072860046009359,
+            "linear_speedup": 1.0677322760738883
+          }
+        ],
+        "32": [
+          {
+            "row0": 0,
+            "col0": 7040,
+            "base_unique": 383,
+            "base_usage_entropy_bits": 3.513288974761963,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.03125,
+            "distilled_unique": 32,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 0.8206254839897156,
+            "base_output_mse": 4.435454172835307e-07,
+            "distilled_output_mse": 0.005973808001726866,
+            "base_weight_mse": 3.436700923842295e-09,
+            "distilled_weight_mse": 4.079129212186672e-05,
+            "projected_palette": [
+              0.00761399744078517,
+              0.013612231239676476,
+              0.002659244928508997,
+              0.019134216010570526,
+              -0.0024517616257071495,
+              0.024717483669519424,
+              0.0,
+              -0.00697436323389411,
+              0.027535097673535347,
+              -0.012128694914281368,
+              0.03167980536818504,
+              -0.018719250336289406,
+              0.036202408373355865,
+              0.040126584470272064,
+              -0.024081064388155937,
+              -0.027967248111963272,
+              0.04337634518742561,
+              -0.03433583304286003,
+              -0.03800056502223015,
+              -0.03188728913664818,
+              -0.0403340682387352,
+              0.08944278955459595,
+              0.04644734039902687,
+              0.05985131859779358,
+              0.050381872802972794,
+              -0.044220246374607086,
+              -0.055328719317913055,
+              -0.09417801350355148,
+              0.16596955060958862,
+              -0.4315994083881378,
+              0.34184423089027405,
+              -0.17379026114940643
+            ],
+            "bench_tokens": 512,
+            "local_unique": 32,
+            "ms_decode_global": 0.019403199851512908,
+            "ms_decode_local": 0.01875839978456497,
+            "ms_linear_global": 0.042259201407432556,
+            "ms_linear_local": 0.04145359992980957,
+            "decode_speedup": 1.034373937774719,
+            "linear_speedup": 1.0194338122379492
+          }
+        ]
+      }
+    },
+    "model.layers.0.self_attn.o_proj.weight": {
+      "shape": [
+        8192,
+        8192
+      ],
+      "global_unique_routes": 1473,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 4224,
+          "col0": 3456,
+          "unique_routes": 1424,
+          "usage_entropy_bits": 10.20753288269043
+        },
+        {
+          "row0": 7808,
+          "col0": 3968,
+          "unique_routes": 1401,
+          "usage_entropy_bits": 10.172422409057617
+        },
+        {
+          "row0": 5888,
+          "col0": 4352,
+          "unique_routes": 1329,
+          "usage_entropy_bits": 10.125031471252441
+        },
+        {
+          "row0": 4480,
+          "col0": 6784,
+          "unique_routes": 1263,
+          "usage_entropy_bits": 10.048893928527832
+        },
+        {
+          "row0": 3712,
+          "col0": 5376,
+          "unique_routes": 1190,
+          "usage_entropy_bits": 9.981696128845215
+        },
+        {
+          "row0": 7424,
+          "col0": 2048,
+          "unique_routes": 1148,
+          "usage_entropy_bits": 9.919717788696289
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 4224,
+          "col0": 3456,
+          "unique_routes": 1424,
+          "usage_entropy_bits": 10.20753288269043
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.1407923698425293,
+          "mean_distilled_weight_mse": 0.0010742777958512306,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.0670903778211926,
+          "mean_linear_speedup": 1.034406260985297,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.07622425258159637,
+          "mean_distilled_weight_mse": 0.0006028367206454277,
+          "mean_distilled_unique": 32.0,
+          "mean_decode_speedup": 1.0454468996064763,
+          "mean_linear_speedup": 1.0201103119206043,
+          "mean_local_bpw_estimate": 5.03125
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 4224,
+            "col0": 3456,
+            "base_unique": 1424,
+            "base_usage_entropy_bits": 10.20753288269043,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 3.534977436065674,
+            "base_output_mse": 4.3531707660804386e-07,
+            "distilled_output_mse": 0.1407923698425293,
+            "base_weight_mse": 3.4557534611678875e-09,
+            "distilled_weight_mse": 0.0010742777958512306,
+            "projected_palette": [
+              -0.369140625,
+              -0.23729868233203888,
+              -0.30664023756980896,
+              0.4296998977661133,
+              -0.44144997000694275,
+              0.19824784994125366,
+              -0.5507805347442627,
+              -0.1455012857913971,
+              -0.0341595858335495,
+              0.4883382022380829,
+              0.08205747604370117,
+              0.30083656311035156,
+              0.3750261068344116,
+              0.5820301175117493,
+              0.773420512676239,
+              -0.749971330165863
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.0263264000415802,
+            "ms_decode_local": 0.024671199917793273,
+            "ms_linear_global": 0.05214400291442871,
+            "ms_linear_local": 0.050409597158432004,
+            "decode_speedup": 1.0670903778211926,
+            "linear_speedup": 1.034406260985297
+          }
+        ],
+        "32": [
+          {
+            "row0": 4224,
+            "col0": 3456,
+            "base_unique": 1424,
+            "base_usage_entropy_bits": 10.20753288269043,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.03125,
+            "distilled_unique": 32,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 4.5157856941223145,
+            "base_output_mse": 4.3460258325467294e-07,
+            "distilled_output_mse": 0.07622425258159637,
+            "base_weight_mse": 3.4557534611678875e-09,
+            "distilled_weight_mse": 0.0006028367206454277,
+            "projected_palette": [
+              -0.22657950222492218,
+              -0.283245325088501,
+              -0.30083656311035156,
+              0.29888278245925903,
+              -0.4160040318965912,
+              0.19824784994125366,
+              -0.47466662526130676,
+              -0.2451360821723938,
+              -0.12500125169754028,
+              0.31449493765830994,
+              0.058577392250299454,
+              0.24607902765274048,
+              0.27735525369644165,
+              0.3398556709289551,
+              0.39263325929641724,
+              -0.6288935542106628,
+              -0.4434158205986023,
+              -0.16794119775295258,
+              -0.2597520053386688,
+              -0.07222369313240051,
+              0.49806153774261475,
+              0.695301353931427,
+              -0.3906673789024353,
+              -0.20216751098632812,
+              -0.011104089207947254,
+              0.1308867633342743,
+              -0.32225239276885986,
+              -0.2695857882499695,
+              -0.8046712875366211,
+              -0.5272992849349976,
+              -0.36719903349876404,
+              -0.34377533197402954
+            ],
+            "bench_tokens": 512,
+            "local_unique": 32,
+            "ms_decode_global": 0.019930399954319,
+            "ms_decode_local": 0.019064000248908995,
+            "ms_linear_global": 0.04305599927902222,
+            "ms_linear_local": 0.04220719933509827,
+            "decode_speedup": 1.0454468996064763,
+            "linear_speedup": 1.0201103119206043
+          }
+        ]
+      }
+    },
+    "model.layers.0.mlp.gate_proj.weight": {
+      "shape": [
+        28672,
+        8192
+      ],
+      "global_unique_routes": 1507,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 17280,
+          "col0": 512,
+          "unique_routes": 611,
+          "usage_entropy_bits": 7.976043701171875
+        },
+        {
+          "row0": 14464,
+          "col0": 7424,
+          "unique_routes": 477,
+          "usage_entropy_bits": 7.870530128479004
+        },
+        {
+          "row0": 4608,
+          "col0": 7040,
+          "unique_routes": 369,
+          "usage_entropy_bits": 6.6985063552856445
+        },
+        {
+          "row0": 25600,
+          "col0": 1664,
+          "unique_routes": 341,
+          "usage_entropy_bits": 6.483397483825684
+        },
+        {
+          "row0": 25856,
+          "col0": 7552,
+          "unique_routes": 334,
+          "usage_entropy_bits": 6.4242048263549805
+        },
+        {
+          "row0": 23808,
+          "col0": 7808,
+          "unique_routes": 248,
+          "usage_entropy_bits": 5.849981784820557
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 17280,
+          "col0": 512,
+          "unique_routes": 611,
+          "usage_entropy_bits": 7.976043701171875
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.014343264512717724,
+          "mean_distilled_weight_mse": 0.0001169843744719401,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.0305584301021145,
+          "mean_linear_speedup": 1.0363040499292784,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.008458368480205536,
+          "mean_distilled_weight_mse": 6.325590948108584e-05,
+          "mean_distilled_unique": 28.0,
+          "mean_decode_speedup": 1.0275513972689168,
+          "mean_linear_speedup": 1.0157178373984284,
+          "mean_local_bpw_estimate": 5.02734375
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 17280,
+            "col0": 512,
+            "base_unique": 611,
+            "base_usage_entropy_bits": 7.976043701171875,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 2.8328075408935547,
+            "base_output_mse": 8.929105206334498e-07,
+            "distilled_output_mse": 0.014343264512717724,
+            "base_weight_mse": 6.93583901423267e-09,
+            "distilled_weight_mse": 0.0001169843744719401,
+            "projected_palette": [
+              -0.03396838158369064,
+              -0.2159210741519928,
+              -0.05462034046649933,
+              -0.01750868558883667,
+              -0.10186361521482468,
+              0.009127006866037846,
+              -0.8908342719078064,
+              0.021443072706460953,
+              0.8829806447029114,
+              0.13865339756011963,
+              -0.00578327476978302,
+              0.03737468272447586,
+              0.0025750049389898777,
+              -0.07546037435531616,
+              -0.4570772051811218,
+              0.014315598644316196
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.020153599977493285,
+            "ms_decode_local": 0.01955599933862686,
+            "ms_linear_global": 0.04453040063381195,
+            "ms_linear_local": 0.042970401048660276,
+            "decode_speedup": 1.0305584301021145,
+            "linear_speedup": 1.0363040499292784
+          }
+        ],
+        "32": [
+          {
+            "row0": 17280,
+            "col0": 512,
+            "base_unique": 611,
+            "base_usage_entropy_bits": 7.976043701171875,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.02734375,
+            "distilled_unique": 28,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 3.4713430404663086,
+            "base_output_mse": 9.259732678401633e-07,
+            "distilled_output_mse": 0.008458368480205536,
+            "base_weight_mse": 6.93583901423267e-09,
+            "distilled_weight_mse": 6.325590948108584e-05,
+            "projected_palette": [
+              -0.07644952833652496,
+              -0.11497239768505096,
+              -0.0921093225479126,
+              -0.05690629780292511,
+              -0.11024689674377441,
+              -0.025512922555208206,
+              -0.19030094146728516,
+              -0.014845281839370728,
+              0.05932185798883438,
+              0.009127006866037846,
+              -0.039464641362428665,
+              0.0007911173743195832,
+              -0.003895805450156331,
+              -0.10470325499773026,
+              -0.11904224008321762,
+              -0.007830193266272545,
+              0.08745083957910538,
+              -0.24883167445659637,
+              0.03559282049536705,
+              0.11858118325471878,
+              -0.9258989691734314,
+              0.01876448653638363,
+              0.21482470631599426,
+              -0.5235804319381714,
+              -0.14277063310146332,
+              -0.1328701376914978,
+              -0.0013208005111664534,
+              0.45107248425483704,
+              0.9102391600608826,
+              -0.14465811848640442,
+              0.0036327748093754053,
+              -0.13964256644248962
+            ],
+            "bench_tokens": 512,
+            "local_unique": 28,
+            "ms_decode_global": 0.01987120062112808,
+            "ms_decode_local": 0.019338400661945344,
+            "ms_linear_global": 0.04337440133094787,
+            "ms_linear_local": 0.04270319938659668,
+            "decode_speedup": 1.0275513972689168,
+            "linear_speedup": 1.0157178373984284
+          }
+        ]
+      }
+    },
+    "model.layers.0.mlp.up_proj.weight": {
+      "shape": [
+        28672,
+        8192
+      ],
+      "global_unique_routes": 1505,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 18048,
+          "col0": 4480,
+          "unique_routes": 425,
+          "usage_entropy_bits": 6.983644485473633
+        },
+        {
+          "row0": 21120,
+          "col0": 4480,
+          "unique_routes": 371,
+          "usage_entropy_bits": 6.928243637084961
+        },
+        {
+          "row0": 7168,
+          "col0": 1024,
+          "unique_routes": 349,
+          "usage_entropy_bits": 6.77381706237793
+        },
+        {
+          "row0": 26496,
+          "col0": 3328,
+          "unique_routes": 301,
+          "usage_entropy_bits": 6.37855339050293
+        },
+        {
+          "row0": 23552,
+          "col0": 7552,
+          "unique_routes": 230,
+          "usage_entropy_bits": 5.7267608642578125
+        },
+        {
+          "row0": 2816,
+          "col0": 3328,
+          "unique_routes": 99,
+          "usage_entropy_bits": 4.305566310882568
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 18048,
+          "col0": 4480,
+          "unique_routes": 425,
+          "usage_entropy_bits": 6.983644485473633
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.0005697759916074574,
+          "mean_distilled_weight_mse": 4.337412519817008e-06,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.050823059357574,
+          "mean_linear_speedup": 1.0159662938774603,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.00029922794783487916,
+          "mean_distilled_weight_mse": 2.3627922018931713e-06,
+          "mean_distilled_unique": 32.0,
+          "mean_decode_speedup": 1.0390739582949649,
+          "mean_linear_speedup": 1.0161074032199189,
+          "mean_local_bpw_estimate": 5.03125
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 18048,
+            "col0": 4480,
+            "base_unique": 425,
+            "base_usage_entropy_bits": 6.983643531799316,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 3.6391215324401855,
+            "base_output_mse": 7.865769475756679e-07,
+            "distilled_output_mse": 0.0005697759916074574,
+            "base_weight_mse": 6.1527201111744034e-09,
+            "distilled_weight_mse": 4.337412519817008e-06,
+            "projected_palette": [
+              -0.007291249930858612,
+              -0.005243315361440182,
+              0.00026333361165598035,
+              0.014325778931379318,
+              0.0020479343365877867,
+              -0.0013207716401666403,
+              0.00835530087351799,
+              -0.00389749719761312,
+              -0.00257672555744648,
+              0.004714668728411198,
+              -0.016709282994270325,
+              -0.010666568763554096,
+              -0.054037000983953476,
+              0.024799127131700516,
+              -0.028458336368203163,
+              0.049849145114421844
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.019253599643707275,
+            "ms_decode_local": 0.018322399258613585,
+            "ms_linear_global": 0.04189519882202149,
+            "ms_linear_local": 0.04123679995536804,
+            "decode_speedup": 1.050823059357574,
+            "linear_speedup": 1.0159662938774603
+          }
+        ],
+        "32": [
+          {
+            "row0": 18048,
+            "col0": 4480,
+            "base_unique": 425,
+            "base_usage_entropy_bits": 6.983643531799316,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.03125,
+            "distilled_unique": 32,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 4.601512432098389,
+            "base_output_mse": 8.160927791323047e-07,
+            "distilled_output_mse": 0.00029922794783487916,
+            "base_weight_mse": 6.1527201111744034e-09,
+            "distilled_weight_mse": 2.3627922018931713e-06,
+            "projected_palette": [
+              -0.0031053724233061075,
+              0.0013207716401666403,
+              -0.004714668728411198,
+              -0.0007921248325146735,
+              -0.00782650988548994,
+              0.0020479343365877867,
+              -0.004185877274721861,
+              -0.002311267890036106,
+              -0.001586229307577014,
+              -0.005508773028850555,
+              -0.006499269045889378,
+              -0.0036341636441648006,
+              -0.01618063636124134,
+              0.00026333361165598035,
+              -0.013598616234958172,
+              0.007291249930858612,
+              0.003368705976754427,
+              0.005243315361440182,
+              -0.009412739425897598,
+              0.014325778931379318,
+              -0.011195216327905655,
+              -0.02215111255645752,
+              0.009412739425897598,
+              -0.01875721663236618,
+              0.011724007315933704,
+              -0.038648489862680435,
+              0.0172380730509758,
+              -0.02766423113644123,
+              0.02188565582036972,
+              -0.06289131194353104,
+              0.030769603326916695,
+              0.054037000983953476
+            ],
+            "bench_tokens": 512,
+            "local_unique": 32,
+            "ms_decode_global": 0.019210399687290193,
+            "ms_decode_local": 0.018488000333309173,
+            "ms_linear_global": 0.041887199878692626,
+            "ms_linear_local": 0.04122320115566254,
+            "decode_speedup": 1.0390739582949649,
+            "linear_speedup": 1.0161074032199189
+          }
+        ]
+      }
+    },
+    "model.layers.0.mlp.down_proj.weight": {
+      "shape": [
+        8192,
+        28672
+      ],
+      "global_unique_routes": 1473,
+      "global_bpw_estimate": 11.0,
+      "sampled_tiles": [
+        {
+          "row0": 1024,
+          "col0": 22400,
+          "unique_routes": 1317,
+          "usage_entropy_bits": 10.11599063873291
+        },
+        {
+          "row0": 2304,
+          "col0": 1280,
+          "unique_routes": 1314,
+          "usage_entropy_bits": 10.124549865722656
+        },
+        {
+          "row0": 6784,
+          "col0": 26368,
+          "unique_routes": 1307,
+          "usage_entropy_bits": 10.11555290222168
+        },
+        {
+          "row0": 7808,
+          "col0": 5376,
+          "unique_routes": 1300,
+          "usage_entropy_bits": 10.10837173461914
+        },
+        {
+          "row0": 6272,
+          "col0": 21760,
+          "unique_routes": 1298,
+          "usage_entropy_bits": 10.114419937133789
+        },
+        {
+          "row0": 6144,
+          "col0": 640,
+          "unique_routes": 1295,
+          "usage_entropy_bits": 10.10235595703125
+        }
+      ],
+      "selected_tiles": [
+        {
+          "row0": 1024,
+          "col0": 22400,
+          "unique_routes": 1317,
+          "usage_entropy_bits": 10.11599063873291
+        }
+      ],
+      "summary": {
+        "16": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.08223819732666016,
+          "mean_distilled_weight_mse": 0.0006451048539020121,
+          "mean_distilled_unique": 16.0,
+          "mean_decode_speedup": 1.0142792516855237,
+          "mean_linear_speedup": 1.0251528251304847,
+          "mean_local_bpw_estimate": 4.015625
+        },
+        "32": {
+          "tiles": 1,
+          "mean_distilled_output_mse": 0.04138994961977005,
+          "mean_distilled_weight_mse": 0.000327469315379858,
+          "mean_distilled_unique": 32.0,
+          "mean_decode_speedup": 1.037855148680256,
+          "mean_linear_speedup": 1.0137212969993004,
+          "mean_local_bpw_estimate": 5.03125
+        }
+      },
+      "sweep": {
+        "16": [
+          {
+            "row0": 1024,
+            "col0": 22400,
+            "base_unique": 1317,
+            "base_usage_entropy_bits": 10.115991592407227,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 4.015625,
+            "distilled_unique": 16,
+            "palette_size": 16,
+            "distilled_usage_entropy_bits": 3.882378101348877,
+            "base_output_mse": 6.265685215112171e-07,
+            "distilled_output_mse": 0.08223819732666016,
+            "base_weight_mse": 4.770870809522876e-09,
+            "distilled_weight_mse": 0.0006451048539020121,
+            "projected_palette": [
+              0.1109178215265274,
+              -0.09316246211528778,
+              0.03358503058552742,
+              -0.351553738117218,
+              0.46480315923690796,
+              -0.554696261882782,
+              -0.24317048490047455,
+              -0.00625369418412447,
+              0.07324641942977905,
+              0.20510414242744446,
+              -0.04097553715109825,
+              0.14941829442977905,
+              0.2948701083660126,
+              -0.16989655792713165,
+              -0.12346961349248886,
+              -0.06736491620540619
+            ],
+            "bench_tokens": 512,
+            "local_unique": 16,
+            "ms_decode_global": 0.01960480064153671,
+            "ms_decode_local": 0.019328799843788148,
+            "ms_linear_global": 0.04294160008430481,
+            "ms_linear_local": 0.04188799858093262,
+            "decode_speedup": 1.0142792516855237,
+            "linear_speedup": 1.0251528251304847
+          }
+        ],
+        "32": [
+          {
+            "row0": 1024,
+            "col0": 22400,
+            "base_unique": 1317,
+            "base_usage_entropy_bits": 10.115991592407227,
+            "global_bpw_estimate": 11.0,
+            "local_bpw_estimate": 5.03125,
+            "distilled_unique": 32,
+            "palette_size": 32,
+            "distilled_usage_entropy_bits": 4.709226131439209,
+            "base_output_mse": 6.049633611837635e-07,
+            "distilled_output_mse": 0.04138994961977005,
+            "base_weight_mse": 4.770870809522876e-09,
+            "distilled_weight_mse": 0.000327469315379858,
+            "projected_palette": [
+              0.1366906315088272,
+              -0.10739640891551971,
+              0.08163174986839294,
+              -0.3320324420928955,
+              0.5195824503898621,
+              -0.6171972751617432,
+              -0.16308140754699707,
+              -0.07032787799835205,
+              0.12500114738941193,
+              0.1923660784959793,
+              -0.12791034579277039,
+              0.1669977754354477,
+              0.26361891627311707,
+              -0.14941829442977905,
+              -0.13770130276679993,
+              -0.11816933006048203,
+              -0.09221841394901276,
+              0.17871825397014618,
+              -0.22949877381324768,
+              -0.2002023160457611,
+              -0.012331458739936352,
+              0.01949945092201233,
+              0.10783276706933975,
+              0.14652299880981445,
+              0.21780428290367126,
+              -0.2714965343475342,
+              -0.04358265921473503,
+              0.05080790817737579,
+              0.15719640254974365,
+              0.34961187839508057,
+              -0.439441978931427,
+              -0.17967166006565094
+            ],
+            "bench_tokens": 512,
+            "local_unique": 32,
+            "ms_decode_global": 0.019696000218391418,
+            "ms_decode_local": 0.01897760033607483,
+            "ms_linear_global": 0.043145599961280826,
+            "ms_linear_local": 0.042561599612236024,
+            "decode_speedup": 1.037855148680256,
+            "linear_speedup": 1.0137212969993004
+          }
+        ]
+      }
+    }
+  }
+}

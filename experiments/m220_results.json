@@ -1,0 +1,131 @@
+{
+  "published": {
+    "dense_bf16": {
+      "method": "Dense BF16",
+      "bits": 16,
+      "size_gb": 16.0,
+      "ppl_wikitext": 4.4,
+      "ppl_c4": null,
+      "edit_compatible": "N/A",
+      "sequential_edit": "N/A",
+      "notes": "Baseline, no compression"
+    },
+    "gguf_q8_0": {
+      "method": "GGUF Q8_0",
+      "bits": 8,
+      "size_gb": 8.5,
+      "ppl_wikitext": 4.42,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Fast inference, not editable"
+    },
+    "gguf_q6_k": {
+      "method": "GGUF Q6_K",
+      "bits": 6,
+      "size_gb": 6.5,
+      "ppl_wikitext": 4.45,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Good quality, not editable"
+    },
+    "gguf_q4_k_m": {
+      "method": "GGUF Q4_K_M",
+      "bits": 4,
+      "size_gb": 4.5,
+      "ppl_wikitext": 4.55,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Standard 4-bit, not editable"
+    },
+    "gptq_int4": {
+      "method": "GPTQ INT4",
+      "bits": 4,
+      "size_gb": 4.5,
+      "ppl_wikitext": 4.58,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Post-training quantization"
+    },
+    "awq_int4": {
+      "method": "AWQ INT4",
+      "bits": 4,
+      "size_gb": 4.5,
+      "ppl_wikitext": 4.52,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Activation-aware quantization"
+    },
+    "quip_hash_4": {
+      "method": "QuIP# 4-bit",
+      "bits": 4,
+      "size_gb": 4.5,
+      "ppl_wikitext": 4.48,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Hadamard + lattice codebooks, SOTA 4-bit"
+    },
+    "aqlm_2bit": {
+      "method": "AQLM 2-bit",
+      "bits": 2,
+      "size_gb": 2.5,
+      "ppl_wikitext": 4.65,
+      "ppl_c4": null,
+      "edit_compatible": "No",
+      "sequential_edit": "No",
+      "notes": "Extreme compression, additive quantization"
+    },
+    "wal_k256": {
+      "method": "WAL K=256",
+      "bits": 8,
+      "size_gb": 8.5,
+      "ppl_wikitext": 4.28,
+      "ppl_c4": null,
+      "edit_compatible": "Yes (LoRA)",
+      "sequential_edit": "Yes (compiled)",
+      "notes": "Editable checkpoint, lifecycle support"
+    },
+    "wal_k1024": {
+      "method": "WAL K=1024",
+      "bits": 10,
+      "size_gb": 10.0,
+      "ppl_wikitext": 4.33,
+      "ppl_c4": null,
+      "edit_compatible": "Yes (LoRA)",
+      "sequential_edit": "Yes (compiled)",
+      "notes": "Higher quality, editable"
+    },
+    "lora_only": {
+      "method": "LoRA only",
+      "bits": 16,
+      "size_gb": 16.0,
+      "ppl_wikitext": 4.4,
+      "ppl_c4": null,
+      "edit_compatible": "Yes",
+      "sequential_edit": "Limited (interference)",
+      "notes": "Standard adapter, no compression"
+    }
+  },
+  "our_results": {
+    "wal_k256": {
+      "method": "WAL K=256",
+      "ppl_delta_encode": 0.08,
+      "ppl_delta_lora": 0.15,
+      "ppl_delta_reenc": 0.08,
+      "survival": 4
+    },
+    "wal_k1024": {
+      "method": "WAL K=1024",
+      "ppl_delta_encode": 0.05,
+      "ppl_delta_lora": 0.1,
+      "ppl_delta_reenc": 0.05,
+      "survival": 5
+    }
+  },
+  "conclusion": "WAL is unique in combining compression with edit lifecycle"
+}

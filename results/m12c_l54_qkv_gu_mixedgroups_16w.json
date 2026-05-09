@@ -1,0 +1,149 @@
+{
+  "text_source": "raw",
+  "num_windows": 16,
+  "runtime_kind": "packed",
+  "rvq_cfg": {
+    "group_rows": 28672,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 3,
+    "product_splits": 4,
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "modes": [
+    "l54_qkv_gu"
+  ],
+  "l54_qkv_gu": {
+    "metrics": {
+      "perplexity": 2.8176878636586844,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 10.80867624282837,
+      "tok_s": 900.0177062805998
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43628.4,
+        "reserved_mb": 49064.0,
+        "peak_mb": 46375.4
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44436.8,
+        "reserved_mb": 44438.0,
+        "peak_mb": 44436.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45696.9,
+        "reserved_mb": 45698.0,
+        "peak_mb": 45696.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43628.4,
+        "reserved_mb": 50742.0,
+        "peak_mb": 48471.1
+      }
+    ],
+    "eval_peak_mb": 46385.9,
+    "replace_peak_mb": 48471.1,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.self_attn.q_proj",
+        "tensor_name": "model.layers.54.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.0403309240937233,
+        "storage_bytes": 28327936,
+        "bits_per_weight": 3.376953125,
+        "group_rows": 128,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.54.self_attn.k_proj",
+        "tensor_name": "model.layers.54.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.04357125610113144,
+        "storage_bytes": 3540992,
+        "bits_per_weight": 3.376953125,
+        "group_rows": 128,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.54.self_attn.v_proj",
+        "tensor_name": "model.layers.54.self_attn.v_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.033308498561382294,
+        "storage_bytes": 3540992,
+        "bits_per_weight": 3.376953125,
+        "group_rows": 128,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.03952081874012947,
+        "storage_bytes": 88186880,
+        "bits_per_weight": 3.003627232142857,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.038869407027959824,
+        "storage_bytes": 88186880,
+        "bits_per_weight": 3.003627232142857,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.039120180904865264
+  }
+}

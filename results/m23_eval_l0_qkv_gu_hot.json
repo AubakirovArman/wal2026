@@ -1,0 +1,191 @@
+{
+  "text_source": "raw",
+  "num_windows": 16,
+  "runtime_kind": "packed",
+  "rvq_cfg": {
+    "group_rows": 28672,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 3,
+    "product_splits": 4,
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "calibrate_stage_scales": true,
+    "residual_correction": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "modes": [
+    "l0_qkv_gu"
+  ],
+  "l0_qkv_gu": {
+    "metrics": {
+      "perplexity": 40.45896428841894,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 10.366004705429077,
+      "tok_s": 938.45220761911
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 43615.9,
+        "reserved_mb": 45682.0,
+        "peak_mb": 45233.0
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 43614.9,
+        "reserved_mb": 68016.0,
+        "peak_mb": 61655.7
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45696.9,
+        "reserved_mb": 45698.0,
+        "peak_mb": 45696.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44436.8,
+        "reserved_mb": 44438.0,
+        "peak_mb": 44436.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 61655.7,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "tensor_name": "model.layers.0.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "matmul_strategy": "full_weight_hot",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": 16,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.6,
+        "rel_mse": 0.0011486897710710764,
+        "storage_bytes": 25231360,
+        "bits_per_weight": 3.0078125,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none",
+        "calibrate_stage_scales": true,
+        "residual_correction": "none"
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj",
+        "tensor_name": "model.layers.0.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "matmul_strategy": "full_weight_hot",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": 16,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.6,
+        "rel_mse": 0.001129307085648179,
+        "storage_bytes": 3196928,
+        "bits_per_weight": 3.048828125,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none",
+        "calibrate_stage_scales": true,
+        "residual_correction": "none"
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj",
+        "tensor_name": "model.layers.0.self_attn.v_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "matmul_strategy": "full_weight_hot",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": 16,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.6,
+        "rel_mse": 0.0011395285837352276,
+        "storage_bytes": 3196952,
+        "bits_per_weight": 3.0488510131835938,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none",
+        "calibrate_stage_scales": true,
+        "residual_correction": "none"
+      },
+      {
+        "name": "model.layers.0.mlp.gate_proj",
+        "tensor_name": "model.layers.0.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "matmul_strategy": "full_weight_hot",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": 16,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.6,
+        "rel_mse": 0.003471469972282648,
+        "storage_bytes": 88186880,
+        "bits_per_weight": 3.003627232142857,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none",
+        "calibrate_stage_scales": true,
+        "residual_correction": "none"
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj",
+        "tensor_name": "model.layers.0.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "matmul_strategy": "full_weight_hot",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": 16,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.6,
+        "rel_mse": 0.003447550581768155,
+        "storage_bytes": 88186880,
+        "bits_per_weight": 3.003627232142857,
+        "group_rows": 28672,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none",
+        "calibrate_stage_scales": true,
+        "residual_correction": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.0020673091989010573
+  }
+}

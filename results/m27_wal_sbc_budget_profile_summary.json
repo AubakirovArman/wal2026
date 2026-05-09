@@ -1,0 +1,644 @@
+{
+  "targets": [
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "text_source": "local",
+  "lha_calibration_windows": 1,
+  "train_samples": 65536,
+  "assign_chunk_size": 8192,
+  "residual_costs": [
+    0.5,
+    0.75,
+    1.0,
+    2.0
+  ],
+  "profiles": {
+    "model.layers.54.mlp.gate_proj": {
+      "sample_rows": 65536,
+      "sample_slots": 262144,
+      "current_atom_output_budget": 0.05,
+      "current_residual_output_budget": 0.16,
+      "atom_output_rel_mse_quantiles": {
+        "p50": 1.2991693019866943,
+        "p70": 1.5744997262954712,
+        "p80": 1.7600500583648682,
+        "p85": 1.8845319747924805,
+        "p90": 2.0597994327545166,
+        "p92": 2.1561241149902344,
+        "p95": 2.3696861267089844
+      },
+      "residual_output_rel_mse_quantiles": {
+        "p50": 0.8194096088409424,
+        "p70": 0.9464073777198792,
+        "p80": 1.029895544052124,
+        "p85": 1.0872596502304077,
+        "p90": 1.1697355508804321,
+        "p92": 1.2164905071258545,
+        "p95": 1.3220640420913696
+      },
+      "best_nonliteral_output_rel_mse_quantiles": {
+        "p50": 0.7887042760848999,
+        "p70": 0.9113632440567017,
+        "p80": 0.9896451234817505,
+        "p85": 1.0416555404663086,
+        "p90": 1.114406704902649,
+        "p92": 1.1572473049163818,
+        "p95": 1.2511649131774902
+      },
+      "share_atom_le_current_budget": 0.0,
+      "share_atom_almost_current_budget": 0.0,
+      "share_best_nonliteral_le_current_residual_budget": 0.0014801025390625,
+      "grid_budgets": {
+        "atom": {
+          "p70": 1.5744997262954712,
+          "p80": 1.7600500583648682,
+          "p90": 2.0597994327545166
+        },
+        "residual": {
+          "p85": 1.0872596502304077,
+          "p92": 1.2164905071258545
+        }
+      },
+      "cost_surface": [
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 5.106864929199219,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9172515869140625,
+          "avg_literal_slots": 0.282745361328125
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.336177825927734,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9172515869140625,
+          "avg_literal_slots": 0.282745361328125
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.56549072265625,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9172515869140625,
+          "avg_literal_slots": 0.282745361328125
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 6.4827423095703125,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9172515869140625,
+          "avg_literal_slots": 0.282745361328125
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.828926086425781,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0284271240234375,
+          "avg_literal_slots": 0.17156982421875
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.086032867431641,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0284271240234375,
+          "avg_literal_slots": 0.17156982421875
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.3431396484375,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0284271240234375,
+          "avg_literal_slots": 0.17156982421875
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.5744997262954712,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 6.3715667724609375,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0284271240234375,
+          "avg_literal_slots": 0.17156982421875
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 5.141685485839844,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.5833282470703125,
+          "avg_literal_slots": 0.2166748046875
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.287517547607422,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.5833282470703125,
+          "avg_literal_slots": 0.2166748046875
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.433349609375,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.5833282470703125,
+          "avg_literal_slots": 0.2166748046875
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 6.0166778564453125,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.5833282470703125,
+          "avg_literal_slots": 0.2166748046875
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.9451904296875,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.66192626953125,
+          "avg_literal_slots": 0.1380767822265625
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.1106719970703125,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.66192626953125,
+          "avg_literal_slots": 0.1380767822265625
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.276153564453125,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.66192626953125,
+          "avg_literal_slots": 0.1380767822265625
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.7600500583648682,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.938079833984375,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.66192626953125,
+          "avg_literal_slots": 0.1380767822265625
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 5.1358795166015625,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.265655517578125,
+          "avg_literal_slots": 0.1343536376953125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.202293395996094,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.265655517578125,
+          "avg_literal_slots": 0.1343536376953125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.268707275390625,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.265655517578125,
+          "avg_literal_slots": 0.1343536376953125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.0872596502304077,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.53436279296875,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.265655517578125,
+          "avg_literal_slots": 0.1343536376953125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 5.0312042236328125,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.307525634765625,
+          "avg_literal_slots": 0.0924835205078125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.108085632324219,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.307525634765625,
+          "avg_literal_slots": 0.0924835205078125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.184967041015625,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.307525634765625,
+          "avg_literal_slots": 0.0924835205078125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.0597994327545166,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.2164905071258545,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.49249267578125,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.307525634765625,
+          "avg_literal_slots": 0.0924835205078125
+        }
+      ]
+    },
+    "model.layers.54.mlp.up_proj": {
+      "sample_rows": 65536,
+      "sample_slots": 262144,
+      "current_atom_output_budget": 0.05,
+      "current_residual_output_budget": 0.16,
+      "atom_output_rel_mse_quantiles": {
+        "p50": 1.3248977661132812,
+        "p70": 1.6157735586166382,
+        "p80": 1.8246859312057495,
+        "p85": 1.9679652452468872,
+        "p90": 2.177901268005371,
+        "p92": 2.294715404510498,
+        "p95": 2.5470831394195557
+      },
+      "residual_output_rel_mse_quantiles": {
+        "p50": 0.8445677757263184,
+        "p70": 0.9381099939346313,
+        "p80": 0.9866141676902771,
+        "p85": 1.016314148902893,
+        "p90": 1.0571438074111938,
+        "p92": 1.0804206132888794,
+        "p95": 1.139575481414795
+      },
+      "best_nonliteral_output_rel_mse_quantiles": {
+        "p50": 0.8091592788696289,
+        "p70": 0.9086978435516357,
+        "p80": 0.959443211555481,
+        "p85": 0.9891058206558228,
+        "p90": 1.0268954038619995,
+        "p92": 1.0478445291519165,
+        "p95": 1.0949701070785522
+      },
+      "share_atom_le_current_budget": 0.0,
+      "share_atom_almost_current_budget": 3.814697265625e-06,
+      "share_best_nonliteral_le_current_residual_budget": 0.00124359130859375,
+      "grid_budgets": {
+        "atom": {
+          "p70": 1.6157735586166382,
+          "p80": 1.8246859312057495,
+          "p90": 2.177901268005371
+        },
+        "residual": {
+          "p85": 1.016314148902893,
+          "p92": 1.0804206132888794
+        }
+      },
+      "cost_surface": [
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.936882019042969,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9852447509765625,
+          "avg_literal_slots": 0.214752197265625
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.183193206787109,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9852447509765625,
+          "avg_literal_slots": 0.214752197265625
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.42950439453125,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9852447509765625,
+          "avg_literal_slots": 0.214752197265625
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 6.4147491455078125,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 0.9852447509765625,
+          "avg_literal_slots": 0.214752197265625
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.714561462402344,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0741729736328125,
+          "avg_literal_slots": 0.125823974609375
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 4.983104705810547,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0741729736328125,
+          "avg_literal_slots": 0.125823974609375
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.25164794921875,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0741729736328125,
+          "avg_literal_slots": 0.125823974609375
+        },
+        {
+          "atom_output_budget_label": "p70",
+          "atom_output_budget": 1.6157735586166382,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 6.3258209228515625,
+          "avg_low_level_calls": 2.8000030517578125,
+          "avg_residual_calls": 1.0741729736328125,
+          "avg_literal_slots": 0.125823974609375
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.991424560546875,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.6434326171875,
+          "avg_literal_slots": 0.1565704345703125
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.15228271484375,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.6434326171875,
+          "avg_literal_slots": 0.1565704345703125
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.313140869140625,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.6434326171875,
+          "avg_literal_slots": 0.1565704345703125
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.956573486328125,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.6434326171875,
+          "avg_literal_slots": 0.1565704345703125
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.8407440185546875,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.703704833984375,
+          "avg_literal_slots": 0.0962982177734375
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.016670227050781,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.703704833984375,
+          "avg_literal_slots": 0.0962982177734375
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.192596435546875,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.703704833984375,
+          "avg_literal_slots": 0.0962982177734375
+        },
+        {
+          "atom_output_budget_label": "p80",
+          "atom_output_budget": 1.8246859312057495,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.89630126953125,
+          "avg_low_level_calls": 3.1999969482421875,
+          "avg_residual_calls": 0.703704833984375,
+          "avg_literal_slots": 0.0962982177734375
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 5.0205230712890625,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.311798095703125,
+          "avg_literal_slots": 0.0882110595703125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.098472595214844,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.311798095703125,
+          "avg_literal_slots": 0.0882110595703125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.176422119140625,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.311798095703125,
+          "avg_literal_slots": 0.0882110595703125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p85",
+          "residual_output_budget": 1.016314148902893,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.48822021484375,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.311798095703125,
+          "avg_literal_slots": 0.0882110595703125
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.5,
+          "avg_program_length": 4.945106506347656,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.3419647216796875,
+          "avg_literal_slots": 0.05804443359375
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 0.75,
+          "avg_program_length": 5.030597686767578,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.3419647216796875,
+          "avg_literal_slots": 0.05804443359375
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 1.0,
+          "avg_program_length": 5.1160888671875,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.3419647216796875,
+          "avg_literal_slots": 0.05804443359375
+        },
+        {
+          "atom_output_budget_label": "p90",
+          "atom_output_budget": 2.177901268005371,
+          "residual_output_budget_label": "p92",
+          "residual_output_budget": 1.0804206132888794,
+          "residual_program_cost": 2.0,
+          "avg_program_length": 5.4580535888671875,
+          "avg_low_level_calls": 3.5999908447265625,
+          "avg_residual_calls": 0.3419647216796875,
+          "avg_literal_slots": 0.05804443359375
+        }
+      ]
+    }
+  }
+}

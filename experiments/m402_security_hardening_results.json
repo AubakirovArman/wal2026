@@ -1,0 +1,79 @@
+{
+  "passed": 12,
+  "total": 12,
+  "score": 1.0,
+  "tests": [
+    {
+      "desc": "Clean question",
+      "blocked": false,
+      "expected": false,
+      "pass": true,
+      "reason": "OK"
+    },
+    {
+      "desc": "Classic injection",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: ignore\\s+(previous|all|instructions?)"
+    },
+    {
+      "desc": "Forget attack",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: forget\\s+(everything|all|instructions?)"
+    },
+    {
+      "desc": "Template injection",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: \\{\\{.*\\}\\}"
+    },
+    {
+      "desc": "Command injection",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: `.*`"
+    },
+    {
+      "desc": "Normal text with punctuation",
+      "blocked": false,
+      "expected": false,
+      "pass": true,
+      "reason": "OK"
+    },
+    {
+      "desc": "Script tag",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: <script[^>]*>"
+    },
+    {
+      "desc": "Multiline injection",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Blocked pattern: ignore\\s+(previous|all|instructions?)"
+    },
+    {
+      "desc": "Too long input",
+      "blocked": true,
+      "expected": true,
+      "pass": true,
+      "reason": "Input too long"
+    },
+    {
+      "desc": "Valid special chars",
+      "blocked": false,
+      "expected": false,
+      "pass": true,
+      "reason": "OK"
+    }
+  ],
+  "template_safe": true,
+  "template_blocked": true
+}

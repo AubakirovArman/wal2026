@@ -1,0 +1,841 @@
+{
+  "targets": [
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "text_source": "local",
+  "num_windows": 4,
+  "matmul_strategy": "full_weight_fast",
+  "phrase_len": 3,
+  "num_phrase_variants": 3,
+  "type_taxonomy": [
+    "MLP_GATE_COMMON",
+    "MLP_GATE_MIXED",
+    "MLP_GATE_OUTLIER",
+    "MLP_UP_COMMON",
+    "MLP_UP_MIXED",
+    "MLP_UP_OUTLIER"
+  ],
+  "dense": {
+    "metrics": {
+      "perplexity": 2.3852471794409666,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4376838207244873,
+      "tok_s": 1470.2480976121112
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "eval_peak_mb": 47214.8
+  },
+  "current_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_ts_current_l54_gate_up.pt",
+  "typed_only_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_ts_typed_only_l54_gate_up.pt",
+  "type_artifact": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_ts_types_l54_gate_up.pt",
+  "wal_ts": [
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "role_name": "MLP_GATE",
+      "raw_program_length": 12,
+      "phrase_len": 3,
+      "slot_count": 4,
+      "type_count": 3,
+      "active_type_count": 3,
+      "route_types": [
+        "MLP_GATE_COMMON",
+        "MLP_GATE_MIXED",
+        "MLP_GATE_OUTLIER"
+      ],
+      "grammar_rule_count": 45,
+      "structural_rule_count": 9,
+      "parse_tree_depth": 4,
+      "parse_nonterminal_nodes": 7,
+      "type_entropy": 0.950422532174797,
+      "type_check_pass_rate": 1.0,
+      "avg_program_length": 11.998148373195104,
+      "avg_rule_calls": 0.0018449510846819197,
+      "avg_literal_corrections": 11.99630342211042,
+      "typed_rule_token_coverage": 0.00030804815746489025,
+      "program_compression_ratio": 0.9998456977662586,
+      "used_production_count": 36,
+      "slot_exact_match_rate": 1.6689300537109375e-06,
+      "slot_rule_use_rate": 0.00046123777117047993,
+      "typed_only_avg_hamming": 11.804156303405762,
+      "typed_only_token_match": 0.016320308049519894,
+      "common_threshold": 5.522151947021484,
+      "outlier_threshold": 5.609189987182617,
+      "type_summaries": [
+        {
+          "type_id": 0,
+          "type_name": "MLP_GATE_COMMON",
+          "block_count": 3586026,
+          "block_share": 0.4885572705950056,
+          "avg_surprisal": 5.469867201185937,
+          "avg_modal_match": 0.011159963137118917,
+          "avg_program_length": 11.996979386094802,
+          "avg_rule_calls": 0.00301169037815119,
+          "avg_literal_corrections": 11.993967695716652,
+          "rule_token_coverage": 0.0005026920236123962,
+          "slot_exact_match_rate": 2.2308817615934744e-06,
+          "slot_rule_use_rate": 0.0007529225945377975,
+          "typed_only_avg_hamming": 11.761111046043727,
+          "typed_only_token_match": 0.01990741282968944,
+          "own_type_centroid_hamming": 11.86518056478118,
+          "nearest_other_centroid_hamming": 11.94843735098407,
+          "global_modal_hamming": 11.866080446711765,
+          "type_separation_margin": 0.08325678620288866,
+          "centroid_gain_vs_global": 0.0008998819305827677
+        },
+        {
+          "type_id": 1,
+          "type_name": "MLP_GATE_MIXED",
+          "block_count": 2994636,
+          "block_share": 0.4079867771693638,
+          "avg_surprisal": 5.559437941706438,
+          "avg_modal_match": 0.00274173555650837,
+          "avg_program_length": 11.999389575227173,
+          "avg_rule_calls": 0.0006074193992191371,
+          "avg_literal_corrections": 11.998782155827953,
+          "rule_token_coverage": 0.00010148701433719045,
+          "slot_exact_match_rate": 7.513434020027809e-07,
+          "slot_rule_use_rate": 0.00015185484980478428,
+          "typed_only_avg_hamming": 11.856899135654551,
+          "typed_only_token_match": 0.011925072028787453,
+          "own_type_centroid_hamming": 11.94520569444834,
+          "nearest_other_centroid_hamming": 11.941116716689441,
+          "global_modal_hamming": 11.9670991733219,
+          "type_separation_margin": -0.004088977758899579,
+          "centroid_gain_vs_global": 0.021893478873559257
+        },
+        {
+          "type_id": 2,
+          "type_name": "MLP_GATE_OUTLIER",
+          "block_count": 759370,
+          "block_share": 0.10345595223563057,
+          "avg_surprisal": 5.645076181571566,
+          "avg_modal_match": 0.0011910093209461462,
+          "avg_program_length": 11.998773983697012,
+          "avg_rule_calls": 0.0012154812541975584,
+          "avg_literal_corrections": 11.997558502442814,
+          "rule_token_coverage": 0.0002034581297654635,
+          "slot_exact_match_rate": 2.6337621976111775e-06,
+          "slot_rule_use_rate": 0.0003038703135493896,
+          "typed_only_avg_hamming": 11.79943637488971,
+          "typed_only_token_match": 0.016713635425857354,
+          "own_type_centroid_hamming": 11.90128922659573,
+          "nearest_other_centroid_hamming": 11.93423364104455,
+          "global_modal_hamming": 11.985707889434662,
+          "type_separation_margin": 0.03294441444881942,
+          "centroid_gain_vs_global": 0.08441866283893228
+        }
+      ],
+      "top_productions": [
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 3,
+          "variant_id": 0,
+          "used_calls": 3156,
+          "train_count": 63795,
+          "rule_prob": 0.9734344482421875,
+          "phrase": [
+            186,
+            68,
+            184
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 0,
+          "variant_id": 0,
+          "used_calls": 2858,
+          "train_count": 63986,
+          "rule_prob": 0.976348876953125,
+          "phrase": [
+            186,
+            186,
+            145
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 1,
+          "variant_id": 0,
+          "used_calls": 1630,
+          "train_count": 63864,
+          "rule_prob": 0.9744873046875,
+          "phrase": [
+            186,
+            36,
+            44
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 2,
+          "variant_id": 0,
+          "used_calls": 1184,
+          "train_count": 63741,
+          "rule_prob": 0.9726104736328125,
+          "phrase": [
+            48,
+            210,
+            199
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 3,
+          "variant_id": 2,
+          "used_calls": 419,
+          "train_count": 1029,
+          "rule_prob": 0.0157012939453125,
+          "phrase": [
+            250,
+            165,
+            128
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 1,
+          "variant_id": 2,
+          "used_calls": 352,
+          "train_count": 1055,
+          "rule_prob": 0.0160980224609375,
+          "phrase": [
+            51,
+            135,
+            103
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 2,
+          "variant_id": 1,
+          "used_calls": 338,
+          "train_count": 1035,
+          "rule_prob": 0.0157928466796875,
+          "phrase": [
+            197,
+            214,
+            179
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 0,
+          "variant_id": 1,
+          "used_calls": 307,
+          "train_count": 982,
+          "rule_prob": 0.014984130859375,
+          "phrase": [
+            250,
+            57,
+            153
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_MIXED",
+          "slot_index": 0,
+          "variant_id": 2,
+          "used_calls": 228,
+          "train_count": 612,
+          "rule_prob": 0.011673151750972763,
+          "phrase": [
+            23,
+            227,
+            166
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_MIXED",
+          "slot_index": 2,
+          "variant_id": 0,
+          "used_calls": 204,
+          "train_count": 51177,
+          "rule_prob": 0.9761387045090409,
+          "phrase": [
+            174,
+            80,
+            183
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_COMMON",
+          "slot_index": 3,
+          "variant_id": 1,
+          "used_calls": 192,
+          "train_count": 712,
+          "rule_prob": 0.0108642578125,
+          "phrase": [
+            135,
+            140,
+            253
+          ]
+        },
+        {
+          "type_name": "MLP_GATE_MIXED",
+          "slot_index": 0,
+          "variant_id": 0,
+          "used_calls": 186,
+          "train_count": 51194,
+          "rule_prob": 0.9764629587243457,
+          "phrase": [
+            244,
+            154,
+            35
+          ]
+        }
+      ]
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "role_name": "MLP_UP",
+      "raw_program_length": 12,
+      "phrase_len": 3,
+      "slot_count": 4,
+      "type_count": 3,
+      "active_type_count": 3,
+      "route_types": [
+        "MLP_UP_COMMON",
+        "MLP_UP_MIXED",
+        "MLP_UP_OUTLIER"
+      ],
+      "grammar_rule_count": 45,
+      "structural_rule_count": 9,
+      "parse_tree_depth": 4,
+      "parse_nonterminal_nodes": 7,
+      "type_entropy": 0.9504858962182267,
+      "type_check_pass_rate": 1.0,
+      "avg_program_length": 11.998477527073451,
+      "avg_rule_calls": 0.0015125274658203125,
+      "avg_literal_corrections": 11.99696499960763,
+      "typed_rule_token_coverage": 0.0002529166993640718,
+      "program_compression_ratio": 0.999873127256121,
+      "used_production_count": 36,
+      "slot_exact_match_rate": 2.486365182059152e-06,
+      "slot_rule_use_rate": 0.0003781318664550781,
+      "typed_only_avg_hamming": 11.800751413617816,
+      "typed_only_token_match": 0.016604048865182075,
+      "common_threshold": 5.520686149597168,
+      "outlier_threshold": 5.610142707824707,
+      "type_summaries": [
+        {
+          "type_id": 0,
+          "type_name": "MLP_UP_COMMON",
+          "block_count": 3585264,
+          "block_share": 0.48845345633370535,
+          "avg_surprisal": 5.4683342705028135,
+          "avg_modal_match": 0.011118125209886915,
+          "avg_program_length": 11.997664886044653,
+          "avg_rule_calls": 0.0023200523029824303,
+          "avg_literal_corrections": 11.99534483374167,
+          "rule_token_coverage": 0.000387930521527378,
+          "slot_exact_match_rate": 3.7654130909188277e-06,
+          "slot_rule_use_rate": 0.0005800130757456076,
+          "typed_only_avg_hamming": 11.752234145100612,
+          "typed_only_token_match": 0.020647154574949034,
+          "own_type_centroid_hamming": 11.863952556910732,
+          "nearest_other_centroid_hamming": 11.947157866198975,
+          "global_modal_hamming": 11.866582488765124,
+          "type_separation_margin": 0.08320530928824209,
+          "centroid_gain_vs_global": 0.002629931854390639
+        },
+        {
+          "type_id": 1,
+          "type_name": "MLP_UP_MIXED",
+          "block_count": 2995159,
+          "block_share": 0.4080580302647182,
+          "avg_surprisal": 5.558780351894507,
+          "avg_modal_match": 0.0028380239606019247,
+          "avg_program_length": 11.999393020537473,
+          "avg_rule_calls": 0.0006033068695184462,
+          "avg_literal_corrections": 11.998789713667955,
+          "rule_token_coverage": 0.00010085719433703965,
+          "slot_exact_match_rate": 9.181482518958092e-07,
+          "slot_rule_use_rate": 0.00015082671737961156,
+          "typed_only_avg_hamming": 11.856725803204437,
+          "typed_only_token_match": 0.011939516399630201,
+          "own_type_centroid_hamming": 11.94505700699028,
+          "nearest_other_centroid_hamming": 11.939671984024889,
+          "global_modal_hamming": 11.965943711168588,
+          "type_separation_margin": -0.005385022965391821,
+          "centroid_gain_vs_global": 0.020886704178309064
+        },
+        {
+          "type_id": 2,
+          "type_name": "MLP_UP_OUTLIER",
+          "block_count": 759609,
+          "block_share": 0.10348851340157646,
+          "avg_surprisal": 5.647716785872732,
+          "avg_modal_match": 0.0013557414064649543,
+          "avg_program_length": 11.998703280240228,
+          "avg_rule_calls": 0.0012861880256816336,
+          "avg_literal_corrections": 11.997417092214548,
+          "rule_token_coverage": 0.00021524231545439824,
+          "slot_exact_match_rate": 2.63293352237796e-06,
+          "slot_rule_use_rate": 0.0003215470064204084,
+          "typed_only_avg_hamming": 11.809038597488971,
+          "typed_only_token_match": 0.01591345020925239,
+          "own_type_centroid_hamming": 11.90207725290248,
+          "nearest_other_centroid_hamming": 11.933239337606585,
+          "global_modal_hamming": 11.983731103765226,
+          "type_separation_margin": 0.031162084704104347,
+          "centroid_gain_vs_global": 0.08165385086274649
+        }
+      ],
+      "top_productions": [
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 3,
+          "variant_id": 0,
+          "used_calls": 2208,
+          "train_count": 63544,
+          "rule_prob": 0.9696044921875,
+          "phrase": [
+            128,
+            72,
+            31
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 0,
+          "variant_id": 0,
+          "used_calls": 1759,
+          "train_count": 63872,
+          "rule_prob": 0.974609375,
+          "phrase": [
+            128,
+            5,
+            148
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 1,
+          "variant_id": 0,
+          "used_calls": 1289,
+          "train_count": 63464,
+          "rule_prob": 0.9683837890625,
+          "phrase": [
+            128,
+            90,
+            3
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 2,
+          "variant_id": 0,
+          "used_calls": 929,
+          "train_count": 63861,
+          "rule_prob": 0.9744415283203125,
+          "phrase": [
+            128,
+            252,
+            192
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 3,
+          "variant_id": 1,
+          "used_calls": 396,
+          "train_count": 1135,
+          "rule_prob": 0.0173187255859375,
+          "phrase": [
+            183,
+            75,
+            145
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 1,
+          "variant_id": 1,
+          "used_calls": 376,
+          "train_count": 1207,
+          "rule_prob": 0.0184173583984375,
+          "phrase": [
+            216,
+            41,
+            27
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 2,
+          "variant_id": 2,
+          "used_calls": 341,
+          "train_count": 1028,
+          "rule_prob": 0.01568603515625,
+          "phrase": [
+            102,
+            180,
+            105
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 3,
+          "variant_id": 2,
+          "used_calls": 291,
+          "train_count": 857,
+          "rule_prob": 0.0130767822265625,
+          "phrase": [
+            240,
+            92,
+            192
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 0,
+          "variant_id": 1,
+          "used_calls": 254,
+          "train_count": 999,
+          "rule_prob": 0.0152435302734375,
+          "phrase": [
+            153,
+            15,
+            68
+          ]
+        },
+        {
+          "type_name": "MLP_UP_COMMON",
+          "slot_index": 1,
+          "variant_id": 2,
+          "used_calls": 252,
+          "train_count": 865,
+          "rule_prob": 0.0131988525390625,
+          "phrase": [
+            214,
+            124,
+            193
+          ]
+        },
+        {
+          "type_name": "MLP_UP_MIXED",
+          "slot_index": 0,
+          "variant_id": 1,
+          "used_calls": 201,
+          "train_count": 678,
+          "rule_prob": 0.012932021057450217,
+          "phrase": [
+            53,
+            112,
+            152
+          ]
+        },
+        {
+          "type_name": "MLP_UP_OUTLIER",
+          "slot_index": 3,
+          "variant_id": 0,
+          "used_calls": 177,
+          "train_count": 12730,
+          "rule_prob": 0.9711626487641135,
+          "phrase": [
+            77,
+            41,
+            226
+          ]
+        }
+      ]
+    }
+  ],
+  "typed_only_compare": [
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "exact_stage_ids": false,
+      "max_stage_id_diff": 254,
+      "recon_rel_mse": 1.65867018699646
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "exact_stage_ids": false,
+      "max_stage_id_diff": 252,
+      "recon_rel_mse": 1.901381015777588
+    }
+  ],
+  "current_eval": {
+    "metrics": {
+      "perplexity": 2.4081482048496654,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4187381267547607,
+      "tok_s": 1481.7643796803584
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "exact_eval": {
+    "metrics": {
+      "perplexity": 2.4081482048496654,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4187381267547607,
+      "tok_s": 1481.7643796803584
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ],
+    "by_construction_identical": true
+  },
+  "typed_only_eval": {
+    "metrics": {
+      "perplexity": 2.7994335623872417,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4265401363372803,
+      "tok_s": 1477.000090099411
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 1.7537233233451843,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 1.637374758720398,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 1.8700718879699707,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "delta_exact": {
+    "ppl_delta": 0.0,
+    "tok_s_delta": 0.0,
+    "peak_mb_delta": 0.0
+  },
+  "delta_typed_only": {
+    "ppl_delta": 0.3912853575375763,
+    "tok_s_delta": -4.764289580947434,
+    "peak_mb_delta": 0.0
+  }
+}

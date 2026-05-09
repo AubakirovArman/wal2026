@@ -1,0 +1,100 @@
+{
+  "tensor_names": [
+    "model.layers.54.self_attn.q_proj.weight",
+    "model.layers.54.self_attn.v_proj.weight"
+  ],
+  "ranks": [
+    4,
+    8
+  ],
+  "pq_cfg": {
+    "group_rows": 28672,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 3,
+    "product_splits": 4,
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "svd_cfg": {
+    "oversample": 8,
+    "niter": 2
+  },
+  "layers": [
+    {
+      "name": "model.layers.54.self_attn.q_proj.weight",
+      "shape": [
+        8192,
+        8192
+      ],
+      "dense_bf16_mb": 128.0,
+      "pq_only": {
+        "rel_mse": 0.04774485528469086,
+        "storage_mb": 24.0625,
+        "bits_per_weight": 3.0078125,
+        "sample_rel_mse": 0.04101045132999216
+      },
+      "overlay_ranks": [
+        {
+          "rank": 4,
+          "svd_q": 12,
+          "hybrid_rel_mse": 0.04757285863161087,
+          "improvement_vs_pq": 1.0036154365751253,
+          "residual_capture": 0.0036024619059461527,
+          "overlay_storage_mb": 0.125,
+          "total_storage_mb": 24.1875,
+          "total_bits_per_weight": 3.0234375
+        },
+        {
+          "rank": 8,
+          "svd_q": 16,
+          "hybrid_rel_mse": 0.04741624742746353,
+          "improvement_vs_pq": 1.0069302797048634,
+          "residual_capture": 0.0068825397150774625,
+          "overlay_storage_mb": 0.25,
+          "total_storage_mb": 24.3125,
+          "total_bits_per_weight": 3.0390625
+        }
+      ]
+    },
+    {
+      "name": "model.layers.54.self_attn.v_proj.weight",
+      "shape": [
+        1024,
+        8192
+      ],
+      "dense_bf16_mb": 16.0,
+      "pq_only": {
+        "rel_mse": 0.03786161169409752,
+        "storage_mb": 3.048828125,
+        "bits_per_weight": 3.048828125,
+        "sample_rel_mse": 0.035485056583136075
+      },
+      "overlay_ranks": [
+        {
+          "rank": 4,
+          "svd_q": 12,
+          "hybrid_rel_mse": 0.03763090819120407,
+          "improvement_vs_pq": 1.0061306918695991,
+          "residual_capture": 0.00609331750314468,
+          "overlay_storage_mb": 0.0703125,
+          "total_storage_mb": 3.119140625,
+          "total_bits_per_weight": 3.119140625
+        },
+        {
+          "rank": 8,
+          "svd_q": 16,
+          "hybrid_rel_mse": 0.03740481287240982,
+          "improvement_vs_pq": 1.012212300680286,
+          "residual_capture": 0.01206495290672438,
+          "overlay_storage_mb": 0.140625,
+          "total_storage_mb": 3.189453125,
+          "total_bits_per_weight": 3.189453125
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+\section{Текущее подтверждённое состояние}
+
+На полном проходе по всем 560 target linear тензорам модели получено:
+
+\begin{itemize}[leftmargin=1.5em]
+\item mean relMSE $= 3.91 \times 10^{-6}$;
+\item median relMSE $= 2.81 \times 10^{-6}$;
+\item p90 relMSE $= 3.07 \times 10^{-6}$;
+\item max relMSE $= 4.26 \times 10^{-5}$.
+\end{itemize}
+
+На полном raw WikiText-2 gate:
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Модель & PPL & Комментарий \\
+\midrule
+dense & 3.4304 & базовый воспроизводимый прогон \\
+routed & 3.4350 & gap $= 0.0046$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Этот результат означает, что quality-side для текстовой метрики практически
+закрыт: разрыв к dense очень мал.
+
+Для дополнительной sanity-проверки был также выполнен более короткий raw
+WikiText-2 gate на первых $100$ окнах. Он дал dense PPL $= 3.2749$ и routed
+PPL $= 3.2773$, то есть gap всего $0.00238$. На этом же прогоне были измерены
+простые eval-throughput числа: `52736` токенов обрабатывались со скоростью
+примерно `1006.4` tok/s для dense и `1016.1` tok/s для routed. Это не decode
+benchmark, но как короткая full-model sanity check эта метрика полезна: на
+таком промежуточном gate routed path не показывает явного regress по качеству
+или по общему evaluation throughput.
+
+На полном HumanEval gate ($164$ задачи):
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Модель & pass@1 & elapsed \\
+\midrule
+dense & 0.7317 & 1337.0 s \\
+routed & 0.7195 & 1169.0 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Абсолютный gap по pass@1 составил $-0.0122$ в пользу dense-базовой модели.
+
+По памяти на этом gate:
+
+\begin{itemize}[leftmargin=1.5em]
+\item eval peak allocated: примерно 44.6 / 45.9 / 44.6 GB на трёх видимых GPU;
+\item route surgery peak allocated: примерно 70.2 / 71.5 / 70.2 GB.
+\end{itemize}

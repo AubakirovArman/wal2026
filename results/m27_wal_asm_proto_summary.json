@@ -1,0 +1,1000 @@
+{
+  "targets": [
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "text_source": "local",
+  "num_windows": 4,
+  "matmul_strategy": "full_weight_fast",
+  "num_subroutines": 64,
+  "num_macros": 32,
+  "macro_lengths": [
+    3,
+    4,
+    5
+  ],
+  "dense": {
+    "metrics": {
+      "perplexity": 2.3852471794409666,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.23616099357605,
+      "tok_s": 1602.7468551217762
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "eval_peak_mb": 47214.8
+  },
+  "current_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_asm_current_l54_gate_up.pt",
+  "asm_only_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_asm_only_l54_gate_up.pt",
+  "asm_artifact": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_asm_library_l54_gate_up.pt",
+  "wal_asm": [
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.928814206804548,
+      "avg_calls": 0.07019601549421038,
+      "avg_jumps": 0.00017711094447544644,
+      "avg_literal_corrections": 11.858441080365862,
+      "call_token_coverage": 0.011796576636178153,
+      "jump_transition_coverage": 0.035487129091256515,
+      "program_compression_ratio": 0.9940678505670457,
+      "selected_label_count": 64,
+      "used_label_count": 64,
+      "selected_macro_count": 32,
+      "used_macro_count": 8,
+      "avg_subroutine_body_length": 12.311281516804758,
+      "avg_subroutine_macro_calls": 0.17217962079881066,
+      "avg_subroutine_literal_args": 11.139101896005947,
+      "macro_body_coverage": 0.0717415086661711,
+      "asm_only_avg_hamming": 10.96854863848005,
+      "asm_only_token_match": 0.08595428012666251,
+      "train_mean_hamming": 10.963294982910156,
+      "train_history": [
+        {
+          "iter": 1,
+          "mean_hamming": 10.967239379882812,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 2,
+          "mean_hamming": 10.963447570800781,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 3,
+          "mean_hamming": 10.963294982910156,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 4,
+          "mean_hamming": 10.963294982910156,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 5,
+          "mean_hamming": 10.963294982910156,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 6,
+          "mean_hamming": 10.963294982910156,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        }
+      ],
+      "group_rows": [
+        {
+          "group_idx": 0,
+          "block_count": 7340032,
+          "avg_call_distance": 10.968549728393555,
+          "call_site_rate": 0.07019601762294769
+        }
+      ],
+      "top_subroutines": [
+        {
+          "label": "gate_sub_037",
+          "template_id": 37,
+          "used_calls": 12225,
+          "train_count": 1291,
+          "predicted_jump": "gate_sub_042",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "gate_sub_012",
+          "template_id": 12,
+          "used_calls": 12001,
+          "train_count": 4048,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "gate_sub_042",
+          "template_id": 42,
+          "used_calls": 11318,
+          "train_count": 1094,
+          "predicted_jump": "gate_sub_042",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "gate_sub_006",
+          "template_id": 6,
+          "used_calls": 10148,
+          "train_count": 4956,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_003",
+          "template_id": 3,
+          "used_calls": 9658,
+          "train_count": 5521,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_024",
+          "template_id": 24,
+          "used_calls": 9574,
+          "train_count": 2258,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_027",
+          "template_id": 27,
+          "used_calls": 9485,
+          "train_count": 1676,
+          "predicted_jump": "gate_sub_042",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_008",
+          "template_id": 8,
+          "used_calls": 9468,
+          "train_count": 4554,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_053",
+          "template_id": 53,
+          "used_calls": 9347,
+          "train_count": 663,
+          "predicted_jump": "gate_sub_037",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "gate_sub_033",
+          "template_id": 33,
+          "used_calls": 9324,
+          "train_count": 1447,
+          "predicted_jump": "gate_sub_003",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        }
+      ],
+      "top_macros": [
+        {
+          "macro_id": 0,
+          "name": "gate_macro_000",
+          "length": 5,
+          "used_calls": 12225,
+          "score": 48900,
+          "pattern": [
+            58,
+            104,
+            155,
+            137,
+            122
+          ]
+        },
+        {
+          "macro_id": 5,
+          "name": "gate_macro_005",
+          "length": 5,
+          "used_calls": 12225,
+          "score": 48900,
+          "pattern": [
+            39,
+            48,
+            111,
+            219,
+            94
+          ]
+        },
+        {
+          "macro_id": 8,
+          "name": "gate_macro_008",
+          "length": 5,
+          "used_calls": 12001,
+          "score": 48004,
+          "pattern": [
+            130,
+            246,
+            14,
+            48,
+            157
+          ]
+        },
+        {
+          "macro_id": 13,
+          "name": "gate_macro_013",
+          "length": 5,
+          "used_calls": 12001,
+          "score": 48004,
+          "pattern": [
+            206,
+            107,
+            39,
+            34,
+            12
+          ]
+        },
+        {
+          "macro_id": 24,
+          "name": "gate_macro_024",
+          "length": 5,
+          "used_calls": 11318,
+          "score": 45272,
+          "pattern": [
+            186,
+            110,
+            164,
+            58,
+            180
+          ]
+        },
+        {
+          "macro_id": 29,
+          "name": "gate_macro_029",
+          "length": 5,
+          "used_calls": 11318,
+          "score": 45272,
+          "pattern": [
+            164,
+            179,
+            76,
+            231,
+            120
+          ]
+        },
+        {
+          "macro_id": 16,
+          "name": "gate_macro_016",
+          "length": 5,
+          "used_calls": 8813,
+          "score": 45272,
+          "pattern": [
+            151,
+            68,
+            219,
+            116,
+            205
+          ]
+        },
+        {
+          "macro_id": 21,
+          "name": "gate_macro_021",
+          "length": 5,
+          "used_calls": 8813,
+          "score": 45272,
+          "pattern": [
+            222,
+            125,
+            101,
+            124,
+            206
+          ]
+        }
+      ],
+      "top_jumps": [
+        {
+          "from_label": "gate_sub_042",
+          "to_label": "gate_sub_042",
+          "count": 72,
+          "is_predicted": true
+        },
+        {
+          "from_label": "gate_sub_037",
+          "to_label": "gate_sub_042",
+          "count": 60,
+          "is_predicted": true
+        },
+        {
+          "from_label": "gate_sub_042",
+          "to_label": "gate_sub_037",
+          "count": 57,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_037",
+          "to_label": "gate_sub_037",
+          "count": 54,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_012",
+          "to_label": "gate_sub_037",
+          "count": 47,
+          "is_predicted": true
+        },
+        {
+          "from_label": "gate_sub_012",
+          "to_label": "gate_sub_042",
+          "count": 45,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_042",
+          "to_label": "gate_sub_012",
+          "count": 44,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_037",
+          "to_label": "gate_sub_012",
+          "count": 43,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_042",
+          "to_label": "gate_sub_003",
+          "count": 37,
+          "is_predicted": false
+        },
+        {
+          "from_label": "gate_sub_042",
+          "to_label": "gate_sub_024",
+          "count": 35,
+          "is_predicted": false
+        }
+      ]
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.930910110473633,
+      "avg_calls": 0.0681304931640625,
+      "avg_jumps": 0.0001735687255859375,
+      "avg_literal_corrections": 11.862606048583984,
+      "call_token_coverage": 0.011449495951334635,
+      "jump_transition_coverage": 0.037065052950075644,
+      "program_compression_ratio": 0.9942425092061361,
+      "selected_label_count": 64,
+      "used_label_count": 64,
+      "selected_macro_count": 32,
+      "used_macro_count": 8,
+      "avg_subroutine_body_length": 12.279251319788834,
+      "avg_subroutine_macro_calls": 0.18018717005279156,
+      "avg_subroutine_literal_args": 11.099064149736042,
+      "macro_body_coverage": 0.07507798752199649,
+      "asm_only_avg_hamming": 10.970368249075753,
+      "asm_only_token_match": 0.08580264591035391,
+      "train_mean_hamming": 10.963508605957031,
+      "train_history": [
+        {
+          "iter": 1,
+          "mean_hamming": 10.968894958496094,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 2,
+          "mean_hamming": 10.963790893554688,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 3,
+          "mean_hamming": 10.963508605957031,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 4,
+          "mean_hamming": 10.963508605957031,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 5,
+          "mean_hamming": 10.963508605957031,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        },
+        {
+          "iter": 6,
+          "mean_hamming": 10.963508605957031,
+          "p50_hamming": 11.0,
+          "p90_hamming": 11.0
+        }
+      ],
+      "group_rows": [
+        {
+          "group_idx": 0,
+          "block_count": 7340032,
+          "avg_call_distance": 10.970367431640625,
+          "call_site_rate": 0.0681304931640625
+        }
+      ],
+      "top_subroutines": [
+        {
+          "label": "up_sub_020",
+          "template_id": 20,
+          "used_calls": 12386,
+          "train_count": 2989,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "up_sub_021",
+          "template_id": 21,
+          "used_calls": 11115,
+          "train_count": 2372,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "up_sub_030",
+          "template_id": 30,
+          "used_calls": 10930,
+          "train_count": 1676,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "up_sub_027",
+          "template_id": 27,
+          "used_calls": 10623,
+          "train_count": 2048,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 5,
+          "body_macro_calls": 2
+        },
+        {
+          "label": "up_sub_002",
+          "template_id": 2,
+          "used_calls": 10168,
+          "train_count": 5934,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "up_sub_019",
+          "template_id": 19,
+          "used_calls": 9907,
+          "train_count": 2573,
+          "predicted_jump": "up_sub_020",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "up_sub_003",
+          "template_id": 3,
+          "used_calls": 9842,
+          "train_count": 5722,
+          "predicted_jump": "up_sub_007",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "up_sub_037",
+          "template_id": 37,
+          "used_calls": 9496,
+          "train_count": 1275,
+          "predicted_jump": "up_sub_019",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "up_sub_041",
+          "template_id": 41,
+          "used_calls": 9434,
+          "train_count": 1025,
+          "predicted_jump": "up_sub_027",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        },
+        {
+          "label": "up_sub_043",
+          "template_id": 43,
+          "used_calls": 9063,
+          "train_count": 800,
+          "predicted_jump": "up_sub_030",
+          "body_program_units": 13,
+          "body_macro_calls": 0
+        }
+      ],
+      "top_macros": [
+        {
+          "macro_id": 0,
+          "name": "up_macro_000",
+          "length": 5,
+          "used_calls": 12386,
+          "score": 49544,
+          "pattern": [
+            128,
+            103,
+            123,
+            26,
+            230
+          ]
+        },
+        {
+          "macro_id": 5,
+          "name": "up_macro_005",
+          "length": 5,
+          "used_calls": 12386,
+          "score": 49544,
+          "pattern": [
+            53,
+            63,
+            102,
+            5,
+            75
+          ]
+        },
+        {
+          "macro_id": 8,
+          "name": "up_macro_008",
+          "length": 5,
+          "used_calls": 11115,
+          "score": 44460,
+          "pattern": [
+            220,
+            197,
+            35,
+            167,
+            163
+          ]
+        },
+        {
+          "macro_id": 13,
+          "name": "up_macro_013",
+          "length": 5,
+          "used_calls": 11115,
+          "score": 44460,
+          "pattern": [
+            153,
+            148,
+            89,
+            210,
+            128
+          ]
+        },
+        {
+          "macro_id": 16,
+          "name": "up_macro_016",
+          "length": 5,
+          "used_calls": 10930,
+          "score": 43720,
+          "pattern": [
+            224,
+            150,
+            116,
+            204,
+            132
+          ]
+        },
+        {
+          "macro_id": 21,
+          "name": "up_macro_021",
+          "length": 5,
+          "used_calls": 10930,
+          "score": 43720,
+          "pattern": [
+            112,
+            89,
+            186,
+            57,
+            128
+          ]
+        },
+        {
+          "macro_id": 24,
+          "name": "up_macro_024",
+          "length": 5,
+          "used_calls": 10623,
+          "score": 42492,
+          "pattern": [
+            48,
+            144,
+            12,
+            156,
+            137
+          ]
+        },
+        {
+          "macro_id": 29,
+          "name": "up_macro_029",
+          "length": 5,
+          "used_calls": 10623,
+          "score": 42492,
+          "pattern": [
+            241,
+            209,
+            88,
+            245,
+            150
+          ]
+        }
+      ],
+      "top_jumps": [
+        {
+          "from_label": "up_sub_020",
+          "to_label": "up_sub_020",
+          "count": 86,
+          "is_predicted": true
+        },
+        {
+          "from_label": "up_sub_030",
+          "to_label": "up_sub_020",
+          "count": 59,
+          "is_predicted": true
+        },
+        {
+          "from_label": "up_sub_019",
+          "to_label": "up_sub_020",
+          "count": 53,
+          "is_predicted": true
+        },
+        {
+          "from_label": "up_sub_020",
+          "to_label": "up_sub_019",
+          "count": 52,
+          "is_predicted": false
+        },
+        {
+          "from_label": "up_sub_020",
+          "to_label": "up_sub_030",
+          "count": 51,
+          "is_predicted": false
+        },
+        {
+          "from_label": "up_sub_021",
+          "to_label": "up_sub_020",
+          "count": 44,
+          "is_predicted": true
+        },
+        {
+          "from_label": "up_sub_030",
+          "to_label": "up_sub_019",
+          "count": 44,
+          "is_predicted": false
+        },
+        {
+          "from_label": "up_sub_019",
+          "to_label": "up_sub_030",
+          "count": 40,
+          "is_predicted": false
+        },
+        {
+          "from_label": "up_sub_020",
+          "to_label": "up_sub_002",
+          "count": 39,
+          "is_predicted": false
+        },
+        {
+          "from_label": "up_sub_027",
+          "to_label": "up_sub_020",
+          "count": 39,
+          "is_predicted": true
+        }
+      ]
+    }
+  ],
+  "asm_only_compare": [
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "exact_stage_ids": false,
+      "max_stage_id_diff": 255,
+      "recon_rel_mse": 1.8789381980895996
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "exact_stage_ids": false,
+      "max_stage_id_diff": 255,
+      "recon_rel_mse": 1.8749417066574097
+    }
+  ],
+  "current_eval": {
+    "metrics": {
+      "perplexity": 2.4081482048496654,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.419804096221924,
+      "tok_s": 1481.1116344483228
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "exact_eval": {
+    "metrics": {
+      "perplexity": 2.4081482048496654,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.419804096221924,
+      "tok_s": 1481.1116344483228
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ],
+    "by_construction_identical": true
+  },
+  "asm_only_eval": {
+    "metrics": {
+      "perplexity": 2.9600750518910153,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4191043376922607,
+      "tok_s": 1481.5400659481302
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.3,
+        "reserved_mb": 48622.0,
+        "peak_mb": 48585.1
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 43741.8,
+        "reserved_mb": 47496.0,
+        "peak_mb": 46486.8
+      }
+    ],
+    "replace_peak_mb": 48585.1,
+    "eval_peak_mb": 46486.8,
+    "avg_layer_rel_mse": 1.8486209511756897,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 1.8511580228805542,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 1.8460838794708252,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "delta_exact": {
+    "ppl_delta": 0.0,
+    "tok_s_delta": 0.0,
+    "peak_mb_delta": 0.0
+  },
+  "delta_asm_only": {
+    "ppl_delta": 0.5519268470413499,
+    "tok_s_delta": 0.42843149980740236,
+    "peak_mb_delta": 0.0
+  }
+}

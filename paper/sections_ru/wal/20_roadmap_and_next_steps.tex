@@ -1,0 +1,456 @@
+\subsection{Roadmap M26--M30}
+
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{M26.} Fused exact hot/cold runtime. Стадия 1 --- allocation-free
+Torch path (\texttt{full\_weight\_hot\_v2}); landed. На same-encoding
+\texttt{l54\_q\_gu} 16w даёт \texttt{PPL = 2.7996} (без изменений), пиковая
+VRAM \texttt{46385.9} MB (без изменений), throughput \texttt{971.28} tok/s
+против \texttt{962.06} у \texttt{full\_weight\_hot} и \texttt{943.29} у
+\texttt{full\_weight\_fast} ($+0.96\%$ и $+2.97\%$ соответственно). Целевой
+рубеж $\ge 980$ tok/s на этом узком слайсе пока не достигнут. На
+\texttt{l0\_qkv\_gu} 16w (патчатся \texttt{q,k,v,gate,up} слоя 0): тот же
+PPL \texttt{32.2524}, throughput \texttt{961.86} tok/s против \texttt{948.17}
+и \texttt{947.92}; одновременно зафиксирована регрессия по VRAM в hot-кэше
+(\texttt{88.9} GB против \texttt{47.2} GB у fast), которую стадия 2 должна
+переписать. Была проверена и более дешёвая промежуточная ветка
+\texttt{triton\_hot\_cold\_persistent}: exact tile-local persistent palette +
+hotprefix Triton kernel. Она оказалась отрицательным результатом: на honest
+same-encoding \texttt{l54\_q\_gu} 16w первый run дал \texttt{PPL = NaN} и лишь
+\texttt{188.77} tok/s при peak \texttt{47567.1} MB; последующая правка,
+строившая persistent plan из того же pre-row-scale tensor, что и
+\texttt{full\_weight\_fast}, улучшила synthetic parity, но полный harness всё
+равно упёрся в CUDA gather out-of-bounds. Следовательно, стадия 2 должна идти
+не через repack всей матрицы в local palettes, а через настоящий stage-local
+RVQ fused hot/cold matmul. Первый native probe в этом направлении тоже уже
+сделан: \texttt{stage\_local\_hot\_cold} работает поверх родных
+\texttt{stage\_ids + full\_codebooks + hot\_lut + hot\_codebooks}. На one-hot
+input для \texttt{l54.gate\_proj} / \texttt{l54.up\_proj} он проходит narrow
+correctness gate (max abs diff порядка $10^{-4}$ против
+\texttt{full\_weight\_hot\_v2}), то есть сама hot/cold логика на native RVQ
+surface собрана правильно. Но это всё ещё scaffold, а не победа: на
+реалистичном $m = 2048$ microbench он медленнее \texttt{full\_weight\_hot\_v2}
+(примерно \texttt{58.8 -> 90.0} ms на \texttt{gate\_proj}), а на honest
+same-encoding \texttt{l54\_q\_gu} 16w даёт \texttt{PPL = NaN}, лишь
+\texttt{258.23} tok/s и peak \texttt{46575.8} MB. Попытка B1 убрать LUT на
+уровне API тоже отрицательна: \texttt{stage\_local\_hot\_cold\_b1} сохраняет
+one-hot parity, но realistic gate проваливает ещё жёстче
+(\texttt{58.81 -> 569.43} ms на \texttt{gate\_proj}). B2 исправил local
+compute shape: staged hot palette теперь даёт one-hot max abs diff
+\texttt{0.001953125}, \texttt{has\_nan = False} и примерно
+\texttt{78.84 -> 68.36} ms ($1.153\times$) против
+\texttt{full\_weight\_hot\_v2}. Но probe всё равно отрицательный: per-stage
+hot-hit rate лишь около \texttt{0.075}, то есть на порядок ниже intended
+порога \texttt{0.72}. B3 проверил более сильную гипотезу напрямую: оставить B2
+kernel, но заменить policy выбора hot IDs. Для этого runtime был доведён до
+реально модульного состояния, включая поддержку non-power-of-2
+\texttt{hot\_topk} через padding staged hot palette. Однако selection-only fix
+тоже не спасает stage 2: на authoritative \texttt{l54.gate/up}, $m = 2048$,
+режимы \texttt{topk = 48} и \texttt{64} сохраняют ту же локальную численность
+(one-hot max abs diff \texttt{0.001953125}, \texttt{has\_nan = False}), но дают
+лишь \texttt{0.170--0.222} mean hit rate и около \texttt{0.224x} от
+\texttt{full\_weight\_hot\_v2}. Более того, count-based upper bound показывает,
+что даже чистый stage-local \texttt{count} selection даёт лишь
+\texttt{~0.312} hit mean при \texttt{topk = 64}; при \texttt{topk = 128}
+coverage поднимается только до \texttt{~0.578}, но speed падает примерно до
+\texttt{0.133x}. Значит, текущий M26-вопрос формулируется уже жёстче: не просто
+"какая hot-selection policy лучше", а "поддерживает ли текущее Block-RVQ
+encoding вообще маленький stage-local hot palette на этих MLP-слоях". Целевой
+рубеж стадии 2 остаётся $\ge 1100$ tok/s при том же качестве, но ни B0--B3 его
+пока не приблизили честным образом.
+
+Следующая компиляторная гипотеза была ещё более прямой: отказаться от словаря
+"hot/cold" и проверить \emph{Route Register File + spilling}, то есть явный
+register-allocation pass над токенами $(stage,id)$. Но честный Step~1a для
+этой идеи был поставлен как offline gate до любого kernel work: сначала
+собрать activation-weighted influence, occurrence counts и structural
+interference per stage, а уже потом смотреть, есть ли у register allocator
+вообще какой-либо рычаг. И этот gate дал ещё более жёсткий отрицательный
+результат. На \texttt{l54.gate\_proj} / \texttt{l54.up\_proj} при tile-size,
+равном \texttt{block\_n = 256} B2-kernel'а, каждый stage имеет
+\texttt{avg\_id\_tile\_occupancy = 1.000}: все codebook id оказываются живыми
+в каждом tile. Следовательно, interference graph практически полносвязный, а
+linear-scan allocator с приоритетом
+\texttt{Influence $\times$ (1 - avg\_interference)} вырождается в
+\texttt{topk-by-influence}. И это не даёт даже локального выигрыша: mean
+hit-rate на \texttt{12} stages составляет лишь \texttt{0.293} при
+\texttt{cap = 64} и \texttt{0.560} при \texttt{cap = 128}, что хуже или равно
+простому \texttt{topk-count} baseline (\texttt{0.311} и \texttt{0.577}).
+Поэтому build полноценного RRF runtime branch на текущем encoding был
+остановлен ещё до Step~1b. Этот отрицательный результат важен концептуально:
+он показывает, что даже честная compiler-style register allocation не помогает,
+если stage vocabulary уже structurally full на уровне tile. Значит, следующий
+M26/M27 шаг должен менять либо само encoding-пространство, либо compute
+scheduling, а не добавлять ещё один selection layer поверх тех же токенов.
+
+Следующая гипотеза проверяла уже именно tile-local compilation: вместо одного
+register file на всю stage собрать для каждого тайла веса размера
+\texttt{64 x 256} собственную маленькую palette и выбирать в неё
+\texttt{topk = 32/48/64} id по tile-local activation-weighted influence.
+Это и был честный offline gate для \emph{Per-Tile Dynamic Palette (PTDP)}.
+Если бы проблема RRF была только в stage-global scope, такой шаг должен был бы
+резко поднять tile-local coverage. Но этого не произошло. На
+\texttt{l54.gate\_proj} / \texttt{l54.up\_proj} mean tile count-hit across
+stages составляет лишь \texttt{0.286/0.393/0.488} и
+\texttt{0.289/0.394/0.490} для \texttt{topk = 32/48/64}; лучший stage mean во
+всём прогоне --- только \texttt{0.494}, а доля тайлов с
+\texttt{count\_hit >= 0.75} равна \texttt{0.000} для каждого проверенного
+\texttt{topk}. Поэтому PTDP Step~2b, то есть runtime integration поверх B2
+kernel'а, честно даже не запускался. Этот результат уточняет предыдущий вывод:
+дело уже не только в полносвязном interference graph на stage-level, но и в
+том, что текущий Block-RVQ encoding не создаёт достаточно концентрированной
+лексики даже внутри tile. Значит, сам вопрос для M26/M27 теперь звучит ещё
+жёстче: можно ли вообще добиться маленького cached vocabulary на этих MLP-слоях
+без смены representation, а не только без смены selection policy.
+
+Следующий шаг проверял уже сам язык, а не selector: \emph{Finer-Grained Route
+Language (FGRL)}. Идея состояла в том, чтобы поднять суммарную residual depth
+с текущих \texttt{12} stages до \texttt{20}, но одновременно уменьшить
+stage-local alphabet с \texttt{256} до \texttt{80}. В терминах этого repo это
+означало не буквальный \texttt{num\_stages = 20} на split, а честную
+реализацию total-20 через \texttt{stages\_per\_split = (5,5,5,5)} при
+\texttt{product\_splits = 4}. На двухслойном gate для
+\texttt{l54.gate\_proj} / \texttt{l54.up\_proj} FGRL действительно улучшил
+качество: average layer relMSE упал с \texttt{0.0390} до \texttt{0.0172}, а
+stable \texttt{4}-window \texttt{full\_weight\_fast} eval улучшил PPL с
+\texttt{2.4054} до \texttt{2.3928}. Tile \texttt{top64} share тоже вырос
+сильно: с \texttt{0.495} до \texttt{0.909}. Но решающий механизм снова не
+сработал. Нормализованная tile occupancy не падает, а растёт:
+\texttt{0.853 -> 0.996}. То есть почти весь новый \texttt{80}-id vocabulary
+живёт в каждом tile, а высокий \texttt{top64} share получается в основном
+потому, что \texttt{64} уже почти покрывает весь alphabet, а не потому, что
+язык стал genuinely sparse. Одновременно растёт storage cost
+(\texttt{3.004 -> 5.003} bits/weight), throughput падает
+(\texttt{1483.29 -> 1309.01} tok/s), а eval peak VRAM чуть увеличивается
+(\texttt{46486.8 -> 46598.5} MB). Поэтому FGRL Step~3b как runtime branch тоже
+не был открыт. Этот результат особенно важен: он показывает, что even true
+language redesign может улучшать quality, но всё ещё не решать аппаратную
+задачу small cached vocabulary, если новая лексика остаётся почти fully live
+на уровне tile.
+
+Последний на данный момент шаг проверял уже не новую palette policy и не новый
+alphabet, а сам syntax layer языка: \emph{WAL with Structured Syntax (WAL-SS)}.
+В первой, максимально консервативной формулировке это был строго lossless
+macro layer поверх текущих \texttt{12 x 256} stage-id программ. Для
+\texttt{l54.gate\_proj} / \texttt{l54.up\_proj} были выделены до
+\texttt{128} frequent subsequences длиной \texttt{3-5}, после чего каждый
+block-program переписывался как \texttt{macro calls + literal args} с точным
+decode обратно в исходный stream. Correctness gate здесь проходит идеально:
+stage IDs совпадают exactly, \texttt{recon\_rel\_mse = 0.0}, а stable
+\texttt{4}-window \texttt{full\_weight\_fast} eval идентичен current packed
+path (\texttt{PPL = 2.4081}, \texttt{1477.69 tok/s}, peak
+\texttt{46486.8} MB). Но структурный выигрыш почти отсутствует. На каждом из
+двух слоёв имеется около \texttt{7,340,032} block-programs, и почти каждый из
+них уникален (\texttt{7,340,018} / \texttt{7,340,015} unique full programs).
+Поэтому syntax layer почти не сжимает программу: average program length падает
+лишь с \texttt{12} до \texttt{11.9985} / \texttt{11.9987}, compression ratio
+остаётся \texttt{0.999875} / \texttt{0.999889}, а macro token coverage равен
+всего \texttt{0.000176} / \texttt{0.000158}. Это важный отрицательный
+результат уже для WAL как языка: даже идеальный lossless macro wrapper не
+создаёт usable structured syntax, если сам stage-program stream почти полностью
+уникален. Значит, следующий WAL-level шаг, если он вообще будет syntax-based,
+должен строить не просто dictionary compression поверх current encoding, а
+настоящую повторяемую higher-order structure.
+
+Именно эту более сильную syntax-гипотезу затем проверил первый шаг
+\emph{WAL with Hierarchical Programs (WAL-HP)}. В первой честной формулировке
+он тоже оставался строго exact: были взяты уже четыре MLP-слоя
+(\texttt{l53/l54 gate/up}), после чего глобально, across layers, были
+выделены \texttt{256} shared subsequences длиной \texttt{3-6} и каждая
+block-program переписана как \texttt{CALL shared\_subroutine} или
+\texttt{LITERAL}. Correctness gate снова проходит идеально:
+\texttt{exact\_stage\_ids = True}, \texttt{recon\_rel\_mse = 0.0}, а stable
+\texttt{4}-window \texttt{full\_weight\_fast} gate идентичен current packed
+path на этом четырёхслойном slice (\texttt{PPL = 2.4258},
+\texttt{1216.91 tok/s}, peak \texttt{47530.4} MB). Более того, некоторый
+настоящий cross-layer reuse уже появляется: \texttt{136 / 256} selected
+subroutines используются хотя бы в двух target'ах, а strongest motif
+(\texttt{[128,128,128]}) встречается во всех четырёх. Но и этого снова
+недостаточно для нового ISA baseline. Global \texttt{call\_coverage} равен
+лишь \texttt{0.000166}, а average program length остаётся практически flat:
+\texttt{11.9973 / 11.9989 / 11.9989 / 11.9992} при raw length \texttt{12}.
+То есть even shared hierarchical subroutines пока существуют лишь как trace
+motifs, а не как meaningful high-level program surface. Поэтому WAL-HP
+Step~5b честно не запускался. Если двигаться дальше по syntax-линии, то уже
+не к ещё одному exact wrapper, а к более сильной форме структуры:
+parameterized или approximate subroutines, learned templates, либо encoder,
+который сам создаёт повторяемые higher-order blocks.
+
+Следующий probe проверил уже именно learned-template вариант этой идеи:
+\emph{WAL with Learned Route Templates (WAL-LRT)}. На том же двухслойном
+slice \texttt{l54.gate/up} был обучен банк из \texttt{256} categorical
+full-program templates длины \texttt{12}, после чего отдельно были измерены
+две поверхности: exact \texttt{TEMPLATE + literal corrections} и
+\texttt{template\_only} approximate encoding. Это первый syntax-level шаг,
+который действительно создаёт немного больше искусственной структуры, чем
+WAL-SS/WAL-HP: average program length падает до
+\texttt{11.7495 / 11.7494} при raw length \texttt{12}, а template token
+coverage поднимается до \texttt{0.04137 / 0.04130}. Exact wrapper, как и
+должно быть, сохраняет качество полностью: stable \texttt{4}-window
+\texttt{full\_weight\_fast} gate остаётся идентичен current packed path
+(\texttt{PPL = 2.4081}, \texttt{1479.74 tok/s}, peak \texttt{46486.8} MB).
+Но learned templates сами по себе ещё слишком слабы как semantics-bearing
+surface. Nearest template совпадает лишь примерно по \texttt{10.4\%} токенов
+(average Hamming distance около \texttt{10.75 / 12}), reconstruction relMSE
+взлетает до примерно \texttt{1.84 / 1.84}, а \texttt{template\_only} PPL
+ухудшается до \texttt{2.9375}. Поэтому WAL-LRT Step~6b честно не запускался:
+первый learned discrete template bank уже создаёт немного синтаксиса, но ещё
+не создаёт usable high-level ISA без большой correction tail. Следующий
+template-level шаг, если он будет, должен делать templates более выразительными
+самими по себе: parameterized templates, weight-space templates или continuous
+corrections.
+
+Следующий шаг сделал syntax-гипотезу ещё буквальнее:
+\emph{WAL as a Formal Grammar (WAL-FG)}. На том же двухслойном slice
+\texttt{l54.gate/up} была задана shallow grammar из \texttt{15} правил:
+\texttt{ROOT -> LEFT RIGHT}, затем \texttt{LEFT/RIGHT -> SLOT SLOT}, а у
+каждого из четырёх phrase-slots длины \texttt{3} есть по \texttt{3} learned
+productions. Это даёт каждой block-program длины \texttt{12} формальное дерево
+глубины \texttt{4} с \texttt{7} nonterminal nodes. Были отдельно измерены две
+поверхности: exact parse с \texttt{RULE calls + literal corrections} и
+\texttt{grammar\_only} approximate encoding без corrections. Exact parse
+действительно создаёт formal grammar surface, но почти не меняет экономику
+языка: average program length остаётся \texttt{11.9984 / 11.9988} при raw
+length \texttt{12}, а rule token coverage равен лишь
+\texttt{0.000272 / 0.000203}. Approximate grammar оказывается чуть менее
+катастрофической, чем template-only в WAL-LRT, но всё ещё недопустимой по
+quality bar: reconstruction relMSE поднимается до
+\texttt{1.2928 / 1.3448} (eval-layer relMSE около \texttt{1.31}), а stable
+\texttt{4}-window \texttt{full\_weight\_fast} gate ухудшается с
+\texttt{PPL = 2.4081} до \texttt{2.6866} при практически той же скорости и
+той же peak VRAM. Поэтому WAL-FG Step~7a тоже является честным отрицательным
+результатом: наличие formal parse tree ещё не означает наличие usable weight
+grammar. Следующий grammar-level шаг, если он вообще будет, должен искать не
+просто дерево, а productions, которые действительно несут semantics.
+
+Следующая гипотеза подняла ещё один уровень формальности:
+\emph{WAL with Route Types and Type System (WAL-TS)}. На том же slice
+\texttt{l54.gate/up} был задан простой typed layer из шести atomic types:
+\texttt{MLP\_GATE/UP x COMMON/MIXED/OUTLIER}. Каждый block-program получает
+тип по простой эвристике среднего token surprisal, после чего для каждого
+локального типа обучается собственный phrase bank и grammar уже строится как
+\texttt{TYPE + RULE calls + literal corrections}. Этот шаг действительно
+создаёт явное label-space: в каждом из двух слоёв активны все три локальных
+типа, common/outlier блоки слегка отделяются друг от друга, а их доли устойчиво
+лежат около \texttt{48.9\% / 40.8\% / 10.3\%}. Но typed grammar всё равно
+остаётся почти полностью literal: average program length равен лишь
+\texttt{11.99815 / 11.99848} при raw length \texttt{12}, а typed rule coverage
+составляет только \texttt{0.000308 / 0.000253}. Более того, approximate
+\texttt{typed\_only} surface оказывается не лучше, а хуже WAL-FG на этом
+slice: reconstruction relMSE поднимается до \texttt{1.6587 / 1.9014}
+(eval-layer relMSE около \texttt{1.75}), а stable \texttt{4}-window gate
+ухудшается с \texttt{PPL = 2.4081} до \texttt{2.7994} при практически той же
+скорости и той же peak VRAM. Поэтому WAL-TS Step~8a тоже является честным
+отрицательным результатом: наличие typed labels ещё не означает наличие
+semantics-bearing typed assembly. Если продолжать эту линию, нужны типы,
+которые действительно ограничивают и объясняют поведение программы, а не
+только переименовывают rarity bands.
+
+Следующая гипотеза подняла syntax-layer до максимально буквальной формы:
+
+\emph{WAL as Classic Assembly (WAL-ASM)}. На том же slice
+\texttt{l54.gate/up} был собран explicit assembly surface с
+\texttt{LABEL/CALL/JMP/MACRO/RET}. Для этого были обучены \texttt{64}
+full-program subroutines длины \texttt{12}, каждая из которых становится
+именованной подпрограммой \texttt{gate\_sub\_xxx / up\_sub\_xxx}; затем их
+тела дополнительно macroize-ятся \texttt{32} macros длины \texttt{3--5}, а
+между соседними \texttt{CALL}-сайтами строится dominant jump-table. Были
+отдельно измерены exact surface с \texttt{CALL + literal corrections} и
+approximate \texttt{asm\_only} surface без corrections. Exact WAL-ASM, как и
+должно быть, полностью сохраняет quality gate current packed path
+(\texttt{PPL = 2.4081}, \texttt{1481.11 tok/s}, peak \texttt{46486.8} MB),
+но control-flow остаётся только trace-level: average program length равен
+лишь \texttt{11.9288 / 11.9309} при raw length \texttt{12}, average calls ---
+\texttt{0.0702 / 0.0681}, average jumps --- всего
+\texttt{0.000177 / 0.000174}, call-token coverage --- только
+\texttt{0.0118 / 0.0114}, а macro-body coverage ---
+\texttt{0.0717 / 0.0751}. Approximate \texttt{asm\_only} surface ещё хуже с
+точки зрения semantics: token match составляет лишь
+\texttt{0.08595 / 0.08580}, reconstruction relMSE поднимается до
+\texttt{1.8789 / 1.8749} (eval-layer relMSE около \texttt{1.85}), а stable
+\texttt{4}-window gate ухудшается до \texttt{PPL = 2.9601} при практически
+той же скорости и той же peak VRAM. Поэтому WAL-ASM Step~9a тоже является
+честным отрицательным результатом: наличие классических assembly-механизмов
+ещё не означает наличие semantics-bearing weight program. Если продолжать
+эту линию, нужны не просто labels и jumps сами по себе, а representation или
+assembly semantics, где \texttt{CALL/JMP} покрывают заметную часть поведения,
+а не остаются следовым wrapper поверх nearest templates.
+
+Следующая гипотеза впервые отказалась чинить syntax-layer сверху и попробовала
+спроектировать саму ISA:
+
+\emph{WAL with Learned Discrete ISA + Semantic Constraints (WAL-LDI)}.
+На том же slice \texttt{l54.gate/up} был построен двухуровневый язык:
+сначала joint feature+sequence clustering выделяет \texttt{4} learned semantic
+families на слой, затем внутри каждой family обучается по \texttt{4} low-level
+atoms для каждого из \texttt{4} phrase-slots длины \texttt{3}. Итого получается
+\texttt{68} инструкций на слой: \texttt{4} high-level family opcodes и
+\texttt{64} family-conditioned low-level instructions. Это уже не просто
+surface wrapper. Впервые появляется реальная semantic partition: все
+\texttt{4} family активны, family entropy держится около \texttt{1.14}, а
+маленький \texttt{COMMON\_CORE} cluster отделяется очень сильно
+(margin около \texttt{6.36} на \texttt{gate} и \texttt{6.11} на \texttt{up})
+и даёт лучший local approximate match (около \texttt{0.113 / 0.109}).
+Но usable ISA из этого пока не получается. Exact program surface даже длиннее
+raw: average program length равен \texttt{12.9969 / 12.9971} при raw length
+\texttt{12}, потому что каждый block всегда несёт high-level family header,
+а low-level atoms почти не срабатывают
+(\texttt{avg low-level calls = 0.00312 / 0.00289}, token coverage только
+\texttt{0.000521 / 0.000483}). Approximate \texttt{ldi\_only} surface уже
+лучше, чем \texttt{asm\_only}, но всё ещё далека от sacred quality bar:
+reconstruction relMSE поднимается до \texttt{1.7697 / 1.8243}
+(eval-layer relMSE около \texttt{1.77}), а stable \texttt{4}-window gate
+ухудшается до \texttt{PPL = 2.8318} при практически той же скорости и той же
+peak VRAM. Поэтому WAL-LDI Step~10a --- это не победа, а первый частично
+положительный сигнал в правильном направлении: semantic families действительно
+можно выделить, но если делать это post-hoc поверх уже почти случайного
+stage-stream, язык всё ещё не становится compact semantics-bearing ISA.
+Следующий viable LDI-level шаг должен встраивать semantic constraints в сам
+encoder/ISA learning, а не только кластеризовать готовую программу после факта.
+
+Следующий шаг проверял именно эту более сильную гипотезу:
+
+\emph{WAL with End-to-End Learned ISA + Semantic Encoder (WAL-E2E)}.
+На том же slice \texttt{l54.gate/up} был добавлен маленький semantic encoder,
+который jointly предсказывает high-level family ID и family-conditioned
+low-level atom IDs по \texttt{4} phrase-slots длины \texttt{3}, а сами atoms
+обучаются одновременно с encoder'ом. Objective объединяет token reconstruction,
+semantic neighborhood consistency, family cohesion и anti-collapse
+regularization. Это действительно исправляет один важный structural defect:
+в authoritative run все \texttt{4} family остаются активны на обоих слоях,
+family entropy составляет \texttt{1.147} на \texttt{gate} и \texttt{0.802}
+на \texttt{up}, а coherent \texttt{COMMON\_CORE} island не исчезает
+(около \texttt{1.97\%} блоков и margin \texttt{6.34} на \texttt{gate};
+около \texttt{7.43\%} и margin \texttt{2.76} на \texttt{up}).
+Но usable ISA из этого всё равно не получается. Exact program surface остаётся
+ещё длиннее, чем в WAL-LDI: average program length равен
+\texttt{12.9988 / 12.9988} при raw length \texttt{12}; low-level atoms почти
+не используются (\texttt{avg low-level calls = 0.00119 / 0.00118}, token
+coverage лишь \texttt{0.000199 / 0.000197}). Approximate \texttt{e2e\_only}
+surface по quality тоже не проходит sacred bar:
+eval-layer relMSE составляет около \texttt{1.70}, а stable \texttt{4}-window
+gate ухудшается до \texttt{PPL = 2.8847}, что даже хуже первого WAL-LDI
+baseline. Поэтому WAL-E2E Step~11a --- тоже честный отрицательный результат,
+но уже более содержательный: недостаточно просто перенести semantic ISA внутрь
+encoder loop, если objective всё ещё учит в основном token reconstruction на
+готовом stage language. Следующий viable E2E-level шаг должен оптимизировать
+не только token CE, а напрямую weight/block reconstruction или layer-output
+semantics вместе с explicit program-cost / correction-budget loss.
+
+\emph{WAL with Direct Block Reconstruction + Explicit Program Cost (WAL-DR)}.
+Следующий шаг уже меняет сам objective. На том же slice \texttt{l54.gate/up}
+сохраняется semantic encoder и family-conditioned atom bank, но основной loss
+теперь оптимизирует direct final-block reconstruction под текущим Block-RVQ
+surface, а отдельный program-cost proxy штрафует correction-heavy exact
+program. Это даёт первый содержательный сигнал, что bottleneck действительно
+сидел в objective: все \texttt{4} family остаются активны (family entropy
+\texttt{1.1188} на \texttt{gate} и \texttt{1.2486} на \texttt{up}), а
+approximate \texttt{dr\_only} surface становится заметно лучше, чем и у
+WAL-LDI, и у WAL-E2E: eval-layer relMSE падает до примерно \texttt{1.54}, а
+stable \texttt{4}-window gate ухудшается лишь до \texttt{PPL = 2.7325} вместо
+\texttt{2.8318} у \texttt{ldi\_only} и \texttt{2.8847} у
+\texttt{e2e\_only}. Но compressible ISA из этого всё ещё не получается.
+Exact program остаётся длиннее raw: average program length равен
+\texttt{12.9984 / 12.9988} при raw length \texttt{12}, low-level atoms всё
+ещё почти не используются (\texttt{avg low-level calls = 0.00156 / 0.00117},
+token coverage \texttt{0.000260 / 0.000195}). Поэтому WAL-DR Step~12a --- это
+не новая baseline ISA, а первый положительный objective-level correction:
+quality-side заметно улучшается, но exact program всё ещё остаётся почти
+полностью correction-dominated. Следующий viable шаг должен привязывать cost
+ещё ближе к downstream behavior --- например, к layer-output reconstruction
+и/или к более явному выбору между high-level calls и literal corrections.
+
+\emph{WAL with Layer-Output Reconstruction + Strong Program Cost (WAL-LO)}.
+Следующий шаг проверил именно эту более сильную формулировку: main objective
+переносится с block-local reconstruction на activation-conditioned
+layer-output contributions по реальным captured layer inputs, а exact-program
+economics усиливаются отдельными штрафами и explicit decision head для выбора
+``atom vs literal''. Это действительно приближает loss к downstream behavior
+слоя. Но первая честная реализация показывает, что и этого пока недостаточно.
+Exact path остаётся identical by construction, approximate
+\texttt{lo\_only} surface не превосходит WAL-DR
+(stable \texttt{4}-window gate даёт \texttt{PPL = 2.7463} против
+\texttt{2.7325} у \texttt{dr\_only}), а exact program почти полностью
+схлопывается в literal fallback: average program length составляет
+\texttt{13.0018 / 13.0000} при raw length \texttt{12}, low-level calls лишь
+\texttt{0.0140 / 0.0000}. То есть даже objective, привязанный к layer-output
+behavior, ещё не создаёт короткую exact ISA, если atom bank не становится
+действительно экономически полезным.
+
+\emph{WAL with Learnable High-Expressivity Atoms (WAL-LHA)}.
+Следующий шаг оставил WAL-LO objective surface почти без изменений, но сменил
+сами low-level atoms: теперь каждый atom задаётся маленьким expressive module,
+который производит context-dependent token logits поверх learned base phrase
+prior, а training дополнительно включает atom-selection loss и прямой bonus за
+использование atoms, когда они улучшают match относительно static bank. Это
+даёт первый mixed result в правильную сторону: approximate
+\texttt{lha\_only} surface становится лучшей в текущей objective-линии
+(stable gate даёт \texttt{PPL = 2.7179}, немного лучше
+\texttt{dr\_only = 2.7325} и явно лучше \texttt{lo\_only = 2.7463}), а
+sample layer-output relMSE улучшается до примерно \texttt{1.34 / 1.21}. Но
+exact economics почти не сдвигаются: average program length остаётся
+\texttt{13.0006 / 13.0000} при raw length \texttt{12}, а low-level calls лишь
+\texttt{0.0083 / 0.0000}. То есть более выразительные atoms уже помогают как
+better approximate language, но всё ещё не становятся economically useful exact
+instructions.
+
+\emph{WAL with Strict Budgeted Compatibility (WAL-SBC)}.
+Следующий шаг уже не усиливал atoms, а менял сам contract exactness: кроме
+старого strict legacy path, теперь существует \texttt{budgeted\_exact} route,
+где atom принимается только если одновременно выполняются жёсткие block-level и
+activation-conditioned output-level budgets, а fallback идёт сначала в маленький
+residual phrase bank и лишь затем в literals. Это важный, но отрицательный
+diagnostic result. На первом честном gate уже на \texttt{16} окнах
+\texttt{budgeted\_exact} почти не отличается от legacy по quality/runtime
+(\texttt{PPL 2.8055 -> 2.8069}, throughput и peak VRAM практически те же), то
+есть смена exactness-contract сама по себе не разрушает систему. Но program
+economics почти не сдвигаются: average program length остаётся
+\texttt{12.9983 / 12.9985} при raw length \texttt{12}, atom calls фактически
+нулевые, а residual calls лишь \texttt{0.0017 / 0.0014}. Значит, пересмотреть
+definition of exact match действительно было нужно, но первая строгая
+budget-геометрия всё ещё слишком консервативна, чтобы materially купить usable
+exact-program surface.
+
+Следующий шаг уже был намеренно двухшаговым и percentile-driven: сначала
+\texttt{m27\_wal\_sbc\_budget\_profile.py} измеряет реальные CDF для
+\texttt{atom\_output\_rel\_mse} и best-residual error на сохранённом
+expressive-atom ISA, затем \texttt{m27\_wal\_sbc\_tune\_proto.py} гоняет
+только узкий grid с screening на \texttt{4} окнах и честным gate лишь для
+лучших \texttt{2} конфигураций на \texttt{16} окнах. Это даёт более чистый
+verdict: loose percentile budgets действительно мгновенно оживляют non-literal
+path (у лучших finalists \texttt{mean\_nonliteral\_calls \~ 3.85},
+\texttt{avg\_program\_length \~ 4.8}), но ломают sacred quality bar
+(\texttt{16}-window \texttt{PPL delta vs strict legacy \~ +0.37}). Значит,
+этот результат уже оправдывает переход к WAL-CDA: следующий шаг должен менять
+сам basis через экономически ограниченный context-aware atom layer, а не делать
+ещё один blind widening budgets. При этом сам CDA-probe тоже должен быть жёстко
+ограничен: embeddings для дискретных identity-сигналов, только cheap detached
+activation summary вместо полного live input, factorized low-rank delta поверх
+base prior и soft expected-cost usefulness surrogate против лучшего старого
+accepted path на том же budget-contract. Если SBC когда-то и продолжать отдельно, то
+только через существенно более tight или shape-aware acceptance geometry.
+
+\item \textbf{M27.} WAL grammar induction: маленький transformer обучается
+предсказывать следующий $(s,i)$ токен; embedding-пространство токенов и
+per-layer grammaticality становятся новой диагностикой.
+\item \textbf{M28.} Component-specific dialects \texttt{WAL-Attn / WAL-MLP /
+WAL-Head / WAL-Norm}.
+\item \textbf{M29.} WAL $\leftrightarrow$ WAL translation между двумя моделями
+одного семейства как proxy weight merging без fine-tuning.
+\item \textbf{M30.} Production-ready inference + первая публичная статья и
+open release.
+\end{itemize}
+
+\section{Что дописывать дальше}
+
+Этот файл дальше нужно дополнять по четырём направлениям:
+
+\begin{itemize}[leftmargin=1.5em]
+\item формальная постановка и related work;
+\item точное описание encode/decode/codebook pipeline;
+\item полная таблица materialized-vs-packed runtime с явным разделением
+deployable и research веток;
+\item отдельная методологическая вставка о same-encoding compare;
+\item расширенный раздел с отрицательными результатами и engineering lessons;
+\item единая WAL-таблица для M26 stage-2 probes B0--B3 с честным pass/fail gate
+по exactness, hit rate, throughput и peak VRAM.
+\end{itemize}

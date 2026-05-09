@@ -1,0 +1,233 @@
+{
+  "text_source": "raw",
+  "num_windows": 16,
+  "rvq_cfg": {
+    "group_rows": 2048,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 4,
+    "normalize_blocks": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "modes": [
+    "l0_q",
+    "l0_v",
+    "l0_gu"
+  ],
+  "l0_q": {
+    "metrics": {
+      "perplexity": 2.778484666610503,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 8.576332807540894,
+      "tok_s": 1134.28434020733
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45992.0,
+        "peak_mb": 45637.1
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45696.9,
+        "reserved_mb": 45698.0,
+        "peak_mb": 45696.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44436.8,
+        "reserved_mb": 44438.0,
+        "peak_mb": 44436.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 45696.9,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "tensor_name": "model.layers.0.self_attn.q_proj.weight",
+        "runtime_decision": "eager_block_rvq",
+        "rel_mse": 0.0026305674109607935,
+        "storage_bytes": 8667136,
+        "bits_per_weight": 1.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 4,
+        "normalize_blocks": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.0026305674109607935
+  },
+  "l0_v": {
+    "metrics": {
+      "perplexity": 1159.6370549377357,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 8.257471561431885,
+      "tok_s": 1178.084590134891
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45854.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44702.0,
+        "peak_mb": 44614.9
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 45728.9,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.self_attn.v_proj",
+        "tensor_name": "model.layers.0.self_attn.v_proj.weight",
+        "runtime_decision": "eager_block_rvq",
+        "rel_mse": 0.0019167355494573712,
+        "storage_bytes": 1116160,
+        "bits_per_weight": 1.064453125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 4,
+        "normalize_blocks": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.0019167355494573712
+  },
+  "l0_gu": {
+    "metrics": {
+      "perplexity": 4.79616621852429,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 8.277962923049927,
+      "tok_s": 1175.1683464191965
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45758.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 49290.0,
+        "peak_mb": 48557.7
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 48557.7,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.mlp.gate_proj",
+        "tensor_name": "model.layers.0.mlp.gate_proj.weight",
+        "runtime_decision": "eager_block_rvq",
+        "rel_mse": 0.010137836448848248,
+        "storage_bytes": 30334976,
+        "bits_per_weight": 1.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 4,
+        "normalize_blocks": "none"
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj",
+        "tensor_name": "model.layers.0.mlp.up_proj.weight",
+        "runtime_decision": "eager_block_rvq",
+        "rel_mse": 0.010203706100583076,
+        "storage_bytes": 30334976,
+        "bits_per_weight": 1.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 4,
+        "normalize_blocks": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.010170771274715662
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "text_source": "raw",
+  "num_windows": 16,
+  "runtime_kind": "packed",
+  "rvq_cfg": {
+    "group_rows": 128,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 3,
+    "product_splits": 4,
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "modes": [
+    "l54_v"
+  ],
+  "l54_v": {
+    "metrics": {
+      "perplexity": 2.7886736237369716,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 8.080240488052368,
+      "tok_s": 1203.9245631839854
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44457.3,
+        "reserved_mb": 47802.0,
+        "peak_mb": 47203.3
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44436.8,
+        "reserved_mb": 44438.0,
+        "peak_mb": 44436.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45696.9,
+        "reserved_mb": 45698.0,
+        "peak_mb": 45696.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44457.3,
+        "reserved_mb": 44688.0,
+        "peak_mb": 44617.3
+      }
+    ],
+    "eval_peak_mb": 47203.3,
+    "replace_peak_mb": 45696.9,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.self_attn.v_proj",
+        "tensor_name": "model.layers.54.self_attn.v_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.03331012278795242,
+        "storage_bytes": 3540992,
+        "bits_per_weight": 3.376953125,
+        "group_rows": 128,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 3,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.03331012278795242
+  }
+}

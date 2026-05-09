@@ -1,0 +1,998 @@
+{
+  "targets": [
+    "model.layers.53.mlp.gate_proj",
+    "model.layers.53.mlp.up_proj",
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "text_source": "local",
+  "num_windows": 4,
+  "matmul_strategy": "full_weight_fast",
+  "subroutine_lengths": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "num_subroutines": 256,
+  "dense": {
+    "metrics": {
+      "perplexity": 2.3852471794409666,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.259134531021118,
+      "tok_s": 1586.44823970711
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 88533.7,
+        "reserved_mb": 90110.0,
+        "peak_mb": 89459.7
+      },
+      {
+        "device": 1,
+        "allocated_mb": 46271.3,
+        "reserved_mb": 49664.0,
+        "peak_mb": 49025.4
+      },
+      {
+        "device": 2,
+        "allocated_mb": 0.0,
+        "reserved_mb": 0.0,
+        "peak_mb": 0.0
+      }
+    ],
+    "eval_peak_mb": 89459.7
+  },
+  "current_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_hp_current_l53_l54_gate_up.pt",
+  "subroutine_cache": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_hp_subroutines_l53_l54_gate_up.pt",
+  "wal_hp": [
+    {
+      "name": "model.layers.53.mlp.gate_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.997336932591029,
+      "avg_calls": 0.0009903226579938615,
+      "avg_literals": 11.996346609933036,
+      "call_coverage": 0.0003044491722470238,
+      "program_compression_ratio": 0.9997780777159191,
+      "selected_subroutine_count": 256,
+      "used_subroutine_count": 198,
+      "top_subroutines": [
+        {
+          "subroutine_id": 23,
+          "length": 3,
+          "freq": 284,
+          "score": 568,
+          "used_calls": 168,
+          "pattern": [
+            80,
+            40,
+            238
+          ]
+        },
+        {
+          "subroutine_id": 18,
+          "length": 3,
+          "freq": 296,
+          "score": 592,
+          "used_calls": 167,
+          "pattern": [
+            80,
+            40,
+            22
+          ]
+        },
+        {
+          "subroutine_id": 5,
+          "length": 5,
+          "freq": 197,
+          "score": 788,
+          "used_calls": 146,
+          "pattern": [
+            91,
+            216,
+            216,
+            45,
+            125
+          ]
+        },
+        {
+          "subroutine_id": 7,
+          "length": 5,
+          "freq": 187,
+          "score": 748,
+          "used_calls": 136,
+          "pattern": [
+            91,
+            159,
+            14,
+            45,
+            125
+          ]
+        },
+        {
+          "subroutine_id": 10,
+          "length": 5,
+          "freq": 170,
+          "score": 680,
+          "used_calls": 117,
+          "pattern": [
+            91,
+            159,
+            157,
+            45,
+            125
+          ]
+        },
+        {
+          "subroutine_id": 241,
+          "length": 3,
+          "freq": 109,
+          "score": 218,
+          "used_calls": 113,
+          "pattern": [
+            246,
+            80,
+            40
+          ]
+        },
+        {
+          "subroutine_id": 111,
+          "length": 3,
+          "freq": 165,
+          "score": 330,
+          "used_calls": 106,
+          "pattern": [
+            239,
+            80,
+            40
+          ]
+        },
+        {
+          "subroutine_id": 70,
+          "length": 3,
+          "freq": 199,
+          "score": 398,
+          "used_calls": 102,
+          "pattern": [
+            46,
+            80,
+            40
+          ]
+        },
+        {
+          "subroutine_id": 9,
+          "length": 5,
+          "freq": 174,
+          "score": 696,
+          "used_calls": 101,
+          "pattern": [
+            45,
+            125,
+            46,
+            80,
+            40
+          ]
+        },
+        {
+          "subroutine_id": 147,
+          "length": 3,
+          "freq": 142,
+          "score": 284,
+          "used_calls": 100,
+          "pattern": [
+            80,
+            40,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "name": "model.layers.53.mlp.up_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.998850005013603,
+      "avg_calls": 0.0004772458757672991,
+      "avg_literals": 11.998372759137835,
+      "call_coverage": 0.00013560340518043156,
+      "program_compression_ratio": 0.9999041670844668,
+      "selected_subroutine_count": 256,
+      "used_subroutine_count": 149,
+      "top_subroutines": [
+        {
+          "subroutine_id": 88,
+          "length": 3,
+          "freq": 182,
+          "score": 364,
+          "used_calls": 185,
+          "pattern": [
+            13,
+            36,
+            36
+          ]
+        },
+        {
+          "subroutine_id": 131,
+          "length": 3,
+          "freq": 152,
+          "score": 304,
+          "used_calls": 157,
+          "pattern": [
+            13,
+            210,
+            44
+          ]
+        },
+        {
+          "subroutine_id": 179,
+          "length": 3,
+          "freq": 127,
+          "score": 254,
+          "used_calls": 135,
+          "pattern": [
+            13,
+            45,
+            45
+          ]
+        },
+        {
+          "subroutine_id": 67,
+          "length": 4,
+          "freq": 134,
+          "score": 402,
+          "used_calls": 121,
+          "pattern": [
+            95,
+            71,
+            41,
+            206
+          ]
+        },
+        {
+          "subroutine_id": 225,
+          "length": 3,
+          "freq": 114,
+          "score": 228,
+          "used_calls": 120,
+          "pattern": [
+            13,
+            210,
+            88
+          ]
+        },
+        {
+          "subroutine_id": 224,
+          "length": 3,
+          "freq": 114,
+          "score": 228,
+          "used_calls": 111,
+          "pattern": [
+            199,
+            124,
+            183
+          ]
+        },
+        {
+          "subroutine_id": 63,
+          "length": 4,
+          "freq": 137,
+          "score": 411,
+          "used_calls": 102,
+          "pattern": [
+            199,
+            124,
+            231,
+            13
+          ]
+        },
+        {
+          "subroutine_id": 16,
+          "length": 4,
+          "freq": 205,
+          "score": 615,
+          "used_calls": 99,
+          "pattern": [
+            206,
+            122,
+            205,
+            199
+          ]
+        },
+        {
+          "subroutine_id": 54,
+          "length": 3,
+          "freq": 220,
+          "score": 440,
+          "used_calls": 92,
+          "pattern": [
+            199,
+            124,
+            231
+          ]
+        },
+        {
+          "subroutine_id": 26,
+          "length": 3,
+          "freq": 278,
+          "score": 556,
+          "used_calls": 89,
+          "pattern": [
+            206,
+            122,
+            205
+          ]
+        }
+      ]
+    },
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.998886789594378,
+      "avg_calls": 0.00046934400285993306,
+      "avg_literals": 11.998417445591517,
+      "call_coverage": 0.00013187953404017856,
+      "program_compression_ratio": 0.9999072324661982,
+      "selected_subroutine_count": 256,
+      "used_subroutine_count": 148,
+      "top_subroutines": [
+        {
+          "subroutine_id": 22,
+          "length": 3,
+          "freq": 290,
+          "score": 580,
+          "used_calls": 273,
+          "pattern": [
+            186,
+            36,
+            88
+          ]
+        },
+        {
+          "subroutine_id": 158,
+          "length": 3,
+          "freq": 137,
+          "score": 274,
+          "used_calls": 137,
+          "pattern": [
+            186,
+            36,
+            164
+          ]
+        },
+        {
+          "subroutine_id": 50,
+          "length": 3,
+          "freq": 225,
+          "score": 450,
+          "used_calls": 137,
+          "pattern": [
+            186,
+            186,
+            186
+          ]
+        },
+        {
+          "subroutine_id": 219,
+          "length": 3,
+          "freq": 116,
+          "score": 232,
+          "used_calls": 125,
+          "pattern": [
+            128,
+            68,
+            128
+          ]
+        },
+        {
+          "subroutine_id": 238,
+          "length": 3,
+          "freq": 111,
+          "score": 222,
+          "used_calls": 121,
+          "pattern": [
+            186,
+            184,
+            175
+          ]
+        },
+        {
+          "subroutine_id": 211,
+          "length": 3,
+          "freq": 118,
+          "score": 236,
+          "used_calls": 120,
+          "pattern": [
+            186,
+            36,
+            8
+          ]
+        },
+        {
+          "subroutine_id": 226,
+          "length": 3,
+          "freq": 114,
+          "score": 228,
+          "used_calls": 112,
+          "pattern": [
+            186,
+            151,
+            44
+          ]
+        },
+        {
+          "subroutine_id": 237,
+          "length": 3,
+          "freq": 111,
+          "score": 222,
+          "used_calls": 109,
+          "pattern": [
+            186,
+            151,
+            58
+          ]
+        },
+        {
+          "subroutine_id": 166,
+          "length": 3,
+          "freq": 131,
+          "score": 262,
+          "used_calls": 106,
+          "pattern": [
+            186,
+            151,
+            107
+          ]
+        },
+        {
+          "subroutine_id": 120,
+          "length": 3,
+          "freq": 158,
+          "score": 316,
+          "used_calls": 97,
+          "pattern": [
+            48,
+            214,
+            206
+          ]
+        }
+      ]
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "raw_program_length": 12,
+      "avg_program_length": 11.999220848083496,
+      "avg_calls": 0.00032833644321986606,
+      "avg_literals": 11.998892511640276,
+      "call_coverage": 9.229069664364769e-05,
+      "program_compression_ratio": 0.9999350706736246,
+      "selected_subroutine_count": 256,
+      "used_subroutine_count": 142,
+      "top_subroutines": [
+        {
+          "subroutine_id": 0,
+          "length": 3,
+          "freq": 1323,
+          "score": 2646,
+          "used_calls": 319,
+          "pattern": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "subroutine_id": 71,
+          "length": 3,
+          "freq": 199,
+          "score": 398,
+          "used_calls": 185,
+          "pattern": [
+            128,
+            122,
+            203
+          ]
+        },
+        {
+          "subroutine_id": 1,
+          "length": 4,
+          "freq": 588,
+          "score": 1764,
+          "used_calls": 173,
+          "pattern": [
+            128,
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "subroutine_id": 95,
+          "length": 3,
+          "freq": 173,
+          "score": 346,
+          "used_calls": 166,
+          "pattern": [
+            128,
+            72,
+            72
+          ]
+        },
+        {
+          "subroutine_id": 102,
+          "length": 3,
+          "freq": 171,
+          "score": 342,
+          "used_calls": 164,
+          "pattern": [
+            128,
+            122,
+            116
+          ]
+        },
+        {
+          "subroutine_id": 205,
+          "length": 3,
+          "freq": 120,
+          "score": 240,
+          "used_calls": 122,
+          "pattern": [
+            128,
+            103,
+            103
+          ]
+        },
+        {
+          "subroutine_id": 159,
+          "length": 4,
+          "freq": 90,
+          "score": 270,
+          "used_calls": 73,
+          "pattern": [
+            128,
+            92,
+            162,
+            128
+          ]
+        },
+        {
+          "subroutine_id": 184,
+          "length": 4,
+          "freq": 84,
+          "score": 252,
+          "used_calls": 73,
+          "pattern": [
+            128,
+            92,
+            154,
+            128
+          ]
+        },
+        {
+          "subroutine_id": 155,
+          "length": 3,
+          "freq": 139,
+          "score": 278,
+          "used_calls": 72,
+          "pattern": [
+            128,
+            87,
+            203
+          ]
+        },
+        {
+          "subroutine_id": 227,
+          "length": 4,
+          "freq": 76,
+          "score": 228,
+          "used_calls": 72,
+          "pattern": [
+            128,
+            216,
+            181,
+            128
+          ]
+        }
+      ]
+    }
+  ],
+  "subroutine_summary": {
+    "selected_subroutine_count": 256,
+    "shared_subroutine_count": 136,
+    "global_call_coverage": 0.00016605570202782042,
+    "top_subroutines": [
+      {
+        "subroutine_id": 0,
+        "length": 3,
+        "freq": 1323,
+        "score": 2646,
+        "pattern": [
+          128,
+          128,
+          128
+        ],
+        "used_in_targets": 4
+      },
+      {
+        "subroutine_id": 1,
+        "length": 4,
+        "freq": 588,
+        "score": 1764,
+        "pattern": [
+          128,
+          128,
+          128,
+          128
+        ],
+        "used_in_targets": 3
+      },
+      {
+        "subroutine_id": 2,
+        "length": 4,
+        "freq": 280,
+        "score": 840,
+        "pattern": [
+          91,
+          216,
+          216,
+          45
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 3,
+        "length": 5,
+        "freq": 209,
+        "score": 836,
+        "pattern": [
+          128,
+          128,
+          128,
+          128,
+          128
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 4,
+        "length": 4,
+        "freq": 264,
+        "score": 792,
+        "pattern": [
+          91,
+          159,
+          14,
+          45
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 5,
+        "length": 5,
+        "freq": 197,
+        "score": 788,
+        "pattern": [
+          91,
+          216,
+          216,
+          45,
+          125
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 6,
+        "length": 3,
+        "freq": 382,
+        "score": 764,
+        "pattern": [
+          186,
+          151,
+          174
+        ],
+        "used_in_targets": 4
+      },
+      {
+        "subroutine_id": 7,
+        "length": 5,
+        "freq": 187,
+        "score": 748,
+        "pattern": [
+          91,
+          159,
+          14,
+          45,
+          125
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 8,
+        "length": 4,
+        "freq": 238,
+        "score": 714,
+        "pattern": [
+          91,
+          159,
+          157,
+          45
+        ],
+        "used_in_targets": 1
+      },
+      {
+        "subroutine_id": 9,
+        "length": 5,
+        "freq": 174,
+        "score": 696,
+        "pattern": [
+          45,
+          125,
+          46,
+          80,
+          40
+        ],
+        "used_in_targets": 1
+      }
+    ]
+  },
+  "encoding_compare": [
+    {
+      "name": "model.layers.53.mlp.gate_proj",
+      "exact_stage_ids": true,
+      "max_stage_id_diff": 0,
+      "recon_rel_mse": 0.0
+    },
+    {
+      "name": "model.layers.53.mlp.up_proj",
+      "exact_stage_ids": true,
+      "max_stage_id_diff": 0,
+      "recon_rel_mse": 0.0
+    },
+    {
+      "name": "model.layers.54.mlp.gate_proj",
+      "exact_stage_ids": true,
+      "max_stage_id_diff": 0,
+      "recon_rel_mse": 0.0
+    },
+    {
+      "name": "model.layers.54.mlp.up_proj",
+      "exact_stage_ids": true,
+      "max_stage_id_diff": 0,
+      "recon_rel_mse": 0.0
+    }
+  ],
+  "current_eval": {
+    "metrics": {
+      "perplexity": 2.425781396792792,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.9451711177825928,
+      "tok_s": 1216.9072208946484
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 46079.4,
+        "reserved_mb": 52014.0,
+        "peak_mb": 51650.6
+      },
+      {
+        "device": 2,
+        "allocated_mb": 42804.8,
+        "reserved_mb": 42806.0,
+        "peak_mb": 42804.8
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 46080.3,
+        "reserved_mb": 47984.0,
+        "peak_mb": 47530.4
+      },
+      {
+        "device": 2,
+        "allocated_mb": 42836.8,
+        "reserved_mb": 46196.0,
+        "peak_mb": 45574.8
+      }
+    ],
+    "replace_peak_mb": 51650.6,
+    "eval_peak_mb": 47530.4,
+    "avg_layer_rel_mse": 0.03909480385482311,
+    "layer_stats": [
+      {
+        "name": "model.layers.53.mlp.gate_proj",
+        "tensor_name": "model.layers.53.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03953047841787338,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.53.mlp.up_proj",
+        "tensor_name": "model.layers.53.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03879726305603981,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "hp_eval": {
+    "metrics": {
+      "perplexity": 2.425781396792792,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.9451711177825928,
+      "tok_s": 1216.9072208946484
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 46079.4,
+        "reserved_mb": 52014.0,
+        "peak_mb": 51650.6
+      },
+      {
+        "device": 2,
+        "allocated_mb": 42804.8,
+        "reserved_mb": 42806.0,
+        "peak_mb": 42804.8
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45822.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 46080.3,
+        "reserved_mb": 47984.0,
+        "peak_mb": 47530.4
+      },
+      {
+        "device": 2,
+        "allocated_mb": 42836.8,
+        "reserved_mb": 46196.0,
+        "peak_mb": 45574.8
+      }
+    ],
+    "replace_peak_mb": 51650.6,
+    "eval_peak_mb": 47530.4,
+    "avg_layer_rel_mse": 0.03909480385482311,
+    "layer_stats": [
+      {
+        "name": "model.layers.53.mlp.gate_proj",
+        "tensor_name": "model.layers.53.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03953047841787338,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.53.mlp.up_proj",
+        "tensor_name": "model.layers.53.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03879726305603981,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ],
+    "by_construction_identical": true
+  },
+  "delta": {
+    "ppl_delta": 0.0,
+    "tok_s_delta": 0.0,
+    "peak_mb_delta": 0.0
+  }
+}

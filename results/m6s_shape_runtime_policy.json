@@ -1,0 +1,60 @@
+{
+  "criteria": {
+    "max_grouped_local_mse": 0.0001,
+    "min_local_vs_global_full": 1.0,
+    "selection_metric": "min_avg_ms_grouped_local"
+  },
+  "selected": [
+    {
+      "tensor_name": "model.layers.0.self_attn.q_proj.weight",
+      "family": "q_proj",
+      "layer_idx": 0,
+      "base_unique": 383,
+      "distilled_output_mse": 0.0009995514992624521,
+      "local_vs_global_triton": 1.2723203044122997,
+      "decision": "local_palette_grouped",
+      "group_rows": 8192,
+      "group_cols": 8192,
+      "avg_launches": 1.0,
+      "avg_mean_group_unique": 1593.0,
+      "avg_total_group_unique": 1593.0,
+      "avg_group_area": 67108864.0,
+      "avg_ms_grouped_local": 0.9488336086273194,
+      "avg_ms_grouped_global": 1.4815248012542725,
+      "avg_ms_global_full": 1.4433472394943236,
+      "avg_local_vs_grouped_global": 1.5614244198154283,
+      "avg_local_vs_global_full": 1.5212009126551078,
+      "avg_grouped_local_mse": 4.583540089697635e-06,
+      "num_measurements": 4
+    },
+    {
+      "tensor_name": "model.layers.0.mlp.up_proj.weight",
+      "family": "up_proj",
+      "layer_idx": 0,
+      "base_unique": 518,
+      "distilled_output_mse": 0.0006103144842199981,
+      "local_vs_global_triton": 1.2660865549507283,
+      "decision": "local_palette_grouped",
+      "group_rows": 28672,
+      "group_cols": 8192,
+      "avg_launches": 1.0,
+      "avg_mean_group_unique": 1511.0,
+      "avg_total_group_unique": 1511.0,
+      "avg_group_area": 234881024.0,
+      "avg_ms_grouped_local": 3.134611129760742,
+      "avg_ms_grouped_global": 4.990707015991211,
+      "avg_ms_global_full": 4.896755218505859,
+      "avg_local_vs_grouped_global": 1.5921295527245,
+      "avg_local_vs_global_full": 1.5621571594686507,
+      "avg_grouped_local_mse": 1.3965739071863936e-06,
+      "num_measurements": 1
+    }
+  ],
+  "unassigned": [],
+  "summary": {
+    "selected": 2,
+    "unassigned": 0,
+    "mean_selected_local_vs_global_full": 1.5416790360618793,
+    "mean_selected_ms_grouped_local": 2.041722369194031
+  }
+}

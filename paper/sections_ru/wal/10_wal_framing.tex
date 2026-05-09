@@ -1,0 +1,41 @@
+\section{Weight Assembly Language: смена парадигмы}
+
+После M20--M25 удобнее переформулировать проект не как ``ещё один способ сжать
+веса'', а как первый шаг к weight-assembly toolchain для большой языковой модели.
+В этой раме каждый вес $w$ трактуется как машинная инструкция в нейронной ISA,
+специфичной для модели; Block-RVQ encoder --- это дизассемблер $w \to (s,i)$
+token'ов; codebook и ladder --- регистровый файл и immediate values;
+stage-local hot/cold --- первая компиляторная оптимизация уровня \texttt{-O1};
+same-encoding harness --- reproducible build для weight-программы.
+
+\subsection{Формальные объекты, на которые опираются следующие milestone-ы}
+
+Для каждого слоя $l$, позиции $(n,k)$, sub-stage $s$ и токена $i$ вводится
+activation-aware influence:
+
+$$ I_{l,n,k}(s,i) = \| x_{l,n} \|_2 \cdot r_{l,n} \cdot \| c_{l,s,i} \|_2 \cdot |d_{s,i}|. $$
+
+Stage-local grammar entropy при $p(i) \propto I_{l,s}(i)$:
+
+$$ H_{l,s} = - \sum_{i \in V_{l,s}} p(i) \log p(i). $$
+
+Бюджет ошибки по стадиям:
+
+$$ \mathbb{E}\big[\| W - \hat W^{(S)} \|_F^2\big] \le \sum_{s=1}^S \lambda_s \sigma_s^2. $$
+
+Deployment quality WAL-стека:
+
+$$ \mathrm{WAL\text{-}Q} = \alpha (1 - \Delta\mathrm{PPL}) + \beta \frac{\mathrm{tok/s}_{\mathrm{WAL}}}{\mathrm{tok/s}_{\mathrm{dense}}} + \gamma \frac{\mathrm{VRAM}_{\mathrm{dense}}}{\mathrm{VRAM}_{\mathrm{WAL}}}. $$
+
+\subsection{Component-specific WAL dialects}
+
+Llama-3.3-70B не однороден, и WAL должен это явно отражать. На текущем этапе
+выделяются следующие диалекты на общем $(s,i)$ ISA:
+
+\begin{itemize}[leftmargin=1.5em]
+\item \texttt{WAL-Attn} для $q/k/v/o$ с RoPE-фазовой важностью токенов;
+\item \texttt{WAL-MLP} для $gate/up/down$ с SwiGLU-aware influence и
+отдельным residual branch для тяжёлого $down\_proj$;
+\item \texttt{WAL-Head} для $lm\_head$ с vocab-aware codebook;
+\item \texttt{WAL-Norm} для RMSNorm-скейлов как ternary или 8-bit scale+shift.
+\end{itemize}

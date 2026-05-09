@@ -1,0 +1,139 @@
+\subsection{Первый реализованный RouteDistill pilot}
+
+Это направление уже не является чисто концептуальным: был реализован минимальный
+tile-local pilot в `src/route_distill.py` и `experiments/m6_route_distill_pilot.py`.
+
+Его схема проста:
+
+\begin{enumerate}[leftmargin=1.7em]
+\item выбрать реальный tile из уже закодированного слоя с высокой route-diversity;
+\item взять teacher как row-normalized dense tile;
+\item задать student в виде малого локального palette значений, который затем
+проецируется обратно в допустимые route-values из глобального codebook слоя;
+\item оптимизировать student по output-MSE на sampled activations.
+\end{enumerate}
+
+Первый pilot на `model.layers.0.self_attn.q_proj.weight` с tile размера
+`128 \times 128` дал следующий результат: выбранный tile содержал `413`
+уникальных route, а после сжатия до local palette размера `16` получился
+student с output-MSE `0.01093` и weight-MSE `1.106 \times 10^{-4}` против
+teacher tile.
+
+Этот результат ещё недостаточен для немедленного runtime-внедрения, но он важен
+как доказательство принципа: локальное route-distillation действительно может
+резко уменьшать route-diversity внутри tile. Значит, следующий шаг состоит уже
+не в доказательстве осуществимости, а в поиске лучшего objective и лучшей
+parameterization student'а.
+
+Следующий шаг уже дал более сильный результат: после добавления constrained
+post-projection palette refinement был проведён multi-tile sweep на трёх sampled
+high-diversity tile того же `layer0.q_proj`. Для tile размера `128 \times 128`
+получены следующие summary-результаты:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Palette & mean output MSE & mean weight MSE & mean unique \\
+\midrule
+16 & $9.31 \times 10^{-4}$ & $6.88 \times 10^{-6}$ & 15.7 \\
+32 & $6.46 \times 10^{-4}$ & $5.23 \times 10^{-6}$ & 29.3 \\
+64 & $6.04 \times 10^{-4}$ & $4.83 \times 10^{-6}$ & 55.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+При этом режим с palette `64` дал лучший mean-error, но чуть худший median-error,
+чем palette `32`, что показывает: objective уже заметно улучшен, но ещё не
+полностью стабилен. Тем не менее это важный качественный сдвиг: локальная ошибка
+снизилась примерно на порядок относительно первого pilot, а значит,
+RouteDistill-подход уже выглядит как реальный кандидат на дальнейшее развитие.
+
+Важно явно зафиксировать смысл параметра palette size. В наших экспериментах
+palette `32` не означает ``32 маршрута на всю матрицу''. Это означает, что один
+tile, например блок размера `128 \times 128`, имеет право использовать не более
+`32` локальных scalar-значений. Тогда каждый вес внутри tile хранит локальный
+индекс в эту palette, а сам tile хранит только сами `32` значения. При текущем
+глобальном route-vocabulary порядка `1473-1593` это меняет локальное хранение
+примерно с `11` бит на weight до около `5.03` бит на weight для режима palette
+`32` на tile размера `128 \times 128`.
+
+После этого был проведён transfer-check на всех семи линейных семействах нулевого
+слоя: `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`, `up_proj`,
+`down_proj`. Для каждого семейства выбирался top-1 sampled high-diversity tile,
+после чего запускался тот же RouteDistill student с palette `16` и `32`.
+Ключевые результаты для palette `32` приведены в таблице ниже.
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Layer family & base unique & output MSE & decode speedup & linear speedup \\
+\midrule
+q\_proj & 383 & $7.29 \times 10^{-4}$ & 1.05x & 1.03x \\
+k\_proj & 481 & $7.91 \times 10^{-3}$ & 1.04x & 1.02x \\
+v\_proj & 383 & $5.97 \times 10^{-3}$ & 1.03x & 1.02x \\
+o\_proj & 1424 & $7.62 \times 10^{-2}$ & 1.05x & 1.02x \\
+gate\_proj & 611 & $8.46 \times 10^{-3}$ & 1.03x & 1.02x \\
+up\_proj & 425 & $2.99 \times 10^{-4}$ & 1.04x & 1.02x \\
+down\_proj & 1317 & $4.14 \times 10^{-2}$ & 1.04x & 1.01x \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Эти числа важны по двум причинам. Во-первых, метод хорошо переносится на
+`up_proj` и `q_proj`, умеренно переносится на `k_proj`, `v_proj`, `gate_proj`,
+и пока плохо переносится на `o_proj` и `down_proj`, где выбранные tile имеют
+очень высокую локальную route-diversity. Во-вторых, speed-результат нужно читать
+честно: хотя representation резко снижает локальный index-traffic, текущий
+naive Torch microbenchmark даёт только около `1.01x-1.07x` ускорения на стадии
+decode и около `1.01x-1.04x` на decode-plus-linear. Следовательно, следующий
+системный шаг состоит уже не в поиске ещё более компактной palette как таковой,
+а в создании специализированного local-palette kernel-path.
+
+Этот следующий шаг был затем сделан. В модуле `triton_local_palette_matmul.py`
+был реализован первый Triton kernel-path для local palette representation, а
+скрипт `m6e_local_palette_kernel_bench.py` был использован для сравнения с
+global-ID Triton path на реальных distilled tiles. На layer-0 `q_proj`,
+`up_proj`, `o_proj`, `down_proj` local kernel оказался стабильно лучше global
+path: выигрыш составил примерно `1.23x-1.39x` и при этом почти не деградировал
+при переходе от palette `16` к `32` и `64`. Это важный положительный результат:
+локальная palette структура действительно начинает превращаться в systems-win,
+а не только в более компактное описание weights.
+
+Тем не менее dense path всё ещё остаётся быстрее. На текущем tile-level
+microbenchmark local kernel достигает лишь около `0.32-0.37` от dense speed,
+то есть остаётся примерно в `2.7x-3.1x` медленнее dense. Поэтому правильная
+интерпретация здесь двойственная: выбор направления для runtime уже подтверждён,
+но до dense-конкурентного исполнения путь ещё не закрыт.
+
+Дополнительно был проведён depth-sweep на `q_proj` и `up_proj` для слоёв
+`0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 79` с фиксированным режимом palette
+`32` и top-1 sampled high-diversity tile. Средние результаты по семействам
+оказались следующими:
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Family & mean base unique & mean output MSE & local/global & local/dense \\
+\midrule
+q\_proj & 1281.6 & $3.41 \times 10^{-2}$ & 1.26x & 0.337 \\
+up\_proj & 1287.7 & $4.06 \times 10^{-2}$ & 1.26x & 0.335 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Этот sweep показал важную асимметрию. Speed-эффект local kernel оказывается
+почти инвариантен по глубине, тогда как quality-эффект вовсе не инвариантен.
+Лучшие случаи по-прежнему находятся вблизи shallow части модели (`q_proj`
+layer 0: $9.99 \times 10^{-4}$, `up_proj` layer 0: $6.10 \times 10^{-4}$),
+тогда как на более тяжёлых слоях ошибка возрастает до порядка
+$5 \times 10^{-2}$--$7 \times 10^{-2}$. Следовательно, следующий инженерный
+шаг должен быть уже selective: либо включать local palette path только там,
+где она хорошо работает, либо давать тяжёлым слоям более сильный student,
+большую palette или fallback branch.
+
+Этот selective-шаг затем был формализован отдельным policy-builder'ом:
+при порогах `output MSE \le 10^{-3}` и `local-vs-global Triton \ge 1.2x`
+для локального режима были одобрены только два кандидата: `layer0.q_proj`
+и `layer0.up_proj`. Иными словами, безопасный rollout local-palette path пока
+получился узким, а не широким. Это важный engineering-результат: политика
+включения local path теперь задаётся проверяемыми числами, а не интуицией.

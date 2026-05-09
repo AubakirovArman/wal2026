@@ -1,0 +1,147 @@
+\section{Поздние обновления runtime-картины: M20--M25}
+
+После фиксации вышеописанного deployable snapshot стало ясно, что в тексте нужно
+разделить два разных вопроса. Первый --- какой runtime сегодня лучше всего
+подходит для реального full-model deployment. Второй --- что именно происходит в
+exact packed Block-RVQ ветке, если сравнивать её честно на одних и тех же
+encodings.
+
+\subsection{M20: fast reconstruct стал правильной packed baseline}
+
+Первый шаг здесь был не в новом kernel, а в наведении порядка в baseline.
+M20 ввёл fast reconstruct path с кэшированием bf16 codebook-представлений и
+переиспользованием reconstruct-буферов. На microbench для матрицы
+`8192 \times 8192` при `seq=2048` это дало:
+
+\begin{itemize}[leftmargin=1.5em]
+\item `per_group`: `35.03 ms`, `per_group_fast`: `26.56 ms`;
+\item `full_weight`: `33.74 ms`, `full_weight_fast`: `24.95 ms`.
+\end{itemize}
+
+При этом relMSE оставался тем же порядком (`\approx 0.0404`). Иначе говоря,
+M20 не поменял кодирование, а просто убрал часть лишней runtime-стоимости.
+После этого именно `full_weight_fast` стал корректной packed baseline-точкой для
+всех следующих M21--M25 сравнений.
+
+\subsection{M21, M22 и M24: число stage оказалось полезным, но слишком грубым рычагом}
+
+После M20 был проверен ближайший инженерный вопрос: можно ли получить speed win,
+просто исполняя меньше residual stage. Для этого сначала пришлось исправить
+одну реальную correctness-проблему: при product-split RVQ stage indices живут в
+split-major порядке, поэтому наивный global stage-drop давал неверное поведение.
+
+Локальный M21 microbench всё же показал, почему эта ветка выглядела заманчиво.
+Для `l54.self_attn.q_proj`:
+
+\begin{itemize}[leftmargin=1.5em]
+\item `3` stage: `24.95 ms`, relMSE `0.0404`;
+\item `2` stage: `16.87 ms`, relMSE `0.1171`;
+\item `1` stage: `8.81 ms`, relMSE `0.3407`.
+\end{itemize}
+
+То есть локальный speed lever здесь действительно есть, но цена по качеству
+растёт слишком быстро. На честном `16`-window raw WikiText-2 gate для
+`first8_qk_gu` это подтвердилось:
+
+\begin{itemize}[leftmargin=1.5em]
+\item baseline `3` stage: `PPL = 2.9487`, `385.47 tok/s`;
+\item uniform `2` stage: `PPL = 3.4761`, `497.58 tok/s` --- dead;
+\item role-aware `attn=3, mlp=2`: `PPL = 3.1191`, `478.75 tok/s`;
+\item per-layer calibration `cos \ge 0.999`: `PPL = 2.9614`, `391.47 tok/s`;
+\item per-layer calibration `cos \ge 0.99`: `PPL = 3.5730`, `408.85 tok/s` --- dead.
+\end{itemize}
+
+Из этого следует важный вывод. Сам по себе вопрос ``сколько stage оставить''
+слишком груб. Даже когда такой рычаг даёт выигрыш по latency, end-to-end качество
+легко ломается. Следовательно, полезный сигнал нужно искать не только на уровне
+числа stage, а на уровне того, какие именно `(stage,id)` токены реально несут
+основную часть влияния.
+
+\subsection{M23 и M25: stage-local grammar и same-encoding runtime}
+
+Именно это привело к M23: был добавлен activation-weighted grammar-анализатор,
+который для каждого `(stage,id)` токена аккумулирует влияние, зависящее от
+нормы входного блока, `row_scale` и нормы соответствующего codebook-вектора.
+
+Результат оказался двойственным и именно поэтому полезным. На merged layer-wide
+уровне vocabulary довольно диффузен: на `first8_qk_gu` средняя `top32_share`
+составляет лишь `0.058` для attention и `0.066` для MLP. Но на уровне отдельных
+sub-stage картина уже другая: средняя stage `top8_share = 0.107`, медиана
+`0.101`, максимум `0.451`. Значит, полезная ``грамматика'' живёт не на уровне
+всего слоя, а на уровне stage-local vocabulary.
+
+На этой основе в runtime появился path `full_weight_hot`, а M25 довёл методику
+до честного состояния за счёт persisted encodings и same-encoding compare. Это
+оказалось критически важным: независимые encode-pass достаточно шумят, чтобы
+скрывать или даже инвертировать небольшие runtime-выигрыши.
+
+После перехода к same-encoding картинка стала уже однозначной:
+
+\begin{itemize}[leftmargin=1.5em]
+\item `l0_qkv_gu`, `4` окна: `full_weight_fast` `1228.23 tok/s` против
+`1335.39 tok/s` у `full_weight_hot` при одинаковой `PPL = 56.9796`;
+\item `l54_q_gu`, `4` окна: `1308.03 tok/s` против `1396.46 tok/s` при
+одинаковой `PPL = 2.3850`;
+\item `l54_q_gu`, `16` окон: `933.41 tok/s` против `962.71 tok/s` при
+одинаковой `PPL = 2.7996` и том же peak memory.
+\end{itemize}
+
+Это первый чистый exact runtime win в packed ветке. Он показывает, что
+stage-local grammar signal реален и уже может приносить пользу даже без новой
+математики кодирования, а просто за счёт более умного exact execution path.
+
+В ту же серию входит и важный отрицательный результат. После того как
+`triton_block_rvq` получил поддержку calibrated `stage_scales`, он стал
+сравнимым честно на тех же encodings. Но speed win это не дало:
+
+\begin{itemize}[leftmargin=1.5em]
+\item на `l54.q_proj` microbench Triton path остаётся около `45.4 ms` против
+`24.6 ms` у `full_weight_fast`;
+\item на `l0_qkv_gu`, `4` окна, Triton path даёт `534.05 tok/s` против
+`1228.23 tok/s` у `full_weight_fast`.
+\end{itemize}
+
+Следовательно, fused Triton path для текущей Block-RVQ workload по-прежнему
+нужно считать отрицательным результатом, а не ближайшим deployable направлением.
+
+\subsection{Operational branch после исправления compare harness}
+
+Отдельно нужно зафиксировать ещё один поздний, но принципиальный результат.
+Compare harness для materialized веток был сломан: eager-bf16 unintentionally
+получал shape-policy и тем самым снова притягивал медленные routed layers.
+После исправления этого дефекта operational picture изменился.
+
+На `16`-window raw WikiText-2 run:
+
+\begin{itemize}[leftmargin=1.5em]
+\item baseline: `PPL = 2.7805`, `1169.63 tok/s`, peak `47214.8 MB`;
+\item eager-bf16: `PPL = 2.7775`, `1240.29 tok/s`, peak `47213.8 MB`;
+\item eager-hybrid: `PPL = 2.8527`, `1402.63 tok/s`, peak `33492.5 MB`.
+\end{itemize}
+
+Это меняет главный operational вывод. Если нужен deployable route path с почти
+baseline-level quality, текущий ceiling --- это `eager-bf16`, а не bounded
+cached-packed stack. Если же допустим quality trade-off, то `eager-hybrid`
+является более сильным speed/VRAM frontier. Следовательно, packed runtime на
+данный момент нужно трактовать как исследовательскую ветку, а не как текущий
+лучший deployment default.
+
+\section{Главный текущий вывод}
+
+На данном этапе уже можно формулировать основной промежуточный вывод:
+DRL v2 почти закрыл quality gap к dense на полном текстовом gate и показывает
+только малую просадку на полном HumanEval. Но runtime-картина теперь явно
+разделилась на две ветки.
+
+Во-первых, operational branch: materialized `eager-bf16` уже даёт лучший
+baseline-quality deployment ceiling, а `eager-hybrid` --- лучший текущий
+speed/VRAM frontier ценой заметного quality trade-off.
+
+Во-вторых, packed research branch: same-encoding `full_weight_hot` впервые дал
+exact runtime win и тем самым подтвердил, что stage-local grammar signal реален.
+Но broad fused Triton rollout и сейчас не является победной веткой.
+
+Поэтому главный открытый systems-вопрос формулируется уже точнее: как превратить
+stage-local grammar из Python-level exact improvement в fused packed kernel,
+который будет быстрее `full_weight_fast` на same-encoding compare и останется
+достаточно сильным при full-model rollout.

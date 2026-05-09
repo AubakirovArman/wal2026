@@ -1,0 +1,58 @@
+{
+  "tensor_names": [
+    "model.layers.54.self_attn.v_proj.weight"
+  ],
+  "ranks": [
+    4
+  ],
+  "pq_cfg": {
+    "group_rows": 28672,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 3,
+    "product_splits": 4,
+    "stages_per_split": [
+      5,
+      4,
+      2,
+      1
+    ],
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "svd_cfg": {
+    "oversample": 8,
+    "niter": 2
+  },
+  "layers": [
+    {
+      "name": "model.layers.54.self_attn.v_proj.weight",
+      "shape": [
+        1024,
+        8192
+      ],
+      "dense_bf16_mb": 16.0,
+      "pq_only": {
+        "rel_mse": 0.11442583054304123,
+        "storage_mb": 3.048828125,
+        "bits_per_weight": 3.048828125,
+        "sample_rel_mse": 0.11085696557057814
+      },
+      "overlay_ranks": [
+        {
+          "rank": 4,
+          "svd_q": 12,
+          "hybrid_rel_mse": 0.11352219432592392,
+          "improvement_vs_pq": 1.00795999603851,
+          "residual_capture": 0.007897119808578656,
+          "overlay_storage_mb": 0.0703125,
+          "total_storage_mb": 3.119140625,
+          "total_bits_per_weight": 3.119140625
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+{
+  "targets": [
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "text_source": "local",
+  "num_windows": 4,
+  "matmul_strategy": "full_weight_fast",
+  "row_tile_size": 64,
+  "col_tile_size": 256,
+  "topk": 64,
+  "dense": {
+    "metrics": {
+      "perplexity": 2.3852471794409666,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.402987241744995,
+      "tok_s": 1491.4769157897733
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 45934.0,
+        "peak_mb": 45178.8
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "eval_peak_mb": 47214.8
+  },
+  "current": {
+    "label": "current_12x256",
+    "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_fgrl_current_l54_gate_up.pt",
+    "codebook_size": 256,
+    "stages_per_split": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "total_stage_tensors": 12,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "codebook_size": 256,
+        "product_splits": 4,
+        "stages_per_split": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "total_stage_tensors": 12,
+        "rel_mse": 0.03937779739499092,
+        "sample_rel_mse": 0.03506630286574364,
+        "bits_per_weight": 3.0036280495779857,
+        "avg_tile_occupancy": 0.8530792054675874,
+        "avg_unique_ids_per_tile": 218.38827659970238,
+        "mean_top64_share": 0.49507213774181547,
+        "median_top64_share": 0.494140625,
+        "frac_top64_share_ge_075": 0.0,
+        "num_stage_tiles": 172032,
+        "encode_s": 9.304794549942017
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "codebook_size": 256,
+        "product_splits": 4,
+        "stages_per_split": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "total_stage_tensors": 12,
+        "rel_mse": 0.03867820277810097,
+        "sample_rel_mse": 0.035098232328891754,
+        "bits_per_weight": 3.0036280495779857,
+        "avg_tile_occupancy": 0.8525775500706264,
+        "avg_unique_ids_per_tile": 218.25985281808036,
+        "mean_top64_share": 0.4952007361820766,
+        "median_top64_share": 0.494140625,
+        "frac_top64_share_ge_075": 0.0,
+        "num_stage_tiles": 172032,
+        "encode_s": 9.352987051010132
+      }
+    ],
+    "aggregate": {
+      "avg_rel_mse": 0.039028000086545944,
+      "avg_sample_rel_mse": 0.035082267597317696,
+      "avg_bits_per_weight": 3.0036280495779857,
+      "avg_tile_occupancy": 0.8528283777691069,
+      "avg_unique_ids_per_tile": 218.32406470889137,
+      "mean_top64_share": 0.49513643696194604,
+      "mean_frac_top64_share_ge_075": 0.0
+    },
+    "eval": {
+      "metrics": {
+        "perplexity": 2.405387443000458,
+        "total_tokens": 3584,
+        "num_windows": 4,
+        "elapsed_s": 2.416249990463257,
+        "tok_s": 1483.2902283065735
+      },
+      "replace_vram": [
+        {
+          "device": 0,
+          "allocated_mb": 44468.8,
+          "reserved_mb": 44470.0,
+          "peak_mb": 44468.8
+        },
+        {
+          "device": 1,
+          "allocated_mb": 45728.9,
+          "reserved_mb": 45730.0,
+          "peak_mb": 45728.9
+        },
+        {
+          "device": 2,
+          "allocated_mb": 43741.3,
+          "reserved_mb": 48622.0,
+          "peak_mb": 48585.1
+        }
+      ],
+      "eval_vram": [
+        {
+          "device": 0,
+          "allocated_mb": 44468.8,
+          "reserved_mb": 45822.0,
+          "peak_mb": 45178.8
+        },
+        {
+          "device": 1,
+          "allocated_mb": 45728.9,
+          "reserved_mb": 46580.0,
+          "peak_mb": 46385.9
+        },
+        {
+          "device": 2,
+          "allocated_mb": 43741.8,
+          "reserved_mb": 47496.0,
+          "peak_mb": 46486.8
+        }
+      ],
+      "replace_peak_mb": 48585.1,
+      "eval_peak_mb": 46486.8,
+      "avg_layer_rel_mse": 0.039028000086545944
+    }
+  },
+  "fgrl": {
+    "label": "fgrl_20x80",
+    "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_fgrl_candidate_l54_gate_up.pt",
+    "codebook_size": 80,
+    "stages_per_split": [
+      5,
+      5,
+      5,
+      5
+    ],
+    "total_stage_tensors": 20,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "codebook_size": 80,
+        "product_splits": 4,
+        "stages_per_split": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "total_stage_tensors": 20,
+        "rel_mse": 0.017339423298835754,
+        "sample_rel_mse": 0.016140878200531006,
+        "bits_per_weight": 5.002826418195452,
+        "avg_tile_occupancy": 0.9961308942522322,
+        "avg_unique_ids_per_tile": 79.69047154017858,
+        "mean_top64_share": 0.9089408261435372,
+        "median_top64_share": 0.908203125,
+        "frac_top64_share_ge_075": 1.0,
+        "num_stage_tiles": 286720,
+        "encode_s": 8.732249736785889
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "codebook_size": 80,
+        "product_splits": 4,
+        "stages_per_split": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "total_stage_tensors": 20,
+        "rel_mse": 0.017091821879148483,
+        "sample_rel_mse": 0.016165142878890038,
+        "bits_per_weight": 5.002826418195452,
+        "avg_tile_occupancy": 0.995952366420201,
+        "avg_unique_ids_per_tile": 79.67618931361608,
+        "mean_top64_share": 0.9093383244105748,
+        "median_top64_share": 0.908203125,
+        "frac_top64_share_ge_075": 1.0,
+        "num_stage_tiles": 286720,
+        "encode_s": 12.615029096603394
+      }
+    ],
+    "aggregate": {
+      "avg_rel_mse": 0.01721562258899212,
+      "avg_sample_rel_mse": 0.01615301053971052,
+      "avg_bits_per_weight": 5.002826418195452,
+      "avg_tile_occupancy": 0.9960416303362166,
+      "avg_unique_ids_per_tile": 79.68333042689733,
+      "mean_top64_share": 0.909139575277056,
+      "mean_frac_top64_share_ge_075": 1.0
+    },
+    "eval": {
+      "metrics": {
+        "perplexity": 2.3928000269518277,
+        "total_tokens": 3584,
+        "num_windows": 4,
+        "elapsed_s": 2.7379462718963623,
+        "tok_s": 1309.0103472036512
+      },
+      "replace_vram": [
+        {
+          "device": 0,
+          "allocated_mb": 44468.8,
+          "reserved_mb": 44470.0,
+          "peak_mb": 44468.8
+        },
+        {
+          "device": 1,
+          "allocated_mb": 45728.9,
+          "reserved_mb": 45730.0,
+          "peak_mb": 45728.9
+        },
+        {
+          "device": 2,
+          "allocated_mb": 43853.1,
+          "reserved_mb": 48702.0,
+          "peak_mb": 48641.0
+        }
+      ],
+      "eval_vram": [
+        {
+          "device": 0,
+          "allocated_mb": 44468.8,
+          "reserved_mb": 45822.0,
+          "peak_mb": 45178.8
+        },
+        {
+          "device": 1,
+          "allocated_mb": 45728.9,
+          "reserved_mb": 46580.0,
+          "peak_mb": 46385.9
+        },
+        {
+          "device": 2,
+          "allocated_mb": 43853.4,
+          "reserved_mb": 47574.0,
+          "peak_mb": 46598.5
+        }
+      ],
+      "replace_peak_mb": 48641.0,
+      "eval_peak_mb": 46598.5,
+      "avg_layer_rel_mse": 0.01721562258899212
+    }
+  },
+  "delta": {
+    "tile_occupancy_drop": -0.1432132525671097,
+    "top64_share_gain": 0.41400313831511,
+    "avg_rel_mse_delta": -0.021812377497553825,
+    "ppl_delta": -0.012587416048630118,
+    "tok_s_delta": -174.27988110292222,
+    "peak_mb_delta": 111.69999999999709
+  }
+}

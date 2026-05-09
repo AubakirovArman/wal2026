@@ -1,0 +1,489 @@
+{
+  "text_source": "raw",
+  "num_windows": 16,
+  "runtime_kind": "packed",
+  "rvq_cfg": {
+    "group_rows": 2048,
+    "block_size": 32,
+    "codebook_size": 256,
+    "num_stages": 2,
+    "product_splits": 4,
+    "normalize_blocks": "none",
+    "transform_kind": "none",
+    "sample_limit": 65536,
+    "kmeans_iters": 8,
+    "batch_size": 16384
+  },
+  "modes": [
+    "first4_qk_gu",
+    "first4_qk"
+  ],
+  "first4_qk_gu": {
+    "metrics": {
+      "perplexity": 2.7714940223849425,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 11.5887610912323,
+      "tok_s": 839.4339932816378
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 40845.8,
+        "reserved_mb": 45008.0,
+        "peak_mb": 41554.9
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 40845.8,
+        "reserved_mb": 50546.0,
+        "peak_mb": 48433.3
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45696.9,
+        "reserved_mb": 45698.0,
+        "peak_mb": 45696.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44436.8,
+        "reserved_mb": 44438.0,
+        "peak_mb": 44436.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 48433.3,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "tensor_name": "model.layers.0.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.0035144640132784843,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj",
+        "tensor_name": "model.layers.0.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.0037860276643186808,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.0.mlp.gate_proj",
+        "tensor_name": "model.layers.0.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.005068617407232523,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj",
+        "tensor_name": "model.layers.0.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.004999592434614897,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.self_attn.q_proj",
+        "tensor_name": "model.layers.1.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.055086586624383926,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.self_attn.k_proj",
+        "tensor_name": "model.layers.1.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.06032255291938782,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.mlp.gate_proj",
+        "tensor_name": "model.layers.1.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.17023755609989166,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.mlp.up_proj",
+        "tensor_name": "model.layers.1.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.1684631109237671,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.self_attn.q_proj",
+        "tensor_name": "model.layers.2.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.13899445533752441,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.self_attn.k_proj",
+        "tensor_name": "model.layers.2.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.17143939435482025,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.mlp.gate_proj",
+        "tensor_name": "model.layers.2.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.16252340376377106,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.mlp.up_proj",
+        "tensor_name": "model.layers.2.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.16169941425323486,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.self_attn.q_proj",
+        "tensor_name": "model.layers.3.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.11183644086122513,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.self_attn.k_proj",
+        "tensor_name": "model.layers.3.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.09971161186695099,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.mlp.gate_proj",
+        "tensor_name": "model.layers.3.mlp.gate_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.14198178052902222,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.mlp.up_proj",
+        "tensor_name": "model.layers.3.mlp.up_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.1382952183485031,
+        "storage_bytes": 59236352,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.09987251421262044
+  },
+  "first4_qk": {
+    "metrics": {
+      "perplexity": 2.7557844920047803,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 8.718689918518066,
+      "tok_s": 1115.7639612045623
+    },
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 43967.4,
+        "reserved_mb": 45384.0,
+        "peak_mb": 44677.4
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 46580.0,
+        "peak_mb": 46385.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 47828.0,
+        "peak_mb": 47214.8
+      }
+    ],
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 43967.4,
+        "reserved_mb": 46052.0,
+        "peak_mb": 45637.3
+      },
+      {
+        "device": 1,
+        "allocated_mb": 45728.9,
+        "reserved_mb": 45730.0,
+        "peak_mb": 45728.9
+      },
+      {
+        "device": 2,
+        "allocated_mb": 44468.8,
+        "reserved_mb": 44470.0,
+        "peak_mb": 44468.8
+      }
+    ],
+    "eval_peak_mb": 47214.8,
+    "replace_peak_mb": 45728.9,
+    "layer_stats": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "tensor_name": "model.layers.0.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.003514312906190753,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj",
+        "tensor_name": "model.layers.0.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.0037860276643186808,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.self_attn.q_proj",
+        "tensor_name": "model.layers.1.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.05509592592716217,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.1.self_attn.k_proj",
+        "tensor_name": "model.layers.1.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.060321711003780365,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.self_attn.q_proj",
+        "tensor_name": "model.layers.2.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.13899637758731842,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.2.self_attn.k_proj",
+        "tensor_name": "model.layers.2.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.17144189774990082,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.self_attn.q_proj",
+        "tensor_name": "model.layers.3.self_attn.q_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.11182640492916107,
+        "storage_bytes": 16924672,
+        "bits_per_weight": 2.017578125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      },
+      {
+        "name": "model.layers.3.self_attn.k_proj",
+        "tensor_name": "model.layers.3.self_attn.k_proj.weight",
+        "runtime_decision": "packed_block_rvq",
+        "rel_mse": 0.09971173852682114,
+        "storage_bytes": 2131968,
+        "bits_per_weight": 2.033203125,
+        "group_rows": 2048,
+        "block_size": 32,
+        "codebook_size": 256,
+        "num_stages": 2,
+        "product_splits": 4,
+        "normalize_blocks": "none",
+        "transform_kind": "none"
+      }
+    ],
+    "avg_layer_rel_mse": 0.08058679953683168
+  }
+}

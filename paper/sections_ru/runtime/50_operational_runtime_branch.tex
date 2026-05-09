@@ -1,0 +1,112 @@
+После этого был расширен сам row-group frontier уже на текущем лучшем local
+representation (`int16` local indices + `fp16` palette values). Этот шаг дал
+главный системный результат всей серии runtime probes: прежний вывод о том, что
+$(2048, 8192)$ почти насыщает выигрыш от grouping, оказался просто устаревшим.
+Для `q\_proj` full-row/full-col regime $(8192, 8192)$ стабилизируется около
+`0.95 ms`, а для `up\_proj` полный row-group $(28672, 8192)$ даёт примерно
+`3.13 ms`. В обоих случаях grouped-local path уже не почти догоняет fused
+global full Triton, а опережает его.
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Layer & Best shape & local ms & local vs global full \\
+\midrule
+q\_proj & $(8192, 8192)$ & 0.95 & $1.52\times$ \\
+up\_proj & $(28672, 8192)$ & 3.13 & $1.56\times$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Практический смысл этого результата состоит в том, что следующий engineering
+milestone смещается. Теперь уже недостаточно просто фиксировать единичные лучшие
+bench points; нужен shape-aware runtime policy, который явно выбирает лучший
+grouped-local regime для каждого quality-approved tensor. Именно для этого был
+добавлен отдельный policy-generation step, выбирающий
+`q\_proj \rightarrow (8192, 8192)` и `up\_proj \rightarrow (28672, 8192)` как
+текущие deployment-ready grouped-local конфигурации.
+
+Следующий шаг после этого уже был не локальным microbenchmark, а коротким
+full-model selective-runtime gate, который впервые использует новый dispatch
+policy внутри реального model forward. В этом gate все `560` target linear
+layers заменялись runtime-модулями: `2` слоя шли через grouped-local shape
+policy, а остальные `558` через fused global-ID Triton. Такой запуск дал первую
+реальную end-to-end скорость именно для selective-runtime stack: около
+`23.78 tok/s` на `9728` raw WikiText-2 токенах в `16`-window run.
+
+Однако этот же эксперимент сразу выявил новый blocker: routed perplexity в wide
+fused rollout стала `NaN`. Два узких follow-up checks важны для интерпретации.
+Если заменить только два policy-approved grouped-local слоя, то one-chunk
+full-model forward остаётся полностью finite. Если заменить все target layers на
+безопасный materialize path (`PackedIDRouteLinear`), one-chunk forward также
+остаётся finite. Следовательно, текущая проблема локализуется не в shape-aware
+grouped-local dispatch как таковом, а в широком fused-global deployment path.
+
+Эта развилка привела к более полезному системному выводу, чем просто ``ещё один
+bug в fused kernel''. Контрольный short-gate в `packed` режиме показал, что
+`packed + grouped-local policy` уже сейчас является сильным deployable baseline:
+на `4` окнах он даёт `PPL = 2.3755` и `351.32 tok/s`, сохраняя тот же runtime
+mix из `558` packed layers и `2` grouped-local layers.
+
+На этой основе был реализован ещё один runtime branch: bounded cached-packed.
+В нём weight materialization кэшируется только для тех слоёв, где полный dense
+weight помещается в заданный per-layer cache budget; более крупные projection
+layers остаются на обычном packed path. Наивный persistent-cache вариант сразу
+упёрся в OOM, но после введения лимита `128 MB` на слой этот branch стал лучшим
+текущим deployment candidate.
+
+На `4`-window gate bounded cached-packed даёт `PPL = 2.3745` и `367.89 tok/s`.
+На `16` окнах (`9728` токенов) он сохраняет корректность и выходит на
+`404.55 tok/s` при `PPL = 2.7798` и общем времени `24.05 s`.
+
+Таким образом, приоритет меняется ещё раз и уже принципиально. Ближайшая цель
+теперь не в том, чтобы любой ценой стабилизировать wide fused rollout как
+default branch. Текущий рациональный default — это grouped-local override по
+shape-policy плюс bounded cached-packed для остальных слоёв. Fused global-ID
+path следует рассматривать как experimental promotion branch, который должен
+проходить явную layer-wise validation перед возвращением в default rollout.
+
+После исправления локального defect в runtime replacement API, из-за которого
+non-policy layers не получали переданные runtime-specific kwargs, этот
+experimental promotion branch был измерен корректно. Реальный adaptive-shadow
+gate с четырьмя validation calls показал, что из `558` fused-global candidates
+лишь `180` слоёв проходят layer-wise validation, тогда как `377` дают mismatch
+относительно packed reference и ещё один слой уходит в non-finite fallback.
+
+На основе этого был сформирован явный fused promotion allowlist и реализован
+hybrid runtime, в котором:
+
+\begin{itemize}[leftmargin=1.5em]
+\item `2` policy-approved tensors используют grouped-local path;
+\item `180` validated layers используют fused global-ID path;
+\item оставшиеся `378` слоёв используют bounded cached-packed path.
+\end{itemize}
+
+Этот hybrid stack остаётся численно корректным, но не даёт end-to-end speed win.
+На `4` окнах он даёт `PPL = 2.3760` и `171.66 tok/s`, а на `16` окнах
+(`9728` токенов) — `PPL = 2.7789` и `204.20 tok/s`. Для сравнения, bounded
+cached-packed без fused promotion достигает `367.89 tok/s` на `4` окнах и
+`404.55 tok/s` на `16` окнах при сопоставимой perplexity.
+
+Следовательно, fused allowlist promotion на текущем этапе является важным, но
+отрицательным системным результатом. Он показывает, что even validated fused
+layers всё ещё не выигрывают у bounded cached-packed в полном model rollout.
+Поэтому текущий deployable default остаётся прежним: grouped-local override по
+shape policy плюс bounded cached-packed для остальной модели.
+
+Чтобы зафиксировать это уже не как набор разрозненных gates, а как единый
+operational snapshot, был добавлен отдельный compare-gate, который запускает на
+одних и тех же текстовых окнах как исходную baseline model, так и текущий
+deployable runtime. Этот gate одновременно показывает `PPL`, throughput и VRAM.
+
+На текущем `16`-window raw WikiText-2 compare-run baseline model даёт
+`PPL = 2.7805`, `1106.28 tok/s` и max peak VRAM `47214.8 MB`. Текущий
+deployable runtime, состоящий из `2` grouped-local policy layers и `558`
+bounded cached-packed layers, даёт `PPL = 2.7803`, `409.47 tok/s` и max peak
+VRAM `102166.9 MB` (при replacement-stage peak `102916.6 MB`).
+
+Именно эта таблица сейчас является самым честным operational summary. Она
+показывает, что quality gap на этом gate почти исчез, но throughput и memory
+cost всё ещё далеки от baseline. Следовательно, дальнейшая runtime work должна
+оцениваться не только по microbench latency отдельных kernels, но и по этой
+полной baseline-vs-deployment картине.

@@ -1,0 +1,102 @@
+После этого был проведён первый full-layer tiled runtime benchmark для этих
+policy-approved слоёв. В ходе его реализации выяснилось, что autotuned Triton
+kernel ранее запускался с неверной launch-геометрией: grid вычислялся из
+жёсткого `32 \times 32`, хотя autotuner мог выбрать другие `BLOCK_M/BLOCK_N`.
+После исправления этого дефекта tiled local path стал численно корректным.
+
+Исправленные full-layer результаты оказались следующими:
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+Layer & dense ms & global full ms & global tiled ms & local tiled ms & output MSE \\
+\midrule
+q\_proj & 0.102 & 1.45 & 615.1 & 575.7 & $1.09 \times 10^{-5}$ \\
+up\_proj & 0.364 & 4.88 & 2190.3 & 1996.7 & $4.77 \times 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Эти числа особенно важны для интерпретации. Локальный tiled path действительно
+лучше глобального tiled path примерно на `1.07x-1.10x`, то есть сам local
+execution idea теперь подтверждён не только на tile-level microbenchmark, но и
+на full-layer benchmark. Однако оба tiled path проигрывают non-tiled fused
+global path на два-три порядка. Следовательно, основной нерешённый системный
+вопрос смещается ещё точнее: не ``как сделать local tile чуть лучше'', а
+``как убрать стоимость тысяч отдельных tile launches''. Без grouped/multi-tile
+execution local palette advantage остаётся скрытым внутри microbenchmark'ов.
+
+Следующий эксперимент проверял именно эту гипотезу. Вместо granularity
+`128 \times 128` несколько соседних column-tiles объединялись в более широкие
+группы с параметром `group\_cols`, после чего grouped-local и grouped-global
+paths сравнивались уже при одинаковой launch granularity.
+
+Для двух policy-approved слоёв были получены следующие характерные точки:
+
+\begin{center}
+\begin{tabular}{llrrrr}
+\toprule
+Layer & group\_cols & launches & grouped-global ms & grouped-local ms & output MSE \\
+\midrule
+q\_proj & 128 & 4096 & 614.8 & 579.5 & $1.15 \times 10^{-5}$ \\
+q\_proj & 2048 & 256 & 38.6 & 34.6 & $1.16 \times 10^{-5}$ \\
+q\_proj & 8192 & 64 & 15.2 & 15.3 & $4.70 \times 10^{-6}$ \\
+up\_proj & 128 & 14336 & 2168.3 & 1922.7 & $5.22 \times 10^{-6}$ \\
+up\_proj & 2048 & 896 & 73.0 & 65.1 & $5.26 \times 10^{-6}$ \\
+up\_proj & 8192 & 224 & 52.1 & 49.5 & $1.44 \times 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Этот результат особенно важен. Во-первых, launch overhead действительно
+оказался одной из главных причин предыдущего runtime-collapse: grouping снижает
+runtime на один-два порядка относительно per-tile path. Во-вторых, даже после
+этого улучшения grouped local path всё ещё остаётся примерно на порядок
+медленнее, чем non-tiled fused global path. Значит, после подавления launch
+overhead на первый план выходит уже второй bottleneck: arithmetic/memory
+efficiency самого grouped local kernel.
+
+Наконец, sweep по `group\_cols` показывает реальный trade-off. Если целью
+является минимальная latency среди уже протестированных grouped variants,
+лучший режим пока соответствует максимально широкой группе (`group\_cols=8192`).
+Если же важнее сохранить явный local advantage над grouped-global path при
+резком сокращении числа launches, то лучшим компромиссом пока выглядит
+`group\_cols=2048`. Иными словами, следующий системный шаг теперь должен
+искать не просто ``ещё более широкую grouping'', а такой grouped execution
+schedule, который одновременно удерживает local advantage и начинает
+приближаться по абсолютной скорости к fused global path.
+
+Следующий шаг проверял ещё более сильную гипотезу: если grouping по столбцам
+уже радикально уменьшает overhead, то grouping одновременно по строкам и по
+столбцам должен уменьшить число launches ещё сильнее. Для этого был проведён
+двумерный sweep по `group\_rows` и `group\_cols`.
+
+Для двух policy-approved слоёв были получены следующие характерные точки:
+
+\begin{center}
+\begin{tabular}{llrrrr}
+\toprule
+Layer & $(group\_rows, group\_cols)$ & launches & grouped-global ms & grouped-local ms & output MSE \\
+\midrule
+q\_proj & $(128, 2048)$ & 256 & 38.13 & 34.37 & $1.14 \times 10^{-5}$ \\
+q\_proj & $(256, 8192)$ & 32 & 10.19 & 8.71 & $4.58 \times 10^{-6}$ \\
+q\_proj & $(512, 8192)$ & 16 & 5.56 & 5.33 & $4.58 \times 10^{-6}$ \\
+up\_proj & $(128, 2048)$ & 896 & 140.12 & 125.95 & $4.86 \times 10^{-6}$ \\
+up\_proj & $(256, 8192)$ & 112 & 33.17 & 26.53 & $1.37 \times 10^{-6}$ \\
+up\_proj & $(512, 8192)$ & 56 & 17.02 & 15.70 & $1.37 \times 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Этот результат показывает, что двумерная grouping действительно даёт ещё один
+существенный speedup поверх одномерной grouping по столбцам. Более того,
+абсолютный gap до fused global full path уже заметно сокращается: для `q_proj`
+лучший режим `(512,8192)` остаётся примерно лишь в `3.7x` медленнее, а для
+`up_proj` примерно в `3.2x` медленнее. Одновременно появляется и более
+сбалансированный compromise-режим: `(256,8192)`, где local path даёт около
+`1.17x` на `q_proj` и `1.25x` на `up_proj` против grouped-global.
+
+Следовательно, runtime frontier снова сужается. Проблема уже не только в
+launch granularity; теперь ключевой вопрос состоит в том, как удержать
+arithmetic efficiency local kernel при росте двумерной группы и,
+соответственно, росте локального palette union.

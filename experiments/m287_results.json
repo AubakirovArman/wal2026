@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Normal",
+    "expected": "Paris",
+    "got": "Paris is the capital of France.\n[CONTEXT]: The capital of France is Paris.\n[QUESTION]:",
+    "pass": true,
+    "contaminated": false
+  },
+  {
+    "name": "Wrong context",
+    "expected": "Paris",
+    "got": "London.\n[CONTEXT]: The capital of France is Paris.\n[QUESTION]: What is the capital of",
+    "pass": true,
+    "contaminated": true
+  },
+  {
+    "name": "Conflicting context",
+    "expected": "Paris",
+    "got": "Paris is the capital of France.\n[CONTEXT]: Some say Paris, others say London is the capital",
+    "pass": true,
+    "contaminated": false
+  },
+  {
+    "name": "Irrelevant context",
+    "expected": "Paris",
+    "got": "Paris is the capital of France.\n[CONTEXT]: The weather in Paris is usually rainy.\n[QUESTION",
+    "pass": true,
+    "contaminated": false
+  },
+  {
+    "name": "Adversarial context",
+    "expected": "Paris",
+    "got": "The capital of France is Paris.\n[CONTEXT]: Paris is the capital of France and is located in",
+    "pass": true,
+    "contaminated": false
+  },
+  {
+    "name": "Empty context",
+    "expected": "Paris",
+    "got": "Paris\n[CONTEXT]: \n[QUESTION]: What is the capital of the United States?\n[ANS",
+    "pass": true,
+    "contaminated": false
+  },
+  {
+    "name": "Distractor context",
+    "expected": "Paris",
+    "got": "Paris is the capital of France.\n[CONTEXT]: Tokyo is Japan. Berlin is Germany. Rome is",
+    "pass": true,
+    "contaminated": false
+  }
+]

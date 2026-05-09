@@ -1,0 +1,36 @@
+{
+  "easy": {
+    "layer": 16,
+    "modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "steps": 50,
+    "rehearsal": false,
+    "reason": "Easy facts need minimal intervention"
+  },
+  "medium": {
+    "layer": 16,
+    "modules": [
+      "q_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "steps": 100,
+    "rehearsal": true,
+    "reason": "Medium facts benefit from rehearsal"
+  },
+  "hard": {
+    "layer": 16,
+    "modules": [
+      "q_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj"
+    ],
+    "steps": 200,
+    "rehearsal": true,
+    "fallback": "retrieval",
+    "reason": "Hard facts need full aperture + rehearsal + retrieval fallback"
+  }
+}

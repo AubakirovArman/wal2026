@@ -1,0 +1,2529 @@
+{
+  "targets": [
+    "model.layers.54.mlp.gate_proj",
+    "model.layers.54.mlp.up_proj"
+  ],
+  "profile": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_budget_profile_summary.json",
+  "screen_windows": 4,
+  "final_windows": 16,
+  "screen_legacy": {
+    "metrics": {
+      "perplexity": 2.4081482048496654,
+      "total_tokens": 3584,
+      "num_windows": 4,
+      "elapsed_s": 2.4650118350982666,
+      "tok_s": 1453.9483944737838
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 134602.5,
+        "reserved_mb": 134606.0,
+        "peak_mb": 134602.5
+      },
+      {
+        "device": 1,
+        "allocated_mb": 133875.0,
+        "reserved_mb": 138758.0,
+        "peak_mb": 138718.8
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 134602.5,
+        "reserved_mb": 136070.0,
+        "peak_mb": 135424.5
+      },
+      {
+        "device": 1,
+        "allocated_mb": 133875.5,
+        "reserved_mb": 137632.0,
+        "peak_mb": 136732.5
+      }
+    ],
+    "replace_peak_mb": 138718.8,
+    "eval_peak_mb": 136732.5,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "final_legacy": {
+    "metrics": {
+      "perplexity": 2.805475186815408,
+      "total_tokens": 9728,
+      "num_windows": 16,
+      "elapsed_s": 9.738892555236816,
+      "tok_s": 998.8815406705602
+    },
+    "replace_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 67317.2,
+        "reserved_mb": 67318.0,
+        "peak_mb": 67317.2
+      },
+      {
+        "device": 1,
+        "allocated_mb": 66589.8,
+        "reserved_mb": 71470.0,
+        "peak_mb": 71433.5
+      }
+    ],
+    "eval_vram": [
+      {
+        "device": 0,
+        "allocated_mb": 67317.2,
+        "reserved_mb": 68782.0,
+        "peak_mb": 68139.3
+      },
+      {
+        "device": 1,
+        "allocated_mb": 66590.2,
+        "reserved_mb": 70344.0,
+        "peak_mb": 69447.3
+      }
+    ],
+    "replace_peak_mb": 71433.5,
+    "eval_peak_mb": 69447.3,
+    "avg_layer_rel_mse": 0.03902573697268963,
+    "layer_stats": [
+      {
+        "name": "model.layers.54.mlp.gate_proj",
+        "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03937753662467003,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      },
+      {
+        "name": "model.layers.54.mlp.up_proj",
+        "tensor_name": "model.layers.54.mlp.up_proj.weight",
+        "runtime_decision": "preencoded_packed_block_rvq",
+        "matmul_strategy": "full_weight_fast",
+        "matmul_chunk_rows": null,
+        "local_palette_group_cols": null,
+        "hot_topk": null,
+        "hot_score_mode": "row_scale_norm",
+        "hot_min_stage_share": 0.0,
+        "hot_score_threshold_ratio": 0.0,
+        "rel_mse": 0.03867393732070923,
+        "storage_bytes": 88186904,
+        "bits_per_weight": 3.0036280495779857
+      }
+    ]
+  },
+  "screen_results": [
+    {
+      "candidate_id": "a_p70_r_p92_c_0p5",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p92_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 4.837876796722412,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 1.026107668876648,
+          "avg_literal_slots": 0.1754654496908188,
+          "accepted_budget_token_coverage": 0.9561335699898856,
+          "budgeted_output_rel_mse": 1.0117075443267822,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.719237804412842,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 1.0753592252731323,
+          "avg_literal_slots": 0.12845897674560547,
+          "accepted_budget_token_coverage": 0.9678852217538017,
+          "budgeted_output_rel_mse": 1.0261847972869873,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.692315168455987,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.431624174118042,
+          "tok_s": 1473.9119795516626
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 4.778557300567627,
+      "mean_nonliteral_calls": 3.8480379581451416,
+      "screen_ppl_delta_vs_legacy": 0.28416696360632177,
+      "final": {
+        "metrics": {
+          "perplexity": 3.1735856688721378,
+          "total_tokens": 9728,
+          "num_windows": 16,
+          "elapsed_s": 9.708565473556519,
+          "tok_s": 1002.001791767941
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "final_ppl_delta_vs_legacy": 0.3681104820567298
+    },
+    {
+      "candidate_id": "a_p80_r_p92_c_0p5",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p92_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 4.953790187835693,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.6594160795211792,
+          "avg_literal_slots": 0.14174911379814148,
+          "accepted_budget_token_coverage": 0.9645626885550362,
+          "budgeted_output_rel_mse": 1.100296139717102,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.842643737792969,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.7030310034751892,
+          "avg_literal_slots": 0.09707968682050705,
+          "accepted_budget_token_coverage": 0.9757300785609654,
+          "budgeted_output_rel_mse": 1.119367003440857,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.703148737847919,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.439258337020874,
+          "tok_s": 1469.299067509687
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 4.898216962814331,
+      "mean_nonliteral_calls": 3.8805858194828033,
+      "screen_ppl_delta_vs_legacy": 0.29500053299825346,
+      "final": {
+        "metrics": {
+          "perplexity": 3.18521398479579,
+          "total_tokens": 9728,
+          "num_windows": 16,
+          "elapsed_s": 9.734778642654419,
+          "tok_s": 999.303667509735
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "final_ppl_delta_vs_legacy": 0.3797387979803819
+    },
+    {
+      "candidate_id": "a_p90_r_p92_c_0p5",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p92_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.034585475921631,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.30783599615097046,
+          "avg_literal_slots": 0.09425190836191177,
+          "accepted_budget_token_coverage": 0.9764370237077985,
+          "budgeted_output_rel_mse": 1.2012232542037964,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.94800329208374,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3408348858356476,
+          "avg_literal_slots": 0.059210505336523056,
+          "accepted_budget_token_coverage": 0.9851973397391183,
+          "budgeted_output_rel_mse": 1.2259777784347534,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.6947264139249185,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4332773685455322,
+          "tok_s": 1472.9105881350063
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2104332447052002,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1984108686447144,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.222455620765686,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 4.9912943840026855,
+      "mean_nonliteral_calls": 3.9232687801122665,
+      "screen_ppl_delta_vs_legacy": 0.2865782090752531
+    },
+    {
+      "candidate_id": "a_p70_r_p85_c_0p5",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p85_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.113799095153809,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 0.9157389402389526,
+          "avg_literal_slots": 0.2858341634273529,
+          "accepted_budget_token_coverage": 0.9285414559500558,
+          "budgeted_output_rel_mse": 0.9881057143211365,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.946760654449463,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 0.984350323677063,
+          "avg_literal_slots": 0.21946784853935242,
+          "accepted_budget_token_coverage": 0.9451330729893276,
+          "budgeted_output_rel_mse": 1.008764624595642,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.69476092411573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4341869354248047,
+          "tok_s": 1472.360215167507
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.0237635970115662,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0136513710021973,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.033875823020935,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.030279874801636,
+      "mean_nonliteral_calls": 3.7473491430282593,
+      "screen_ppl_delta_vs_legacy": 0.2866127192660648
+    },
+    {
+      "candidate_id": "a_p70_r_p92_c_0p75",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p92_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.0944037437438965,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 1.026107668876648,
+          "avg_literal_slots": 0.1754654496908188,
+          "accepted_budget_token_coverage": 0.9561335699898856,
+          "budgeted_output_rel_mse": 1.0117075443267822,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.9880781173706055,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 1.0753592252731323,
+          "avg_literal_slots": 0.12845897674560547,
+          "accepted_budget_token_coverage": 0.9678852217538017,
+          "budgeted_output_rel_mse": 1.0261847972869873,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.692315168455987,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.417970895767212,
+          "tok_s": 1482.2345489244658
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.041240930557251,
+      "mean_nonliteral_calls": 3.8480379581451416,
+      "screen_ppl_delta_vs_legacy": 0.28416696360632177
+    },
+    {
+      "candidate_id": "a_p80_r_p92_c_0p75",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p92_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.1186442375183105,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.6594160795211792,
+          "avg_literal_slots": 0.14174911379814148,
+          "accepted_budget_token_coverage": 0.9645626885550362,
+          "budgeted_output_rel_mse": 1.100296139717102,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.018402099609375,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.7030310034751892,
+          "avg_literal_slots": 0.09707968682050705,
+          "accepted_budget_token_coverage": 0.9757300785609654,
+          "budgeted_output_rel_mse": 1.119367003440857,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.703148737847919,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.433424234390259,
+          "tok_s": 1472.8216927197818
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.068523168563843,
+      "mean_nonliteral_calls": 3.8805858194828033,
+      "screen_ppl_delta_vs_legacy": 0.29500053299825346
+    },
+    {
+      "candidate_id": "a_p90_r_p92_c_0p75",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p92_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.111545085906982,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.30783599615097046,
+          "avg_literal_slots": 0.09425190836191177,
+          "accepted_budget_token_coverage": 0.9764370237077985,
+          "budgeted_output_rel_mse": 1.2012232542037964,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.033212184906006,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3408348858356476,
+          "avg_literal_slots": 0.059210505336523056,
+          "accepted_budget_token_coverage": 0.9851973397391183,
+          "budgeted_output_rel_mse": 1.2259777784347534,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.6947264139249185,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4291443824768066,
+          "tok_s": 1475.4166223523027
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2104332447052002,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1984108686447144,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.222455620765686,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.072378635406494,
+      "mean_nonliteral_calls": 3.9232687801122665,
+      "screen_ppl_delta_vs_legacy": 0.2865782090752531
+    },
+    {
+      "candidate_id": "a_p80_r_p85_c_0p5",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p85_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.150153636932373,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.5808706283569336,
+          "avg_literal_slots": 0.2202945500612259,
+          "accepted_budget_token_coverage": 0.9449263981410435,
+          "budgeted_output_rel_mse": 1.0845261812210083,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.996572971343994,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.641459584236145,
+          "avg_literal_slots": 0.15865108370780945,
+          "accepted_budget_token_coverage": 0.9603372982570103,
+          "budgeted_output_rel_mse": 1.1085920333862305,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.695499649125573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4250576496124268,
+          "tok_s": 1477.9030100883563
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.11023610830307,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0980874300003052,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.122384786605835,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.073363304138184,
+      "mean_nonliteral_calls": 3.8105273842811584,
+      "screen_ppl_delta_vs_legacy": 0.28735144427590775
+    },
+    {
+      "candidate_id": "a_p90_r_p85_c_0p5",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p85_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.140601634979248,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.2654297649860382,
+          "avg_literal_slots": 0.13665811717510223,
+          "accepted_budget_token_coverage": 0.9658355031694684,
+          "budgeted_output_rel_mse": 1.193741798400879,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.024725914001465,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3101460635662079,
+          "avg_literal_slots": 0.08989933878183365,
+          "accepted_budget_token_coverage": 0.977525166102818,
+          "budgeted_output_rel_mse": 1.2213960886001587,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.694888574360283,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.411940813064575,
+          "tok_s": 1485.9402770527458
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2048223614692688,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1912585496902466,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.218386173248291,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.0826637744903564,
+      "mean_nonliteral_calls": 3.8867212533950806,
+      "screen_ppl_delta_vs_legacy": 0.28674036951061765
+    },
+    {
+      "candidate_id": "a_p90_r_p92_c_1p0",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p92_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.188503742218018,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.30783599615097046,
+          "avg_literal_slots": 0.09425190836191177,
+          "accepted_budget_token_coverage": 0.9764370237077985,
+          "budgeted_output_rel_mse": 1.2012232542037964,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.1184210777282715,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3408348858356476,
+          "avg_literal_slots": 0.059210505336523056,
+          "accepted_budget_token_coverage": 0.9851973397391183,
+          "budgeted_output_rel_mse": 1.2259777784347534,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.6947264139249185,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.430678129196167,
+          "tok_s": 1474.485641249934
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2104332447052002,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1984108686447144,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.222455620765686,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.1534624099731445,
+      "mean_nonliteral_calls": 3.9232687801122665,
+      "screen_ppl_delta_vs_legacy": 0.2865782090752531
+    },
+    {
+      "candidate_id": "a_p90_r_p85_c_0p75",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p85_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.206959247589111,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.2654297649860382,
+          "avg_literal_slots": 0.13665811717510223,
+          "accepted_budget_token_coverage": 0.9658355031694684,
+          "budgeted_output_rel_mse": 1.193741798400879,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.102262020111084,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3101460635662079,
+          "avg_literal_slots": 0.08989933878183365,
+          "accepted_budget_token_coverage": 0.977525166102818,
+          "budgeted_output_rel_mse": 1.2213960886001587,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.694888574360283,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4185287952423096,
+          "tok_s": 1481.8926311939665
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2048223614692688,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1912585496902466,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.218386173248291,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.154610633850098,
+      "mean_nonliteral_calls": 3.8867212533950806,
+      "screen_ppl_delta_vs_legacy": 0.28674036951061765
+    },
+    {
+      "candidate_id": "a_p80_r_p85_c_0p75",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p85_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.295371055603027,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.5808706283569336,
+          "avg_literal_slots": 0.2202945500612259,
+          "accepted_budget_token_coverage": 0.9449263981410435,
+          "budgeted_output_rel_mse": 1.0845261812210083,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.156937122344971,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.641459584236145,
+          "avg_literal_slots": 0.15865108370780945,
+          "accepted_budget_token_coverage": 0.9603372982570103,
+          "budgeted_output_rel_mse": 1.1085920333862305,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.695499649125573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4289333820343018,
+          "tok_s": 1475.544791186614
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.11023610830307,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0980874300003052,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.122384786605835,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.226154088973999,
+      "mean_nonliteral_calls": 3.8105273842811584,
+      "screen_ppl_delta_vs_legacy": 0.28735144427590775
+    },
+    {
+      "candidate_id": "a_p90_r_p85_c_1p0",
+      "atom_output_budget_label": "p90",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p90_r_p85_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.273315906524658,
+          "avg_low_level_calls": 3.597912073135376,
+          "avg_residual_calls": 0.2654297649860382,
+          "avg_literal_slots": 0.13665811717510223,
+          "accepted_budget_token_coverage": 0.9658355031694684,
+          "budgeted_output_rel_mse": 1.193741798400879,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.179798603057861,
+          "avg_low_level_calls": 3.599954605102539,
+          "avg_residual_calls": 0.3101460635662079,
+          "avg_literal_slots": 0.08989933878183365,
+          "accepted_budget_token_coverage": 0.977525166102818,
+          "budgeted_output_rel_mse": 1.2213960886001587,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.694888574360283,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4277517795562744,
+          "tok_s": 1476.2629483707167
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.2048223614692688,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1912585496902466,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.218386173248291,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.22655725479126,
+      "mean_nonliteral_calls": 3.8867212533950806,
+      "screen_ppl_delta_vs_legacy": 0.28674036951061765
+    },
+    {
+      "candidate_id": "a_p80_r_p92_c_1p0",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p92_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.283498287200928,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.6594160795211792,
+          "avg_literal_slots": 0.14174911379814148,
+          "accepted_budget_token_coverage": 0.9645626885550362,
+          "budgeted_output_rel_mse": 1.100296139717102,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.194159507751465,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.7030310034751892,
+          "avg_literal_slots": 0.09707968682050705,
+          "accepted_budget_token_coverage": 0.9757300785609654,
+          "budgeted_output_rel_mse": 1.119367003440857,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.703148737847919,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4362454414367676,
+          "tok_s": 1471.116144146112
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.238828897476196,
+      "mean_nonliteral_calls": 3.8805858194828033,
+      "screen_ppl_delta_vs_legacy": 0.29500053299825346
+    },
+    {
+      "candidate_id": "a_p70_r_p85_c_0p75",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 0.75,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p85_c_0p75.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.342734336853027,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 0.9157389402389526,
+          "avg_literal_slots": 0.2858341634273529,
+          "accepted_budget_token_coverage": 0.9285414559500558,
+          "budgeted_output_rel_mse": 0.9881057143211365,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.192848205566406,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 0.984350323677063,
+          "avg_literal_slots": 0.21946784853935242,
+          "accepted_budget_token_coverage": 0.9451330729893276,
+          "budgeted_output_rel_mse": 1.008764624595642,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.69476092411573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4333748817443848,
+          "tok_s": 1472.8515638456743
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.0237635970115662,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0136513710021973,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.033875823020935,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.267791271209717,
+      "mean_nonliteral_calls": 3.7473491430282593,
+      "screen_ppl_delta_vs_legacy": 0.2866127192660648
+    },
+    {
+      "candidate_id": "a_p70_r_p92_c_1p0",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p92_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.350930690765381,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 1.026107668876648,
+          "avg_literal_slots": 0.1754654496908188,
+          "accepted_budget_token_coverage": 0.9561335699898856,
+          "budgeted_output_rel_mse": 1.0117075443267822,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.256918430328369,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 1.0753592252731323,
+          "avg_literal_slots": 0.12845897674560547,
+          "accepted_budget_token_coverage": 0.9678852217538017,
+          "budgeted_output_rel_mse": 1.0261847972869873,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.692315168455987,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4228222370147705,
+          "tok_s": 1479.266594653659
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.303924560546875,
+      "mean_nonliteral_calls": 3.8480379581451416,
+      "screen_ppl_delta_vs_legacy": 0.28416696360632177
+    },
+    {
+      "candidate_id": "a_p80_r_p85_c_1p0",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p85_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.44058895111084,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.5808706283569336,
+          "avg_literal_slots": 0.2202945500612259,
+          "accepted_budget_token_coverage": 0.9449263981410435,
+          "budgeted_output_rel_mse": 1.0845261812210083,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.317302227020264,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.641459584236145,
+          "avg_literal_slots": 0.15865108370780945,
+          "accepted_budget_token_coverage": 0.9603372982570103,
+          "budgeted_output_rel_mse": 1.1085920333862305,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.695499649125573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4281973838806152,
+          "tok_s": 1475.9920358172212
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.11023610830307,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0980874300003052,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.122384786605835,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.378945589065552,
+      "mean_nonliteral_calls": 3.8105273842811584,
+      "screen_ppl_delta_vs_legacy": 0.28735144427590775
+    },
+    {
+      "candidate_id": "a_p70_r_p85_c_1p0",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p85",
+      "residual_program_cost": 1.0,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p85_c_1p0.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 5.5716681480407715,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 0.9157389402389526,
+          "avg_literal_slots": 0.2858341634273529,
+          "accepted_budget_token_coverage": 0.9285414559500558,
+          "budgeted_output_rel_mse": 0.9881057143211365,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 5.43893575668335,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 0.984350323677063,
+          "avg_literal_slots": 0.21946784853935242,
+          "accepted_budget_token_coverage": 0.9451330729893276,
+          "budgeted_output_rel_mse": 1.008764624595642,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.69476092411573,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.4356226921081543,
+          "tok_s": 1471.4922847503392
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.0237635970115662,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0136513710021973,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.033875823020935,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 5.5053019523620605,
+      "mean_nonliteral_calls": 3.7473491430282593,
+      "screen_ppl_delta_vs_legacy": 0.2866127192660648
+    }
+  ],
+  "finalists": [
+    {
+      "candidate_id": "a_p70_r_p92_c_0p5",
+      "atom_output_budget_label": "p70",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p70_r_p92_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 4.837876796722412,
+          "avg_low_level_calls": 2.798427104949951,
+          "avg_residual_calls": 1.026107668876648,
+          "avg_literal_slots": 0.1754654496908188,
+          "accepted_budget_token_coverage": 0.9561335699898856,
+          "budgeted_output_rel_mse": 1.0117075443267822,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.719237804412842,
+          "avg_low_level_calls": 2.7961819171905518,
+          "avg_residual_calls": 1.0753592252731323,
+          "avg_literal_slots": 0.12845897674560547,
+          "accepted_budget_token_coverage": 0.9678852217538017,
+          "budgeted_output_rel_mse": 1.0261847972869873,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.692315168455987,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.431624174118042,
+          "tok_s": 1473.9119795516626
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 4.778557300567627,
+      "mean_nonliteral_calls": 3.8480379581451416,
+      "screen_ppl_delta_vs_legacy": 0.28416696360632177,
+      "final": {
+        "metrics": {
+          "perplexity": 3.1735856688721378,
+          "total_tokens": 9728,
+          "num_windows": 16,
+          "elapsed_s": 9.708565473556519,
+          "tok_s": 1002.001791767941
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.043141484260559,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.036271333694458,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.0500116348266602,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "final_ppl_delta_vs_legacy": 0.3681104820567298
+    },
+    {
+      "candidate_id": "a_p80_r_p92_c_0p5",
+      "atom_output_budget_label": "p80",
+      "residual_output_budget_label": "p92",
+      "residual_program_cost": 0.5,
+      "cache_path": "/mnt/hf_model_weights/arman/3bit/dwl2_dynamic_route/results/m27_wal_sbc_tune_cache_a_p80_r_p92_c_0p5.pt",
+      "wal_sbc": [
+        {
+          "name": "model.layers.54.mlp.gate_proj",
+          "avg_program_length": 4.953790187835693,
+          "avg_low_level_calls": 3.1988348960876465,
+          "avg_residual_calls": 0.6594160795211792,
+          "avg_literal_slots": 0.14174911379814148,
+          "accepted_budget_token_coverage": 0.9645626885550362,
+          "budgeted_output_rel_mse": 1.100296139717102,
+          "family_entropy": 1.143101961915542
+        },
+        {
+          "name": "model.layers.54.mlp.up_proj",
+          "avg_program_length": 4.842643737792969,
+          "avg_low_level_calls": 3.199889659881592,
+          "avg_residual_calls": 0.7030310034751892,
+          "avg_literal_slots": 0.09707968682050705,
+          "accepted_budget_token_coverage": 0.9757300785609654,
+          "budgeted_output_rel_mse": 1.119367003440857,
+          "family_entropy": 1.3531917076304278
+        }
+      ],
+      "screen": {
+        "metrics": {
+          "perplexity": 2.703148737847919,
+          "total_tokens": 3584,
+          "num_windows": 4,
+          "elapsed_s": 2.439258337020874,
+          "tok_s": 1469.299067509687
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "mean_program_length": 4.898216962814331,
+      "mean_nonliteral_calls": 3.8805858194828033,
+      "screen_ppl_delta_vs_legacy": 0.29500053299825346,
+      "final": {
+        "metrics": {
+          "perplexity": 3.18521398479579,
+          "total_tokens": 9728,
+          "num_windows": 16,
+          "elapsed_s": 9.734778642654419,
+          "tok_s": 999.303667509735
+        },
+        "replace_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 67318.0,
+            "peak_mb": 67317.2
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66589.8,
+            "reserved_mb": 71470.0,
+            "peak_mb": 71433.5
+          }
+        ],
+        "eval_vram": [
+          {
+            "device": 0,
+            "allocated_mb": 67317.2,
+            "reserved_mb": 68782.0,
+            "peak_mb": 68139.3
+          },
+          {
+            "device": 1,
+            "allocated_mb": 66590.2,
+            "reserved_mb": 70344.0,
+            "peak_mb": 69447.3
+          }
+        ],
+        "replace_peak_mb": 71433.5,
+        "eval_peak_mb": 69447.3,
+        "avg_layer_rel_mse": 1.1227062940597534,
+        "layer_stats": [
+          {
+            "name": "model.layers.54.mlp.gate_proj",
+            "tensor_name": "model.layers.54.mlp.gate_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.113198161125183,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          },
+          {
+            "name": "model.layers.54.mlp.up_proj",
+            "tensor_name": "model.layers.54.mlp.up_proj.weight",
+            "runtime_decision": "preencoded_packed_block_rvq",
+            "matmul_strategy": "full_weight_fast",
+            "matmul_chunk_rows": null,
+            "local_palette_group_cols": null,
+            "hot_topk": null,
+            "hot_score_mode": "row_scale_norm",
+            "hot_min_stage_share": 0.0,
+            "hot_score_threshold_ratio": 0.0,
+            "rel_mse": 1.1322144269943237,
+            "storage_bytes": 88186904,
+            "bits_per_weight": 3.0036280495779857
+          }
+        ]
+      },
+      "final_ppl_delta_vs_legacy": 0.3797387979803819
+    }
+  ]
+}

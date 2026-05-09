@@ -1,0 +1,157 @@
+{
+  "generated": "2026-05-01T00:48:09.000574",
+  "sequential_edits": {
+    "n_edits": 10,
+    "total_facts": 50,
+    "final_cumulative_survival": 15,
+    "ppl_drift_per_edit": [
+      {
+        "edit": 1,
+        "reencode_ppl": 4.327724456787109,
+        "ppl_delta": 0.05333423614501953
+      },
+      {
+        "edit": 2,
+        "reencode_ppl": 4.3771586418151855,
+        "ppl_delta": 0.1027684211730957
+      },
+      {
+        "edit": 3,
+        "reencode_ppl": 4.41431188583374,
+        "ppl_delta": 0.1399216651916504
+      },
+      {
+        "edit": 4,
+        "reencode_ppl": 4.499740123748779,
+        "ppl_delta": 0.22534990310668945
+      },
+      {
+        "edit": 5,
+        "reencode_ppl": 4.6044182777404785,
+        "ppl_delta": 0.33002805709838867
+      },
+      {
+        "edit": 6,
+        "reencode_ppl": 4.661373138427734,
+        "ppl_delta": 0.38698291778564453
+      },
+      {
+        "edit": 7,
+        "reencode_ppl": 4.6667351722717285,
+        "ppl_delta": 0.39234495162963867
+      },
+      {
+        "edit": 8,
+        "reencode_ppl": 4.707734107971191,
+        "ppl_delta": 0.43334388732910156
+      },
+      {
+        "edit": 9,
+        "reencode_ppl": 4.721817970275879,
+        "ppl_delta": 0.44742774963378906
+      },
+      {
+        "edit": 10,
+        "reencode_ppl": 4.800759792327881,
+        "ppl_delta": 0.526369571685791
+      }
+    ],
+    "survival_per_edit": [
+      {
+        "edit": 1,
+        "batch_survival": 1,
+        "cumulative_survival": 1
+      },
+      {
+        "edit": 2,
+        "batch_survival": 1,
+        "cumulative_survival": 2
+      },
+      {
+        "edit": 3,
+        "batch_survival": 3,
+        "cumulative_survival": 3
+      },
+      {
+        "edit": 4,
+        "batch_survival": 3,
+        "cumulative_survival": 8
+      },
+      {
+        "edit": 5,
+        "batch_survival": 2,
+        "cumulative_survival": 8
+      },
+      {
+        "edit": 6,
+        "batch_survival": 3,
+        "cumulative_survival": 10
+      },
+      {
+        "edit": 7,
+        "batch_survival": 3,
+        "cumulative_survival": 12
+      },
+      {
+        "edit": 8,
+        "batch_survival": 3,
+        "cumulative_survival": 10
+      },
+      {
+        "edit": 9,
+        "batch_survival": 3,
+        "cumulative_survival": 13
+      },
+      {
+        "edit": 10,
+        "batch_survival": 2,
+        "cumulative_survival": 15
+      }
+    ],
+    "batch_degradation": [],
+    "risk_score": 12.314495039405198,
+    "total_ppl_drift": 0.4730353355407715,
+    "drift_per_edit": 0.04730353355407715,
+    "ppl_risk": 12.314495039405198,
+    "survival_risk": 0.0
+  },
+  "checkpoint_diff": {
+    "n_edits": 3,
+    "modules_changed_per_edit": [
+      224,
+      224,
+      224
+    ],
+    "params_changed_per_edit": [
+      4820352364,
+      4314578859,
+      3943983377
+    ],
+    "diff_size_mb_per_edit": [
+      27582.277473449707,
+      24688.2182636261,
+      22567.65390586853
+    ],
+    "cumulative_modules_changed": 224,
+    "cumulative_params_changed": 5383134830,
+    "cumulative_diff_size_mb": 30802.54457473755
+  },
+  "hard_facts": {
+    "n_configs": 6,
+    "all_zero_survival": true,
+    "best_ppl_config": "deep_layers_l10-20_s400",
+    "worst_ppl_config": "more_steps_rank4_l14-16_s800",
+    "avg_ppl_delta": 1.4038929102579754,
+    "best_ppl_delta": 0.6169631439208985,
+    "worst_ppl_delta": 2.348797555541992
+  },
+  "alerts": [
+    "\ud83d\udea8 MASSIVE DIFF: 5.4B params changed",
+    "\ud83d\udea8 HARD FACTS BLOCKER: All configs failed (0/3 survival)"
+  ],
+  "recommendations": [
+    "Use contrastive loss / suppression for hard facts",
+    "Route hard facts to retrieval tier instead of weights",
+    "Store edit recipes, not checkpoint diffs (build artifact approach)"
+  ]
+}
