@@ -5,7 +5,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 
 ## Summary
 
-- Total scripts: `793`
+- Total scripts: `800`
 - Blocked scripts: `521`
 - Assigned scripts: `521`
 - Unassigned scripts: `0`

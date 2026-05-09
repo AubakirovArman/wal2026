@@ -23,7 +23,7 @@ Public docs must describe WAL as a pre-alpha research framework unless a later g
 
 ## Current Scan
 
-- Files scanned: `26`
+- Files scanned: `27`
 - Violations: `0`
 - Required phrase misses: `0`
 

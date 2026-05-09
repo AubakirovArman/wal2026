@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `45`
-- Runnable commands passed: `45`
+- Runnable commands: `52`
+- Runnable commands passed: `52`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -29,6 +29,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `doc` | `doc exists: docs/ci_hardening_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/security_hardening_protocol.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/deployment_reality_protocol.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/product_polish_protocol.md` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m pytest -q tests` | `PASS` | `—` |
 | `run` | `PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid` | `PASS` | `—` |
 | `run` | `python experiments/m626_technical_report.py` | `PASS` | `PASS` |
@@ -73,6 +74,13 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m666_24h_soak_test.py` | `PASS` | `BLOCKED` |
 | `run` | `python experiments/m667_memory_leak_long_run.py` | `PASS` | `SIMULATED` |
 | `run` | `python experiments/m668_log_volume_storage_growth.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m669_cli_ux_test.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m670_error_message_quality.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m671_readme_claim_checker.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m672_docs_to_code_consistency.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m673_demo_script_e2e.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m674_github_pages_build.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m675_public_release_dry_run.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |

@@ -4,13 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-09T22:13:58.579476+00:00",
-  "run_commands": 45,
-  "run_passed": 45,
+  "timestamp": "2026-05-09T22:25:35.455208+00:00",
+  "run_commands": 52,
+  "run_passed": 52,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
   "blocked_result_commands": 8,
-  "docs_checked": 10,
+  "docs_checked": 11,
   "failures": [],
   "records": [
     {
@@ -74,18 +74,24 @@
       "returncode": 0
     },
     {
+      "command": "doc exists: docs/product_polish_protocol.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
       "command": "PYTHONPATH=src python -m pytest -q tests",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 2.28s\n"
+      "output_tail": "............                                                             [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 1 warning in 1.86s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 461/461 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 468/468 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -132,7 +138,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=26 violations=0 missing=0\n",
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=27 violations=0 missing=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m630_public_claim_checker_results.json"
@@ -506,6 +512,76 @@
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m668_log_volume_storage_growth_results.json"
+    },
+    {
+      "command": "python experiments/m669_cli_ux_test.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M669 CLI UX Test: PASS\nchecks=5 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m669_cli_ux_test_results.json"
+    },
+    {
+      "command": "python experiments/m670_error_message_quality.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M670 Error Message Quality: PASS\nchecks=5 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m670_error_message_quality_results.json"
+    },
+    {
+      "command": "python experiments/m671_readme_claim_checker.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M671 README Claim Checker: PASS\nfiles=4 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m671_readme_claim_checker_results.json"
+    },
+    {
+      "command": "python experiments/m672_docs_to_code_consistency.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M672 Docs-to-Code Consistency: PASS\ncommands=56 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m672_docs_to_code_consistency_results.json"
+    },
+    {
+      "command": "python experiments/m673_demo_script_e2e.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M673 Demo Script E2E: PASS\nchecks=4 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m673_demo_script_e2e_results.json"
+    },
+    {
+      "command": "python experiments/m674_github_pages_build.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M674 GitHub Pages Build: PASS\nfiles=2 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m674_github_pages_build_results.json"
+    },
+    {
+      "command": "python experiments/m675_public_release_dry_run.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M675 Public Release Dry Run: PASS\nresults=8 failures=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m675_public_release_dry_run_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

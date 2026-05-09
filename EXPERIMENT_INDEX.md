@@ -1,6 +1,6 @@
 # Experiment Index
 
-Total: 793 Python experiment/prototype scripts
+Total: 800 Python experiment/prototype scripts
 
 - [m1_probe_mlp_up.py](experiments/m1_probe_mlp_up.py)
 - [m1b_probe_rownorm.py](experiments/m1b_probe_rownorm.py)
@@ -771,6 +771,13 @@ Total: 793 Python experiment/prototype scripts
 - [m666_24h_soak_test.py](experiments/m666_24h_soak_test.py)
 - [m667_memory_leak_long_run.py](experiments/m667_memory_leak_long_run.py)
 - [m668_log_volume_storage_growth.py](experiments/m668_log_volume_storage_growth.py)
+- [m669_cli_ux_test.py](experiments/m669_cli_ux_test.py)
+- [m670_error_message_quality.py](experiments/m670_error_message_quality.py)
+- [m671_readme_claim_checker.py](experiments/m671_readme_claim_checker.py)
+- [m672_docs_to_code_consistency.py](experiments/m672_docs_to_code_consistency.py)
+- [m673_demo_script_e2e.py](experiments/m673_demo_script_e2e.py)
+- [m674_github_pages_build.py](experiments/m674_github_pages_build.py)
+- [m675_public_release_dry_run.py](experiments/m675_public_release_dry_run.py)
 - [__init__.py](experiments/__init__.py)
 - [_generate_diary.py](experiments/_generate_diary.py)
 - [auto_generated_unit_tests.py](experiments/auto_generated_unit_tests.py)

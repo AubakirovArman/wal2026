@@ -9,12 +9,12 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 793 Python scripts |
-| Results | 461 JSON result files |
-| Books | 606 entries |
-| Docs | 227 markdown docs plus developer diary |
+| Experiments | 800 Python scripts |
+| Results | 468 JSON result files |
+| Books | 613 entries |
+| Docs | 228 markdown docs plus developer diary |
 | Maintained core tests | 12 passing |
-| Safe runtime sweep | 272 passing, 0 failing, 521 blocked by policy |
+| Safe runtime sweep | 279 passing, 0 failing, 521 blocked by policy |
 
 ## Key Results
 
@@ -34,6 +34,7 @@
 - M646-M651 add CI hardening corpora, long-context payloads, scoring calibration, and checksum drift checks.
 - M652-M658 add static security gates for secrets, recipe injection, registry poisoning, hotfix abuse, retrieval injection, provenance tamper, and signed package verification.
 - M659-M668 add deployment reality contracts; M666 remains `BLOCKED` for a real 24h runner and M667 is `SIMULATED` as a short memory sentinel.
+- M669-M675 add product polish gates for CLI UX, docs consistency, demo E2E, static Pages build, and pre-alpha release dry run.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 

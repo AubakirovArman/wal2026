@@ -57,6 +57,13 @@ RUN_COMMANDS = [
     "python experiments/m666_24h_soak_test.py",
     "python experiments/m667_memory_leak_long_run.py",
     "python experiments/m668_log_volume_storage_growth.py",
+    "python experiments/m669_cli_ux_test.py",
+    "python experiments/m670_error_message_quality.py",
+    "python experiments/m671_readme_claim_checker.py",
+    "python experiments/m672_docs_to_code_consistency.py",
+    "python experiments/m673_demo_script_e2e.py",
+    "python experiments/m674_github_pages_build.py",
+    "python experiments/m675_public_release_dry_run.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -76,6 +83,7 @@ DOC_FILES = [
     "docs/ci_hardening_protocol.md",
     "docs/security_hardening_protocol.md",
     "docs/deployment_reality_protocol.md",
+    "docs/product_polish_protocol.md",
 ]
 
 

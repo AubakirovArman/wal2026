@@ -4759,7 +4759,7 @@ python experiments/m544_result_validation.py
 ### M624 — Full Test Inventory
 - **Файл**: `m624_full_test_inventory.py`
 - **Метод**: ordered inventory всех `experiments/*.py`, `compile()` для синтаксиса/compile-time проверки, классификация runnable vs blocked.
-- **Результат**: total_scripts=793, parse_failures=0, runnable_scripts=272, blocked_scripts=521
+- **Результат**: total_scripts=800, parse_failures=0, runnable_scripts=279, blocked_scripts=521
 - **Статус**: ✅ PASS
 - **Book**: `book/M624_Full_Test_Inventory.md`
 
@@ -4772,7 +4772,7 @@ python experiments/m544_result_validation.py
 ### M625 — Safe Runtime Sweep
 - **Файл**: `m625_safe_runtime_sweep.py`
 - **Метод**: запуск всех M624-runnable scripts в M-order с `timeout=15s`, `PYTHONPATH=src:<repo>`.
-- **Результат**: total_scripts=793, executed_scripts=272, status_counts={PASS: 272, BLOCKED: 521}, FAIL=0
+- **Результат**: total_scripts=800, executed_scripts=279, status_counts={PASS: 279, BLOCKED: 521}, FAIL=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M625_Safe_Runtime_Sweep.md`
 
@@ -4817,7 +4817,7 @@ python experiments/m544_result_validation.py
 - `wal_studio_v01/README.md` обновлён: старые synthetic validation цифры заменены на реальные gates M621-M638.
 - `EXPERIMENT_INDEX.md`, badges, release notes, manifest и project summary синхронизированы с текущими счётчиками.
 - `M621` усилен до 37 checks: теперь он проверяет не только README, но и текущие public claim files (`FINAL_REPORT`, `WAL_EXPORT`, milestone JSON, demo/report docs, controlled runner docs).
-- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `272 PASS / 521 BLOCKED`.
+- `M624/M625` policy усилен: старые public-claim generators вроде final HTML report и completion certificate теперь `BLOCKED`, поэтому финальный sweep стал `279 PASS / 521 BLOCKED`.
 
 ### Практический вывод
 Для публичного GitHub входа теперь есть две разные двери:
@@ -4835,7 +4835,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m628_blocked_script_taxonomy.py`
 - **Документ**: `docs/blocked_script_taxonomy.md`
 - **Метод**: чтение `m624_full_test_inventory_results.json`, маппинг `blocked_reasons` в runner categories.
-- **Результат**: total_scripts=793, blocked_scripts=521, assigned_scripts=521, unassigned_scripts=0
+- **Результат**: total_scripts=800, blocked_scripts=521, assigned_scripts=521, unassigned_scripts=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M628_Blocked_Script_Taxonomy.md`
 
@@ -4851,7 +4851,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m630_public_claim_checker.py`
 - **Документ**: `docs/public_claim_policy.md`
 - **Метод**: scan public-facing files на зрелые deployment claims, active top-grade labels, external certification claims и обязательные conservative phrases.
-- **Результат**: files_scanned=26, violations_total=0, required_phrase_misses=0
+- **Результат**: files_scanned=27, violations_total=0, required_phrase_misses=0
 - **Статус**: ✅ PASS
 - **Book**: `book/M630_Public_Claim_Checker.md`
 
@@ -4859,7 +4859,7 @@ python experiments/m544_result_validation.py
 - **Файл**: `m631_docs_command_smoke.py`
 - **Документ**: `docs/docs_command_smoke.md`
 - **Метод**: запуск быстрых reviewer commands (`pytest`, `wal validate-results`, M626-M630, WAL Studio demo), long sweep commands — existence-only.
-- **Результат**: run_commands=45/45 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=8
+- **Результат**: run_commands=52/52 PASS, exists_only_commands=2/2 PASS, embedded_result_BLOCKED=8
 - **Статус**: ✅ PASS
 - **Book**: `book/M631_Docs_Command_Smoke.md`
 
@@ -4867,7 +4867,7 @@ python experiments/m544_result_validation.py
 - M628/M629 сначала попали в `BLOCKED` из-за строк `device_map`/`triton` внутри taxonomy text.
 - Добавлен `SAFE_TEXT_ONLY_AUDIT_ALLOWLIST` для text-only audit scripts.
 - Исправлено двойное экранирование regex в M621 public-file scan: теперь `production-ready` и active top-grade JSON/HTML labels реально ловятся не только в README.
-- Финальный M624 после M628-M631: total_scripts=793, parse_failures=0, runnable_scripts=272, blocked_scripts=521.
+- Финальный M624 после M628-M631: total_scripts=800, parse_failures=0, runnable_scripts=279, blocked_scripts=521.
 
 ### Практический вывод
 Проект теперь имеет первый слой test taxonomy: `BLOCKED` больше не скрытая зона, а очередь контролируемых runners с явными safety boundaries.
@@ -5149,3 +5149,54 @@ M652-M658 — это не внешний security audit и не production claim
 
 ### Практический вывод
 M659-M668 повышают реализм deployment слоя, но не заменяют настоящий production soak. M666 специально `BLOCKED`, а M667 специально `SIMULATED`, чтобы не превращать short checks в ложные production claims.
+
+---
+
+## M669-675 — Product Polish / Public Release Dry Run (2026-05-09)
+
+### Цель
+Закрыть hardening sprint product-facing проверками: CLI UX, качество ошибок, README claims, docs-to-code consistency, demo E2E, локальный GitHub Pages build и public release dry run.
+
+### M669 — CLI UX Test
+- **Файл**: `m669_cli_ux_test.py`
+- **Результат**: status=PASS, checks=5, failures=0
+- **Book**: `book/M669_CLI_UX_Test.md`
+
+### M670 — Error Message Quality
+- **Файл**: `m670_error_message_quality.py`
+- **Результат**: status=PASS, checks=5, failures=0
+- **Book**: `book/M670_Error_Message_Quality.md`
+
+### M671 — README Claim Checker
+- **Файл**: `m671_readme_claim_checker.py`
+- **Результат**: status=PASS, files_checked=4, failures=0
+- **Book**: `book/M671_README_Claim_Checker.md`
+
+### M672 — Docs-to-Code Consistency
+- **Файл**: `m672_docs_to_code_consistency.py`
+- **Результат**: status=PASS, commands_checked=49, failures=0
+- **Book**: `book/M672_Docs_to_Code_Consistency.md`
+
+### M673 — Demo Script E2E
+- **Файл**: `m673_demo_script_e2e.py`
+- **Artifact**: `corpora/product_demo_e2e_output.txt`
+- **Результат**: status=PASS, checks=4, failures=0
+- **Book**: `book/M673_Demo_Script_E2E.md`
+
+### M674 — GitHub Pages Build
+- **Файл**: `m674_github_pages_build.py`
+- **Artifacts**: `site/index.html`, `site/status.json`
+- **Результат**: status=PASS, site_files=2, failures=0
+- **Book**: `book/M674_GitHub_Pages_Build.md`
+
+### M675 — Public Release Dry Run
+- **Файл**: `m675_public_release_dry_run.py`
+- **Artifact**: `corpora/product_public_release_dry_run.json`
+- **Результат**: status=PASS, failures=0
+- **Book**: `book/M675_Public_Release_Dry_Run.md`
+
+### Документ
+- `docs/product_polish_protocol.md`
+
+### Практический вывод
+M669-M675 дают честный pre-alpha public release dry run. Это не alpha claim: M632-M638 всё ещё `BLOCKED` без small text-only моделей, M666 всё ещё `BLOCKED` без 24h runner.

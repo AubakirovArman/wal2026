@@ -11,7 +11,7 @@ M628 turns the M625 `BLOCKED` set from a flat count into controlled runner categ
 
 ## Result
 
-- Total scripts: `783`
+- Total scripts: `800`
 - Blocked scripts: `521`
 - Assigned scripts: `521`
 - Unassigned scripts: `0`

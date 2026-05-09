@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 605
+Total entries: 612
 
 ## Early (M1-M99)
 
@@ -392,6 +392,13 @@ Total entries: 605
 - [M666 24h Soak Test](M666_24h_Soak_Test.md)
 - [M667 Memory Leak Long Run](M667_Memory_Leak_Long_Run.md)
 - [M668 Log Volume Storage Growth](M668_Log_Volume_Storage_Growth.md)
+- [M669 CLI UX Test](M669_CLI_UX_Test.md)
+- [M670 Error Message Quality](M670_Error_Message_Quality.md)
+- [M671 README Claim Checker](M671_README_Claim_Checker.md)
+- [M672 Docs to Code Consistency](M672_Docs_to_Code_Consistency.md)
+- [M673 Demo Script E2E](M673_Demo_Script_E2E.md)
+- [M674 GitHub Pages Build](M674_GitHub_Pages_Build.md)
+- [M675 Public Release Dry Run](M675_Public_Release_Dry_Run.md)
 
 ## Phase 1 (M100-M149)
 

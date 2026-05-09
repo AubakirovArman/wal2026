@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M668.
+The current release-cleanup line is M621-M675.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -127,6 +127,13 @@ The current release-cleanup line is M621-M668.
 | M666 | 24h soak test | BLOCKED |
 | M667 | Memory leak long run | SIMULATED |
 | M668 | Log volume/storage growth | PASS |
+| M669 | CLI UX test | PASS |
+| M670 | Error message quality | PASS |
+| M671 | README claim checker | PASS |
+| M672 | Docs-to-code consistency | PASS |
+| M673 | Demo script E2E | PASS |
+| M674 | GitHub Pages build | PASS |
+| M675 | Public release dry run | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -141,6 +148,8 @@ M646-M651 harden CI inputs and scoring: negative prompts, lure prompts, long-con
 M652-M658 add security and abuse contracts. They are static deterministic gates, not an external security audit and not a production-readiness claim.
 
 M659-M668 add deployment-reality contracts. M659 uses a local loopback server, but M666 is explicitly `BLOCKED` because a real 24h soak test must not be faked, and M667 is `SIMULATED` because it is only a short memory sentinel.
+
+M669-M675 add product polish and release dry-run gates for the pre-alpha public release path.
 
 ## Status Semantics
 

@@ -27,6 +27,7 @@ PUBLIC_FILES = [
     "docs/ci_hardening_protocol.md",
     "docs/security_hardening_protocol.md",
     "docs/deployment_reality_protocol.md",
+    "docs/product_polish_protocol.md",
     "docs/wal_status_summary.md",
     "wal_studio_v01/README.md",
     "FINAL_REPORT.html",

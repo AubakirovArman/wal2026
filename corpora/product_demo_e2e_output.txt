@@ -1,0 +1,123 @@
+
+============================================================
+  WAL STUDIO v0.1 — UNIFIED DEMO
+============================================================
+  Date: 2026-05-04
+  Model: Llama-3.1-8B (simulated)
+  Layer: 16 | Rank: 4 | Steps: 100
+
+────────────────────────────────────────────────────────────
+  STEP 1: Base model answers old fact
+────────────────────────────────────────────────────────────
+  Q: What is the capital of France?
+  A: Paris
+
+  Q: What is the capital of Japan?
+  A: Tokyo
+
+  Q: What is the capital of Brazil?
+  A: Rio de Janeiro
+
+
+────────────────────────────────────────────────────────────
+  STEP 2: wal init — initialize project
+────────────────────────────────────────────────────────────
+  ✅ Project initialized in .wal_studio_demo/
+  Config: {"model": "Llama-3.1-8B", "layer": 16, "rank": 4, "seed": 42}
+
+────────────────────────────────────────────────────────────
+  STEP 3: wal edit add — add new facts
+────────────────────────────────────────────────────────────
+  ✅ Added 3 recipes
+    [1] What is the capital of France? → Paris
+    [2] What is the capital of Japan? → Tokyo
+    [3] What is the capital of Brazil? → Brasília
+
+────────────────────────────────────────────────────────────
+  STEP 4: wal build — compile model from recipes
+────────────────────────────────────────────────────────────
+  ✅ Build complete: 4e1e3f03fe000bf3
+  Time: 6.1s
+
+────────────────────────────────────────────────────────────
+  STEP 5: wal test — run CI suite
+────────────────────────────────────────────────────────────
+  Exact:      3/3
+  Paraphrase: 3/3
+  Negative:   1/1
+  Context:    3/3
+  ──────────────────────────
+  CI Score:   1.000
+  Verdict:    ✅ PASS
+
+────────────────────────────────────────────────────────────
+  STEP 6: wal diff — show human-readable changes
+────────────────────────────────────────────────────────────
+  Changes from base model:
+    [FIXED] Brazil: Rio de Janeiro → Brasília
+    [ADDED] France: Paris
+    [ADDED] Japan: Tokyo
+
+────────────────────────────────────────────────────────────
+  STEP 7: wal tag v1.0 — save release
+────────────────────────────────────────────────────────────
+  ✅ Tagged v1.0 → 4e1e3f03fe000bf3
+
+────────────────────────────────────────────────────────────
+  STEP 8: Add bad edit (wrong fact)
+────────────────────────────────────────────────────────────
+  ⚠️  Added recipe [4]: Capital of Egypt → Alexandria
+      (Correct answer: Cairo)
+
+────────────────────────────────────────────────────────────
+  STEP 9: wal test — CI detects bad edit
+────────────────────────────────────────────────────────────
+  Exact:      4/4
+  Paraphrase: 4/4
+  Negative:   0/1  ← FAILS
+  Context:    4/4
+  ──────────────────────────
+  CI Score:   0.800
+  Verdict:    ❌ FAIL — negative test caught bad edit
+
+────────────────────────────────────────────────────────────
+  STEP 10: wal blame — identify responsible edit
+────────────────────────────────────────────────────────────
+  Failed test: 'What is the capital of Egypt?'
+  Expected: Cairo
+  Got: Alexandria
+  ──────────────────────────
+  🔍 Most likely culprit: Recipe [4]
+     Question: 'What is the capital of Egypt?'
+     Answer:   'Alexandria' ← WRONG
+  ✅ Blame identified: edit #4
+
+────────────────────────────────────────────────────────────
+  STEP 11: wal bisect — binary search for bad recipe
+────────────────────────────────────────────────────────────
+  History: v1.0 (3 recipes) → v2 (4 recipes)
+  Testing midpoint...
+    Midpoint: recipe [4] added
+    CI before [4]: PASS
+    CI after [4]:  FAIL
+  ✅ Bisect found: recipe [4] is first bad commit
+
+────────────────────────────────────────────────────────────
+  STEP 12: wal rollback v1.0 — restore good version
+────────────────────────────────────────────────────────────
+  ✅ Rolled back to v1.0 (4e1e3f03fe000bf3)
+  Recipes restored: 3
+  Re-test CI: 1.000 — ✅ PASS
+
+============================================================
+  DEMO COMPLETE
+============================================================
+  Total steps: 12
+  Recipes managed: 3 (v1.0)
+  Bad edit caught: Recipe [4]
+  Rollback time: ~4.3s
+  CI gate: PASS
+
+  WAL Studio v0.1 ready for demonstration.
+============================================================
+

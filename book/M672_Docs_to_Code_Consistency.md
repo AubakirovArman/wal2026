@@ -1,0 +1,18 @@
+# M672 — Docs-to-Code Consistency
+
+Date: 2026-05-09  
+Status: PASS  
+Result: `experiments/m672_docs_to_code_consistency_results.json`
+
+## Purpose
+
+Ensure README command targets point to real scripts.
+
+## Result
+
+- Commands checked: recorded in result JSON
+- Failures: `0`
+
+## Outcome
+
+Reviewer-facing command references resolve to files in the repo.
