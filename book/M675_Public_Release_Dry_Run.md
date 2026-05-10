@@ -10,8 +10,9 @@ Run a final pre-alpha public release checklist over key gates, docs, and site ar
 
 ## Result
 
-- Results checked: `7`
+- Results checked: `9`
 - Failures: `0`
+- Docs checked: `10`
 - Artifact: `corpora/product_public_release_dry_run.json`
 
 ## Outcome

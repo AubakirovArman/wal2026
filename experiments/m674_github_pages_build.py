@@ -17,7 +17,9 @@ def load_metrics() -> dict[str, object]:
 
 def render_index(metrics: dict[str, object]) -> str:
     experiments = metrics["experiments"]
+    code = metrics["code"]
     small_models = metrics["small_model_gates"]
+    legacy_audit = metrics.get("legacy_audit", {})
     generated_at = datetime.now(timezone.utc).isoformat()
     return f"""<!doctype html>
 <html lang="en">
@@ -47,10 +49,11 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
 
   <h2>What is validated?</h2>
   <div class="grid">
-    <div class="card"><strong>Core tests</strong><br>13 maintained pytest tests pass.</div>
+    <div class="card"><strong>Core tests</strong><br>{code["pytest_tests"]} maintained pytest tests pass.</div>
     <div class="card"><strong>Result schema</strong><br>{experiments["result_json_files"]}/{experiments["result_json_files"]} result JSON files validate.</div>
     <div class="card"><strong>Safe sweep</strong><br>{experiments["safe_sweep_pass"]} safe scripts pass; {experiments["safe_sweep_blocked"]} are policy-blocked.</div>
     <div class="card"><strong>Small models</strong><br>{small_models["unique_model_paths"]} unique local runtime/artifact workflows pass.</div>
+    <div class="card"><strong>Legacy audit</strong><br>M1-M50 batch: {legacy_audit.get("m1_m50_total", 0)} scripts classified; {legacy_audit.get("m1_m50_current_public_claim_allowed", 0)} current public claims.</div>
   </div>
 
   <h2>What is not validated?</h2>
@@ -58,6 +61,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <li>No production-readiness claim.</li>
     <li>No external certification claim.</li>
     <li>Small-model gates do not yet prove semantic weight-edit training.</li>
+    <li>M1-M50 safe-pass scripts still need schema-v1 result artifacts before current public claims.</li>
     <li>Deployment modules remain prototypes/simulations unless explicitly marked otherwise.</li>
   </ul>
 

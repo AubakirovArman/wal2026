@@ -65,6 +65,8 @@ RUN_COMMANDS = [
     "python experiments/m674_github_pages_build.py",
     "python experiments/m675_public_release_dry_run.py",
     "python experiments/m676_public_repo_hardening.py",
+    "python experiments/m677_experiment_manifest.py",
+    "python experiments/m678_legacy_audit_m1_m50.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -78,6 +80,8 @@ DOC_FILES = [
     "TECHNICAL_REPORT.md",
     "docs/VALIDATION_STATUS.md",
     "docs/project_metrics.json",
+    "docs/legacy_audit_manifest.md",
+    "docs/legacy_audit_m1_m50.md",
     "docs/demo_playbook.md",
     "docs/controlled_runners.md",
     "docs/model_small_protocol.md",

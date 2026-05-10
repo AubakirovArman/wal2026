@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M676.
+The current release-cleanup line is M621-M678.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -135,6 +135,8 @@ The current release-cleanup line is M621-M676.
 | M674 | GitHub Pages build | PASS |
 | M675 | Public release dry run | PASS |
 | M676 | Public repo hardening | PASS |
+| M677 | Experiment manifest | PASS |
+| M678 | Legacy audit M1-M50 | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -151,6 +153,8 @@ M652-M658 add security and abuse contracts. They are static deterministic gates,
 M659-M668 add deployment-reality contracts. M659 uses a local loopback server, but M666 is explicitly `BLOCKED` because a real 24h soak test must not be faked, and M667 is `SIMULATED` because it is only a short memory sentinel.
 
 M669-M676 add product polish, release dry-run, and public repo hardening gates for the pre-alpha public release path.
+
+M677-M678 start the Legacy Experiment Resurrection Program. The first batch audits M1-M50 as 143 numeric-prefix scripts: 133 require controlled GPU/model runners, 3 require slow runners, and 7 still run under the safe policy but need schema-v1 artifacts before current public claims.
 
 ## Status Semantics
 

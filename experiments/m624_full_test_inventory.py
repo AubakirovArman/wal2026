@@ -125,6 +125,7 @@ SAFE_SUBPROCESS_ALLOWLIST = {
 SAFE_TEXT_ONLY_AUDIT_ALLOWLIST = {
     "m628_blocked_script_taxonomy.py",
     "m629_controlled_runner_matrix.py",
+    "m677_experiment_manifest.py",
 }
 
 MODEL_SMALL_RUNNER_SCRIPTS = {

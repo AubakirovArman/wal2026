@@ -11,12 +11,12 @@ M631 verifies that the fast commands documented for reviewers still run, while l
 
 ## Result
 
-- Runnable commands: `53`
-- Runnable commands passed: `53`
+- Runnable commands: `55`
+- Runnable commands passed: `55`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 - Commands with embedded blocked result status: `2`
-- Docs checked: `13`
+- Docs checked: `15`
 
 ## Outcome
 

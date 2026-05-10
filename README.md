@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 779 milestone experiment scripts in `experiments/m*.py`
-- 801 Python scripts total in `experiments/`
-- 469 experiment result JSON files in `experiments/`
-- 614 book/diary entries in `book/`
+- 781 milestone experiment scripts in `experiments/m*.py`
+- 803 Python scripts total in `experiments/`
+- 471 experiment result JSON files in `experiments/`
+- 616 book/diary entries in `book/`
 - 274 top-level result files in `results/`
 - 230 docs files in `docs/`
-- 5200+ lines in `docs/dev_diary_ru.md`
-- 68 Python source modules in `src/`
-- 13 pytest tests for the packaged core
+- 5300+ lines in `docs/dev_diary_ru.md`
+- 69 Python source modules in `src/`
+- 16 pytest tests for the packaged core and audit helpers
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M676+
+experiments/        milestone scripts and result JSON for M1-M678+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -148,6 +148,8 @@ python experiments/m673_demo_script_e2e.py
 python experiments/m674_github_pages_build.py
 python experiments/m675_public_release_dry_run.py
 python experiments/m676_public_repo_hardening.py
+python experiments/m677_experiment_manifest.py
+python experiments/m678_legacy_audit_m1_m50.py
 ```
 
 ## Artifact Policy

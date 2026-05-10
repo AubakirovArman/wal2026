@@ -18,6 +18,8 @@ REQUIRED_RESULTS = [
     "m630_public_claim_checker_results.json",
     "m673_demo_script_e2e_results.json",
     "m674_github_pages_build_results.json",
+    "m677_experiment_manifest_results.json",
+    "m678_legacy_audit_m1_m50_results.json",
 ]
 
 REQUIRED_DOCS = [
@@ -27,6 +29,8 @@ REQUIRED_DOCS = [
     "PROJECT_SUMMARY.md",
     "docs/VALIDATION_STATUS.md",
     "docs/project_metrics.json",
+    "docs/legacy_audit_manifest.md",
+    "docs/legacy_audit_m1_m50.md",
     "docs/product_polish_protocol.md",
     "site/index.html",
 ]
