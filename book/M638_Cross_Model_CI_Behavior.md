@@ -1,7 +1,7 @@
 # M638 — Cross-Model CI Behavior
 
 Date: 2026-05-10
-Status: BLOCKED  
+Status: PASS
 Result: `experiments/m638_cross_model_ci_behavior_results.json`
 
 ## Purpose
@@ -10,10 +10,11 @@ Require exact, negative, context, checksum, and rollback behavior across model f
 
 ## Result
 
-- Real model passes: `1`
-- Replay pass: `false`
-- Reason: `NEEDS_REAL_CROSS_MODEL_WORKFLOW_RESULTS`
+- Real model passes: `3`
+- Unique model paths: `3`
+- Replay pass: `true`
+- Reason: none
 
 ## Outcome
 
-Cross-model CI behavior remains blocked until at least three real small-model workflow results exist and recipe replay passes.
+Cross-model CI behavior now passes for the controlled runtime/artifact protocol. This is still not semantic weight-edit training.

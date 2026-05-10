@@ -15,7 +15,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Commands
 
-- Commands with embedded blocked result status: `7`
+- Commands with embedded blocked result status: `2`
 
 | Mode | Command | Command Status | Result Status |
 |------|---------|----------------|---------------|
@@ -37,13 +37,13 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m628_blocked_script_taxonomy.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m629_controlled_runner_matrix.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m630_public_claim_checker.py` | `PASS` | `PASS` |
-| `run` | `python experiments/m632_llama_1b_full_workflow.py` | `PASS` | `BLOCKED` |
+| `run` | `python experiments/m632_llama_1b_full_workflow.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m633_qwen_small_full_workflow.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m634_gemma_small_full_workflow.py` | `PASS` | `BLOCKED` |
-| `run` | `python experiments/m635_tinyllama_mistral_full_workflow.py` | `PASS` | `BLOCKED` |
-| `run` | `python experiments/m636_cross_model_recipe_replay.py` | `PASS` | `BLOCKED` |
-| `run` | `python experiments/m637_cross_model_layer_aperture.py` | `PASS` | `BLOCKED` |
-| `run` | `python experiments/m638_cross_model_ci_behavior.py` | `PASS` | `BLOCKED` |
+| `run` | `python experiments/m635_tinyllama_mistral_full_workflow.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m636_cross_model_recipe_replay.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m637_cross_model_layer_aperture.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m638_cross_model_ci_behavior.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m639_dirty_facts_corpus.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m640_ambiguous_facts_test.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m641_temporal_facts_date_logic.py` | `PASS` | `PASS` |

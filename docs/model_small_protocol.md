@@ -1,7 +1,7 @@
 # Model-Small Validation Protocol
 
 Date: 2026-05-10
-Status: controlled runner protocol, one Qwen-small run completed
+Status: controlled runner protocol, three small-model runs completed
 
 ## Purpose
 
@@ -33,13 +33,19 @@ release_notes
 
 ## Current Local State
 
-The current machine now has one confirmed small text-only model:
+The current machine now has three confirmed small text-only models:
 
+- `HuggingFaceTB/SmolLM2-360M-Instruct`
+- Local snapshot: `.hf_cache/models--HuggingFaceTB--SmolLM2-360M-Instruct/snapshots/a10cc1512eabd3dde888204e902eca88bddb4951`
+- M632 status: `PASS`
 - `Qwen/Qwen2.5-0.5B-Instruct`
 - Local snapshot: `.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775`
 - M633 status: `PASS`
+- `TinyLlama/TinyLlama-1.1B-Chat-v1.0`
+- Local snapshot: `.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6`
+- M635 status: `PASS`
 
-The Llama-family, Gemma, and TinyLlama/Mistral-small slots are still missing. Therefore M636-M638 remain `BLOCKED` until at least three real small-model family workflows pass.
+The Gemma-small slot is still missing, so M634 remains `BLOCKED`. M636-M638 pass because three unique small-model paths now have controlled workflow evidence.
 
 ## Blocking Rules
 
@@ -51,7 +57,7 @@ The Llama-family, Gemma, and TinyLlama/Mistral-small slots are still missing. Th
 ## Download Helper
 
 ```bash
-python scripts/download_qwen_small_model.py
+python scripts/download_model_small_set.py
 ```
 
 The helper downloads model files into `.hf_cache/`, which is intentionally excluded from git.

@@ -1,0 +1,4 @@
+# M635 Qwen Small Smoke
+
+- Build: `6726f54c780e`
+- Model: `/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6`

@@ -90,13 +90,13 @@ The current release-cleanup line is M621-M675.
 | M629 | Controlled runner matrix | PASS |
 | M630 | Public claim checker | PASS |
 | M631 | Docs command smoke | PASS |
-| M632 | Llama-family 1B workflow | BLOCKED |
+| M632 | Llama-family small workflow | PASS |
 | M633 | Qwen small workflow | PASS |
 | M634 | Gemma small workflow | BLOCKED |
-| M635 | TinyLlama/Mistral-small workflow | BLOCKED |
-| M636 | Cross-model recipe replay | BLOCKED |
-| M637 | Cross-model layer aperture | BLOCKED |
-| M638 | Cross-model CI behavior | BLOCKED |
+| M635 | TinyLlama/Mistral-small workflow | PASS |
+| M636 | Cross-model recipe replay | PASS |
+| M637 | Cross-model layer aperture | PASS |
+| M638 | Cross-model CI behavior | PASS |
 | M639 | Dirty facts corpus | PASS |
 | M640 | Ambiguous facts test | PASS |
 | M641 | Temporal facts date logic | PASS |
@@ -139,7 +139,7 @@ The M625 sweep is a safe local execution pass, not a claim that every historical
 
 M628-M631 convert that blocked group into a controlled runner plan: model runners, GPU-heavy runners, mutation dry-runs, docs/public-claim gates, and security/abuse runners are tracked separately from safe-core checks.
 
-M632-M638 start the `MODEL_SMALL` runner. M633 now has one pinned local Qwen2.5-0.5B-Instruct snapshot and passes a controlled runtime/artifact workflow. M632, M634, and M635 remain `BLOCKED`, so M636-M638 remain `BLOCKED` until at least three real small-model family workflows pass.
+M632-M638 now have three unique local small-model controlled workflows: SmolLM2-360M, Qwen2.5-0.5B-Instruct, and TinyLlama-1.1B. M632, M633, M635, and the aggregate M636-M638 gates pass. M634 remains `BLOCKED` because no Gemma-small local snapshot is available. These gates validate local runtime/artifact lifecycle portability, not semantic weight-edit training.
 
 M639-M645 add corpus and routing contracts for robustness. These are not model-behavior claims; M645 is explicitly `SIMULATED` because no real hybrid backend is executed.
 
@@ -175,7 +175,7 @@ This matters because historical false-positive results were found and corrected.
 
 ## Limitations
 
-- **Scientific validation is incomplete**: the framework needs stronger cross-model behavioral testing on small text-only models before claims about generality are defensible.
+- **Scientific validation is incomplete**: the framework still needs semantic weight-edit training and realistic behavioral testing before claims about generality are defensible.
 - **Many modules are simulations**: deployment, registry, and operational modules often validate concepts rather than production infrastructure.
 - **Not every script is safe to run locally**: some scripts depend on large local models, GPUs, Hugging Face assets, backups, git mutation, or long-running probes.
 - **Historical corpus is heterogeneous**: old experiments mix research scripts, docs generators, one-off migrations, and product prototypes.
@@ -200,30 +200,32 @@ Avoid:
 
 ## Next Validation Protocol
 
-The next useful technical milestone is a small-model cross-model protocol:
+The small-model controlled runtime/artifact protocol now has three passing local model paths. The next useful technical milestone is semantic edit training on that same protocol:
 
 ```text
 models:
-  - Llama-3.2-1B or equivalent small Llama-family text model
-  - Qwen2.5-1.5B or equivalent small Qwen text model
-  - Gemma small text model
+  - SmolLM2-360M-Instruct
+  - Qwen2.5-0.5B-Instruct
+  - TinyLlama-1.1B-Chat
+  - optional Gemma-small when a local snapshot is available
 
 workflow:
   1. init project
   2. add recipe
-  3. build WAL artifact
-  4. run exact behavior test
-  5. run negative behavior test
-  6. run context behavior test
-  7. tag passing build
-  8. introduce bad edit
-  9. detect CI failure
-  10. blame/bisect regression
-  11. rollback
-  12. regenerate release notes
+  3. train or apply a real edit
+  4. build WAL artifact
+  5. run exact behavior test
+  6. run negative behavior test
+  7. run context behavior test
+  8. tag passing build
+  9. introduce bad edit
+  10. detect CI failure
+  11. blame/bisect regression
+  12. rollback
+  13. regenerate release notes
 ```
 
-This protocol would convert WAL from broad platform prototype toward defensible model-edit validation.
+This would convert the current portability proof into defensible model-edit validation.
 
 ## Current Release Readiness
 

@@ -4,12 +4,12 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T03:08:16.798756+00:00",
+  "timestamp": "2026-05-10T03:32:44.267365+00:00",
   "run_commands": 52,
   "run_passed": 52,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
-  "blocked_result_commands": 7,
+  "blocked_result_commands": 2,
   "docs_checked": 11,
   "failures": [],
   "records": [
@@ -84,7 +84,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": ".............                                                            [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n13 passed, 1 warning in 1.90s\n"
+      "output_tail": ".............                                                            [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n13 passed, 1 warning in 1.94s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
@@ -148,9 +148,9 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M632 Llama 1B Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
-      "result_status": "BLOCKED",
-      "result_pass": false,
+      "output_tail": "M632 Llama 1B Full Workflow: PASS\ncandidates=1 near_misses=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
       "result_file": "experiments/m632_llama_1b_full_workflow_results.json"
     },
     {
@@ -178,9 +178,9 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M635 TinyLlama/Mistral Small Full Workflow: BLOCKED\ncandidates=0 near_misses=0\n",
-      "result_status": "BLOCKED",
-      "result_pass": false,
+      "output_tail": "M635 TinyLlama/Mistral Small Full Workflow: PASS\ncandidates=1 near_misses=0\n",
+      "result_status": "PASS",
+      "result_pass": true,
       "result_file": "experiments/m635_tinyllama_mistral_full_workflow_results.json"
     },
     {
@@ -188,9 +188,9 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M636 Cross-Model Recipe Replay: BLOCKED\nreal_passes=1 blocked_inputs=3\n",
-      "result_status": "BLOCKED",
-      "result_pass": false,
+      "output_tail": "M636 Cross-Model Recipe Replay: PASS\nreal_passes=3 blocked_inputs=1\n",
+      "result_status": "PASS",
+      "result_pass": true,
       "result_file": "experiments/m636_cross_model_recipe_replay_results.json"
     },
     {
@@ -198,9 +198,9 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M637 Cross-Model Layer Aperture: BLOCKED\ncandidate_models=1 real_passes=1\n",
-      "result_status": "BLOCKED",
-      "result_pass": false,
+      "output_tail": "M637 Cross-Model Layer Aperture: PASS\ncandidate_models=3 real_passes=3\n",
+      "result_status": "PASS",
+      "result_pass": true,
       "result_file": "experiments/m637_cross_model_layer_aperture_results.json"
     },
     {
@@ -208,9 +208,9 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M638 Cross-Model CI Behavior: BLOCKED\nreal_model_passes=1 replay_pass=False\n",
-      "result_status": "BLOCKED",
-      "result_pass": false,
+      "output_tail": "M638 Cross-Model CI Behavior: PASS\nreal_model_passes=3 replay_pass=True\n",
+      "result_status": "PASS",
+      "result_pass": true,
       "result_file": "experiments/m638_cross_model_ci_behavior_results.json"
     },
     {

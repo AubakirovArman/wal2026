@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from wal.cross_model_protocol import discover_candidates, model_workflow_result, repo_root, write_result
+from wal.cross_model_protocol import controlled_model_workflow_result, discover_candidates, repo_root, write_result
 
 
 ROOT = repo_root()
@@ -13,7 +13,7 @@ def main() -> int:
         exclude_terms=["mixtral", "22b", "12b", "8b", "7b", "vision", "vl"],
         max_size_gb=6.0,
     )
-    result = model_workflow_result(
+    result = controlled_model_workflow_result(
         module="M635",
         name="TinyLlama or Mistral Small Full Workflow",
         family="tinyllama_or_mistral_small",

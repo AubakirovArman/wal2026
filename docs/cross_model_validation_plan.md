@@ -11,13 +11,13 @@ Move from platform-level validation to model-portability evidence.
 
 | Module | Gate | Expected Until Small Models Exist |
 |--------|------|-----------------------------------|
-| M632 | Llama-family 1B workflow | `BLOCKED` if no local small model |
+| M632 | Llama-family small workflow | `PASS` with local SmolLM2-360M-Instruct controlled workflow |
 | M633 | Qwen small workflow | `PASS` with local Qwen2.5-0.5B-Instruct controlled workflow |
 | M634 | Gemma small workflow | `BLOCKED` if no local small model |
-| M635 | TinyLlama/Mistral small workflow | `BLOCKED` if no local small model |
-| M636 | Cross-model recipe replay | `BLOCKED` until enough model workflows pass |
-| M637 | Cross-model layer aperture | `BLOCKED` until enough model manifests exist |
-| M638 | Cross-model CI behavior | `BLOCKED` until enough real workflows pass |
+| M635 | TinyLlama/Mistral small workflow | `PASS` with local TinyLlama-1.1B controlled workflow |
+| M636 | Cross-model recipe replay | `PASS` with 3 unique model paths |
+| M637 | Cross-model layer aperture | `PASS` with 3 real model manifests |
+| M638 | Cross-model CI behavior | `PASS` with replay pass and 3 unique model paths |
 
 ## Alpha Requirement
 
@@ -42,4 +42,4 @@ Gemma or TinyLlama/Mistral small
 
 ## Non-Claims
 
-M633 loads one local Qwen-small model and records runtime/artifact workflow evidence. This is one-family evidence only: it does not prove cross-model generality, does not perform semantic weight editing, and does not satisfy M636-M638 by itself.
+M632, M633, and M635 load three local small text-only models and record runtime/artifact workflow evidence. This does not perform semantic weight editing and should not be described as production validation.

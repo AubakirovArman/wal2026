@@ -25,7 +25,16 @@ def main() -> int:
     inputs = [load_result(path) for path in INPUT_RESULTS]
     candidate_models = sum(int(item.get("candidate_count", 0)) for item in inputs)
     real_passes = sum(1 for item in inputs if item.get("status") == "PASS")
-    status = "PASS" if real_passes >= 3 else "BLOCKED"
+    unique_model_paths = sorted(
+        {
+            str(item.get("selected_candidate", {}).get("path"))
+            for item in inputs
+            if item.get("status") == "PASS"
+            and isinstance(item.get("selected_candidate"), dict)
+            and item.get("selected_candidate", {}).get("path")
+        }
+    )
+    status = "PASS" if real_passes >= 3 and len(unique_model_paths) >= 3 else "BLOCKED"
     result = {
         "schema_version": "wal.results.v1",
         "module": "M637",
@@ -36,6 +45,8 @@ def main() -> int:
         "reason": None if status == "PASS" else "NEEDS_REAL_MODEL_MANIFESTS",
         "candidate_models": candidate_models,
         "real_passes": real_passes,
+        "unique_model_paths": unique_model_paths,
+        "unique_model_count": len(unique_model_paths),
         "policy": {
             "do_not_assume_fixed_layer": True,
             "required_mapping": "family-specific layer/target mapping before edit execution",

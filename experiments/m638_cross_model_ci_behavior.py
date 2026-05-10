@@ -25,8 +25,17 @@ def load_result(path: Path) -> dict[str, object]:
 def main() -> int:
     inputs = [load_result(path) for path in INPUT_RESULTS]
     real_model_passes = sum(1 for item in inputs[:4] if item.get("status") == "PASS")
+    unique_model_paths = sorted(
+        {
+            str(item.get("selected_candidate", {}).get("path"))
+            for item in inputs[:4]
+            if item.get("status") == "PASS"
+            and isinstance(item.get("selected_candidate"), dict)
+            and item.get("selected_candidate", {}).get("path")
+        }
+    )
     replay_pass = inputs[-1].get("status") == "PASS"
-    status = "PASS" if real_model_passes >= 3 and replay_pass else "BLOCKED"
+    status = "PASS" if real_model_passes >= 3 and len(unique_model_paths) >= 3 and replay_pass else "BLOCKED"
     result = {
         "schema_version": "wal.results.v1",
         "module": "M638",
@@ -43,6 +52,8 @@ def main() -> int:
             "rollback_restores_previous_checksum",
         ],
         "real_model_passes": real_model_passes,
+        "unique_model_paths": unique_model_paths,
+        "unique_model_count": len(unique_model_paths),
         "replay_pass": replay_pass,
         "inputs": inputs,
         "docs": "docs/cross_model_validation_plan.md",

@@ -2,12 +2,18 @@
   "schema_version": "wal.results.v1",
   "module": "M637",
   "name": "Cross-Model Layer Aperture",
-  "status": "BLOCKED",
-  "pass": false,
-  "timestamp": "2026-05-10T03:08:07.898693+00:00",
-  "reason": "NEEDS_REAL_MODEL_MANIFESTS",
-  "candidate_models": 1,
-  "real_passes": 1,
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-10T03:32:36.047766+00:00",
+  "reason": null,
+  "candidate_models": 3,
+  "real_passes": 3,
+  "unique_model_paths": [
+    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--HuggingFaceTB--SmolLM2-360M-Instruct/snapshots/a10cc1512eabd3dde888204e902eca88bddb4951",
+    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6"
+  ],
+  "unique_model_count": 3,
   "policy": {
     "do_not_assume_fixed_layer": true,
     "required_mapping": "family-specific layer/target mapping before edit execution",
@@ -18,11 +24,11 @@
       "schema_version": "wal.results.v1",
       "module": "M632",
       "name": "Llama 1B Full Workflow",
-      "status": "BLOCKED",
-      "pass": false,
-      "timestamp": "2026-05-10T03:07:41.448641+00:00",
+      "status": "PASS",
+      "pass": true,
+      "timestamp": "2026-05-10T03:31:53.997841+00:00",
       "family": "llama_small",
-      "reason": "LOCAL_SMALL_TEXT_MODEL_NOT_FOUND",
+      "reason": null,
       "required_workflow": [
         "init",
         "add_recipe",
@@ -38,10 +44,80 @@
         "release_notes"
       ],
       "required_models": 1,
-      "candidate_count": 0,
+      "candidate_count": 1,
       "near_miss_count": 0,
-      "candidates": [],
+      "candidates": [
+        {
+          "path": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--HuggingFaceTB--SmolLM2-360M-Instruct/snapshots/a10cc1512eabd3dde888204e902eca88bddb4951",
+          "size_gb": 0.677,
+          "model_type": "llama",
+          "architectures": [
+            "LlamaForCausalLM"
+          ],
+          "matched_terms": [
+            "smollm2-360m",
+            "smollm2"
+          ]
+        }
+      ],
       "near_misses": [],
+      "selected_candidate": {
+        "path": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--HuggingFaceTB--SmolLM2-360M-Instruct/snapshots/a10cc1512eabd3dde888204e902eca88bddb4951",
+        "size_gb": 0.677,
+        "model_type": "llama",
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "matched_terms": [
+          "smollm2-360m",
+          "smollm2"
+        ]
+      },
+      "runtime_smoke": {
+        "status": "PASS",
+        "pass": true,
+        "reason": null,
+        "device": "cuda:0",
+        "dtype": "torch.float16",
+        "prompt_tokens": 14,
+        "generated_token_count": 2,
+        "generated_text": ".",
+        "logits_finite": true,
+        "behavioral_checksum": "503966057f55f0d3"
+      },
+      "artifact_workflow": {
+        "status": "PASS",
+        "pass": true,
+        "workflow_dir": "corpora/m632_llama_small_workflow",
+        "build_id": "e51dcc1d8e84",
+        "checks": {
+          "init": true,
+          "add_recipe": true,
+          "build": true,
+          "exact_check": true,
+          "negative_check": true,
+          "context_check": true,
+          "tag": true,
+          "bad_edit": true,
+          "ci_fail": true,
+          "blame_or_bisect": true,
+          "rollback": true,
+          "release_notes": true
+        },
+        "artifact_workflow_only": true,
+        "weights_modified": false
+      },
+      "validation_scope": [
+        "local_snapshot_manifest",
+        "tokenizer_load_local_files_only",
+        "causal_lm_load_local_files_only",
+        "forward_logits_finite",
+        "deterministic_generation_executes",
+        "wal_artifact_lifecycle",
+        "rollback_restores_artifact_checksum"
+      ],
+      "semantic_edit_training": false,
+      "weights_modified": false,
       "docs": "docs/model_small_protocol.md"
     },
     {
@@ -50,7 +126,7 @@
       "name": "Qwen Small Full Workflow",
       "status": "PASS",
       "pass": true,
-      "timestamp": "2026-05-10T03:07:45.643796+00:00",
+      "timestamp": "2026-05-10T03:32:06.722746+00:00",
       "family": "qwen_small",
       "reason": null,
       "required_workflow": [
@@ -148,7 +224,7 @@
       "name": "Gemma Small Full Workflow",
       "status": "BLOCKED",
       "pass": false,
-      "timestamp": "2026-05-10T03:07:58.413615+00:00",
+      "timestamp": "2026-05-10T03:32:19.032902+00:00",
       "family": "gemma_small",
       "reason": "LOCAL_SMALL_TEXT_MODEL_NOT_FOUND",
       "required_workflow": [
@@ -176,11 +252,11 @@
       "schema_version": "wal.results.v1",
       "module": "M635",
       "name": "TinyLlama or Mistral Small Full Workflow",
-      "status": "BLOCKED",
-      "pass": false,
-      "timestamp": "2026-05-10T03:08:03.231920+00:00",
+      "status": "PASS",
+      "pass": true,
+      "timestamp": "2026-05-10T03:32:23.508090+00:00",
       "family": "tinyllama_or_mistral_small",
-      "reason": "LOCAL_SMALL_TEXT_MODEL_NOT_FOUND",
+      "reason": null,
       "required_workflow": [
         "init",
         "add_recipe",
@@ -196,10 +272,78 @@
         "release_notes"
       ],
       "required_models": 1,
-      "candidate_count": 0,
+      "candidate_count": 1,
       "near_miss_count": 0,
-      "candidates": [],
+      "candidates": [
+        {
+          "path": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6",
+          "size_gb": 2.051,
+          "model_type": "llama",
+          "architectures": [
+            "LlamaForCausalLM"
+          ],
+          "matched_terms": [
+            "tinyllama"
+          ]
+        }
+      ],
       "near_misses": [],
+      "selected_candidate": {
+        "path": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6",
+        "size_gb": 2.051,
+        "model_type": "llama",
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "matched_terms": [
+          "tinyllama"
+        ]
+      },
+      "runtime_smoke": {
+        "status": "PASS",
+        "pass": true,
+        "reason": null,
+        "device": "cuda:0",
+        "dtype": "torch.float16",
+        "prompt_tokens": 15,
+        "generated_token_count": 2,
+        "generated_text": ".",
+        "logits_finite": true,
+        "behavioral_checksum": "b871d6d356c62daa"
+      },
+      "artifact_workflow": {
+        "status": "PASS",
+        "pass": true,
+        "workflow_dir": "corpora/m635_tinyllama_or_mistral_small_workflow",
+        "build_id": "6726f54c780e",
+        "checks": {
+          "init": true,
+          "add_recipe": true,
+          "build": true,
+          "exact_check": true,
+          "negative_check": true,
+          "context_check": true,
+          "tag": true,
+          "bad_edit": true,
+          "ci_fail": true,
+          "blame_or_bisect": true,
+          "rollback": true,
+          "release_notes": true
+        },
+        "artifact_workflow_only": true,
+        "weights_modified": false
+      },
+      "validation_scope": [
+        "local_snapshot_manifest",
+        "tokenizer_load_local_files_only",
+        "causal_lm_load_local_files_only",
+        "forward_logits_finite",
+        "deterministic_generation_executes",
+        "wal_artifact_lifecycle",
+        "rollback_restores_artifact_checksum"
+      ],
+      "semantic_edit_training": false,
+      "weights_modified": false,
       "docs": "docs/model_small_protocol.md"
     }
   ],

@@ -20,4 +20,4 @@ Run the same small-model workflow on a Qwen-family text-only model.
 
 ## Outcome
 
-M633 is now the first real small-model runner pass. It is not semantic edit training and does not modify weights; M636-M638 still require more model families.
+M633 is one of three real small-model runner passes. It is not semantic edit training and does not modify weights.

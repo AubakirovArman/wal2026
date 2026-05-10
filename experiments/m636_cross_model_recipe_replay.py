@@ -25,7 +25,15 @@ def main() -> int:
     inputs = [load_result(path) for path in INPUT_RESULTS]
     real_passes = [item for item in inputs if item.get("status") == "PASS"]
     blocked = [item for item in inputs if item.get("status") == "BLOCKED"]
-    status = "PASS" if len(real_passes) >= 3 else "BLOCKED"
+    unique_model_paths = sorted(
+        {
+            str(item.get("selected_candidate", {}).get("path"))
+            for item in real_passes
+            if isinstance(item.get("selected_candidate"), dict)
+            and item.get("selected_candidate", {}).get("path")
+        }
+    )
+    status = "PASS" if len(real_passes) >= 3 and len(unique_model_paths) >= 3 else "BLOCKED"
     reason = None if status == "PASS" else "NEEDS_THREE_REAL_SMALL_MODEL_WORKFLOWS"
     result = {
         "schema_version": "wal.results.v1",
@@ -37,6 +45,8 @@ def main() -> int:
         "reason": reason,
         "required_real_passes": 3,
         "real_passes": len(real_passes),
+        "unique_model_paths": unique_model_paths,
+        "unique_model_count": len(unique_model_paths),
         "blocked_inputs": len(blocked),
         "workflow_steps": WORKFLOW_STEPS,
         "recipe_contract": {
