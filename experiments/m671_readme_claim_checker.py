@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RESULT_PATH = ROOT / "experiments" / "m671_readme_claim_checker_results.json"
 
 
-FILES = ["README.md", "PROJECT_SUMMARY.md", "TECHNICAL_REPORT.md", "RELEASE_NOTES_v2.md"]
+FILES = ["README.md", "PROJECT_SUMMARY.md", "TECHNICAL_REPORT.md", "KNOWN_ISSUES.md", "RELEASE_NOTES_v2.md"]
 FORBIDDEN = [
     re.compile(r"\bproduction[- ]ready\b", re.IGNORECASE),
     re.compile(r"certified\s+A\+", re.IGNORECASE),

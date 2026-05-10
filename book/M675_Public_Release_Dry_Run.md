@@ -10,9 +10,12 @@ Run a final pre-alpha public release checklist over key gates, docs, and site ar
 
 ## Result
 
+- Results checked: `7`
 - Failures: `0`
 - Artifact: `corpora/product_public_release_dry_run.json`
 
 ## Outcome
 
 The public release dry run passes for a pre-alpha research framework release.
+
+M625 and M631 are validated outside M675 to avoid cyclic gate dependencies.

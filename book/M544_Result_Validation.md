@@ -11,11 +11,11 @@ Result validation now uses wal.results.v1 and the wal validate-results CLI.
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **total**: `431`
-- **valid**: `431`
+- **total**: `469`
+- **valid**: `469`
 - **invalid**: `0`
 - **warnings**: `576`
-- **status_counts**: `5 keys` (`PASS=414`, `FAIL=5`, `BLOCKED=8`, `SIMULATED=3`, `UNSUPPORTED=1`)
+- **status_counts**: `5 keys` (`PASS=455`, `FAIL=5`, `BLOCKED=3`, `SIMULATED=5`, `UNSUPPORTED=1`)
 - **invalid_files**: `0 items`
 - **warning_files**: `383 items`
 
@@ -23,7 +23,7 @@ Result validation now uses wal.results.v1 and the wal validate-results CLI.
 
 - **Модуль**: M544
 - **Название**: Result Validation
-- **Дата обновления**: 2026-05-09
+- **Дата обновления**: 2026-05-10
 - **Статус**: ✅ PASS
 
 ---

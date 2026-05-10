@@ -31,12 +31,17 @@ def capture_cli(argv: list[str]) -> tuple[int, str, str]:
 def main() -> int:
     help_code, help_stdout, help_stderr = capture_cli(["validate-results", "--help"])
     root_code, root_stdout, root_stderr = capture_cli([])
+    studio_code, studio_stdout, studio_stderr = capture_cli(["studio", "--help"])
+    core_code, core_stdout, core_stderr = capture_cli(["core", "--help"])
     checks = [
         {"name": "validate_results_help_exits_zero", "passed": help_code == 0},
         {"name": "validate_results_help_mentions_fail_on_invalid", "passed": "--fail-on-invalid" in help_stdout},
-        {"name": "root_help_mentions_encode", "passed": "encode" in root_stdout},
-        {"name": "root_help_nonzero_without_command", "passed": root_code == 1},
-        {"name": "stderr_empty_for_help", "passed": help_stderr == ""},
+        {"name": "root_help_mentions_core", "passed": "core" in root_stdout},
+        {"name": "root_help_mentions_studio", "passed": "studio" in root_stdout},
+        {"name": "root_help_exits_zero_without_command", "passed": root_code == 0},
+        {"name": "studio_help_mentions_init", "passed": studio_code == 0 and "init" in studio_stdout},
+        {"name": "core_help_mentions_encode", "passed": core_code == 0 and "encode" in core_stdout},
+        {"name": "stderr_empty_for_help", "passed": help_stderr == "" and studio_stderr == "" and core_stderr == ""},
     ]
     failures = [check for check in checks if not check["passed"]]
     status = "PASS" if not failures else "FAIL"

@@ -11,16 +11,16 @@ Audits public wording and false-positive GPU statuses before public release.
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **checks_total**: `41`
-- **checks_passed**: `41`
+- **checks_total**: `51`
+- **checks_passed**: `51`
 - **checks_failed**: `0`
-- **checks**: `41 items`
+- **checks**: `51 items`
 
 ## Анализ
 
 - **Модуль**: M621
 - **Название**: Release Truthfulness Audit
-- **Дата обновления**: 2026-05-09
+- **Дата обновления**: 2026-05-10
 - **Статус**: ✅ PASS
 
 ---
@@ -32,3 +32,7 @@ Audits public wording and false-positive GPU statuses before public release.
 M621 теперь также проверяет current public claim files: `README.md`, `PROJECT_SUMMARY.md`, `TECHNICAL_REPORT.md`, `docs/demo_playbook.md`, `docs/blocked_script_taxonomy.md`, `docs/controlled_runners.md`, `docs/public_claim_policy.md`, `docs/docs_command_smoke.md`, `docs/wal_status_summary.md`, `wal_studio_v01/README.md`, `FINAL_REPORT.html`, `FINAL_REPORT.json`, `WAL_EXPORT.json`, `MILESTONE_v1.2.json`, `MILESTONE_v1.4.json`.
 
 Regex escaping was corrected so the public-file scan detects forbidden active claims outside README as well.
+
+## Дополнение M676
+
+M621 now covers the public hardening files added for repository hygiene and passes `51/51` checks with no active mature deployment or external certification claims.

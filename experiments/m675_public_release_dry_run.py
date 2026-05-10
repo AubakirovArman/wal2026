@@ -16,15 +16,17 @@ REQUIRED_RESULTS = [
     "m623_core_release_gate_results.json",
     "m624_full_test_inventory_results.json",
     "m630_public_claim_checker_results.json",
-    "m631_docs_command_smoke_results.json",
     "m673_demo_script_e2e_results.json",
     "m674_github_pages_build_results.json",
 ]
 
 REQUIRED_DOCS = [
     "README.md",
+    "KNOWN_ISSUES.md",
     "TECHNICAL_REPORT.md",
     "PROJECT_SUMMARY.md",
+    "docs/VALIDATION_STATUS.md",
+    "docs/project_metrics.json",
     "docs/product_polish_protocol.md",
     "site/index.html",
 ]
@@ -65,7 +67,7 @@ def main() -> int:
         "results_checked": len(records),
         "docs_checked": len(REQUIRED_DOCS),
         "failures": failures,
-        "self_referential_note": "M625 safe sweep is validated outside M675 to avoid a cyclic gate dependency.",
+        "self_referential_note": "M625 safe sweep and M631 docs smoke are validated outside M675 to avoid cyclic gate dependencies.",
         "artifact": str(ARTIFACT_PATH.relative_to(ROOT)),
         "scope": "pre-alpha public release dry run gate",
         "docs": "docs/product_polish_protocol.md",

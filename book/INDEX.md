@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 612
+Total entries: 613
 
 ## Early (M1-M99)
 
@@ -399,6 +399,7 @@ Total entries: 612
 - [M673 Demo Script E2E](M673_Demo_Script_E2E.md)
 - [M674 GitHub Pages Build](M674_GitHub_Pages_Build.md)
 - [M675 Public Release Dry Run](M675_Public_Release_Dry_Run.md)
+- [M676 Public Repo Hardening](M676_Public_Repo_Hardening.md)
 
 ## Phase 1 (M100-M149)
 

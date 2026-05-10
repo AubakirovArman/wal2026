@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""WAL — Weight Assembly Language.
+"""WAL Studio — WeightOps research framework.
 
 Setup script for pip install.
 """
@@ -9,9 +9,9 @@ from setuptools import setup, find_packages
 packages = find_packages(where="src") + ["framework"]
 
 setup(
-    name="wal",
-    version="1.0.0",
-    description="Weight Assembly Language — a language for neural network weights",
+    name="wal-studio",
+    version="0.1.0",
+    description="Pre-alpha WeightOps research framework and WAL core runtime",
     author="WAL Team",
     packages=packages,
     package_dir={"": "src", "framework": "framework"},
@@ -27,6 +27,8 @@ setup(
     entry_points={
         "console_scripts": [
             "wal=wal.cli:main",
+            "wal-core=wal.cli:core_main",
+            "wal-studio=wal.cli:studio_main",
             "wal-encode=wal.cli:encode_main",
             "wal-decode=wal.cli:decode_main",
         ],

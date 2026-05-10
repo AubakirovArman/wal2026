@@ -2,19 +2,20 @@
 
 **Status:** pre-alpha research framework prototype
 **Release Grade:** not assigned
-**Version:** v1.4 post-audit cleanup
-**Date:** 2026-05-09
+**Version:** v1.4 post-audit cleanup plus small-model gates
+**Date:** 2026-05-10
 
 ## Statistics
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 800 Python scripts |
-| Results | 468 JSON result files |
-| Books | 613 entries |
-| Docs | 228 markdown docs plus developer diary |
-| Maintained core tests | 12 passing |
-| Safe runtime sweep | 279 passing, 0 failing, 521 blocked by policy |
+| Experiments | 801 Python scripts |
+| Results | 469 JSON result files |
+| Books | 614 entries |
+| Docs | 230 docs plus developer diary |
+| Maintained core tests | 13 passing |
+| Safe runtime sweep | 273 passing, 0 failing, 528 blocked by policy |
+| Small-model controlled workflows | 3 passing unique local model paths |
 
 ## Key Results
 
@@ -28,13 +29,15 @@
 - M629 defines the seven-runner hardening matrix.
 - M630 verifies public claims across release-facing files.
 - M631 smoke-tests fast reviewer documentation commands.
-- M632-M638 are correctly `BLOCKED` until pinned local small text-only models are available.
+- M632, M633, and M635 pass controlled local small-model runtime/artifact workflows on SmolLM2-360M, Qwen2.5-0.5B, and TinyLlama-1.1B.
+- M636-M638 pass with 3 unique local model paths; M634 remains `BLOCKED` until a Gemma-small snapshot is available.
+- `docs/VALIDATION_STATUS.md` provides the public validation ledger and non-claims.
 - M639-M644 add dirty/ambiguous/temporal/long-answer/procedural/refusal robustness corpora and routing contracts.
 - M645 records hard-facts hybrid backend work as `SIMULATED`, not a real backend claim.
 - M646-M651 add CI hardening corpora, long-context payloads, scoring calibration, and checksum drift checks.
 - M652-M658 add static security gates for secrets, recipe injection, registry poisoning, hotfix abuse, retrieval injection, provenance tamper, and signed package verification.
 - M659-M668 add deployment reality contracts; M666 remains `BLOCKED` for a real 24h runner and M667 is `SIMULATED` as a short memory sentinel.
-- M669-M675 add product polish gates for CLI UX, docs consistency, demo E2E, static Pages build, and pre-alpha release dry run.
+- M669-M676 add product polish gates for CLI UX, docs consistency, demo E2E, static Pages build, pre-alpha release dry run, and public repo hardening.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
@@ -42,6 +45,6 @@
 
 **Strong:** CLI, recipes, build/test/rollback concepts, result validation, debugging prototypes, audit trail, generated book/diary, safe release gates.
 
-**Weak:** full cross-model WAL workflow not yet validated, real GPU training remains resource-bound, deployment modules are mostly simulations/prototypes, historical meta files still contain generated optimism in older entries.
+**Weak:** semantic weight-edit training is not yet validated across the small-model set, real GPU training remains resource-bound, deployment modules are mostly simulations/prototypes, historical meta files still contain generated optimism in older entries.
 
 **Status:** Research-grade pre-alpha WeightOps framework prototype with explicit known issues and release gates.

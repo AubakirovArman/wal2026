@@ -17,12 +17,12 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 778 milestone experiment scripts in `experiments/m*.py`
-- 800 Python scripts total in `experiments/`
-- 468 experiment result JSON files in `experiments/`
-- 613 book/diary entries in `book/`
+- 779 milestone experiment scripts in `experiments/m*.py`
+- 801 Python scripts total in `experiments/`
+- 469 experiment result JSON files in `experiments/`
+- 614 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 228 docs files in `docs/`
+- 230 docs files in `docs/`
 - 5200+ lines in `docs/dev_diary_ru.md`
 - 68 Python source modules in `src/`
 - 13 pytest tests for the packaged core
@@ -30,17 +30,19 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M675+
+experiments/        milestone scripts and result JSON for M1-M676+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
 src/                packaged WAL runtime, v1/v2 APIs, and build utilities
 framework/          legacy CLI/framework modules
 tests/              unit tests for packaged core APIs
+examples/           minimal runnable examples
 paper/              article materials, figures, tables, and Russian sections
 scripts/            helper scripts for phase workflows and reports
 reproduce/          reproduction entry points
 results/            legacy summarized result files
+archive/            historical generated artifacts, not current release claims
 ```
 
 ## Quick Start
@@ -49,6 +51,21 @@ results/            legacy summarized result files
 pip install -e .[dev]
 python -m wal --help
 pytest -q tests
+```
+
+CLI surfaces:
+
+```bash
+python -m wal core --help
+python -m wal studio --help
+```
+
+Quickstart example:
+
+```bash
+python -m wal studio init local-demo-model
+python -m wal studio edit add examples/quickstart/facts.json
+python -m wal studio status
 ```
 
 Demo workflow:
@@ -62,6 +79,7 @@ Technical framing:
 ```text
 TECHNICAL_REPORT.md
 docs/demo_playbook.md
+docs/VALIDATION_STATUS.md
 ```
 
 Run a single milestone:
@@ -129,6 +147,7 @@ python experiments/m672_docs_to_code_consistency.py
 python experiments/m673_demo_script_e2e.py
 python experiments/m674_github_pages_build.py
 python experiments/m675_public_release_dry_run.py
+python experiments/m676_public_repo_hardening.py
 ```
 
 ## Artifact Policy

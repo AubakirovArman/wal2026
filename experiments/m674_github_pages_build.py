@@ -11,35 +11,105 @@ SITE = ROOT / "site"
 RESULT_PATH = ROOT / "experiments" / "m674_github_pages_build_results.json"
 
 
+def load_metrics() -> dict[str, object]:
+    return json.loads((ROOT / "docs" / "project_metrics.json").read_text(encoding="utf-8"))
+
+
+def render_index(metrics: dict[str, object]) -> str:
+    experiments = metrics["experiments"]
+    small_models = metrics["small_model_gates"]
+    generated_at = datetime.now(timezone.utc).isoformat()
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WAL Studio — Pre-alpha WeightOps Research Framework</title>
+  <style>
+    body {{ font-family: system-ui, sans-serif; max-width: 960px; margin: 40px auto; padding: 0 20px; line-height: 1.55; color: #172033; }}
+    h1, h2 {{ line-height: 1.2; }}
+    code {{ background: #f3f5f7; padding: 0.1rem 0.25rem; border-radius: 4px; }}
+    pre {{ background: #0f172a; color: #e2e8f0; padding: 1rem; overflow-x: auto; border-radius: 8px; }}
+    .status {{ display: inline-block; background: #fff7ed; color: #9a3412; padding: 0.25rem 0.5rem; border-radius: 999px; font-weight: 600; }}
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }}
+    .card {{ border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; background: #fff; }}
+  </style>
+</head>
+<body>
+  <h1>WAL Studio</h1>
+  <p><span class="status">pre-alpha research framework</span></p>
+  <p>WAL Studio is a WeightOps prototype for representing model edits as reproducible recipes, building auditable artifacts, running behavioral gates, and rolling back regressions.</p>
+
+  <h2>30-second demo</h2>
+  <pre><code>pip install -e .[dev]
+python wal_studio_v01/demo.py
+python -m wal validate-results experiments --fail-on-invalid</code></pre>
+
+  <h2>What is validated?</h2>
+  <div class="grid">
+    <div class="card"><strong>Core tests</strong><br>13 maintained pytest tests pass.</div>
+    <div class="card"><strong>Result schema</strong><br>{experiments["result_json_files"]}/{experiments["result_json_files"]} result JSON files validate.</div>
+    <div class="card"><strong>Safe sweep</strong><br>{experiments["safe_sweep_pass"]} safe scripts pass; {experiments["safe_sweep_blocked"]} are policy-blocked.</div>
+    <div class="card"><strong>Small models</strong><br>{small_models["unique_model_paths"]} unique local runtime/artifact workflows pass.</div>
+  </div>
+
+  <h2>What is not validated?</h2>
+  <ul>
+    <li>No production-readiness claim.</li>
+    <li>No external certification claim.</li>
+    <li>Small-model gates do not yet prove semantic weight-edit training.</li>
+    <li>Deployment modules remain prototypes/simulations unless explicitly marked otherwise.</li>
+  </ul>
+
+  <h2>How to run</h2>
+  <pre><code>python -m wal core --help
+python -m wal studio --help
+python -m wal studio init local-demo-model
+python -m wal studio edit add examples/quickstart/facts.json
+python -m wal studio status</code></pre>
+
+  <h2>Roadmap</h2>
+  <p>Next useful milestone: run semantic edit training across the same small-model protocol and compare against RAG-only and LoRA baselines.</p>
+
+  <h2>References</h2>
+  <ul>
+    <li><a href="../README.md">README.md</a></li>
+    <li><a href="../TECHNICAL_REPORT.md">TECHNICAL_REPORT.md</a></li>
+    <li><a href="../docs/VALIDATION_STATUS.md">docs/VALIDATION_STATUS.md</a></li>
+    <li><a href="../KNOWN_ISSUES.md">KNOWN_ISSUES.md</a></li>
+  </ul>
+
+  <p><small>Generated at {html.escape(generated_at)} from docs/project_metrics.json.</small></p>
+</body>
+</html>
+"""
+
+
 def main() -> int:
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    summary = (ROOT / "PROJECT_SUMMARY.md").read_text(encoding="utf-8")
+    metrics = load_metrics()
+    experiments = metrics["experiments"]
     SITE.mkdir(parents=True, exist_ok=True)
     index = SITE / "index.html"
     status_json = SITE / "status.json"
-    body = "\n".join([
-        "<!doctype html>",
-        "<html><head><meta charset=\"utf-8\"><title>WAL Pre-alpha</title></head><body>",
-        "<h1>WAL — WeightOps Research Framework</h1>",
-        "<p>Status: pre-alpha research framework prototype.</p>",
-        "<h2>README</h2>",
-        f"<pre>{html.escape(readme[:6000])}</pre>",
-        "<h2>Project Summary</h2>",
-        f"<pre>{html.escape(summary[:4000])}</pre>",
-        "</body></html>",
-    ])
+    body = render_index(metrics)
     index.write_text(body, encoding="utf-8")
     status_payload = {
-        "status": "pre-alpha research framework prototype",
+        "status": metrics["status"],
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "source": ["README.md", "PROJECT_SUMMARY.md"],
+        "source": ["docs/project_metrics.json", "docs/VALIDATION_STATUS.md"],
+        "metrics": metrics,
     }
     status_json.write_text(json.dumps(status_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     failures = []
-    if "production-ready" in body.lower():
+    lowered = body.lower()
+    if "production-ready" in lowered:
         failures.append("forbidden_claim_in_site")
+    if "pre-alpha" not in lowered:
+        failures.append("missing_pre_alpha")
     if not index.exists() or not status_json.exists():
         failures.append("site_artifact_missing")
+    if f'{experiments["result_json_files"]}/468' in body:
+        failures.append("stale_result_json_denominator")
     status = "PASS" if not failures else "FAIL"
     result = {
         "schema_version": "wal.results.v1",

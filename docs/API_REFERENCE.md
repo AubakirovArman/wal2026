@@ -1,79 +1,68 @@
 # WAL API Reference
 
-## Python API
+Status: pre-alpha.
 
-### `WALProject`
+## Packaged CLI
 
-```python
-from wal import WALProject
+WAL exposes two explicit command surfaces:
 
-# Initialize
-project = WALProject("./my_project")
-project.init(model="meta-llama/Llama-3.1-8B")
-
-# Add recipes
-project.add_recipe("What is X?", "Y")
-project.add_recipes([
-    ("Q1", "A1"),
-    ("Q2", "A2"),
-])
-
-# Build
-project.build(layer=16, rank=4, steps=100)
-
-# Test
-results = project.test()
-print(results.ci_score)
-
-# Tag
-project.tag("v1.0")
-
-# Rollback
-project.rollback("v1.0")
+```bash
+python -m wal core --help
+python -m wal studio --help
 ```
 
-### `train_lora_fp32`
+### Core
+
+`wal core` wraps the legacy WAL core operations:
+
+- `encode`
+- `decode`
+- `grammar`
+- `compress`
+- `hierarchy`
+- `torch`
+- `debug`
+- `library`
+- `backend`
+- `meta`
+- `export`
+- `merge`
+- `pipeline`
+- `validate-results`
+
+### Studio
+
+`wal studio` currently wraps the pre-alpha artifact registry subset:
+
+- `init <base_model>`
+- `edit add <recipe_file>`
+- `status`
+- `tag <name> [build_id]`
+- `rollback <tag>`
+
+The full WeightOps workflow is represented by the scripted demo and milestone experiments, not yet by a stable Python API.
+
+## Python Modules
+
+Stable-enough imports for tests and experiments:
 
 ```python
-from wal import train_lora_fp32
-
-train_lora_fp32(
-    model,
-    tokenizer,
-    facts=[("Q", "A")],
-    layer=16,
-    rank=4,
-    steps=100,
-    lr=1e-4,
-)
+from wal.results import validate_results
+from wal.cross_model_protocol import discover_candidates
+from wal.encoder import wal_encode_scalar
+from wal.decoder import wal_decode_scalar_torch
 ```
 
-### `test_question`
+## Compatibility
 
-```python
-from wal import test_question
+Legacy top-level commands remain supported:
 
-passed = test_question(model, tokenizer, "What is X?", "Y")
+```bash
+wal validate-results experiments --fail-on-invalid
+wal encode --help
+wal init local-demo-model
 ```
 
-## CLI API
+## Non-API
 
-### Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WAL_MODEL` | Llama-3.1-8B | Base model name |
-| `WAL_LAYER` | 16 | Target layer |
-| `WAL_RANK` | 4 | LoRA rank |
-| `WAL_STEPS` | 100 | Training steps |
-| `WAL_DEVICE` | cuda:0 | GPU device |
-
-### Return Codes
-
-| Code | Meaning |
-|------|---------|
-| 0 | Success |
-| 1 | Build failed |
-| 2 | Tests failed |
-| 3 | Invalid recipe |
-| 4 | Rollback failed |
+Historical examples that mention `WALProject`, direct LoRA training helpers, or full `build/test/diff/blame/bisect` Python APIs are product-direction notes, not stable packaged APIs.

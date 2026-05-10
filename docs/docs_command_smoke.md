@@ -1,6 +1,6 @@
 # Docs Command Smoke
 
-Date: 2026-05-09
+Date: 2026-05-10
 
 ## Purpose
 
@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `52`
-- Runnable commands passed: `52`
+- Runnable commands: `53`
+- Runnable commands passed: `53`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -21,6 +21,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 |------|---------|----------------|---------------|
 | `doc` | `doc exists: README.md` | `PASS` | `—` |
 | `doc` | `doc exists: TECHNICAL_REPORT.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/VALIDATION_STATUS.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/project_metrics.json` | `PASS` | `—` |
 | `doc` | `doc exists: docs/demo_playbook.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/controlled_runners.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/model_small_protocol.md` | `PASS` | `—` |
@@ -81,6 +83,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m673_demo_script_e2e.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m674_github_pages_build.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m675_public_release_dry_run.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m676_public_repo_hardening.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |

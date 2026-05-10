@@ -1,8 +1,8 @@
 # M630 — Public Claim Checker
 
-Date: 2026-05-09  
-Status: PASS  
-Result: `experiments/m630_public_claim_checker_results.json`  
+Date: 2026-05-10
+Status: PASS
+Result: `experiments/m630_public_claim_checker_results.json`
 Doc: `docs/public_claim_policy.md`
 
 ## Purpose
@@ -11,7 +11,7 @@ M630 adds a standalone public-claim scanner for README, reports, milestone JSON,
 
 ## Result
 
-- Files scanned: `27`
+- Files scanned: `31`
 - Violations: `0`
 - Required phrase misses: `0`
 

@@ -13,10 +13,13 @@ DOC_PATH = ROOT / "docs" / "public_claim_policy.md"
 
 PUBLIC_FILES = [
     "README.md",
+    "KNOWN_ISSUES.md",
     "PROJECT_SUMMARY.md",
     "PROJECT_SUMMARY_v2.json",
     "TECHNICAL_REPORT.md",
     "docs/demo_playbook.md",
+    "docs/VALIDATION_STATUS.md",
+    "docs/project_metrics.json",
     "docs/blocked_script_taxonomy.md",
     "docs/controlled_runners.md",
     "docs/public_claim_policy.md",
@@ -39,6 +42,7 @@ PUBLIC_FILES = [
     "WAL_EXPORT.json",
     "RELEASE_NOTES_v2.md",
     "FAQ.md",
+    "archive/generated_history/README.md",
 ]
 
 FORBIDDEN_PATTERNS = {
@@ -59,7 +63,7 @@ def render_policy(result: dict[str, object]) -> str:
     lines = [
         "# Public Claim Policy",
         "",
-        "Date: 2026-05-09",
+        "Date: 2026-05-10",
         "",
         "## Purpose",
         "",

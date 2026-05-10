@@ -10,7 +10,7 @@ Ensure README command targets point to real scripts.
 
 ## Result
 
-- Commands checked: `56`
+- Commands checked: `57`
 - Failures: `0`
 
 ## Outcome

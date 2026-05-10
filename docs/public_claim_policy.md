@@ -1,6 +1,6 @@
 # Public Claim Policy
 
-Date: 2026-05-09
+Date: 2026-05-10
 
 ## Purpose
 
@@ -23,7 +23,7 @@ Public docs must describe WAL as a pre-alpha research framework unless a later g
 
 ## Current Scan
 
-- Files scanned: `27`
+- Files scanned: `31`
 - Violations: `0`
 - Required phrase misses: `0`
 

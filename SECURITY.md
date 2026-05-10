@@ -9,9 +9,9 @@
 
 ## Reporting Vulnerabilities
 
-Email: security@wal-project.org
+Use GitHub Security Advisories for this repository when available. If private advisories are unavailable, contact the repository owner through GitHub before publishing details.
 
 ## Known Issues
 
-- Prompt injection partially mitigated (M402)
-- Memory growth bounded (M401)
+- Prompt injection has deterministic static gates, but this is not an external security audit.
+- Memory growth has short-run sentinels; a real 24h soak test remains blocked until a long-run runner is available.

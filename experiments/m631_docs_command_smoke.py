@@ -64,6 +64,7 @@ RUN_COMMANDS = [
     "python experiments/m673_demo_script_e2e.py",
     "python experiments/m674_github_pages_build.py",
     "python experiments/m675_public_release_dry_run.py",
+    "python experiments/m676_public_repo_hardening.py",
     "python wal_studio_v01/demo.py",
 ]
 
@@ -75,6 +76,8 @@ EXISTS_ONLY_COMMANDS = [
 DOC_FILES = [
     "README.md",
     "TECHNICAL_REPORT.md",
+    "docs/VALIDATION_STATUS.md",
+    "docs/project_metrics.json",
     "docs/demo_playbook.md",
     "docs/controlled_runners.md",
     "docs/model_small_protocol.md",
@@ -142,7 +145,7 @@ def render_doc(result: dict[str, object]) -> str:
     lines = [
         "# Docs Command Smoke",
         "",
-        "Date: 2026-05-09",
+        "Date: 2026-05-10",
         "",
         "## Purpose",
         "",

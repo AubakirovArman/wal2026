@@ -10,7 +10,7 @@ Check release-facing wording for forbidden maturity claims.
 
 ## Result
 
-- Files checked: `4`
+- Files checked: `5`
 - Failures: `0`
 
 ## Outcome
