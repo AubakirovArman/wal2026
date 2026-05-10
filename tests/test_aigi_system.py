@@ -1,6 +1,14 @@
 from aigi import AIGISystem, MemoryPolicy
 
 
+class EchoBackend:
+    name = "echo-test-backend"
+    source = "test_model_backend"
+
+    def generate(self, prompt: str) -> str:
+        return f"backend saw: {prompt}"
+
+
 def test_aigi_learn_commit_ask_loop(tmp_path):
     system = AIGISystem.from_model(
         "local-test-model",
@@ -100,3 +108,26 @@ def test_aigi_rollback_restores_previous_memory(tmp_path):
 
     assert system.rollback_last()
     assert system.ask(question).answer == "first"
+
+
+def test_aigi_uses_model_backend_before_memory_and_after_rollback(tmp_path):
+    system = AIGISystem.from_model(
+        "echo-test-model",
+        workdir=tmp_path,
+        model_backend=EchoBackend(),
+    )
+    question = "What does the real backend hook see?"
+
+    before = system.ask(question)
+    assert before.source == "test_model_backend"
+    assert before.answer == f"backend saw: {question}"
+
+    candidate = system.propose_memory(question=question, answer="verified overlay answer")
+    report = system.compile(candidate)
+    assert system.commit(report)
+    assert system.ask(question).answer == "verified overlay answer"
+
+    assert system.rollback_last()
+    after = system.ask(question)
+    assert after.source == "test_model_backend"
+    assert after.answer == f"backend saw: {question}"

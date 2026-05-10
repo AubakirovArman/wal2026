@@ -22,6 +22,7 @@ setup(
     ],
     extras_require={
         "dev": ["pytest", "black", "mypy"],
+        "hf": ["transformers>=4.57", "accelerate"],
         "webgpu": ["wgpu"],
     },
     entry_points={

@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 629
+Total entries: 630
 
 ## Early (M1-M99)
 
@@ -416,6 +416,7 @@ Total entries: 629
 - [M690 AIGI Risk Ledger](M690_AIGI_Risk_Ledger.md)
 - [M691 AIGI Contract Regression Suite](M691_AIGI_Contract_Regression_Suite.md)
 - [M692 AIGI Commit Decision Report](M692_AIGI_Commit_Decision_Report.md)
+- [M693 AIGI Real HF Backend Gate](M693_AIGI_Real_HF_Backend_Gate.md)
 
 ## Phase 1 (M100-M149)
 

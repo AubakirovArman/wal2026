@@ -1,0 +1,68 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M693",
+  "name": "AIGI Real HF Backend Gate",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-10T16:04:16.393892+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_device_count": 8,
+    "cuda_device_0": "NVIDIA H200"
+  },
+  "load_elapsed_sec": 8.145,
+  "elapsed_sec": 9.48,
+  "checks_total": 9,
+  "checks_passed": 9,
+  "records": [
+    {
+      "name": "real_backend_loaded",
+      "passed": true
+    },
+    {
+      "name": "cuda_available_recorded",
+      "passed": true
+    },
+    {
+      "name": "hf_fallback_source",
+      "passed": true,
+      "source": "hf_model"
+    },
+    {
+      "name": "hf_generated_text",
+      "passed": true,
+      "elapsed_sec": 0.963
+    },
+    {
+      "name": "memory_compile_passed",
+      "passed": true,
+      "tier": "retrieval"
+    },
+    {
+      "name": "memory_commit_passed",
+      "passed": true
+    },
+    {
+      "name": "overlay_answer_exact",
+      "passed": true,
+      "source": "retrieval"
+    },
+    {
+      "name": "rollback_passed",
+      "passed": true
+    },
+    {
+      "name": "rollback_returns_to_hf",
+      "passed": true,
+      "source": "hf_model"
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "before_answer_preview": "Base model online refers to the process of using pre-trained models as a starting point for creating new models or applications. This",
+  "after_answer": "M693 overlay committed",
+  "rollback_answer_preview": "Base model online refers to the process of using pre-trained models as a starting point for creating new models or applications. This",
+  "claim_boundary": "Real HF inference backend gate; not LoRA training and not real semantic weight editing yet."
+}

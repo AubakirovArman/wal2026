@@ -17,24 +17,24 @@ AIGI 1.0 is a separate pre-alpha SDK layer on top of WAL ideas. Its current scop
 experience → memory candidate → tier selection → verification → commit/reject → contract check → rollback if needed
 ```
 
-Current AIGI is **not** autonomous AGI, not ready for production deployment, and not a real semantic weight-editing backend yet. `wal_recipe` currently means a WAL-compatible recipe artifact plus retrieval overlay.
+Current AIGI is **not** autonomous AGI, not ready for production deployment, and not a real semantic weight-editing backend yet. M693 adds real HF inference integration, but not real weight training/editing. `wal_recipe` currently means a WAL-compatible recipe artifact plus retrieval overlay.
 
 ## 2. Current Metrics
 
 | Area | Value |
 |------|-------|
-| Milestone scripts | 795 |
-| Python scripts in `experiments/` | 817 |
-| Result JSON files | 485 |
-| Book entries | 630 |
+| Milestone scripts | 796 |
+| Python scripts in `experiments/` | 818 |
+| Result JSON files | 486 |
+| Book entries | 631 |
 | Docs files | 235 |
-| Developer diary lines | 5436 |
-| Python source modules | 89 |
-| Maintained pytest tests | 34 |
-| Safe sweep | 289 PASS / 528 BLOCKED |
-| Result schema | 485 valid / 0 invalid |
+| Developer diary lines | 5464 |
+| Python source modules | 92 |
+| Maintained pytest tests | 35 |
+| Safe sweep | 289 PASS / 529 BLOCKED |
+| Result schema | 486 valid / 0 invalid |
 | Docs smoke | 69 / 69 commands PASS |
-| Legacy manifest | 817 scripts classified |
+| Legacy manifest | 818 scripts classified |
 | Current public-claim-allowed experiments | 61 |
 
 ## 3. Repository Map
@@ -56,7 +56,7 @@ wal/
 │   ├── wal/                          # package CLI and WAL-facing APIs
 │   ├── wal_build/                    # build system pieces
 │   └── aigi/                         # pre-alpha AIGI SDK
-├── experiments/                      # M1-M692+ scripts and result JSON
+├── experiments/                      # M1-M693+ scripts and result JSON
 ├── book/                             # per-experiment writeups
 ├── logs/aigi/                        # JSONL AIGI runtime/step logs
 ├── wal_studio_v01/                   # demo workflow
@@ -121,6 +121,9 @@ AIGI SDK
 │   ├── compile
 │   ├── commit
 │   └── rollback_last
+├── Model Backend
+│   ├── StaticTextModelBackend
+│   └── HuggingFaceTextBackend
 ├── MemoryCompiler
 │   ├── wal_recipe tier
 │   ├── retrieval tier
@@ -148,7 +151,7 @@ AIGI SDK
     └── logs/aigi/m681_bad_memory_rejection.jsonl
 ```
 
-## 6. AIGI Gates M679-M692
+## 6. AIGI Gates M679-M693
 
 | Module | Purpose | Result |
 |--------|---------|--------|
@@ -166,20 +169,21 @@ AIGI SDK
 | M690 | Risk ledger | PASS: 8 / 8 checks |
 | M691 | Contract regression suite | PASS: 6 / 6 checks over 10 protected contracts |
 | M692 | Commit decision report | PASS: 7 / 7 checks |
+| M693 | Real HF backend gate | PASS: 9 / 9 checks on Qwen2.5-0.5B-Instruct |
 
-AIGI validates control flow and state-management logic. It does not yet validate real training-time weight edits.
+AIGI validates control flow, state-management logic, and now one real HF inference fallback gate. It does not yet validate real training-time weight edits.
 
 ## 7. Current Validation Ledger
 
 | Gate | Status | Notes |
 |------|--------|-------|
-| Pytest | PASS | 34 maintained tests pass |
-| Result schema | PASS | 485 / 485 result JSON valid |
+| Pytest | PASS | 35 maintained tests pass |
+| Result schema | PASS | 486 / 486 result JSON valid |
 | M621 truthfulness audit | PASS | 55 / 55 checks |
-| M622 schema gate | PASS | 485 valid / 0 invalid |
+| M622 schema gate | PASS | 486 valid / 0 invalid |
 | M623 core release gate | PASS | pytest wrapper passes |
-| M624 full inventory | PASS | 817 scripts, 0 parse failures |
-| M625 safe runtime sweep | PASS | 289 PASS / 528 BLOCKED |
+| M624 full inventory | PASS | 818 scripts, 0 parse failures |
+| M625 safe runtime sweep | PASS | 289 PASS / 529 BLOCKED |
 | M630 public claim checker | PASS | 0 violations |
 | M631 docs command smoke | PASS | 69 / 69 commands |
 | M632/M633/M635 | PASS | controlled small-model workflows |
@@ -193,6 +197,7 @@ AIGI validates control flow and state-management logic. It does not yet validate
 | M679-M687 | PASS | AIGI verified memory/feedback loop gates |
 | M688 | PASS | single-file context digest |
 | M689-M692 | PASS | AIGI governance: budget, risk ledger, regression suite, decision report |
+| M693 | PASS | real HF inference backend: Qwen2.5-0.5B, overlay, rollback |
 
 ## 8. Status Semantics
 
@@ -210,7 +215,7 @@ This status discipline is important. Historical optimistic artifacts such as `A+
 
 ## 9. Controlled Runner Taxonomy
 
-The 528 blocked scripts are not treated as failures. They need controlled runners:
+The 529 blocked scripts are not treated as failures. They need controlled runners:
 
 | Runner | Purpose |
 |--------|---------|
@@ -278,6 +283,14 @@ PYTHONPATH=src:. python experiments/m684_aigi_behavioral_contracts.py
 PYTHONPATH=src:. python experiments/m685_aigi_experience_to_memory.py
 PYTHONPATH=src:. python experiments/m686_aigi_verified_feedback_loop.py
 PYTHONPATH=src:. python experiments/m687_aigi_contract_gated_rollback.py
+PYTHONPATH=src:. python experiments/m688_single_file_context_digest.py
+PYTHONPATH=src:. python experiments/m689_aigi_memory_change_budget.py
+PYTHONPATH=src:. python experiments/m690_aigi_risk_ledger.py
+PYTHONPATH=src:. python experiments/m691_aigi_contract_regression_suite.py
+PYTHONPATH=src:. python experiments/m692_aigi_commit_decision_report.py
+
+# Controlled real-model gate; downloads/loads a small HF model
+PYTHONPATH=src:. python experiments/m693_aigi_real_hf_backend_gate.py
 
 # Demo
 python wal_studio_v01/demo.py
@@ -317,9 +330,9 @@ python wal_studio_v01/demo.py
 
 ## 16. Recommended Next Steps
 
-1. **M693-M696**: connect a real small-model semantic edit backend behind `wal_recipe`.
-2. **M697-M700**: run RAG-only vs WAL-recipe vs LoRA baseline on a small controlled benchmark.
-3. **M701-M704**: add long-running governed feedback-loop stability checks.
+1. **M694-M697**: connect a real small-model adapter/LoRA update backend behind `wal_recipe`.
+2. **M698-M701**: run RAG-only vs WAL-recipe vs LoRA baseline on a small controlled benchmark.
+3. **M702-M705**: add long-running governed feedback-loop stability checks.
 4. Continue legacy audit batches: M51-M100, M101-M150, then critical old failures.
 5. Add a real long-duration runner for M666/M667.
 6. Keep `WAL_AIGI_FULL_CONTEXT.md` updated through M688 or a successor digest gate.

@@ -26,6 +26,12 @@ M689-M692 add governance before a real backend is attached:
 change budget → risk ledger → regression suite → commit decision report
 ```
 
+M693 attaches the first real HuggingFace inference backend:
+
+```text
+Qwen2.5-0.5B-Instruct → AIGISystem.ask fallback → memory overlay → rollback to hf_model
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -39,12 +45,13 @@ change budget → risk ledger → regression suite → commit decision report
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
 - Memory change budget, risk/debt ledger, regression suite, and decision reports.
-- Experiment gates M679-M692 with positive and negative test logs.
+- Experiment gates M679-M693 with positive, negative, governance, and real-inference test logs.
+- Optional `HuggingFaceTextBackend` for controlled real model inference.
 - JSONL runtime logs.
 
 ## Non-Claims
 
 - No autonomous AGI claim.
-- No real semantic weight-edit backend attached yet.
+- No real semantic weight-edit backend attached yet; M693 is real inference, not LoRA/weight editing.
 - No production-readiness claim.
 - WAL recipe commits are served through retrieval overlay until a real weight backend is connected.

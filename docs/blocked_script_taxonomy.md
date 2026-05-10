@@ -5,9 +5,9 @@ Source: `experiments/m624_full_test_inventory_results.json`
 
 ## Summary
 
-- Total scripts: `817`
-- Blocked scripts: `528`
-- Assigned scripts: `528`
+- Total scripts: `818`
+- Blocked scripts: `529`
+- Assigned scripts: `529`
 - Unassigned scripts: `0`
 
 ## Runner Classes
@@ -15,7 +15,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | Runner | Scripts | Purpose |
 |--------|---------|---------|
 | `DOCS_PUBLIC_CLAIMS` | 90 | Docs and public-claim generators behind truthfulness gates. |
-| `GPU_HEAVY` | 385 | CUDA/Triton/local-model scripts with explicit hardware requirements. |
+| `GPU_HEAVY` | 386 | CUDA/Triton/local-model scripts with explicit hardware requirements. |
 | `MODEL_CONTROLLED` | 3 | Model/tokenizer/dataset loading under pinned small/medium model protocols. |
 | `MODEL_SMALL` | 7 | Small text-only cross-model workflows run outside safe-core sweeps. |
 | `MUTATION_DRY_RUN` | 37 | Git/archive/destructive operations in temp repos or temp directories only. |
@@ -27,7 +27,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | Reason | Count | Runner |
 |--------|-------|--------|
 | `archive_mutation` | 6 | `MUTATION_DRY_RUN` |
-| `cuda` | 305 | `GPU_HEAVY` |
+| `cuda` | 306 | `GPU_HEAVY` |
 | `dataset_load` | 159 | `MODEL_CONTROLLED` |
 | `destructive_file_op` | 10 | `MUTATION_DRY_RUN` |
 | `destructive_shell_op` | 3 | `MUTATION_DRY_RUN` |
@@ -41,7 +41,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `mass_rewrite` | 2 | `DOCS_PUBLIC_CLAIMS` |
 | `merge_simulation_or_mutation` | 4 | `MUTATION_DRY_RUN` |
 | `model_artifact` | 33 | `GPU_HEAVY` |
-| `model_load` | 313 | `MODEL_CONTROLLED` |
+| `model_load` | 314 | `MODEL_CONTROLLED` |
 | `model_small_controlled_runner` | 7 | `MODEL_SMALL` |
 | `public_claim_generator` | 58 | `DOCS_PUBLIC_CLAIMS` |
 | `public_doc_generator` | 31 | `DOCS_PUBLIC_CLAIMS` |

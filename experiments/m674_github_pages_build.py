@@ -55,7 +55,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <div class="card"><strong>Safe sweep</strong><br>{experiments["safe_sweep_pass"]} safe scripts pass; {experiments["safe_sweep_blocked"]} are policy-blocked.</div>
     <div class="card"><strong>Small models</strong><br>{small_models["unique_model_paths"]} unique local runtime/artifact workflows pass.</div>
     <div class="card"><strong>Legacy audit</strong><br>M1-M50 batch: {legacy_audit.get("m1_m50_total", 0)} scripts classified; {legacy_audit.get("m1_m50_current_public_claim_allowed", 0)} current public claims.</div>
-    <div class="card"><strong>AIGI loop</strong><br>M679-M692: {aigi.get("fact_learning_passed", 0)} learned facts, {aigi.get("bad_memory_rejected", 0)} bad-memory rejections, {aigi.get("feedback_episodes_passed", 0)} feedback episodes, {aigi.get("budget_checks_passed", 0)} budget checks, {aigi.get("decision_report_checks_passed", 0)} decision-report checks.</div>
+    <div class="card"><strong>AIGI loop</strong><br>M679-M693: {aigi.get("fact_learning_passed", 0)} learned facts, {aigi.get("bad_memory_rejected", 0)} bad-memory rejections, {aigi.get("feedback_episodes_passed", 0)} feedback episodes, {aigi.get("budget_checks_passed", 0)} budget checks, {aigi.get("real_hf_backend_checks_passed", 0)} real-HF checks.</div>
   </div>
 
   <h2>What is not validated?</h2>
@@ -64,7 +64,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <li>No external certification claim.</li>
     <li>Small-model gates do not yet prove semantic weight-edit training.</li>
     <li>M1-M50 safe-pass scripts still need schema-v1 result artifacts before current public claims.</li>
-    <li>AIGI M679-M692 are SDK memory-loop proofs, not autonomous AGI or real semantic weight editing.</li>
+    <li>AIGI M679-M693 are SDK memory-loop and real-inference gates, not autonomous AGI or real semantic weight editing.</li>
     <li>Deployment modules remain prototypes/simulations unless explicitly marked otherwise.</li>
   </ul>
 

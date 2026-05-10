@@ -34,6 +34,7 @@ REQUIRED_RESULTS = [
     "m690_aigi_risk_ledger_results.json",
     "m691_aigi_contract_regression_suite_results.json",
     "m692_aigi_commit_decision_report_results.json",
+    "m693_aigi_real_hf_backend_gate_results.json",
 ]
 
 REQUIRED_DOCS = [

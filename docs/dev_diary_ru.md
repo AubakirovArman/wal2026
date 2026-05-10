@@ -5434,3 +5434,31 @@ Digest — это компактная карта проекта, а не зам
 ### Ограничения
 
 M689-M692 управляют SDK memory loop и не доказывают реальное автономное обучение. Их задача — подготовить безопасный контрольный слой перед подключением настоящего `wal_recipe` backend.
+
+## M693 — AIGI Real HF Backend Gate (2026-05-10)
+
+### Причина
+
+Пользователь справедливо указал, что одних SDK-примеров недостаточно. Следующий слой должен использовать реальную модель, а не только symbolic fallback.
+
+### Что сделано
+
+- Добавлен `src/aigi/model/` с `TextModelBackend`, `StaticTextModelBackend` и `HuggingFaceTextBackend`.
+- `AIGISystem` получил injectable backend и теперь вызывает реальную модель при cache miss в memory layers.
+- M693 загрузил `Qwen/Qwen2.5-0.5B-Instruct` через `transformers`, выполнил генерацию, затем проверил commit memory overlay и rollback.
+
+### Результаты
+
+- M693 status: `PASS`.
+- Checks: `9/9`.
+- Base source: `hf_model`.
+- Overlay source: retrieval/WAL memory layer.
+- Rollback source: снова `hf_model`.
+
+### Отрицательный результат
+
+Первый запуск M693 упал из-за `PermissionError` в общем HF cache `/mnt/hf_model_weights/.hf_cache`. Это исправлено переводом эксперимента на локальный project cache `.hf_cache/`.
+
+### Честная граница
+
+M693 — реальная inference integration. Это ещё не реальное изменение весов, не LoRA training и не доказательство автономного AGI. Следующий hard step: M694 real adapter/LoRA update с теми же budget/risk/regression gates.

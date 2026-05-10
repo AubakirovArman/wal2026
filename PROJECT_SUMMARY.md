@@ -9,15 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 817 Python scripts |
-| Results | 485 JSON result files |
-| Books | 630 entries |
+| Experiments | 818 Python scripts |
+| Results | 486 JSON result files |
+| Books | 631 entries |
 | Docs | 230 docs plus developer diary |
-| Maintained tests | 34 passing |
-| Safe runtime sweep | 289 passing, 0 failing, 528 blocked by policy |
+| Maintained tests | 35 passing |
+| Safe runtime sweep | 289 passing, 0 failing, 529 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
-| AIGI governed feedback memory loop | M679-M692 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, 7 budget checks, 8 risk-ledger checks, 6 regression checks, 7 decision-report checks |
+| AIGI governed feedback memory loop | M679-M693 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, governance checks, and 1 real HF inference backend gate |
 
 ## Key Results
 
@@ -44,6 +44,7 @@
 - M679-M687 extend the separate AIGI SDK layer with verified memory accumulation, behavioral contracts, feedback extraction, contract-gated rollback, logs, and positive/negative tests.
 - M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the one-file project handoff digest and validates its key sections/metrics.
 - M689-M692 add AIGI memory change budgets, risk ledger, contract regression suite, and commit decision reports.
+- M693 connects AIGISystem to a real Qwen2.5-0.5B-Instruct HuggingFace inference backend and verifies memory overlay plus rollback against that backend.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
@@ -54,3 +55,5 @@
 **Weak:** semantic weight-edit training is not yet validated across the small-model set, real GPU training remains resource-bound, deployment modules are mostly simulations/prototypes, historical meta files still contain generated optimism in older entries.
 
 **Status:** Research-grade pre-alpha WeightOps framework prototype with explicit known issues and release gates.
+
+M693 is the first real HF inference integration gate for AIGI. It loads `Qwen/Qwen2.5-0.5B-Instruct`, serves unknown questions through `hf_model`, commits an AIGI memory overlay, then rolls back to the HF backend. It is not LoRA training or real semantic weight editing yet.

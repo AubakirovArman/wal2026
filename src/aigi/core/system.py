@@ -7,6 +7,7 @@ from aigi.event_log import AIGIEventLog
 from aigi.memory.compiler import MemoryCompiler
 from aigi.memory.retrieval_memory import RetrievalMemory
 from aigi.memory.wal_memory import WALMemory
+from aigi.model.backends import StaticTextModelBackend, TextModelBackend
 from aigi.verify.gates import MemoryVerifier
 
 
@@ -24,9 +25,11 @@ class AIGISystem:
         workdir: str | Path = ".aigi",
         base_model_name: str = "local-symbolic-fallback",
         memory_policy: MemoryPolicy | None = None,
+        model_backend: TextModelBackend | None = None,
     ) -> None:
         self.workdir = Path(workdir)
         self.base_model_name = base_model_name
+        self.model_backend = model_backend or StaticTextModelBackend()
         self.policy = memory_policy or MemoryPolicy()
         self.log = AIGIEventLog(self.workdir / "logs" / "events.jsonl")
         self.retrieval = RetrievalMemory(self.workdir / "memory" / "retrieval.json")
@@ -36,7 +39,11 @@ class AIGISystem:
         self.verifier = MemoryVerifier(self.retrieval, self.refusals)
         self.last_report: CompileReport | None = None
         self.commit_history: list[CommitRecord] = []
-        self.log.write("system_init", "PASS", {"base_model": self.base_model_name})
+        self.log.write(
+            "system_init",
+            "PASS",
+            {"base_model": self.base_model_name, "model_backend": self.model_backend.name},
+        )
 
     @classmethod
     def from_model(
@@ -45,8 +52,14 @@ class AIGISystem:
         *,
         workdir: str | Path = ".aigi",
         memory_policy: MemoryPolicy | None = None,
+        model_backend: TextModelBackend | None = None,
     ) -> "AIGISystem":
-        return cls(workdir=workdir, base_model_name=model, memory_policy=memory_policy)
+        return cls(
+            workdir=workdir,
+            base_model_name=model,
+            memory_policy=memory_policy,
+            model_backend=model_backend,
+        )
 
     def ask(self, question: str) -> AIGIResponse:
         refusal = self.refusals.lookup(question)
@@ -59,9 +72,9 @@ class AIGISystem:
             self.log.write("ask", "PASS", {"source": "retrieval", "question": question})
             return AIGIResponse(question=question, answer=memory["answer"], source=memory["source"], memory_id=memory["id"])
 
-        answer = "I don't know yet."
-        self.log.write("ask", "PASS", {"source": "base_model_fallback", "question": question})
-        return AIGIResponse(question=question, answer=answer, source="base_model_fallback")
+        answer = self.model_backend.generate(question)
+        self.log.write("ask", "PASS", {"source": self.model_backend.source, "question": question})
+        return AIGIResponse(question=question, answer=answer, source=self.model_backend.source)
 
     def propose_memory(
         self,
