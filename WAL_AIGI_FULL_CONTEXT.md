@@ -345,7 +345,7 @@ python wal_studio_v01/demo.py
 
 ## 16. Recommended Next Steps
 
-1. **M697-M700**: run multi-fact module-LoRA and compare against RAG-only / soft-prompt / logit-LoRA baselines.
+1. **M698-M700**: run multi-fact module-LoRA and compare against RAG-only / soft-prompt / logit-LoRA baselines.
 2. **M701-M704**: run RAG-only vs WAL-recipe vs LoRA baseline on a small controlled benchmark.
 3. **M705-M708**: add long-running governed feedback-loop stability checks.
 4. Continue legacy audit batches: M51-M100, M101-M150, then critical old failures.
