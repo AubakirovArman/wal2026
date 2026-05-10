@@ -14,7 +14,7 @@ Inject a real trainable LoRA adapter into an actual MLP `down_proj` module of a 
 
 - Checks: `9/9`
 - Before loss: `2.552348`
-- After loss: `0.000506`
+- After loss: `0.000497`
 - Trainable parameters: `46080`
 - Adapter artifact: `.aigi/adapters/m696_qwen_mlp_down_proj_lora.pt`
 - Boundary: real module LoRA injection, still a one-fact controlled gate rather than production model editing.

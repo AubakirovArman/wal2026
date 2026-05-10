@@ -50,6 +50,12 @@ M696 attaches the first real module-level LoRA gate:
 frozen Qwen2.5-0.5B → inject rank-8 LoRA into MLP down_proj → generation changes
 ```
 
+M697 verifies module-LoRA persistence:
+
+```text
+train module-LoRA artifact → release model → load fresh Qwen2.5-0.5B → apply artifact → target generation returns
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -63,16 +69,16 @@ frozen Qwen2.5-0.5B → inject rank-8 LoRA into MLP down_proj → generation cha
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
 - Memory change budget, risk/debt ledger, regression suite, and decision reports.
-- Experiment gates M679-M696 with positive, negative, governance, real-inference, and real-adapter-training test logs.
+- Experiment gates M679-M697 with positive, negative, governance, real-inference, real-adapter-training, and fresh-model reload test logs.
 - Optional `HuggingFaceTextBackend` for controlled real model inference.
 - `SoftPromptAdapterTrainer` for controlled frozen-model adapter training.
 - `LogitLoRAAdapterTrainer` for controlled low-rank logit adapter training.
-- `ModuleLoRAAdapterTrainer` for controlled LoRA injection into a real MLP module.
+- `ModuleLoRAAdapterTrainer` for controlled LoRA injection into a real MLP module and artifact reload into a fresh model.
 - JSONL runtime logs.
 
 ## Non-Claims
 
 - No autonomous AGI claim.
-- No production semantic edit backend attached yet; M693 is real inference, M694/M695/M696 are real adapter-training gates, but they are still one-fact controlled tests rather than multi-fact production LoRA/MEMIT editing.
+- No production semantic edit backend attached yet; M693 is real inference, M694/M695/M696 are real adapter-training gates, and M697 is a real artifact reload gate, but they are still one-fact controlled tests rather than multi-fact production LoRA/MEMIT editing.
 - No production-readiness claim.
 - WAL recipe commits are served through retrieval overlay until a real weight backend is connected.

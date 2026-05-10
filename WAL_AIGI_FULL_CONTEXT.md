@@ -17,24 +17,24 @@ AIGI 1.0 is a separate pre-alpha SDK layer on top of WAL ideas. Its current scop
 experience → memory candidate → tier selection → verification → commit/reject → contract check → rollback if needed
 ```
 
-Current AIGI is **not** autonomous AGI, not ready for production deployment, and not a base-weight semantic editing backend yet. M693 adds real HF inference integration, M694 adds real soft-prompt adapter training, M695 adds real logit-LoRA adapter training, and M696 injects LoRA into an actual MLP module. These are still one-fact controlled gates, not production multi-fact editing or MEMIT base-weight editing. `wal_recipe` currently means a WAL-compatible recipe artifact plus retrieval overlay.
+Current AIGI is **not** autonomous AGI, not ready for production deployment, and not a base-weight semantic editing backend yet. M693 adds real HF inference integration, M694 adds real soft-prompt adapter training, M695 adds real logit-LoRA adapter training, M696 injects LoRA into an actual MLP module, and M697 reloads that module-LoRA style artifact into a fresh model instance. These are still one-fact controlled gates, not production multi-fact editing or MEMIT base-weight editing. `wal_recipe` currently means a WAL-compatible recipe artifact plus retrieval overlay.
 
 ## 2. Current Metrics
 
 | Area | Value |
 |------|-------|
-| Milestone scripts | 799 |
-| Python scripts in `experiments/` | 821 |
-| Result JSON files | 489 |
-| Book entries | 634 |
+| Milestone scripts | 800 |
+| Python scripts in `experiments/` | 822 |
+| Result JSON files | 490 |
+| Book entries | 635 |
 | Docs files | 235 |
-| Developer diary lines | 5546 |
+| Developer diary lines | 5573 |
 | Python source modules | 95 |
 | Maintained pytest tests | 35 |
-| Safe sweep | 289 PASS / 532 BLOCKED |
-| Result schema | 489 valid / 0 invalid |
+| Safe sweep | 289 PASS / 533 BLOCKED |
+| Result schema | 490 valid / 0 invalid |
 | Docs smoke | 69 / 69 commands PASS |
-| Legacy manifest | 821 scripts classified |
+| Legacy manifest | 822 scripts classified |
 | Current public-claim-allowed experiments | 61 |
 
 ## 3. Repository Map
@@ -56,7 +56,7 @@ wal/
 │   ├── wal/                          # package CLI and WAL-facing APIs
 │   ├── wal_build/                    # build system pieces
 │   └── aigi/                         # pre-alpha AIGI SDK
-├── experiments/                      # M1-M696+ scripts and result JSON
+├── experiments/                      # M1-M697+ scripts and result JSON
 ├── book/                             # per-experiment writeups
 ├── logs/aigi/                        # JSONL AIGI runtime/step logs
 ├── wal_studio_v01/                   # demo workflow
@@ -154,7 +154,7 @@ AIGI SDK
     └── logs/aigi/m681_bad_memory_rejection.jsonl
 ```
 
-## 6. AIGI Gates M679-M696
+## 6. AIGI Gates M679-M697
 
 | Module | Purpose | Result |
 |--------|---------|--------|
@@ -176,20 +176,21 @@ AIGI SDK
 | M694 | Real soft-prompt adapter | PASS: 8 / 8 checks, loss 5.6645 → ~0.0016 |
 | M695 | Real logit-LoRA adapter | PASS: 8 / 8 checks, loss 2.8775 → 0.0 |
 | M696 | Real module-LoRA adapter | PASS: 9 / 9 checks, `mlp.down_proj` loss 2.5523 → ~0.0005 |
+| M697 | Real module-LoRA reload | PASS: 13 / 13 checks, fresh model reload reproduces target |
 
-AIGI validates control flow, state-management logic, one real HF inference fallback gate, and one real gradient-trained soft-prompt adapter gate, one real low-rank logit-LoRA adapter gate, and one real MLP module-LoRA injection gate. It does not yet validate multi-fact reliability or MEMIT/base-weight edits.
+AIGI validates control flow, state-management logic, one real HF inference fallback gate, one real gradient-trained soft-prompt adapter gate, one real low-rank logit-LoRA adapter gate, one real MLP module-LoRA injection gate, and one fresh-model module-LoRA reload gate. It does not yet validate multi-fact reliability or MEMIT/base-weight edits.
 
 ## 7. Current Validation Ledger
 
 | Gate | Status | Notes |
 |------|--------|-------|
 | Pytest | PASS | 35 maintained tests pass |
-| Result schema | PASS | 489 / 489 result JSON valid |
+| Result schema | PASS | 490 / 490 result JSON valid |
 | M621 truthfulness audit | PASS | 55 / 55 checks |
-| M622 schema gate | PASS | 489 valid / 0 invalid |
+| M622 schema gate | PASS | 490 valid / 0 invalid |
 | M623 core release gate | PASS | pytest wrapper passes |
-| M624 full inventory | PASS | 821 scripts, 0 parse failures |
-| M625 safe runtime sweep | PASS | 289 PASS / 532 BLOCKED |
+| M624 full inventory | PASS | 822 scripts, 0 parse failures |
+| M625 safe runtime sweep | PASS | 289 PASS / 533 BLOCKED |
 | M630 public claim checker | PASS | 0 violations |
 | M631 docs command smoke | PASS | 69 / 69 commands |
 | M632/M633/M635 | PASS | controlled small-model workflows |
@@ -207,6 +208,7 @@ AIGI validates control flow, state-management logic, one real HF inference fallb
 | M694 | PASS | real soft-prompt adapter: frozen Qwen2.5-0.5B, trained prompt, target generation |
 | M695 | PASS | real logit-LoRA adapter: frozen Qwen2.5-0.5B, rank-4 logit delta, target generation |
 | M696 | PASS | real module-LoRA adapter: frozen Qwen2.5-0.5B, rank-8 MLP down_proj, target generation |
+| M697 | PASS | real module-LoRA reload: fresh Qwen2.5-0.5B instance applies saved artifact and reproduces target |
 
 ## 8. Status Semantics
 
@@ -224,7 +226,7 @@ This status discipline is important. Historical optimistic artifacts such as `A+
 
 ## 9. Controlled Runner Taxonomy
 
-The 532 blocked scripts are not treated as failures. They need controlled runners:
+The 533 blocked scripts are not treated as failures. They need controlled runners:
 
 | Runner | Purpose |
 |--------|---------|
@@ -303,6 +305,7 @@ PYTHONPATH=src:. python experiments/m693_aigi_real_hf_backend_gate.py
 PYTHONPATH=src:. python experiments/m694_aigi_real_soft_prompt_adapter.py
 PYTHONPATH=src:. python experiments/m695_aigi_real_logit_lora_adapter.py
 PYTHONPATH=src:. python experiments/m696_aigi_real_module_lora_adapter.py
+PYTHONPATH=src:. python experiments/m697_aigi_real_module_lora_reload.py
 
 # Demo
 python wal_studio_v01/demo.py
@@ -313,8 +316,8 @@ python wal_studio_v01/demo.py
 - Not ready for production deployment.
 - Not externally certified.
 - Not autonomous AGI.
-- AIGI does not perform LoRA/MEMIT base-weight semantic editing yet.
-- `wal_recipe` is currently a recipe artifact plus retrieval overlay; M694/M695/M696 are separate adapter-training gates.
+- AIGI does not perform production LoRA/MEMIT base-weight semantic editing yet.
+- `wal_recipe` is currently a recipe artifact plus retrieval overlay; M694/M695/M696/M697 are separate adapter-training/reload gates.
 - Deployment modules are prototypes/simulations unless explicitly validated otherwise.
 - Heavy GPU/HF/model scripts are blocked from safe sweep by policy.
 - Real 24h soak testing is still blocked until a controlled long-duration runner exists.
@@ -328,7 +331,7 @@ python wal_studio_v01/demo.py
 - Result schema is clean.
 - Public claims are conservative and checked.
 - WAL has recipe/build/test/rollback/debugging concepts.
-- AIGI SDK now has verified memory accumulation, bad-memory rejection, rollback, behavioral contracts, contract-gated feedback learning, memory budgets, risk ledger, regression suite, decision reports, real HF inference, real soft-prompt adapter training, real logit-LoRA adapter training, and real module-LoRA injection.
+- AIGI SDK now has verified memory accumulation, bad-memory rejection, rollback, behavioral contracts, contract-gated feedback learning, memory budgets, risk ledger, regression suite, decision reports, real HF inference, real soft-prompt adapter training, real logit-LoRA adapter training, real module-LoRA injection, and real fresh-model adapter reload.
 - Docs, book, diary, logs, Pages, and result artifacts are synchronized through release gates.
 
 ## 15. Main Weak Points

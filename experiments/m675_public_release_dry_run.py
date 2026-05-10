@@ -38,6 +38,7 @@ REQUIRED_RESULTS = [
     "m694_aigi_real_soft_prompt_adapter_results.json",
     "m695_aigi_real_logit_lora_adapter_results.json",
     "m696_aigi_real_module_lora_adapter_results.json",
+    "m697_aigi_real_module_lora_reload_results.json",
 ]
 
 REQUIRED_DOCS = [

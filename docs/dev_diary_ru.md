@@ -5543,4 +5543,31 @@ M695 был low-rank adapter на logits. Чтобы выйти на более 
 
 ### Честная граница
 
-Это уже реальное LoRA-внедрение в MLP module frozen HF-модели. Но это one-fact controlled gate, не multi-fact training, не MEMIT и не production edit backend. Следующий hard step — M697: multi-fact module-LoRA или честный baseline adapter-vs-RAG.
+Это уже реальное LoRA-внедрение в MLP module frozen HF-модели. Но это one-fact controlled gate, не multi-fact training, не MEMIT и не production edit backend. Следующий hard step после reload-проверки — multi-fact module-LoRA или честный baseline adapter-vs-RAG.
+
+## M697 — AIGI Real Module LoRA Reload (2026-05-10)
+
+### Причина
+
+M696 доказал, что module-LoRA можно обучить внутри реального MLP слоя. Но для настоящей memory compilation этого мало: artifact должен переживать процесс, загружаться в fresh model и воспроизводить поведение без повторного обучения.
+
+### Что сделано
+
+- `ModuleLoRAAdapterTrainer` расширен методом `apply_artifact`.
+- Artifact содержит `question`, `target_answer`, `target_module`, `rank`, `alpha`, `lora_a`, `lora_b` и model id.
+- M697 обучает adapter на `Qwen/Qwen2.5-0.5B-Instruct`, сохраняет `.aigi/adapters/m697_qwen_mlp_down_proj_lora_reload.pt`.
+- Затем загружает свежий экземпляр модели и применяет artifact к `model.layers.23.mlp.down_proj`.
+- Base generation свежей модели проверяется отдельно от reloaded adapter generation.
+
+### Результаты
+
+- M697 status: `PASS`.
+- Checks: `13/13`.
+- Training loss: `1.7696 → 0.0020`.
+- Reloaded generation содержит `M697_RELOAD_OK`.
+- Fresh base generation target не содержит.
+- Trainable parameters: `46080`.
+
+### Честная граница
+
+Это реальная проверка сохранения и повторной загрузки module-LoRA artifact в fresh model instance. Но это всё ещё one-fact controlled gate, не multi-fact semantic editing, не MEMIT и не production backend.

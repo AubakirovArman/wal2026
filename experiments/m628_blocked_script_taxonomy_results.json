@@ -4,14 +4,14 @@
   "name": "Blocked Script Taxonomy",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T17:30:51.323447+00:00",
-  "total_scripts": 821,
-  "blocked_scripts": 532,
-  "assigned_scripts": 532,
+  "timestamp": "2026-05-10T17:43:20.579322+00:00",
+  "total_scripts": 822,
+  "blocked_scripts": 533,
+  "assigned_scripts": 533,
   "unassigned_scripts": 0,
   "runner_counts": {
     "DOCS_PUBLIC_CLAIMS": 90,
-    "GPU_HEAVY": 388,
+    "GPU_HEAVY": 389,
     "MODEL_CONTROLLED": 3,
     "MODEL_SMALL": 7,
     "MUTATION_DRY_RUN": 38,
@@ -20,7 +20,7 @@
   },
   "reason_counts": {
     "archive_mutation": 6,
-    "cuda": 309,
+    "cuda": 310,
     "dataset_load": 159,
     "destructive_file_op": 10,
     "destructive_shell_op": 3,
@@ -34,7 +34,7 @@
     "mass_rewrite": 2,
     "merge_simulation_or_mutation": 4,
     "model_artifact": 33,
-    "model_load": 317,
+    "model_load": 318,
     "model_small_controlled_runner": 7,
     "public_claim_generator": 58,
     "public_doc_generator": 31,
@@ -6789,6 +6789,18 @@
     },
     {
       "file": "m696_aigi_real_module_lora_adapter.py",
+      "blocked_reasons": [
+        "cuda",
+        "model_load"
+      ],
+      "candidate_runners": [
+        "GPU_HEAVY",
+        "MODEL_CONTROLLED"
+      ],
+      "primary_runner": "GPU_HEAVY"
+    },
+    {
+      "file": "m697_aigi_real_module_lora_reload.py",
       "blocked_reasons": [
         "cuda",
         "model_load"

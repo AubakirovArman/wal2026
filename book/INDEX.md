@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 633
+Total entries: 634
 
 ## Early (M1-M99)
 
@@ -420,6 +420,7 @@ Total entries: 633
 - [M694 AIGI Real Soft Prompt Adapter](M694_AIGI_Real_Soft_Prompt_Adapter.md)
 - [M695 AIGI Real Logit LoRA Adapter](M695_AIGI_Real_Logit_LoRA_Adapter.md)
 - [M696 AIGI Real Module LoRA Adapter](M696_AIGI_Real_Module_LoRA_Adapter.md)
+- [M697 AIGI Real Module LoRA Reload](M697_AIGI_Real_Module_LoRA_Reload.md)
 
 ## Phase 1 (M100-M149)
 

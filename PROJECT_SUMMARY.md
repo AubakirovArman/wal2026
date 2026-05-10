@@ -9,15 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 821 Python scripts |
-| Results | 489 JSON result files |
-| Books | 634 entries |
+| Experiments | 822 Python scripts |
+| Results | 490 JSON result files |
+| Books | 635 entries |
 | Docs | 230 docs plus developer diary |
 | Maintained tests | 35 passing |
-| Safe runtime sweep | 289 passing, 0 failing, 532 blocked by policy |
+| Safe runtime sweep | 289 passing, 0 failing, 533 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
-| AIGI governed feedback memory loop | M679-M696 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, governance checks, real HF inference, soft-prompt, logit-LoRA, and module-LoRA adapter gates |
+| AIGI governed feedback memory loop | M679-M697 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, governance checks, real HF inference, soft-prompt, logit-LoRA, module-LoRA, and fresh-model reload gates |
 
 ## Key Results
 
@@ -48,6 +48,7 @@
 - M694 trains a real soft-prompt adapter on Qwen2.5-0.5B-Instruct: loss drops from 5.6645 to ~0.0016 and adapted generation contains the target codeword.
 - M695 trains a real low-rank logit-LoRA adapter: loss drops from 2.8775 to 0.0 and custom greedy decoding emits the target codeword.
 - M696 injects a real rank-8 LoRA adapter into `model.layers.23.mlp.down_proj`: loss drops from 2.5523 to ~0.0005 and adapted generation emits the target codeword.
+- M697 saves a module-LoRA artifact, loads a fresh Qwen2.5-0.5B-Instruct instance, reapplies the artifact, and reproduces the target generation.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
@@ -59,4 +60,4 @@
 
 **Status:** Research-grade pre-alpha WeightOps framework prototype with explicit known issues and release gates.
 
-M693 is the first real HF inference integration gate for AIGI. M694 trains a soft-prompt adapter. M695 trains a low-rank logit-LoRA adapter. M696 injects LoRA into a real MLP module. These are real adapter updates, but still one-fact controlled gates rather than multi-fact production editing or MEMIT base-weight editing.
+M693 is the first real HF inference integration gate for AIGI. M694 trains a soft-prompt adapter. M695 trains a low-rank logit-LoRA adapter. M696 injects LoRA into a real MLP module. M697 verifies module-LoRA artifact persistence and fresh-model reload. These are real adapter updates, but still one-fact controlled gates rather than multi-fact production editing or MEMIT base-weight editing.

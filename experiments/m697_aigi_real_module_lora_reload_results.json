@@ -1,0 +1,112 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M697",
+  "name": "AIGI Real Module LoRA Reload",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-10T17:37:28.570388+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_device_count": 8,
+    "cuda_device_0": "NVIDIA H200"
+  },
+  "checks_total": 13,
+  "checks_passed": 13,
+  "records": [
+    {
+      "name": "training_model_loaded",
+      "passed": true,
+      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+    },
+    {
+      "name": "training_loss_decreased",
+      "passed": true,
+      "before": 1.7696353197097778,
+      "after": 0.0020159876439720392
+    },
+    {
+      "name": "training_target_generated",
+      "passed": true,
+      "generated": "M697_RELOAD_OK_OK_OK_OK_OK_OK"
+    },
+    {
+      "name": "adapter_artifact_written",
+      "passed": true,
+      "bytes": 186757
+    },
+    {
+      "name": "target_module_recorded",
+      "passed": true,
+      "target_module": "model.layers.23.mlp.down_proj"
+    },
+    {
+      "name": "fresh_model_loaded",
+      "passed": true,
+      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+    },
+    {
+      "name": "artifact_model_matches",
+      "passed": true,
+      "artifact_model": "Qwen/Qwen2.5-0.5B-Instruct"
+    },
+    {
+      "name": "reload_target_module_matches",
+      "passed": true,
+      "target_module": "model.layers.23.mlp.down_proj"
+    },
+    {
+      "name": "reloaded_generation_target",
+      "passed": true,
+      "generated": "M697_RELOAD_OK_OK_OK_OK_OK_OK"
+    },
+    {
+      "name": "fresh_base_generation_not_target",
+      "passed": true,
+      "base_generated": "M697 = 0x1234"
+    },
+    {
+      "name": "reloaded_trainable_params_match",
+      "passed": true,
+      "trainable_parameters": 46080
+    },
+    {
+      "name": "reload_artifact_size_matches",
+      "passed": true,
+      "bytes": 186757
+    },
+    {
+      "name": "cuda_available_recorded",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "elapsed_sec": 16.083,
+  "training": {
+    "target_module": "model.layers.23.mlp.down_proj",
+    "rank": 8,
+    "alpha": 16.0,
+    "steps": 80,
+    "learning_rate": 0.08,
+    "trainable_parameters": 46080,
+    "before_loss": 1.7696353197097778,
+    "after_loss": 0.0020159876439720392,
+    "loss_improvement_ratio": 0.9988607892137332,
+    "generated_text": "M697_RELOAD_OK_OK_OK_OK_OK_OK",
+    "base_generated_text": "M697 = 0x1234"
+  },
+  "reload": {
+    "target_module": "model.layers.23.mlp.down_proj",
+    "rank": 8,
+    "alpha": 16.0,
+    "trainable_parameters": 46080,
+    "generated_text": "M697_RELOAD_OK_OK_OK_OK_OK_OK",
+    "base_generated_text": "M697 = 0x1234",
+    "artifact_path": ".aigi/adapters/m697_qwen_mlp_down_proj_lora_reload.pt",
+    "artifact_size_bytes": 186757,
+    "artifact_model": "Qwen/Qwen2.5-0.5B-Instruct"
+  },
+  "claim_boundary": "Real module-LoRA artifact reload into a fresh model instance; still one-fact controlled persistence, not production multi-fact editing."
+}

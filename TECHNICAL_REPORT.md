@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M696.
+The current release-cleanup line is M621-M697.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -155,6 +155,7 @@ The current release-cleanup line is M621-M696.
 | M694 | AIGI real soft-prompt adapter | PASS |
 | M695 | AIGI real logit LoRA adapter | PASS |
 | M696 | AIGI real module LoRA adapter | PASS |
+| M697 | AIGI real module LoRA reload | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -178,7 +179,7 @@ M679 starts the AIGI pre-alpha SDK layer. M680-M687 extend it into a small verif
 
 M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the single-file project digest. It is intended for future handoffs and reviewer orientation, not as a replacement for the raw experiment corpus.
 
-M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. M694 adds a real gradient-trained soft-prompt adapter gate on the same model: target loss drops from 5.6645 to roughly 0.0016 and adapted generation contains the target codeword. M695 adds a real low-rank logit-LoRA adapter: loss drops from 2.8775 to 0.0 and custom greedy decoding emits the target. M696 injects a real rank-8 LoRA adapter into `model.layers.23.mlp.down_proj`: loss drops from 2.5523 to roughly 0.0005 and generation contains the target. These are SDK/inference/adapter controls and one-fact model editing gates, not proof of autonomous AGI, multi-fact reliability, or MEMIT/base-weight editing.
+M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. M694 adds a real gradient-trained soft-prompt adapter gate on the same model: target loss drops from 5.6645 to roughly 0.0016 and adapted generation contains the target codeword. M695 adds a real low-rank logit-LoRA adapter: loss drops from 2.8775 to 0.0 and custom greedy decoding emits the target. M696 injects a real rank-8 LoRA adapter into `model.layers.23.mlp.down_proj`: loss drops from 2.5523 to roughly 0.0005 and generation contains the target. M697 saves a module-LoRA artifact, loads a fresh model instance, reapplies the artifact, and reproduces the target generation. These are SDK/inference/adapter controls and one-fact model editing gates, not proof of autonomous AGI, multi-fact reliability, or MEMIT/base-weight editing.
 
 ## Status Semantics
 
