@@ -32,6 +32,12 @@ M693 attaches the first real HuggingFace inference backend:
 Qwen2.5-0.5B-Instruct → AIGISystem.ask fallback → memory overlay → rollback to hf_model
 ```
 
+M694 attaches the first real trainable adapter gate:
+
+```text
+frozen Qwen2.5-0.5B → train soft prompt → target loss drops → adapted generation changes
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -45,13 +51,14 @@ Qwen2.5-0.5B-Instruct → AIGISystem.ask fallback → memory overlay → rollbac
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
 - Memory change budget, risk/debt ledger, regression suite, and decision reports.
-- Experiment gates M679-M693 with positive, negative, governance, and real-inference test logs.
+- Experiment gates M679-M694 with positive, negative, governance, real-inference, and real-adapter-training test logs.
 - Optional `HuggingFaceTextBackend` for controlled real model inference.
+- `SoftPromptAdapterTrainer` for controlled frozen-model adapter training.
 - JSONL runtime logs.
 
 ## Non-Claims
 
 - No autonomous AGI claim.
-- No real semantic weight-edit backend attached yet; M693 is real inference, not LoRA/weight editing.
+- No base-weight semantic edit backend attached yet; M693 is real inference and M694 is real adapter training, but not LoRA/MEMIT base-weight editing.
 - No production-readiness claim.
 - WAL recipe commits are served through retrieval overlay until a real weight backend is connected.

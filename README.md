@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 796 milestone experiment scripts in `experiments/m*.py`
-- 818 Python scripts total in `experiments/`
-- 486 experiment result JSON files in `experiments/`
-- 631 book/diary entries in `book/`
+- 797 milestone experiment scripts in `experiments/m*.py`
+- 819 Python scripts total in `experiments/`
+- 487 experiment result JSON files in `experiments/`
+- 632 book/diary entries in `book/`
 - 274 top-level result files in `results/`
 - 235 docs files in `docs/`
-- 5460+ lines in `docs/dev_diary_ru.md`
-- 92 Python source modules in `src/`
+- 5490+ lines in `docs/dev_diary_ru.md`
+- 93 Python source modules in `src/`
 - 35 pytest tests for the packaged core, audit helpers, and AIGI SDK
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M693+
+experiments/        milestone scripts and result JSON for M1-M694+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -48,7 +48,7 @@ logs/               small text logs for AIGI/WAL audit runs
 
 ## AIGI Layer
 
-`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M693 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, rollback, behavioral contracts, experience-to-memory extraction, 25 verified feedback episodes, memory budgets, risk ledger, regression suite, and commit decision reports, and a real Qwen2.5-0.5B-Instruct HF inference backend gate. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
+`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M694 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, rollback, behavioral contracts, experience-to-memory extraction, 25 verified feedback episodes, memory budgets, risk ledger, regression suite, and commit decision reports, a real Qwen2.5-0.5B-Instruct HF inference backend gate, and a real gradient-trained soft-prompt adapter gate. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
 
 ## Quick Start
 
@@ -172,6 +172,7 @@ python experiments/m692_aigi_commit_decision_report.py
 
 # Controlled real-model gate; downloads/loads a small HF model.
 python experiments/m693_aigi_real_hf_backend_gate.py
+python experiments/m694_aigi_real_soft_prompt_adapter.py
 ```
 
 ## Artifact Policy

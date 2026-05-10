@@ -5462,3 +5462,30 @@ M689-M692 управляют SDK memory loop и не доказывают реа
 ### Честная граница
 
 M693 — реальная inference integration. Это ещё не реальное изменение весов, не LoRA training и не доказательство автономного AGI. Следующий hard step: M694 real adapter/LoRA update с теми же budget/risk/regression gates.
+
+## M694 — AIGI Real Soft Prompt Adapter (2026-05-10)
+
+### Причина
+
+M693 доказал только реальную inference-интеграцию. Для движения к настоящей memory compilation нужен хотя бы один обучаемый adapter, который меняет поведение модели через backprop, а не через retrieval lookup.
+
+### Что сделано
+
+- Добавлен `SoftPromptAdapterTrainer` в `src/aigi/model/soft_prompt.py`.
+- Использована реальная модель `Qwen/Qwen2.5-0.5B-Instruct`.
+- Base weights заморожены.
+- Обучается trainable soft prompt длиной 8 токенов.
+- Loss считается по target answer `M694_REAL_ADAPTER_OK`.
+- Adapter artifact сохраняется в `.aigi/adapters/m694_qwen_soft_prompt.pt`.
+
+### Результаты
+
+- M694 status: `PASS`.
+- Checks: `8/8`.
+- Loss: `5.6645 → 0.0016`.
+- Adapted generation содержит target.
+- Base generation без adapter target не содержит.
+
+### Честная граница
+
+Это уже реальный gradient-trained adapter update на HF-модели. Но это не LoRA/MEMIT и не изменение base weights. Следующий hard step — M695: LoRA-style module adapter или controlled baseline RAG-only vs adapter.

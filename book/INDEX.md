@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 630
+Total entries: 631
 
 ## Early (M1-M99)
 
@@ -417,6 +417,7 @@ Total entries: 630
 - [M691 AIGI Contract Regression Suite](M691_AIGI_Contract_Regression_Suite.md)
 - [M692 AIGI Commit Decision Report](M692_AIGI_Commit_Decision_Report.md)
 - [M693 AIGI Real HF Backend Gate](M693_AIGI_Real_HF_Backend_Gate.md)
+- [M694 AIGI Real Soft Prompt Adapter](M694_AIGI_Real_Soft_Prompt_Adapter.md)
 
 ## Phase 1 (M100-M149)
 

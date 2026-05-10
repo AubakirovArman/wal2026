@@ -11,12 +11,12 @@ Compiles and classifies every experiment script from the first milestone onward,
 - **schema_version**: `wal.results.v1`
 - **status**: ✅ PASS
 - **pass**: `True`
-- **total_scripts**: `818`
+- **total_scripts**: `819`
 - **parse_failures**: `0`
 - **runnable_scripts**: `289`
-- **blocked_scripts**: `529`
+- **blocked_scripts**: `530`
 - **blocked_reason_counts**: `23 keys`
-- **records**: `818 items`
+- **records**: `819 items`
 
 ## Анализ
 

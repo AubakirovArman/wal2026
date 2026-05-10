@@ -12,7 +12,7 @@ from aigi.governance.report import CommitDecisionReport, CommitDecisionReporter
 from aigi.governance.risk import RiskLedger
 from aigi.learn.experience import Experience, Lesson, LessonExtractor
 from aigi.learn.loop import LearningLoopResult, VerifiedLearningLoop
-from aigi.model import HuggingFaceTextBackend, StaticTextModelBackend, TextModelBackend
+from aigi.model import HuggingFaceTextBackend, SoftPromptAdapterTrainer, SoftPromptTrainingReport, StaticTextModelBackend, TextModelBackend
 from aigi.verify.contracts import BehavioralContract, BehavioralContractVerifier, ContractExpectation
 from aigi.verify.regression import ContractRegressionSuite, RegressionSuiteResult
 
@@ -38,6 +38,8 @@ __all__ = [
     "MemoryPolicy",
     "RegressionSuiteResult",
     "RiskLedger",
+    "SoftPromptAdapterTrainer",
+    "SoftPromptTrainingReport",
     "StaticTextModelBackend",
     "TextModelBackend",
     "VerifiedLearningLoop",

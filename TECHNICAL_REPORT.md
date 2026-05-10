@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M693.
+The current release-cleanup line is M621-M694.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -152,6 +152,7 @@ The current release-cleanup line is M621-M693.
 | M691 | AIGI contract regression suite | PASS |
 | M692 | AIGI commit decision report | PASS |
 | M693 | AIGI real HF backend gate | PASS |
+| M694 | AIGI real soft-prompt adapter | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -175,7 +176,7 @@ M679 starts the AIGI pre-alpha SDK layer. M680-M687 extend it into a small verif
 
 M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the single-file project digest. It is intended for future handoffs and reviewer orientation, not as a replacement for the raw experiment corpus.
 
-M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. These are SDK/inference controls, not proof of real autonomous learning or semantic weight editing.
+M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. M694 adds a real gradient-trained soft-prompt adapter gate on the same model: target loss drops from 5.6645 to roughly 0.0016 and adapted generation contains the target codeword. These are SDK/inference/adapter controls, not proof of autonomous AGI or base-weight LoRA/MEMIT editing.
 
 ## Status Semantics
 

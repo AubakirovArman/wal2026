@@ -1,0 +1,77 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M694",
+  "name": "AIGI Real Soft Prompt Adapter",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-10T16:37:05.965261+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_device_count": 8,
+    "cuda_device_0": "NVIDIA H200"
+  },
+  "checks_total": 8,
+  "checks_passed": 8,
+  "records": [
+    {
+      "name": "model_loaded",
+      "passed": true,
+      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+    },
+    {
+      "name": "adapter_artifact_written",
+      "passed": true,
+      "bytes": 16267
+    },
+    {
+      "name": "loss_decreased",
+      "passed": true,
+      "before": 5.664482116699219,
+      "after": 0.0016335088293999434
+    },
+    {
+      "name": "loss_improvement_ratio_ge_95pct",
+      "passed": true,
+      "ratio": 0.9997116225639437
+    },
+    {
+      "name": "target_generated_with_adapter",
+      "passed": true,
+      "generated": "M694_REAL_ADAPTER_OK??? M6"
+    },
+    {
+      "name": "base_generation_not_target",
+      "passed": true,
+      "base_generated": "M694 = 010101"
+    },
+    {
+      "name": "real_gradient_steps",
+      "passed": true
+    },
+    {
+      "name": "cuda_available_recorded",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "elapsed_sec": 12.451,
+  "training": {
+    "prompt_tokens": 19,
+    "target_tokens": 7,
+    "soft_prompt_tokens": 8,
+    "steps": 50,
+    "learning_rate": 0.2,
+    "before_loss": 5.664482116699219,
+    "after_loss": 0.0016335088293999434,
+    "loss_improvement": 5.662848607869819,
+    "loss_improvement_ratio": 0.9997116225639437,
+    "generated_text": "M694_REAL_ADAPTER_OK??? M6",
+    "base_generated_text": "M694 = 010101",
+    "artifact_path": ".aigi/adapters/m694_qwen_soft_prompt.pt",
+    "artifact_size_bytes": 16267
+  },
+  "claim_boundary": "Real gradient-trained soft-prompt adapter on a frozen HF model; not base-weight LoRA/MEMIT editing yet."
+}

@@ -9,15 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 818 Python scripts |
-| Results | 486 JSON result files |
-| Books | 631 entries |
+| Experiments | 819 Python scripts |
+| Results | 487 JSON result files |
+| Books | 632 entries |
 | Docs | 230 docs plus developer diary |
 | Maintained tests | 35 passing |
-| Safe runtime sweep | 289 passing, 0 failing, 529 blocked by policy |
+| Safe runtime sweep | 289 passing, 0 failing, 530 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
-| AIGI governed feedback memory loop | M679-M693 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, governance checks, and 1 real HF inference backend gate |
+| AIGI governed feedback memory loop | M679-M694 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, governance checks, 1 real HF inference gate, and 1 real soft-prompt adapter gate |
 
 ## Key Results
 
@@ -45,6 +45,7 @@
 - M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the one-file project handoff digest and validates its key sections/metrics.
 - M689-M692 add AIGI memory change budgets, risk ledger, contract regression suite, and commit decision reports.
 - M693 connects AIGISystem to a real Qwen2.5-0.5B-Instruct HuggingFace inference backend and verifies memory overlay plus rollback against that backend.
+- M694 trains a real soft-prompt adapter on Qwen2.5-0.5B-Instruct: loss drops from 5.6645 to ~0.0016 and adapted generation contains the target codeword.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
@@ -56,4 +57,4 @@
 
 **Status:** Research-grade pre-alpha WeightOps framework prototype with explicit known issues and release gates.
 
-M693 is the first real HF inference integration gate for AIGI. It loads `Qwen/Qwen2.5-0.5B-Instruct`, serves unknown questions through `hf_model`, commits an AIGI memory overlay, then rolls back to the HF backend. It is not LoRA training or real semantic weight editing yet.
+M693 is the first real HF inference integration gate for AIGI. M694 is the first real gradient-trained adapter gate: it trains a soft prompt against `Qwen/Qwen2.5-0.5B-Instruct` and verifies loss improvement plus target generation. It is still not base-weight LoRA/MEMIT editing yet.

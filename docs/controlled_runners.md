@@ -21,14 +21,14 @@ The safe sweep proves that safe scripts do not fail locally. The next step is ro
 
 ## Current Blocked Routing Snapshot
 
-- Blocked scripts: `529`
-- Assigned scripts: `529`
+- Blocked scripts: `530`
+- Assigned scripts: `530`
 - Unassigned scripts: `0`
 
 | Taxonomy Runner | Scripts |
 |-----------------|---------|
 | `DOCS_PUBLIC_CLAIMS` | 90 |
-| `GPU_HEAVY` | 386 |
+| `GPU_HEAVY` | 387 |
 | `MODEL_CONTROLLED` | 3 |
 | `MODEL_SMALL` | 7 |
 | `MUTATION_DRY_RUN` | 37 |

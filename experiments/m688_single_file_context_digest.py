@@ -17,7 +17,7 @@ REQUIRED_SECTIONS = [
     "Repository Map",
     "WAL Architecture",
     "AIGI 1.0 Architecture",
-    "AIGI Gates M679-M693",
+    "AIGI Gates M679-M694",
     "Current Validation Ledger",
     "Status Semantics",
     "Controlled Runner Taxonomy",
@@ -92,8 +92,13 @@ def main() -> int:
         checks.append({"name": f"forbidden:{name}", "passed": pattern.search(text) is None})
 
     checks.append({"name": "non_claim:autonomous_agi", "passed": "not autonomous agi" in text.lower() or "**not** autonomous agi" in text.lower()})
-    checks.append({"name": "non_claim:semantic_weight_editing", "passed": "not a real semantic weight-editing backend" in text})
-    checks.append({"name": "aigi_latest_range", "passed": "M679-M693" in text})
+    lowered = text.lower()
+    checks.append({
+        "name": "non_claim:semantic_weight_editing",
+        "passed": "not a base-weight semantic editing backend" in lowered
+        or "does not perform lora/memit base-weight semantic editing" in lowered,
+    })
+    checks.append({"name": "aigi_latest_range", "passed": "M679-M694" in text})
     checks.append({"name": "single_file_summary", "passed": "single-file operational context" in text})
 
     failures = [check for check in checks if not check["passed"]]
