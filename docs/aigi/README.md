@@ -38,6 +38,12 @@ M694 attaches the first real trainable adapter gate:
 frozen Qwen2.5-0.5B → train soft prompt → target loss drops → adapted generation changes
 ```
 
+M695 attaches the first LoRA-style low-rank adapter gate:
+
+```text
+frozen Qwen2.5-0.5B → train rank-4 logit delta → custom greedy decode emits target
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -51,14 +57,15 @@ frozen Qwen2.5-0.5B → train soft prompt → target loss drops → adapted gene
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
 - Memory change budget, risk/debt ledger, regression suite, and decision reports.
-- Experiment gates M679-M694 with positive, negative, governance, real-inference, and real-adapter-training test logs.
+- Experiment gates M679-M695 with positive, negative, governance, real-inference, and real-adapter-training test logs.
 - Optional `HuggingFaceTextBackend` for controlled real model inference.
 - `SoftPromptAdapterTrainer` for controlled frozen-model adapter training.
+- `LogitLoRAAdapterTrainer` for controlled low-rank logit adapter training.
 - JSONL runtime logs.
 
 ## Non-Claims
 
 - No autonomous AGI claim.
-- No base-weight semantic edit backend attached yet; M693 is real inference and M694 is real adapter training, but not LoRA/MEMIT base-weight editing.
+- No base-weight semantic edit backend attached yet; M693 is real inference, M694 is real soft-prompt training, and M695 is real logit-LoRA training, but not attention/MLP LoRA injection or MEMIT base-weight editing.
 - No production-readiness claim.
 - WAL recipe commits are served through retrieval overlay until a real weight backend is connected.

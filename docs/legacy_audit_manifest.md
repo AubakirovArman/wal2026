@@ -6,16 +6,16 @@ This manifest classifies every `experiments/*.py` script into a runner type and 
 
 ## Summary
 
-- Total scripts: `819`
-- With historical artifacts: `320`
-- With `wal.results.v1` artifacts: `75`
+- Total scripts: `820`
+- With historical artifacts: `321`
+- With `wal.results.v1` artifacts: `76`
 - Current public claim allowed after audit: `61`
 
 ## Review Status Counts
 
 - `blocked_by_policy`: `2`
 - `blocked_needs_controlled_model_runner`: `390`
-- `blocked_needs_dry_run`: `37`
+- `blocked_needs_dry_run`: `38`
 - `blocked_needs_model_small_runner`: `7`
 - `blocked_needs_slow_runner`: `3`
 - `blocked_needs_subprocess_review`: `5`
@@ -29,7 +29,7 @@ This manifest classifies every `experiments/*.py` script into a runner type and 
 - `docs_public_claims`: `86`
 - `gpu_or_model_controlled`: `390`
 - `model_small`: `7`
-- `mutation_dry_run`: `37`
+- `mutation_dry_run`: `38`
 - `safe_core`: `7`
 - `safe_core_with_artifact`: `282`
 - `slow_safe`: `3`

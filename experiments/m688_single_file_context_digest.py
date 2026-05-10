@@ -17,7 +17,7 @@ REQUIRED_SECTIONS = [
     "Repository Map",
     "WAL Architecture",
     "AIGI 1.0 Architecture",
-    "AIGI Gates M679-M694",
+    "AIGI Gates M679-M695",
     "Current Validation Ledger",
     "Status Semantics",
     "Controlled Runner Taxonomy",
@@ -98,7 +98,7 @@ def main() -> int:
         "passed": "not a base-weight semantic editing backend" in lowered
         or "does not perform lora/memit base-weight semantic editing" in lowered,
     })
-    checks.append({"name": "aigi_latest_range", "passed": "M679-M694" in text})
+    checks.append({"name": "aigi_latest_range", "passed": "M679-M695" in text})
     checks.append({"name": "single_file_summary", "passed": "single-file operational context" in text})
 
     failures = [check for check in checks if not check["passed"]]

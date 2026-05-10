@@ -1,0 +1,78 @@
+{
+  "schema_version": "wal.results.v1",
+  "module": "M695",
+  "name": "AIGI Real Logit LoRA Adapter",
+  "status": "PASS",
+  "pass": true,
+  "timestamp": "2026-05-10T16:47:24.813833+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_device_count": 8,
+    "cuda_device_0": "NVIDIA H200"
+  },
+  "checks_total": 8,
+  "checks_passed": 8,
+  "records": [
+    {
+      "name": "model_loaded",
+      "passed": true,
+      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+    },
+    {
+      "name": "adapter_artifact_written",
+      "passed": true,
+      "bytes": 2447501
+    },
+    {
+      "name": "loss_decreased",
+      "passed": true,
+      "before": 2.877546787261963,
+      "after": 0.0
+    },
+    {
+      "name": "loss_improvement_ratio_ge_95pct",
+      "passed": true,
+      "ratio": 1.0
+    },
+    {
+      "name": "target_generated_with_adapter",
+      "passed": true,
+      "generated": "M695_LOGIT_LORA_OK_OK_OK_OK"
+    },
+    {
+      "name": "base_generation_not_target",
+      "passed": true,
+      "base_generated": "M695 = 010101"
+    },
+    {
+      "name": "real_low_rank_steps",
+      "passed": true,
+      "rank": 4
+    },
+    {
+      "name": "cuda_available_recorded",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "elapsed_sec": 10.555,
+  "training": {
+    "prompt_tokens": 21,
+    "target_tokens": 9,
+    "rank": 4,
+    "steps": 40,
+    "learning_rate": 0.3,
+    "before_loss": 2.877546787261963,
+    "after_loss": 0.0,
+    "loss_improvement": 2.877546787261963,
+    "loss_improvement_ratio": 1.0,
+    "generated_text": "M695_LOGIT_LORA_OK_OK_OK_OK",
+    "base_generated_text": "M695 = 010101",
+    "artifact_path": ".aigi/adapters/m695_qwen_logit_lora.pt",
+    "artifact_size_bytes": 2447501
+  },
+  "claim_boundary": "Real low-rank logit adapter on a frozen HF model; not attention/MLP LoRA injection or base-weight MEMIT editing yet."
+}

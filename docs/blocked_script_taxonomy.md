@@ -5,9 +5,9 @@ Source: `experiments/m624_full_test_inventory_results.json`
 
 ## Summary
 
-- Total scripts: `819`
-- Blocked scripts: `530`
-- Assigned scripts: `530`
+- Total scripts: `820`
+- Blocked scripts: `531`
+- Assigned scripts: `531`
 - Unassigned scripts: `0`
 
 ## Runner Classes
@@ -18,7 +18,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `GPU_HEAVY` | 387 | CUDA/Triton/local-model scripts with explicit hardware requirements. |
 | `MODEL_CONTROLLED` | 3 | Model/tokenizer/dataset loading under pinned small/medium model protocols. |
 | `MODEL_SMALL` | 7 | Small text-only cross-model workflows run outside safe-core sweeps. |
-| `MUTATION_DRY_RUN` | 37 | Git/archive/destructive operations in temp repos or temp directories only. |
+| `MUTATION_DRY_RUN` | 38 | Git/archive/destructive operations in temp repos or temp directories only. |
 | `SLOW_PROFILE` | 1 | Timeout-prone scripts measured in slow profiling suite. |
 | `SUBPROCESS_REVIEW` | 5 | Scripts that spawn commands and need command-level review. |
 
@@ -27,13 +27,13 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | Reason | Count | Runner |
 |--------|-------|--------|
 | `archive_mutation` | 6 | `MUTATION_DRY_RUN` |
-| `cuda` | 307 | `GPU_HEAVY` |
+| `cuda` | 308 | `GPU_HEAVY` |
 | `dataset_load` | 159 | `MODEL_CONTROLLED` |
 | `destructive_file_op` | 10 | `MUTATION_DRY_RUN` |
 | `destructive_shell_op` | 3 | `MUTATION_DRY_RUN` |
 | `device_map` | 268 | `GPU_HEAVY` |
 | `git_metadata_generator` | 1 | `MUTATION_DRY_RUN` |
-| `git_mutation` | 16 | `MUTATION_DRY_RUN` |
+| `git_mutation` | 17 | `MUTATION_DRY_RUN` |
 | `hf_download` | 3 | `MODEL_CONTROLLED` |
 | `local_model_path` | 243 | `GPU_HEAVY` |
 | `mass_export` | 4 | `DOCS_PUBLIC_CLAIMS` |
@@ -41,7 +41,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `mass_rewrite` | 2 | `DOCS_PUBLIC_CLAIMS` |
 | `merge_simulation_or_mutation` | 4 | `MUTATION_DRY_RUN` |
 | `model_artifact` | 33 | `GPU_HEAVY` |
-| `model_load` | 315 | `MODEL_CONTROLLED` |
+| `model_load` | 316 | `MODEL_CONTROLLED` |
 | `model_small_controlled_runner` | 7 | `MODEL_SMALL` |
 | `public_claim_generator` | 58 | `DOCS_PUBLIC_CLAIMS` |
 | `public_doc_generator` | 31 | `DOCS_PUBLIC_CLAIMS` |

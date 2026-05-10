@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M694.
+The current release-cleanup line is M621-M695.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -153,6 +153,7 @@ The current release-cleanup line is M621-M694.
 | M692 | AIGI commit decision report | PASS |
 | M693 | AIGI real HF backend gate | PASS |
 | M694 | AIGI real soft-prompt adapter | PASS |
+| M695 | AIGI real logit LoRA adapter | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -176,7 +177,7 @@ M679 starts the AIGI pre-alpha SDK layer. M680-M687 extend it into a small verif
 
 M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the single-file project digest. It is intended for future handoffs and reviewer orientation, not as a replacement for the raw experiment corpus.
 
-M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. M694 adds a real gradient-trained soft-prompt adapter gate on the same model: target loss drops from 5.6645 to roughly 0.0016 and adapted generation contains the target codeword. These are SDK/inference/adapter controls, not proof of autonomous AGI or base-weight LoRA/MEMIT editing.
+M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. M693 adds the first real HuggingFace inference backend gate using `Qwen/Qwen2.5-0.5B-Instruct`: the SDK falls back to `hf_model`, applies a committed memory overlay, and rolls back to the HF backend. M694 adds a real gradient-trained soft-prompt adapter gate on the same model: target loss drops from 5.6645 to roughly 0.0016 and adapted generation contains the target codeword. M695 adds a real low-rank logit-LoRA adapter: loss drops from 2.8775 to 0.0 and custom greedy decoding emits the target. These are SDK/inference/adapter controls, not proof of autonomous AGI or attention/MLP LoRA/MEMIT base-weight editing.
 
 ## Status Semantics
 

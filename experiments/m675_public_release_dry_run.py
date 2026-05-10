@@ -36,6 +36,7 @@ REQUIRED_RESULTS = [
     "m692_aigi_commit_decision_report_results.json",
     "m693_aigi_real_hf_backend_gate_results.json",
     "m694_aigi_real_soft_prompt_adapter_results.json",
+    "m695_aigi_real_logit_lora_adapter_results.json",
 ]
 
 REQUIRED_DOCS = [

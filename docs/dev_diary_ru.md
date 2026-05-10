@@ -5489,3 +5489,30 @@ M693 доказал только реальную inference-интеграцию
 ### Честная граница
 
 Это уже реальный gradient-trained adapter update на HF-модели. Но это не LoRA/MEMIT и не изменение base weights. Следующий hard step — M695: LoRA-style module adapter или controlled baseline RAG-only vs adapter.
+
+## M695 — AIGI Real Logit LoRA Adapter (2026-05-10)
+
+### Причина
+
+M694 доказал trainable soft-prompt adapter. Чтобы приблизиться к LoRA, нужен low-rank параметрический adapter, который добавляет delta к logits модели.
+
+### Что сделано
+
+- Добавлен `LogitLoRAAdapterTrainer` в `src/aigi/model/logit_lora.py`.
+- Использована реальная модель `Qwen/Qwen2.5-0.5B-Instruct`.
+- Base weights заморожены.
+- Обучены low-rank матрицы `A` и `B` ранга 4.
+- Loss считается по target answer `M695_LOGIT_LORA_OK`.
+- Custom greedy generation использует `base_logits + hidden @ A @ B`.
+
+### Результаты
+
+- M695 status: `PASS`.
+- Checks: `8/8`.
+- Loss: `2.8775 → 0.0`.
+- Adapted generation содержит target.
+- Base generation без adapter target не содержит.
+
+### Честная граница
+
+Это уже реальный low-rank LoRA-style adapter, но не attention/MLP LoRA injection и не MEMIT/base-weight edit. Следующий hard step — M696: module-level LoRA injection или честный baseline RAG-only vs soft-prompt/logit-LoRA.
