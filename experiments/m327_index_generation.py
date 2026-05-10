@@ -49,15 +49,19 @@ for group, entries in sorted(index.items()):
         print(f"    ... and {len(entries) - 3} more")
 
 # Generate INDEX.md
+index_lines = [
+    "# WAL Book Index",
+    "",
+    f"Total entries: {len(books)}",
+]
+for group, entries in sorted(index.items()):
+    index_lines.extend(["", f"## {group}", ""])
+    for entry in entries:
+        title = entry.replace(".md", "").replace("_", " ")
+        index_lines.append(f"- [{title}]({entry})")
+
 with open("book/INDEX.md", "w") as f:
-    f.write("# WAL Book Index\n\n")
-    f.write(f"Total entries: {len(books)}\n\n")
-    for group, entries in sorted(index.items()):
-        f.write(f"## {group}\n\n")
-        for entry in entries:
-            title = entry.replace(".md", "").replace("_", " ")
-            f.write(f"- [{title}]({entry})\n")
-        f.write("\n")
+    f.write("\n".join(index_lines) + "\n")
 
 print(f"\nGenerated book/INDEX.md with {len(books)} entries")
 

@@ -32,6 +32,7 @@ PUBLIC_FILES = [
     "docs/deployment_reality_protocol.md",
     "docs/product_polish_protocol.md",
     "docs/wal_status_summary.md",
+    "docs/aigi/README.md",
     "wal_studio_v01/README.md",
     "FINAL_REPORT.html",
     "FINAL_REPORT.json",

@@ -63,3 +63,12 @@ class AIGIResponse:
     answer: str
     source: str
     memory_id: str | None = None
+
+
+@dataclass(frozen=True)
+class CommitRecord:
+    artifact_id: str
+    tier: MemoryTier
+    question: str
+    previous_entry: dict[str, str] | None = None
+    created_at: str = field(default_factory=utc_now)

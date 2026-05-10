@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from aigi.core.state import AIGIResponse, CompileReport, MemoryCandidate, MemoryPolicy
+from aigi.core.state import AIGIResponse, CommitRecord, CompileReport, MemoryCandidate, MemoryPolicy
 from aigi.event_log import AIGIEventLog
 from aigi.memory.compiler import MemoryCompiler
 from aigi.memory.retrieval_memory import RetrievalMemory
@@ -35,6 +35,7 @@ class AIGISystem:
         self.compiler = MemoryCompiler(self.policy)
         self.verifier = MemoryVerifier(self.retrieval, self.refusals)
         self.last_report: CompileReport | None = None
+        self.commit_history: list[CommitRecord] = []
         self.log.write("system_init", "PASS", {"base_model": self.base_model_name})
 
     @classmethod
@@ -113,21 +114,45 @@ class AIGISystem:
 
         candidate = selected.candidate
         if selected.tier == "wal_recipe":
+            previous_entry = self.retrieval.lookup(candidate.question)
             artifact_id = self.wal.write_recipe(candidate)
             self.retrieval.upsert(candidate.question, candidate.answer, source="wal_recipe", memory_id=artifact_id)
         elif selected.tier == "retrieval":
+            previous_entry = self.retrieval.lookup(candidate.question)
             artifact_id = self.retrieval.upsert(candidate.question, candidate.answer, source="retrieval")
         elif selected.tier == "refusal":
+            previous_entry = self.refusals.lookup(candidate.question)
             artifact_id = self.refusals.upsert(candidate.question, candidate.answer, source="refusal")
         elif selected.tier == "tool":
+            previous_entry = self.retrieval.lookup(candidate.question)
             artifact_id = self.retrieval.upsert(candidate.question, candidate.answer, source="tool_policy")
         else:
             self.log.write("commit", "FAIL", {"reason": f"unsupported_tier:{selected.tier}"})
             return False
 
+        self.commit_history.append(CommitRecord(
+            artifact_id=artifact_id,
+            tier=selected.tier,
+            question=candidate.question,
+            previous_entry=previous_entry,
+        ))
         self.log.write("commit", "PASS", {"tier": selected.tier, "artifact_id": artifact_id})
         return True
 
     def rollback_last(self) -> bool:
-        self.log.write("rollback", "PASS", {"mode": "no_mutating_rollback_in_mvp"})
+        if not self.commit_history:
+            self.log.write("rollback", "FAIL", {"reason": "empty_commit_history"})
+            return False
+        record = self.commit_history.pop()
+        if record.tier == "wal_recipe":
+            self.wal.remove_recipe(record.artifact_id)
+            self.retrieval.restore(record.question, record.previous_entry)
+        elif record.tier in {"retrieval", "tool"}:
+            self.retrieval.restore(record.question, record.previous_entry)
+        elif record.tier == "refusal":
+            self.refusals.restore(record.question, record.previous_entry)
+        else:
+            self.log.write("rollback", "FAIL", {"reason": f"unsupported_tier:{record.tier}"})
+            return False
+        self.log.write("rollback", "PASS", {"tier": record.tier, "artifact_id": record.artifact_id})
         return True

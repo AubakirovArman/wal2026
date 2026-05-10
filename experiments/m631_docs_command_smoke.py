@@ -68,6 +68,10 @@ RUN_COMMANDS = [
     "python experiments/m677_experiment_manifest.py",
     "python experiments/m678_legacy_audit_m1_m50.py",
     "python experiments/m679_aigi_sdk_skeleton.py",
+    "python experiments/m680_aigi_100_fact_learning_loop.py",
+    "python experiments/m681_aigi_bad_memory_rejection_suite.py",
+    "python experiments/m682_aigi_memory_tier_routing.py",
+    "python experiments/m683_aigi_rollback_mvp.py",
     "python wal_studio_v01/demo.py",
 ]
 

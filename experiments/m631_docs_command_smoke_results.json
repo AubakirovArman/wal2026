@@ -4,9 +4,9 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T05:40:28.968055+00:00",
-  "run_commands": 56,
-  "run_passed": 56,
+  "timestamp": "2026-05-10T06:06:07.748820+00:00",
+  "run_commands": 60,
+  "run_passed": 60,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
   "blocked_result_commands": 2,
@@ -126,14 +126,14 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": ".......................                                                  [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n23 passed, 1 warning in 1.87s\n"
+      "output_tail": ".........................                                                [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n25 passed, 1 warning in 2.00s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 472/472 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 476/476 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -180,7 +180,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M630 Public Claim Checker: PASS\nfiles=31 violations=0 missing=0\n",
+      "output_tail": "M630 Public Claim Checker: PASS\nfiles=32 violations=0 missing=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m630_public_claim_checker_results.json"
@@ -620,7 +620,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M675 Public Release Dry Run: PASS\nresults=10 failures=0\n",
+      "output_tail": "M675 Public Release Dry Run: PASS\nresults=14 failures=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m675_public_release_dry_run_results.json"
@@ -640,7 +640,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M677 Experiment Manifest: PASS\nscripts=804 review_statuses=9\n",
+      "output_tail": "M677 Experiment Manifest: PASS\nscripts=808 review_statuses=9\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m677_experiment_manifest_results.json"
@@ -664,6 +664,46 @@
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m679_aigi_sdk_skeleton_results.json"
+    },
+    {
+      "command": "python experiments/m680_aigi_100_fact_learning_loop.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M680 AIGI 100 Fact Learning Loop: PASS\nfacts=100/100 tiers={'retrieval': 50, 'wal_recipe': 50}\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m680_aigi_100_fact_learning_loop_results.json"
+    },
+    {
+      "command": "python experiments/m681_aigi_bad_memory_rejection_suite.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M681 AIGI Bad Memory Rejection Suite: PASS\nrejected=20/20\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m681_aigi_bad_memory_rejection_suite_results.json"
+    },
+    {
+      "command": "python experiments/m682_aigi_memory_tier_routing.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M682 AIGI Memory Tier Routing: PASS\ncases=9/9\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m682_aigi_memory_tier_routing_results.json"
+    },
+    {
+      "command": "python experiments/m683_aigi_rollback_mvp.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M683 AIGI Rollback MVP: PASS\nchecks=8/8\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m683_aigi_rollback_mvp_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

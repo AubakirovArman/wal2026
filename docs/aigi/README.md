@@ -8,6 +8,12 @@ AIGI is a verified memory-accumulation system built on top of WAL ideas. The cur
 experience → memory candidate → tier selection → verification → commit/reject → audit log
 ```
 
+M680-M683 extend this into:
+
+```text
+learn 100 facts → reject bad memory → route by tier → rollback last commit
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -16,6 +22,8 @@ experience → memory candidate → tier selection → verification → commit/r
 - Retrieval overlay for serving committed memories.
 - Refusal memory tier for safety/policy memories.
 - Verification gates for empty data, confidence range, secret-like tokens, contradiction, and refusal shape.
+- Rollback of the last committed memory, including WAL recipe removal and previous-memory restore.
+- Experiment gates M679-M683 with positive and negative test logs.
 - JSONL runtime logs.
 
 ## Non-Claims

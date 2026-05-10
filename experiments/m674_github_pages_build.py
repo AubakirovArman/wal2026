@@ -55,7 +55,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <div class="card"><strong>Safe sweep</strong><br>{experiments["safe_sweep_pass"]} safe scripts pass; {experiments["safe_sweep_blocked"]} are policy-blocked.</div>
     <div class="card"><strong>Small models</strong><br>{small_models["unique_model_paths"]} unique local runtime/artifact workflows pass.</div>
     <div class="card"><strong>Legacy audit</strong><br>M1-M50 batch: {legacy_audit.get("m1_m50_total", 0)} scripts classified; {legacy_audit.get("m1_m50_current_public_claim_allowed", 0)} current public claims.</div>
-    <div class="card"><strong>AIGI loop</strong><br>M679: {aigi.get("positive_tests", 0)} positive and {aigi.get("negative_tests", 0)} negative checks pass.</div>
+    <div class="card"><strong>AIGI loop</strong><br>M679-M683: {aigi.get("fact_learning_passed", 0)} learned facts, {aigi.get("bad_memory_rejected", 0)} bad-memory rejections, {aigi.get("routing_checks_passed", 0)} routing checks, {aigi.get("rollback_checks_passed", 0)} rollback checks.</div>
   </div>
 
   <h2>What is not validated?</h2>
@@ -64,7 +64,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <li>No external certification claim.</li>
     <li>Small-model gates do not yet prove semantic weight-edit training.</li>
     <li>M1-M50 safe-pass scripts still need schema-v1 result artifacts before current public claims.</li>
-    <li>AIGI M679 is an SDK memory-loop proof, not autonomous AGI or real weight editing.</li>
+    <li>AIGI M679-M683 are SDK memory-loop proofs, not autonomous AGI or real semantic weight editing.</li>
     <li>Deployment modules remain prototypes/simulations unless explicitly marked otherwise.</li>
   </ul>
 
@@ -116,8 +116,9 @@ def main() -> int:
         failures.append("missing_pre_alpha")
     if not index.exists() or not status_json.exists():
         failures.append("site_artifact_missing")
-    if f'{experiments["result_json_files"]}/468' in body:
-        failures.append("stale_result_json_denominator")
+    for stale_denominator in (468, 472):
+        if f'{experiments["result_json_files"]}/{stale_denominator}' in body:
+            failures.append(f"stale_result_json_denominator:{stale_denominator}")
     status = "PASS" if not failures else "FAIL"
     result = {
         "schema_version": "wal.results.v1",

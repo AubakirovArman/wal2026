@@ -5334,3 +5334,30 @@ M1-M50 в основном являются core WAL encoding/runtime экспе
 
 ### Ограничение
 M679 не является AGI claim. Реальный semantic weight-edit backend ещё не подключён: `wal_recipe` tier сейчас сохраняет recipe artifact и обслуживается retrieval overlay.
+
+## M680-M683 — AIGI Memory-Loop Hardening (2026-05-10)
+
+### Цель
+
+Усилить AIGI 1.0 pre-alpha слой поверх WAL: перейти от SDK skeleton к проверяемому набору memory-loop gates с положительными и отрицательными тестами.
+
+### Реализация
+
+- Добавлен rollback history в `AIGISystem`: commit теперь сохраняет предыдущую запись, rollback удаляет WAL recipe или восстанавливает прежнюю memory entry.
+- M680 проверяет 100 synthetic facts через `ask → propose_memory → compile → commit → ask`.
+- M681 проверяет rejection suite: empty memory, secret-like payloads, contradictory memory candidates.
+- M682 проверяет deterministic tier routing: `wal_recipe`, `retrieval`, `refusal`, `tool`, `reject`.
+- M683 проверяет rollback: удалить WAL recipe, восстановить baseline, удалить baseline, fail on empty history.
+
+### Результаты
+
+- **M680**: PASS, facts=`100/100`, tiers=`wal_recipe=50`, `retrieval=50`.
+- **M681**: PASS, bad memories rejected=`20/20`.
+- **M682**: PASS, routing checks=`9/9`.
+- **M683**: PASS, rollback checks=`8/8`.
+- **Post-M683 inventory**: total_scripts=`808`, runnable_scripts=`280`, blocked_scripts=`528`.
+- **Post-M683 safe sweep**: PASS=`280`, BLOCKED=`528`, FAIL=`0`.
+
+### Ограничения
+
+AIGI M679-M683 не являются claim полноценного AGI и не доказывают semantic weight editing. Текущий `wal_recipe` tier сохраняет artifact и обслуживается retrieval overlay до подключения настоящего weight-edit backend.

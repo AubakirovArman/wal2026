@@ -67,3 +67,36 @@ def test_aigi_rejects_secret_like_memory(tmp_path):
     report = system.compile(candidate)
     assert not report.pass_
     assert "secret-like token" in report.reason
+
+
+def test_aigi_rollback_last_wal_recipe(tmp_path):
+    system = AIGISystem(
+        workdir=tmp_path,
+        memory_policy=MemoryPolicy(allow_weight_tier=True),
+    )
+    question = "What does rollback remove?"
+    candidate = system.propose_memory(question=question, answer="The newest memory.", kind="stable_fact")
+    report = system.compile(candidate)
+
+    assert system.commit(report)
+    assert system.ask(question).answer == "The newest memory."
+    assert system.rollback_last()
+    assert system.ask(question).source == "base_model_fallback"
+
+
+def test_aigi_rollback_restores_previous_memory(tmp_path):
+    system = AIGISystem(workdir=tmp_path)
+    question = "Which answer survives rollback?"
+
+    first = system.propose_memory(question=question, answer="first")
+    assert system.commit(system.compile(first))
+    second = system.propose_memory(
+        question=question,
+        answer="second",
+        metadata={"allow_overwrite": True},
+    )
+    assert system.commit(system.compile(second))
+    assert system.ask(question).answer == "second"
+
+    assert system.rollback_last()
+    assert system.ask(question).answer == "first"

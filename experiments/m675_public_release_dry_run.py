@@ -21,6 +21,10 @@ REQUIRED_RESULTS = [
     "m677_experiment_manifest_results.json",
     "m678_legacy_audit_m1_m50_results.json",
     "m679_aigi_sdk_skeleton_results.json",
+    "m680_aigi_100_fact_learning_loop_results.json",
+    "m681_aigi_bad_memory_rejection_suite_results.json",
+    "m682_aigi_memory_tier_routing_results.json",
+    "m683_aigi_rollback_mvp_results.json",
 ]
 
 REQUIRED_DOCS = [

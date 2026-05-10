@@ -38,3 +38,10 @@ class WALMemory:
             encoding="utf-8",
         )
         return artifact_id
+
+    def remove_recipe(self, artifact_id: str) -> bool:
+        path = self.recipe_dir / f"{artifact_id}.json"
+        if not path.exists():
+            return False
+        path.unlink()
+        return True

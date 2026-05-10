@@ -28,3 +28,28 @@ Status: `PASS`
 - `wal_recipe` stores a WAL-compatible recipe artifact and serves it via retrieval overlay in this MVP.
 - Real semantic weight editing remains future work.
 - Failed negative tests would block the AIGI gate.
+
+## M680 — 100 Fact Learning Loop
+
+- Status: `PASS`
+- Facts: `100`
+- Passed: `100`
+- Tier counts: `{'retrieval': 50, 'wal_recipe': 50}`
+
+## M681 — Bad Memory Rejection Suite
+
+- Status: `PASS`
+- Cases: `20`
+- Rejected safely: `20`
+
+## M682 — Memory Tier Routing
+
+- Status: `PASS`
+- Cases: `9`
+- Passed: `9`
+
+## M683 — Rollback MVP
+
+- Status: `PASS`
+- Checks: `8`
+- Passed: `8`

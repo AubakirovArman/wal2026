@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 616
+Total entries: 620
 
 ## Early (M1-M99)
 
@@ -403,6 +403,10 @@ Total entries: 616
 - [M677 Experiment Manifest](M677_Experiment_Manifest.md)
 - [M678 Legacy Audit M1 M50](M678_Legacy_Audit_M1_M50.md)
 - [M679 AIGI SDK Skeleton](M679_AIGI_SDK_Skeleton.md)
+- [M680 AIGI 100 Fact Learning Loop](M680_AIGI_100_Fact_Learning_Loop.md)
+- [M681 AIGI Bad Memory Rejection Suite](M681_AIGI_Bad_Memory_Rejection_Suite.md)
+- [M682 AIGI Memory Tier Routing](M682_AIGI_Memory_Tier_Routing.md)
+- [M683 AIGI Rollback MVP](M683_AIGI_Rollback_MVP.md)
 
 ## Phase 1 (M100-M149)
 
@@ -635,5 +639,3 @@ Total entries: 616
 - [312 E3 BASELINE](312_E3_BASELINE.md)
 - [313 E4 SECURITY](313_E4_SECURITY.md)
 - [314 E5 LONG RUN](314_E5_LONG_RUN.md)
-
-- [M679 AIGI SDK Skeleton](M679_AIGI_SDK_Skeleton.md)
