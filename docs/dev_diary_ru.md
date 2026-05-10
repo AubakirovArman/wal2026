@@ -5516,3 +5516,31 @@ M694 доказал trainable soft-prompt adapter. Чтобы приблизит
 ### Честная граница
 
 Это уже реальный low-rank LoRA-style adapter, но не attention/MLP LoRA injection и не MEMIT/base-weight edit. Следующий hard step — M696: module-level LoRA injection или честный baseline RAG-only vs soft-prompt/logit-LoRA.
+
+## M696 — AIGI Real Module LoRA Adapter (2026-05-10)
+
+### Причина
+
+M695 был low-rank adapter на logits. Чтобы выйти на более реальный model-editing уровень, нужен adapter внутри настоящего слоя модели, а не только поверх output head.
+
+### Что сделано
+
+- Добавлен `ModuleLoRAAdapterTrainer` в `src/aigi/model/module_lora.py`.
+- Использована реальная модель `Qwen/Qwen2.5-0.5B-Instruct`.
+- Target module: `model.layers.23.mlp.down_proj`.
+- Base weights заморожены.
+- Injected rank-8 LoRA adapter с `alpha=16`.
+- Обучаемые параметры: `46080`.
+- Loss считается по target answer `M696_MODULE_LORA_OK`.
+
+### Результаты
+
+- M696 status: `PASS`.
+- Checks: `9/9`.
+- Loss: `2.5523 → 0.0005`.
+- Adapted generation содержит target.
+- Base generation без adapter target не содержит.
+
+### Честная граница
+
+Это уже реальное LoRA-внедрение в MLP module frozen HF-модели. Но это one-fact controlled gate, не multi-fact training, не MEMIT и не production edit backend. Следующий hard step — M697: multi-fact module-LoRA или честный baseline adapter-vs-RAG.

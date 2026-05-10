@@ -13,7 +13,7 @@ Create a machine-readable manifest for every `experiments/*.py` script with runn
 
 - Manifest: `experiments/experiments_manifest.json`
 - Schema: `wal.legacy_audit.v1`
-- Scripts classified: `820`
+- Scripts classified: `821`
 - Current public claim allowed: `61`
 
 ## Outcome

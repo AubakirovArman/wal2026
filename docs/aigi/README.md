@@ -44,6 +44,12 @@ M695 attaches the first LoRA-style low-rank adapter gate:
 frozen Qwen2.5-0.5B → train rank-4 logit delta → custom greedy decode emits target
 ```
 
+M696 attaches the first real module-level LoRA gate:
+
+```text
+frozen Qwen2.5-0.5B → inject rank-8 LoRA into MLP down_proj → generation changes
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -57,15 +63,16 @@ frozen Qwen2.5-0.5B → train rank-4 logit delta → custom greedy decode emits 
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
 - Memory change budget, risk/debt ledger, regression suite, and decision reports.
-- Experiment gates M679-M695 with positive, negative, governance, real-inference, and real-adapter-training test logs.
+- Experiment gates M679-M696 with positive, negative, governance, real-inference, and real-adapter-training test logs.
 - Optional `HuggingFaceTextBackend` for controlled real model inference.
 - `SoftPromptAdapterTrainer` for controlled frozen-model adapter training.
 - `LogitLoRAAdapterTrainer` for controlled low-rank logit adapter training.
+- `ModuleLoRAAdapterTrainer` for controlled LoRA injection into a real MLP module.
 - JSONL runtime logs.
 
 ## Non-Claims
 
 - No autonomous AGI claim.
-- No base-weight semantic edit backend attached yet; M693 is real inference, M694 is real soft-prompt training, and M695 is real logit-LoRA training, but not attention/MLP LoRA injection or MEMIT base-weight editing.
+- No production semantic edit backend attached yet; M693 is real inference, M694/M695/M696 are real adapter-training gates, but they are still one-fact controlled tests rather than multi-fact production LoRA/MEMIT editing.
 - No production-readiness claim.
 - WAL recipe commits are served through retrieval overlay until a real weight backend is connected.

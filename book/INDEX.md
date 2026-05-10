@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 632
+Total entries: 633
 
 ## Early (M1-M99)
 
@@ -419,6 +419,7 @@ Total entries: 632
 - [M693 AIGI Real HF Backend Gate](M693_AIGI_Real_HF_Backend_Gate.md)
 - [M694 AIGI Real Soft Prompt Adapter](M694_AIGI_Real_Soft_Prompt_Adapter.md)
 - [M695 AIGI Real Logit LoRA Adapter](M695_AIGI_Real_Logit_LoRA_Adapter.md)
+- [M696 AIGI Real Module LoRA Adapter](M696_AIGI_Real_Module_LoRA_Adapter.md)
 
 ## Phase 1 (M100-M149)
 
