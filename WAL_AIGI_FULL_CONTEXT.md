@@ -23,19 +23,19 @@ Current AIGI is **not** autonomous AGI, not ready for production deployment, and
 
 | Area | Value |
 |------|-------|
-| Milestone scripts | 791 |
-| Python scripts in `experiments/` | 813 |
-| Result JSON files | 481 |
-| Book entries | 626 |
+| Milestone scripts | 795 |
+| Python scripts in `experiments/` | 817 |
+| Result JSON files | 485 |
+| Book entries | 630 |
 | Docs files | 235 |
-| Developer diary lines | 5390 |
-| Python source modules | 84 |
-| Maintained pytest tests | 30 |
-| Safe sweep | 285 PASS / 528 BLOCKED |
-| Result schema | 481 valid / 0 invalid |
-| Docs smoke | 65 / 65 commands PASS |
-| Legacy manifest | 813 scripts classified |
-| Current public-claim-allowed experiments | 56 |
+| Developer diary lines | 5436 |
+| Python source modules | 89 |
+| Maintained pytest tests | 34 |
+| Safe sweep | 289 PASS / 528 BLOCKED |
+| Result schema | 485 valid / 0 invalid |
+| Docs smoke | 69 / 69 commands PASS |
+| Legacy manifest | 817 scripts classified |
+| Current public-claim-allowed experiments | 61 |
 
 ## 3. Repository Map
 
@@ -56,7 +56,7 @@ wal/
 │   ├── wal/                          # package CLI and WAL-facing APIs
 │   ├── wal_build/                    # build system pieces
 │   └── aigi/                         # pre-alpha AIGI SDK
-├── experiments/                      # M1-M688+ scripts and result JSON
+├── experiments/                      # M1-M692+ scripts and result JSON
 ├── book/                             # per-experiment writeups
 ├── logs/aigi/                        # JSONL AIGI runtime/step logs
 ├── wal_studio_v01/                   # demo workflow
@@ -148,7 +148,7 @@ AIGI SDK
     └── logs/aigi/m681_bad_memory_rejection.jsonl
 ```
 
-## 6. AIGI Gates M679-M688
+## 6. AIGI Gates M679-M692
 
 | Module | Purpose | Result |
 |--------|---------|--------|
@@ -161,6 +161,11 @@ AIGI SDK
 | M685 | Experience-to-memory | PASS: 8 / 8 extraction cases |
 | M686 | Verified feedback loop | PASS: 25 / 25 feedback episodes |
 | M687 | Contract-gated rollback | PASS: 5 / 5 rollback checks |
+| M688 | Single-file context digest | PASS: 47 / 47 checks |
+| M689 | Memory change budget | PASS: 7 / 7 checks |
+| M690 | Risk ledger | PASS: 8 / 8 checks |
+| M691 | Contract regression suite | PASS: 6 / 6 checks over 10 protected contracts |
+| M692 | Commit decision report | PASS: 7 / 7 checks |
 
 AIGI validates control flow and state-management logic. It does not yet validate real training-time weight edits.
 
@@ -168,15 +173,15 @@ AIGI validates control flow and state-management logic. It does not yet validate
 
 | Gate | Status | Notes |
 |------|--------|-------|
-| Pytest | PASS | 30 maintained tests pass |
-| Result schema | PASS | 481 / 481 result JSON valid |
+| Pytest | PASS | 34 maintained tests pass |
+| Result schema | PASS | 485 / 485 result JSON valid |
 | M621 truthfulness audit | PASS | 55 / 55 checks |
-| M622 schema gate | PASS | 481 valid / 0 invalid |
+| M622 schema gate | PASS | 485 valid / 0 invalid |
 | M623 core release gate | PASS | pytest wrapper passes |
-| M624 full inventory | PASS | 813 scripts, 0 parse failures |
-| M625 safe runtime sweep | PASS | 285 PASS / 528 BLOCKED |
+| M624 full inventory | PASS | 817 scripts, 0 parse failures |
+| M625 safe runtime sweep | PASS | 289 PASS / 528 BLOCKED |
 | M630 public claim checker | PASS | 0 violations |
-| M631 docs command smoke | PASS | 65 / 65 commands |
+| M631 docs command smoke | PASS | 69 / 69 commands |
 | M632/M633/M635 | PASS | controlled small-model workflows |
 | M634 | BLOCKED | no local Gemma-small snapshot |
 | M636-M638 | PASS | 3 unique local model paths, runtime/artifact protocol only |
@@ -187,6 +192,7 @@ AIGI validates control flow and state-management logic. It does not yet validate
 | M678 | PASS | M1-M50 legacy audit batch |
 | M679-M687 | PASS | AIGI verified memory/feedback loop gates |
 | M688 | PASS | single-file context digest |
+| M689-M692 | PASS | AIGI governance: budget, risk ledger, regression suite, decision report |
 
 ## 8. Status Semantics
 
@@ -297,7 +303,7 @@ python wal_studio_v01/demo.py
 - Result schema is clean.
 - Public claims are conservative and checked.
 - WAL has recipe/build/test/rollback/debugging concepts.
-- AIGI SDK now has verified memory accumulation, bad-memory rejection, rollback, behavioral contracts, and contract-gated feedback learning.
+- AIGI SDK now has verified memory accumulation, bad-memory rejection, rollback, behavioral contracts, contract-gated feedback learning, memory budgets, risk ledger, regression suite, and decision reports.
 - Docs, book, diary, logs, Pages, and result artifacts are synchronized through release gates.
 
 ## 15. Main Weak Points
@@ -311,9 +317,9 @@ python wal_studio_v01/demo.py
 
 ## 16. Recommended Next Steps
 
-1. **M689-M692**: add AIGI memory budget/risk ledger/change budget gates.
-2. **M693-M696**: connect a real small-model semantic edit backend behind `wal_recipe`.
-3. **M697-M700**: run RAG-only vs WAL-recipe vs LoRA baseline on a small controlled benchmark.
+1. **M693-M696**: connect a real small-model semantic edit backend behind `wal_recipe`.
+2. **M697-M700**: run RAG-only vs WAL-recipe vs LoRA baseline on a small controlled benchmark.
+3. **M701-M704**: add long-running governed feedback-loop stability checks.
 4. Continue legacy audit batches: M51-M100, M101-M150, then critical old failures.
 5. Add a real long-duration runner for M666/M667.
 6. Keep `WAL_AIGI_FULL_CONTEXT.md` updated through M688 or a successor digest gate.

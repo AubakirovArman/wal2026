@@ -17,7 +17,7 @@ REQUIRED_SECTIONS = [
     "Repository Map",
     "WAL Architecture",
     "AIGI 1.0 Architecture",
-    "AIGI Gates M679-M688",
+    "AIGI Gates M679-M692",
     "Current Validation Ledger",
     "Status Semantics",
     "Controlled Runner Taxonomy",
@@ -75,7 +75,7 @@ def main() -> int:
         "safe_sweep_pass": metrics["experiments"]["safe_sweep_pass"],
         "safe_sweep_blocked": metrics["experiments"]["safe_sweep_blocked"],
         "schema_valid": metrics["experiments"]["result_json_files"],
-        "docs_smoke": 65,
+        "docs_smoke": 69,
     }
     checks.extend([
         {"name": "metric:milestone_scripts", "passed": f"Milestone scripts | {expected_values['milestone_scripts']}" in text},
@@ -93,7 +93,7 @@ def main() -> int:
 
     checks.append({"name": "non_claim:autonomous_agi", "passed": "not autonomous agi" in text.lower() or "**not** autonomous agi" in text.lower()})
     checks.append({"name": "non_claim:semantic_weight_editing", "passed": "not a real semantic weight-editing backend" in text})
-    checks.append({"name": "aigi_latest_range", "passed": "M679-M688" in text})
+    checks.append({"name": "aigi_latest_range", "passed": "M679-M692" in text})
     checks.append({"name": "single_file_summary", "passed": "single-file operational context" in text})
 
     failures = [check for check in checks if not check["passed"]]

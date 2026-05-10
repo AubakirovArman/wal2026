@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M688.
+The current release-cleanup line is M621-M692.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -147,6 +147,10 @@ The current release-cleanup line is M621-M688.
 | M686 | AIGI verified feedback loop | PASS |
 | M687 | AIGI contract-gated rollback | PASS |
 | M688 | Single-file context digest | PASS |
+| M689 | AIGI memory change budget | PASS |
+| M690 | AIGI risk ledger | PASS |
+| M691 | AIGI contract regression suite | PASS |
+| M692 | AIGI commit decision report | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -169,6 +173,8 @@ M677-M678 start the Legacy Experiment Resurrection Program. The first batch audi
 M679 starts the AIGI pre-alpha SDK layer. M680-M687 extend it into a small verified feedback memory-loop suite: 100/100 synthetic facts are committed through WAL recipe/retrieval tiers, 20/20 bad memories are rejected, 9/9 tier-routing checks pass, 8/8 rollback checks pass, 4/4 behavioral contract checks pass, 8/8 experience-to-memory extraction cases pass, 25/25 verified feedback episodes pass, and 5/5 contract-gated rollback checks pass. This is not an autonomous AGI claim and does not attach a real semantic weight-edit backend yet; `wal_recipe` currently means a recipe artifact plus retrieval overlay.
 
 M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the single-file project digest. It is intended for future handoffs and reviewer orientation, not as a replacement for the raw experiment corpus.
+
+M689-M692 add governance around the feedback memory loop: memory change budgets, risk/debt ledger, protected contract regression suite, and auditable commit decision reports. These are deterministic SDK controls, not proof of real autonomous learning.
 
 ## Status Semantics
 

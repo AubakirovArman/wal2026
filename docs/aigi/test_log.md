@@ -77,3 +77,28 @@ Status: `PASS`
 - Status: `PASS`
 - Checks: `5`
 - Passed: `5`
+
+## M689 — Memory Change Budget
+
+- Status: `PASS`
+- Checks: `7`
+- Passed: `7`
+
+## M690 — Risk Ledger
+
+- Status: `PASS`
+- Checks: `8`
+- Passed: `8`
+
+## M691 — Contract Regression Suite
+
+- Status: `PASS`
+- Protected contracts: `10`
+- Checks: `6`
+- Passed: `6`
+
+## M692 — Commit Decision Report
+
+- Status: `PASS`
+- Checks: `7`
+- Passed: `7`

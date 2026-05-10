@@ -30,6 +30,10 @@ REQUIRED_RESULTS = [
     "m686_aigi_verified_feedback_loop_results.json",
     "m687_aigi_contract_gated_rollback_results.json",
     "m688_single_file_context_digest_results.json",
+    "m689_aigi_memory_change_budget_results.json",
+    "m690_aigi_risk_ledger_results.json",
+    "m691_aigi_contract_regression_suite_results.json",
+    "m692_aigi_commit_decision_report_results.json",
 ]
 
 REQUIRED_DOCS = [

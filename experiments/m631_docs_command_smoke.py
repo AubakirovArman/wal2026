@@ -77,6 +77,10 @@ RUN_COMMANDS = [
     "python experiments/m686_aigi_verified_feedback_loop.py",
     "python experiments/m687_aigi_contract_gated_rollback.py",
     "python experiments/m688_single_file_context_digest.py",
+    "python experiments/m689_aigi_memory_change_budget.py",
+    "python experiments/m690_aigi_risk_ledger.py",
+    "python experiments/m691_aigi_contract_regression_suite.py",
+    "python experiments/m692_aigi_commit_decision_report.py",
     "python wal_studio_v01/demo.py",
 ]
 

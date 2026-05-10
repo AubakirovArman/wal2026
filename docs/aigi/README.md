@@ -20,6 +20,12 @@ M684-M687 add the first feedback-learning controls:
 behavioral contract → experience extraction → verified feedback commit → contract-gated rollback
 ```
 
+M689-M692 add governance before a real backend is attached:
+
+```text
+change budget → risk ledger → regression suite → commit decision report
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -32,7 +38,8 @@ behavioral contract → experience extraction → verified feedback commit → c
 - Behavioral contracts with `must_answer`, `must_not_answer`, and `must_refuse`.
 - Experience-to-memory extraction for user corrections and refusals.
 - Verified learning loop that rolls back a tentative commit if contract gates fail.
-- Experiment gates M679-M687 with positive and negative test logs.
+- Memory change budget, risk/debt ledger, regression suite, and decision reports.
+- Experiment gates M679-M692 with positive and negative test logs.
 - JSONL runtime logs.
 
 ## Non-Claims

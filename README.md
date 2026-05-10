@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 791 milestone experiment scripts in `experiments/m*.py`
-- 813 Python scripts total in `experiments/`
-- 481 experiment result JSON files in `experiments/`
-- 626 book/diary entries in `book/`
+- 795 milestone experiment scripts in `experiments/m*.py`
+- 817 Python scripts total in `experiments/`
+- 485 experiment result JSON files in `experiments/`
+- 630 book/diary entries in `book/`
 - 274 top-level result files in `results/`
 - 235 docs files in `docs/`
-- 5390+ lines in `docs/dev_diary_ru.md`
-- 84 Python source modules in `src/`
-- 30 pytest tests for the packaged core, audit helpers, and AIGI SDK
+- 5430+ lines in `docs/dev_diary_ru.md`
+- 89 Python source modules in `src/`
+- 34 pytest tests for the packaged core, audit helpers, and AIGI SDK
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M688+
+experiments/        milestone scripts and result JSON for M1-M692+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -48,7 +48,7 @@ logs/               small text logs for AIGI/WAL audit runs
 
 ## AIGI Layer
 
-`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M687 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, rollback, behavioral contracts, experience-to-memory extraction, and 25 verified feedback episodes. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
+`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M692 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, rollback, behavioral contracts, experience-to-memory extraction, 25 verified feedback episodes, memory budgets, risk ledger, regression suite, and commit decision reports. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
 
 ## Quick Start
 

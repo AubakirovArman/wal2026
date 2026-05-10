@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 625
+Total entries: 629
 
 ## Early (M1-M99)
 
@@ -412,6 +412,10 @@ Total entries: 625
 - [M686 AIGI Verified Feedback Loop](M686_AIGI_Verified_Feedback_Loop.md)
 - [M687 AIGI Contract Gated Rollback](M687_AIGI_Contract_Gated_Rollback.md)
 - [M688 Single File Context Digest](M688_Single_File_Context_Digest.md)
+- [M689 AIGI Memory Change Budget](M689_AIGI_Memory_Change_Budget.md)
+- [M690 AIGI Risk Ledger](M690_AIGI_Risk_Ledger.md)
+- [M691 AIGI Contract Regression Suite](M691_AIGI_Contract_Regression_Suite.md)
+- [M692 AIGI Commit Decision Report](M692_AIGI_Commit_Decision_Report.md)
 
 ## Phase 1 (M100-M149)
 

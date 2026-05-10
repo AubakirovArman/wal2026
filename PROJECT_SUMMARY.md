@@ -9,15 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 813 Python scripts |
-| Results | 481 JSON result files |
-| Books | 626 entries |
+| Experiments | 817 Python scripts |
+| Results | 485 JSON result files |
+| Books | 630 entries |
 | Docs | 230 docs plus developer diary |
-| Maintained tests | 30 passing |
-| Safe runtime sweep | 285 passing, 0 failing, 528 blocked by policy |
+| Maintained tests | 34 passing |
+| Safe runtime sweep | 289 passing, 0 failing, 528 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
-| AIGI verified feedback memory loop | M679-M687 passing: 100 facts, 20 bad-memory rejections, 9 routing checks, 8 rollback checks, 25 feedback episodes |
+| AIGI governed feedback memory loop | M679-M692 passing: 100 facts, 20 bad-memory rejections, 25 feedback episodes, 7 budget checks, 8 risk-ledger checks, 6 regression checks, 7 decision-report checks |
 
 ## Key Results
 
@@ -43,6 +43,7 @@
 - M677-M678 add the Legacy Experiment Resurrection manifest and first M1-M50 audit batch.
 - M679-M687 extend the separate AIGI SDK layer with verified memory accumulation, behavioral contracts, feedback extraction, contract-gated rollback, logs, and positive/negative tests.
 - M688 adds `WAL_AIGI_FULL_CONTEXT.md` as the one-file project handoff digest and validates its key sections/metrics.
+- M689-M692 add AIGI memory change budgets, risk ledger, contract regression suite, and commit decision reports.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 
