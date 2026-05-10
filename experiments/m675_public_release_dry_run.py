@@ -20,6 +20,7 @@ REQUIRED_RESULTS = [
     "m674_github_pages_build_results.json",
     "m677_experiment_manifest_results.json",
     "m678_legacy_audit_m1_m50_results.json",
+    "m679_aigi_sdk_skeleton_results.json",
 ]
 
 REQUIRED_DOCS = [
@@ -31,6 +32,8 @@ REQUIRED_DOCS = [
     "docs/project_metrics.json",
     "docs/legacy_audit_manifest.md",
     "docs/legacy_audit_m1_m50.md",
+    "docs/aigi/README.md",
+    "docs/aigi/test_log.md",
     "docs/product_polish_protocol.md",
     "site/index.html",
 ]

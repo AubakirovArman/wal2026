@@ -4,13 +4,13 @@
   "name": "Docs Command Smoke",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T04:18:29.390678+00:00",
-  "run_commands": 55,
-  "run_passed": 55,
+  "timestamp": "2026-05-10T05:40:28.968055+00:00",
+  "run_commands": 56,
+  "run_passed": 56,
   "exists_only_commands": 2,
   "exists_only_passed": 2,
   "blocked_result_commands": 2,
-  "docs_checked": 15,
+  "docs_checked": 18,
   "failures": [],
   "records": [
     {
@@ -45,6 +45,24 @@
     },
     {
       "command": "doc exists: docs/legacy_audit_m1_m50.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/aigi/README.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/aigi/dev_diary_ru.md",
+      "mode": "doc",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "doc exists: docs/aigi/test_log.md",
       "mode": "doc",
       "passed": true,
       "returncode": 0
@@ -108,14 +126,14 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "................                                                         [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n16 passed, 1 warning in 2.04s\n"
+      "output_tail": ".......................                                                  [100%]\n=============================== warnings summary ===============================\ntests/test_wal_v1_spec.py::test_serialize_deserialize\n  /mnt/hf_model_weights/arman/3bit/wal/src/wal/v1/format.py:251: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:1578.)\n    base_atoms = torch.frombuffer(data, dtype=torch.float32, count=K0, offset=offset)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n23 passed, 1 warning in 1.87s\n"
     },
     {
       "command": "PYTHONPATH=src python -m wal validate-results experiments --fail-on-invalid",
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "[WAL] Result validation: 471/471 valid, 0 invalid, 576 warnings\n"
+      "output_tail": "[WAL] Result validation: 472/472 valid, 0 invalid, 576 warnings\n"
     },
     {
       "command": "python experiments/m626_technical_report.py",
@@ -572,7 +590,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M672 Docs-to-Code Consistency: PASS\ncommands=59 failures=0\n",
+      "output_tail": "M672 Docs-to-Code Consistency: PASS\ncommands=60 failures=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m672_docs_to_code_consistency_results.json"
@@ -602,7 +620,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M675 Public Release Dry Run: PASS\nresults=9 failures=0\n",
+      "output_tail": "M675 Public Release Dry Run: PASS\nresults=10 failures=0\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m675_public_release_dry_run_results.json"
@@ -622,7 +640,7 @@
       "mode": "run",
       "returncode": 0,
       "passed": true,
-      "output_tail": "M677 Experiment Manifest: PASS\nscripts=803 review_statuses=9\n",
+      "output_tail": "M677 Experiment Manifest: PASS\nscripts=804 review_statuses=9\n",
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m677_experiment_manifest_results.json"
@@ -636,6 +654,16 @@
       "result_status": "PASS",
       "result_pass": true,
       "result_file": "experiments/m678_legacy_audit_m1_m50_results.json"
+    },
+    {
+      "command": "python experiments/m679_aigi_sdk_skeleton.py",
+      "mode": "run",
+      "returncode": 0,
+      "passed": true,
+      "output_tail": "M679 AIGI SDK Skeleton: PASS\npositive=7/7 negative=4/4\n",
+      "result_status": "PASS",
+      "result_pass": true,
+      "result_file": "experiments/m679_aigi_sdk_skeleton_results.json"
     },
     {
       "command": "python wal_studio_v01/demo.py",

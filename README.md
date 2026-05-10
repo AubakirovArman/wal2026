@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 781 milestone experiment scripts in `experiments/m*.py`
-- 803 Python scripts total in `experiments/`
-- 471 experiment result JSON files in `experiments/`
-- 616 book/diary entries in `book/`
+- 782 milestone experiment scripts in `experiments/m*.py`
+- 804 Python scripts total in `experiments/`
+- 472 experiment result JSON files in `experiments/`
+- 617 book/diary entries in `book/`
 - 274 top-level result files in `results/`
 - 230 docs files in `docs/`
 - 5300+ lines in `docs/dev_diary_ru.md`
-- 69 Python source modules in `src/`
-- 16 pytest tests for the packaged core and audit helpers
+- 80 Python source modules in `src/`
+- 23 pytest tests for the packaged core, audit helpers, and AIGI SDK
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M678+
+experiments/        milestone scripts and result JSON for M1-M679+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -43,7 +43,12 @@ scripts/            helper scripts for phase workflows and reports
 reproduce/          reproduction entry points
 results/            legacy summarized result files
 archive/            historical generated artifacts, not current release claims
+logs/               small text logs for AIGI/WAL audit runs
 ```
+
+## AIGI Layer
+
+`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit or reject, and log the result. M679 is not an AGI claim and does not attach a real weight-edit backend yet.
 
 ## Quick Start
 
@@ -150,6 +155,7 @@ python experiments/m675_public_release_dry_run.py
 python experiments/m676_public_repo_hardening.py
 python experiments/m677_experiment_manifest.py
 python experiments/m678_legacy_audit_m1_m50.py
+python experiments/m679_aigi_sdk_skeleton.py
 ```
 
 ## Artifact Policy

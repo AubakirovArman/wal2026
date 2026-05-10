@@ -26,7 +26,7 @@ Runs the maintained core pytest release gate for packaged WAL APIs.
 ## Лог аудита
 
 - Обновлено вручную в рамках full test sweep M624–M625.
-- После добавления legacy audit tests gate проходит `16 passed, 1 warning`.
+- После добавления AIGI tests gate проходит `23 passed, 1 warning`.
 - Тяжёлые GPU/model-loading, git-mutating, destructive и public-doc generator scripts не исполняются автоматически; они фиксируются как BLOCKED by policy.
 
 ---

@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 615
+Total entries: 616
 
 ## Early (M1-M99)
 
@@ -402,6 +402,7 @@ Total entries: 615
 - [M676 Public Repo Hardening](M676_Public_Repo_Hardening.md)
 - [M677 Experiment Manifest](M677_Experiment_Manifest.md)
 - [M678 Legacy Audit M1 M50](M678_Legacy_Audit_M1_M50.md)
+- [M679 AIGI SDK Skeleton](M679_AIGI_SDK_Skeleton.md)
 
 ## Phase 1 (M100-M149)
 
@@ -635,3 +636,4 @@ Total entries: 615
 - [313 E4 SECURITY](313_E4_SECURITY.md)
 - [314 E5 LONG RUN](314_E5_LONG_RUN.md)
 
+- [M679 AIGI SDK Skeleton](M679_AIGI_SDK_Skeleton.md)

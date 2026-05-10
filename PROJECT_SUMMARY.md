@@ -9,14 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 803 Python scripts |
-| Results | 471 JSON result files |
-| Books | 616 entries |
+| Experiments | 804 Python scripts |
+| Results | 472 JSON result files |
+| Books | 617 entries |
 | Docs | 230 docs plus developer diary |
-| Maintained tests | 16 passing |
-| Safe runtime sweep | 275 passing, 0 failing, 528 blocked by policy |
+| Maintained tests | 23 passing |
+| Safe runtime sweep | 276 passing, 0 failing, 528 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
+| AIGI SDK skeleton | 7 positive, 4 negative checks |
 
 ## Key Results
 
@@ -40,6 +41,7 @@
 - M659-M668 add deployment reality contracts; M666 remains `BLOCKED` for a real 24h runner and M667 is `SIMULATED` as a short memory sentinel.
 - M669-M676 add product polish gates for CLI UX, docs consistency, demo E2E, static Pages build, pre-alpha release dry run, and public repo hardening.
 - M677-M678 add the Legacy Experiment Resurrection manifest and first M1-M50 audit batch.
+- M679 starts the separate AIGI SDK layer with verified memory accumulation, logs, and positive/negative tests.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 

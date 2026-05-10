@@ -20,6 +20,7 @@ def render_index(metrics: dict[str, object]) -> str:
     code = metrics["code"]
     small_models = metrics["small_model_gates"]
     legacy_audit = metrics.get("legacy_audit", {})
+    aigi = metrics.get("aigi", {})
     generated_at = datetime.now(timezone.utc).isoformat()
     return f"""<!doctype html>
 <html lang="en">
@@ -54,6 +55,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <div class="card"><strong>Safe sweep</strong><br>{experiments["safe_sweep_pass"]} safe scripts pass; {experiments["safe_sweep_blocked"]} are policy-blocked.</div>
     <div class="card"><strong>Small models</strong><br>{small_models["unique_model_paths"]} unique local runtime/artifact workflows pass.</div>
     <div class="card"><strong>Legacy audit</strong><br>M1-M50 batch: {legacy_audit.get("m1_m50_total", 0)} scripts classified; {legacy_audit.get("m1_m50_current_public_claim_allowed", 0)} current public claims.</div>
+    <div class="card"><strong>AIGI loop</strong><br>M679: {aigi.get("positive_tests", 0)} positive and {aigi.get("negative_tests", 0)} negative checks pass.</div>
   </div>
 
   <h2>What is not validated?</h2>
@@ -62,6 +64,7 @@ python -m wal validate-results experiments --fail-on-invalid</code></pre>
     <li>No external certification claim.</li>
     <li>Small-model gates do not yet prove semantic weight-edit training.</li>
     <li>M1-M50 safe-pass scripts still need schema-v1 result artifacts before current public claims.</li>
+    <li>AIGI M679 is an SDK memory-loop proof, not autonomous AGI or real weight editing.</li>
     <li>Deployment modules remain prototypes/simulations unless explicitly marked otherwise.</li>
   </ul>
 
@@ -80,6 +83,7 @@ python -m wal studio status</code></pre>
     <li><a href="../README.md">README.md</a></li>
     <li><a href="../TECHNICAL_REPORT.md">TECHNICAL_REPORT.md</a></li>
     <li><a href="../docs/VALIDATION_STATUS.md">docs/VALIDATION_STATUS.md</a></li>
+    <li><a href="../docs/aigi/README.md">docs/aigi/README.md</a></li>
     <li><a href="../KNOWN_ISSUES.md">KNOWN_ISSUES.md</a></li>
   </ul>
 

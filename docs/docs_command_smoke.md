@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `55`
-- Runnable commands passed: `55`
+- Runnable commands: `56`
+- Runnable commands passed: `56`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -25,6 +25,9 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `doc` | `doc exists: docs/project_metrics.json` | `PASS` | `—` |
 | `doc` | `doc exists: docs/legacy_audit_manifest.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/legacy_audit_m1_m50.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/aigi/README.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/aigi/dev_diary_ru.md` | `PASS` | `—` |
+| `doc` | `doc exists: docs/aigi/test_log.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/demo_playbook.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/controlled_runners.md` | `PASS` | `—` |
 | `doc` | `doc exists: docs/model_small_protocol.md` | `PASS` | `—` |
@@ -88,6 +91,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m676_public_repo_hardening.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m677_experiment_manifest.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m678_legacy_audit_m1_m50.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m679_aigi_sdk_skeleton.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |
