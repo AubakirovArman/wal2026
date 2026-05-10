@@ -13,6 +13,7 @@ DOC_PATH = ROOT / "docs" / "public_claim_policy.md"
 
 PUBLIC_FILES = [
     "README.md",
+    "WAL_AIGI_FULL_CONTEXT.md",
     "KNOWN_ISSUES.md",
     "PROJECT_SUMMARY.md",
     "PROJECT_SUMMARY_v2.json",

@@ -5388,3 +5388,24 @@ AIGI M679-M683 не являются claim полноценного AGI и не 
 ### Ограничения
 
 AIGI M679-M687 остаются pre-alpha SDK gates. Они не доказывают autonomous AGI, production readiness или semantic weight editing. Текущий `wal_recipe` tier всё ещё artifact plus retrieval overlay.
+
+## M688 — Single File Context Digest (2026-05-10)
+
+### Цель
+
+Собрать актуальную информацию по WAL/AIGI в один файл для handoff, ревью и следующих agent-сессий.
+
+### Реализация
+
+- Добавлен `WAL_AIGI_FULL_CONTEXT.md` в корень проекта.
+- Файл включает позиционирование, метрики, карту репозитория, WAL/AIGI архитектуру, validation ledger, status semantics, runner taxonomy, legacy audit, small-model status, команды запуска, ограничения и roadmap.
+- Добавлен `m688_single_file_context_digest.py`, который проверяет наличие обязательных секций, актуальность ключевых метрик, наличие canonical source files и отсутствие запрещённых release claims.
+
+### Результат
+
+- **M688**: PASS, checks=`47/47`.
+- Artifact: `WAL_AIGI_FULL_CONTEXT.md`.
+
+### Ограничение
+
+Digest — это компактная карта проекта, а не замена raw corpus. Полные данные остаются в `experiments/`, `book/`, `docs/`, `src/` и `logs/`.

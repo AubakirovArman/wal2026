@@ -29,6 +29,7 @@ REQUIRED_RESULTS = [
     "m685_aigi_experience_to_memory_results.json",
     "m686_aigi_verified_feedback_loop_results.json",
     "m687_aigi_contract_gated_rollback_results.json",
+    "m688_single_file_context_digest_results.json",
 ]
 
 REQUIRED_DOCS = [

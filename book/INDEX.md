@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 624
+Total entries: 625
 
 ## Early (M1-M99)
 
@@ -411,6 +411,7 @@ Total entries: 624
 - [M685 AIGI Experience To Memory](M685_AIGI_Experience_To_Memory.md)
 - [M686 AIGI Verified Feedback Loop](M686_AIGI_Verified_Feedback_Loop.md)
 - [M687 AIGI Contract Gated Rollback](M687_AIGI_Contract_Gated_Rollback.md)
+- [M688 Single File Context Digest](M688_Single_File_Context_Digest.md)
 
 ## Phase 1 (M100-M149)
 

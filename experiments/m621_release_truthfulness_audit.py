@@ -40,6 +40,7 @@ for forbidden in ("production-ready", "certified A+", "complete and production")
 
 public_claim_files = [
     "README.md",
+    "WAL_AIGI_FULL_CONTEXT.md",
     "PROJECT_SUMMARY.md",
     "TECHNICAL_REPORT.md",
     "docs/demo_playbook.md",

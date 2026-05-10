@@ -76,6 +76,7 @@ RUN_COMMANDS = [
     "python experiments/m685_aigi_experience_to_memory.py",
     "python experiments/m686_aigi_verified_feedback_loop.py",
     "python experiments/m687_aigi_contract_gated_rollback.py",
+    "python experiments/m688_single_file_context_digest.py",
     "python wal_studio_v01/demo.py",
 ]
 

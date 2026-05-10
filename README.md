@@ -13,24 +13,24 @@ The repository contains two related tracks:
 - **DRL/runtime experiments** — route-codebook and Block-RVQ runtime layers for large LLM linear weights.
 - **Experiment chronicle** — reproducible milestone scripts, generated result JSON, and a book-style development log.
 
-Current public status: **pre-alpha, fully instrumented research prototype**. See `TECHNICAL_REPORT.md`, `docs/demo_playbook.md`, and `KNOWN_ISSUES.md` for the technical framing, demo path, limitations, and release gates.
+Current public status: **pre-alpha, fully instrumented research prototype**. See `TECHNICAL_REPORT.md`, `docs/demo_playbook.md`, `KNOWN_ISSUES.md`, and `WAL_AIGI_FULL_CONTEXT.md` for the technical framing, demo path, limitations, release gates, and one-file handoff context.
 
 ## Stats
 
-- 790 milestone experiment scripts in `experiments/m*.py`
-- 812 Python scripts total in `experiments/`
-- 480 experiment result JSON files in `experiments/`
-- 625 book/diary entries in `book/`
+- 791 milestone experiment scripts in `experiments/m*.py`
+- 813 Python scripts total in `experiments/`
+- 481 experiment result JSON files in `experiments/`
+- 626 book/diary entries in `book/`
 - 274 top-level result files in `results/`
-- 230 docs files in `docs/`
-- 5300+ lines in `docs/dev_diary_ru.md`
-- 80 Python source modules in `src/`
+- 235 docs files in `docs/`
+- 5390+ lines in `docs/dev_diary_ru.md`
+- 84 Python source modules in `src/`
 - 30 pytest tests for the packaged core, audit helpers, and AIGI SDK
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M687+
+experiments/        milestone scripts and result JSON for M1-M688+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
