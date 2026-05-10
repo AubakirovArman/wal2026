@@ -14,6 +14,12 @@ M680-M683 extend this into:
 learn 100 facts → reject bad memory → route by tier → rollback last commit
 ```
 
+M684-M687 add the first feedback-learning controls:
+
+```text
+behavioral contract → experience extraction → verified feedback commit → contract-gated rollback
+```
+
 ## Current MVP
 
 - `AIGISystem` Python SDK.
@@ -23,7 +29,10 @@ learn 100 facts → reject bad memory → route by tier → rollback last commit
 - Refusal memory tier for safety/policy memories.
 - Verification gates for empty data, confidence range, secret-like tokens, contradiction, and refusal shape.
 - Rollback of the last committed memory, including WAL recipe removal and previous-memory restore.
-- Experiment gates M679-M683 with positive and negative test logs.
+- Behavioral contracts with `must_answer`, `must_not_answer`, and `must_refuse`.
+- Experience-to-memory extraction for user corrections and refusals.
+- Verified learning loop that rolls back a tentative commit if contract gates fail.
+- Experiment gates M679-M687 with positive and negative test logs.
 - JSONL runtime logs.
 
 ## Non-Claims

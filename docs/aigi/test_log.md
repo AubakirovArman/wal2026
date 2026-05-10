@@ -53,3 +53,27 @@ Status: `PASS`
 - Status: `PASS`
 - Checks: `8`
 - Passed: `8`
+
+## M684 — Behavioral Contracts
+
+- Status: `PASS`
+- Checks: `4`
+- Passed: `4`
+
+## M685 — Experience To Memory
+
+- Status: `PASS`
+- Cases: `8`
+- Passed: `8`
+
+## M686 — Verified Feedback Loop
+
+- Status: `PASS`
+- Episodes: `25`
+- Passed: `25`
+
+## M687 — Contract-Gated Rollback
+
+- Status: `PASS`
+- Checks: `5`
+- Passed: `5`

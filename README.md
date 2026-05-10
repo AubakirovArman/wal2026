@@ -17,20 +17,20 @@ Current public status: **pre-alpha, fully instrumented research prototype**. See
 
 ## Stats
 
-- 786 milestone experiment scripts in `experiments/m*.py`
-- 808 Python scripts total in `experiments/`
-- 476 experiment result JSON files in `experiments/`
-- 621 book/diary entries in `book/`
+- 790 milestone experiment scripts in `experiments/m*.py`
+- 812 Python scripts total in `experiments/`
+- 480 experiment result JSON files in `experiments/`
+- 625 book/diary entries in `book/`
 - 274 top-level result files in `results/`
 - 230 docs files in `docs/`
 - 5300+ lines in `docs/dev_diary_ru.md`
 - 80 Python source modules in `src/`
-- 25 pytest tests for the packaged core, audit helpers, and AIGI SDK
+- 30 pytest tests for the packaged core, audit helpers, and AIGI SDK
 
 ## Repository Map
 
 ```text
-experiments/        milestone scripts and result JSON for M1-M683+
+experiments/        milestone scripts and result JSON for M1-M687+
 book/               markdown entries for modules, phases, and milestones
 docs/               architecture notes, decisions, diaries, and roadmap files
 wal_studio_v01/     12-step WAL Studio demo
@@ -48,7 +48,7 @@ logs/               small text logs for AIGI/WAL audit runs
 
 ## AIGI Layer
 
-`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M683 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, and rollback. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
+`src/aigi/` starts a separate pre-alpha AIGI SDK layer above WAL. It implements a verified memory loop: propose memory, select tier, verify gates, commit, reject, rollback, and log the result. M679-M687 validate 100 synthetic memory updates, 20 bad-memory rejections, tier routing, rollback, behavioral contracts, experience-to-memory extraction, and 25 verified feedback episodes. This is not an AGI claim and does not attach a real semantic weight-edit backend yet.
 
 ## Quick Start
 

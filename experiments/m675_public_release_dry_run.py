@@ -25,6 +25,10 @@ REQUIRED_RESULTS = [
     "m681_aigi_bad_memory_rejection_suite_results.json",
     "m682_aigi_memory_tier_routing_results.json",
     "m683_aigi_rollback_mvp_results.json",
+    "m684_aigi_behavioral_contracts_results.json",
+    "m685_aigi_experience_to_memory_results.json",
+    "m686_aigi_verified_feedback_loop_results.json",
+    "m687_aigi_contract_gated_rollback_results.json",
 ]
 
 REQUIRED_DOCS = [

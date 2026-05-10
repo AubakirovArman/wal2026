@@ -8,8 +8,8 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Results
 
-- Runnable commands: `60`
-- Runnable commands passed: `60`
+- Runnable commands: `64`
+- Runnable commands passed: `64`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
 
@@ -96,6 +96,10 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m681_aigi_bad_memory_rejection_suite.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m682_aigi_memory_tier_routing.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m683_aigi_rollback_mvp.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m684_aigi_behavioral_contracts.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m685_aigi_experience_to_memory.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m686_aigi_verified_feedback_loop.py` | `PASS` | `PASS` |
+| `run` | `python experiments/m687_aigi_contract_gated_rollback.py` | `PASS` | `PASS` |
 | `run` | `python wal_studio_v01/demo.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m624_full_test_inventory.py` | `PASS` | `—` |
 | `exists_only` | `python experiments/m625_safe_runtime_sweep.py --timeout 15` | `PASS` | `—` |

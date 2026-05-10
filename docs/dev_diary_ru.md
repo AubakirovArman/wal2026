@@ -5361,3 +5361,30 @@ M679 не является AGI claim. Реальный semantic weight-edit back
 ### Ограничения
 
 AIGI M679-M683 не являются claim полноценного AGI и не доказывают semantic weight editing. Текущий `wal_recipe` tier сохраняет artifact и обслуживается retrieval overlay до подключения настоящего weight-edit backend.
+
+## M684-M687 — AIGI Feedback Contracts (2026-05-10)
+
+### Цель
+
+Добавить следующий слой AIGI 1.0 поверх verified memory loop: behavioral contracts, experience-to-memory extraction, verified feedback commit и rollback при нарушении контракта.
+
+### Реализация
+
+- Добавлен `BehavioralContract` с режимами `must_answer`, `must_not_answer`, `must_refuse`.
+- Добавлен `LessonExtractor`, который преобразует feedback experience в typed `MemoryCandidate`.
+- Добавлен `VerifiedLearningLoop`: `experience → candidate → compile → commit → contract check → rollback if failed`.
+- Добавлены unit tests для contracts, extraction, successful feedback commit и contract rollback.
+- Добавлены M684-M687 experiment gates, result JSON, book entries и AIGI logs.
+
+### Результаты
+
+- **M684**: PASS, behavioral contract checks=`4/4`.
+- **M685**: PASS, experience extraction cases=`8/8`.
+- **M686**: PASS, verified feedback episodes=`25/25`.
+- **M687**: PASS, contract rollback checks=`5/5`.
+- **Post-M687 inventory**: total_scripts=`812`, runnable_scripts=`284`, blocked_scripts=`528`.
+- **Post-M687 safe sweep**: PASS=`284`, BLOCKED=`528`, FAIL=`0`.
+
+### Ограничения
+
+AIGI M679-M687 остаются pre-alpha SDK gates. Они не доказывают autonomous AGI, production readiness или semantic weight editing. Текущий `wal_recipe` tier всё ещё artifact plus retrieval overlay.

@@ -9,15 +9,15 @@
 
 | Metric | Value |
 |--------|-------|
-| Experiments | 808 Python scripts |
-| Results | 476 JSON result files |
-| Books | 621 entries |
+| Experiments | 812 Python scripts |
+| Results | 480 JSON result files |
+| Books | 625 entries |
 | Docs | 230 docs plus developer diary |
-| Maintained tests | 25 passing |
-| Safe runtime sweep | 280 passing, 0 failing, 528 blocked by policy |
+| Maintained tests | 30 passing |
+| Safe runtime sweep | 284 passing, 0 failing, 528 blocked by policy |
 | Small-model controlled workflows | 3 passing unique local model paths |
 | Legacy audit M1-M50 | 143 scripts classified, 0 current public claims |
-| AIGI verified memory loop | M679-M683 passing: 100 facts, 20 bad-memory rejections, 9 routing checks, 8 rollback checks |
+| AIGI verified feedback memory loop | M679-M687 passing: 100 facts, 20 bad-memory rejections, 9 routing checks, 8 rollback checks, 25 feedback episodes |
 
 ## Key Results
 
@@ -41,7 +41,7 @@
 - M659-M668 add deployment reality contracts; M666 remains `BLOCKED` for a real 24h runner and M667 is `SIMULATED` as a short memory sentinel.
 - M669-M676 add product polish gates for CLI UX, docs consistency, demo E2E, static Pages build, pre-alpha release dry run, and public repo hardening.
 - M677-M678 add the Legacy Experiment Resurrection manifest and first M1-M50 audit batch.
-- M679-M683 extend the separate AIGI SDK layer with verified memory accumulation, 100-fact learning, bad-memory rejection, tier routing, rollback, logs, and positive/negative tests.
+- M679-M687 extend the separate AIGI SDK layer with verified memory accumulation, behavioral contracts, feedback extraction, contract-gated rollback, logs, and positive/negative tests.
 - M501 is correctly marked `BLOCKED` due CUDA OOM.
 - M601 is correctly marked `UNSUPPORTED` for the current Qwen-VL AutoModel path.
 

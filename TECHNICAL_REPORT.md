@@ -75,7 +75,7 @@ WAL Studio / CLI
 
 ## Validation Snapshot
 
-The current release-cleanup line is M621-M683.
+The current release-cleanup line is M621-M687.
 
 | Module | Purpose | Current Result |
 |--------|---------|----------------|
@@ -142,6 +142,10 @@ The current release-cleanup line is M621-M683.
 | M681 | AIGI bad-memory rejection suite | PASS |
 | M682 | AIGI memory tier routing | PASS |
 | M683 | AIGI rollback MVP | PASS |
+| M684 | AIGI behavioral contracts | PASS |
+| M685 | AIGI experience-to-memory | PASS |
+| M686 | AIGI verified feedback loop | PASS |
+| M687 | AIGI contract-gated rollback | PASS |
 
 The M625 sweep is a safe local execution pass, not a claim that every historical experiment is executable on the current machine. Heavy model runs, GPU/HF probes, destructive scripts, backup/restore scripts, git-mutating scripts, and public-doc regeneration scripts are blocked by policy and recorded as `BLOCKED`.
 
@@ -161,7 +165,7 @@ M669-M676 add product polish, release dry-run, and public repo hardening gates f
 
 M677-M678 start the Legacy Experiment Resurrection Program. The first batch audits M1-M50 as 143 numeric-prefix scripts: 133 require controlled GPU/model runners, 3 require slow runners, and 7 still run under the safe policy but need schema-v1 artifacts before current public claims.
 
-M679 starts the AIGI pre-alpha SDK layer. M680-M683 extend it into a small verified memory-loop suite: 100/100 synthetic facts are committed through WAL recipe/retrieval tiers, 20/20 bad memories are rejected, 9/9 tier-routing checks pass, and 8/8 rollback checks pass. This is not an autonomous AGI claim and does not attach a real semantic weight-edit backend yet; `wal_recipe` currently means a recipe artifact plus retrieval overlay.
+M679 starts the AIGI pre-alpha SDK layer. M680-M687 extend it into a small verified feedback memory-loop suite: 100/100 synthetic facts are committed through WAL recipe/retrieval tiers, 20/20 bad memories are rejected, 9/9 tier-routing checks pass, 8/8 rollback checks pass, 4/4 behavioral contract checks pass, 8/8 experience-to-memory extraction cases pass, 25/25 verified feedback episodes pass, and 5/5 contract-gated rollback checks pass. This is not an autonomous AGI claim and does not attach a real semantic weight-edit backend yet; `wal_recipe` currently means a recipe artifact plus retrieval overlay.
 
 ## Status Semantics
 

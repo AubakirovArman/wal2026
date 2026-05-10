@@ -72,6 +72,10 @@ RUN_COMMANDS = [
     "python experiments/m681_aigi_bad_memory_rejection_suite.py",
     "python experiments/m682_aigi_memory_tier_routing.py",
     "python experiments/m683_aigi_rollback_mvp.py",
+    "python experiments/m684_aigi_behavioral_contracts.py",
+    "python experiments/m685_aigi_experience_to_memory.py",
+    "python experiments/m686_aigi_verified_feedback_loop.py",
+    "python experiments/m687_aigi_contract_gated_rollback.py",
     "python wal_studio_v01/demo.py",
 ]
 

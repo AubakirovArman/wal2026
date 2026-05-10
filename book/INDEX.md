@@ -1,6 +1,6 @@
 # WAL Book Index
 
-Total entries: 620
+Total entries: 624
 
 ## Early (M1-M99)
 
@@ -407,6 +407,10 @@ Total entries: 620
 - [M681 AIGI Bad Memory Rejection Suite](M681_AIGI_Bad_Memory_Rejection_Suite.md)
 - [M682 AIGI Memory Tier Routing](M682_AIGI_Memory_Tier_Routing.md)
 - [M683 AIGI Rollback MVP](M683_AIGI_Rollback_MVP.md)
+- [M684 AIGI Behavioral Contracts](M684_AIGI_Behavioral_Contracts.md)
+- [M685 AIGI Experience To Memory](M685_AIGI_Experience_To_Memory.md)
+- [M686 AIGI Verified Feedback Loop](M686_AIGI_Verified_Feedback_Loop.md)
+- [M687 AIGI Contract Gated Rollback](M687_AIGI_Contract_Gated_Rollback.md)
 
 ## Phase 1 (M100-M149)
 
