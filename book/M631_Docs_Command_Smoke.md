@@ -1,8 +1,8 @@
 # M631 — Docs Command Smoke
 
-Date: 2026-05-09  
-Status: PASS  
-Result: `experiments/m631_docs_command_smoke_results.json`  
+Date: 2026-05-10
+Status: PASS
+Result: `experiments/m631_docs_command_smoke_results.json`
 Doc: `docs/docs_command_smoke.md`
 
 ## Purpose
@@ -15,8 +15,8 @@ M631 verifies that the fast commands documented for reviewers still run, while l
 - Runnable commands passed: `52`
 - Exists-only commands: `2`
 - Exists-only commands passed: `2`
-- Commands with embedded blocked result status: `8`
+- Commands with embedded blocked result status: `7`
 
 ## Outcome
 
-The public quick validation commands are executable locally, long-running reviewer commands resolve to real scripts, and M632-M638 plus M666 are explicitly visible as `BLOCKED` gates rather than hidden command failures.
+The public quick validation commands are executable locally, long-running reviewer commands resolve to real scripts, and the remaining blocked gates are visible rather than hidden command failures.

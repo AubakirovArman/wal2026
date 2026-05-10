@@ -1,7 +1,7 @@
 # M633 — Qwen Small Full Workflow
 
-Date: 2026-05-09  
-Status: BLOCKED  
+Date: 2026-05-10
+Status: PASS
 Result: `experiments/m633_qwen_small_full_workflow_results.json`
 
 ## Purpose
@@ -10,10 +10,14 @@ Run the same small-model workflow on a Qwen-family text-only model.
 
 ## Result
 
-- Candidate small models: `0`
-- Near misses: `0`
-- Reason: `LOCAL_SMALL_TEXT_MODEL_NOT_FOUND`
+- Model: `Qwen/Qwen2.5-0.5B-Instruct`
+- Local snapshot: `.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775`
+- Candidate small models: `1`
+- Runtime smoke: `PASS`
+- Artifact workflow: `PASS`
+- Behavioral checksum: `aaaf480da28a291f`
+- Scope: local model load, tokenizer load, finite logits, deterministic generation, WAL artifact lifecycle, tag/rollback/release notes.
 
 ## Outcome
 
-The gate is blocked until a pinned Qwen 0.5B-1.5B text model is available locally.
+M633 is now the first real small-model runner pass. It is not semantic edit training and does not modify weights; M636-M638 still require more model families.

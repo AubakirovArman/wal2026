@@ -1,7 +1,7 @@
 # Model-Small Validation Protocol
 
-Date: 2026-05-09  
-Status: controlled runner protocol, real model run pending
+Date: 2026-05-10
+Status: controlled runner protocol, one Qwen-small run completed
 
 ## Purpose
 
@@ -33,7 +33,13 @@ release_notes
 
 ## Current Local State
 
-The current machine has large/medium model assets, but no confirmed small text-only models suitable for this runner. Therefore M632-M638 are allowed to produce `BLOCKED` results until a pinned small model path is provided.
+The current machine now has one confirmed small text-only model:
+
+- `Qwen/Qwen2.5-0.5B-Instruct`
+- Local snapshot: `.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775`
+- M633 status: `PASS`
+
+The Llama-family, Gemma, and TinyLlama/Mistral-small slots are still missing. Therefore M636-M638 remain `BLOCKED` until at least three real small-model family workflows pass.
 
 ## Blocking Rules
 
@@ -41,6 +47,14 @@ The current machine has large/medium model assets, but no confirmed small text-o
 - Existing model path but real run not enabled: `BLOCKED`.
 - Resource failure during controlled run: `BLOCKED`, not `PASS`.
 - Simulated workflow: `SIMULATED`, never counted as real cross-model proof.
+
+## Download Helper
+
+```bash
+python scripts/download_qwen_small_model.py
+```
+
+The helper downloads model files into `.hf_cache/`, which is intentionally excluded from git.
 
 ## Commands
 

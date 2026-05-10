@@ -13,8 +13,8 @@ Compiles and classifies every experiment script from the first milestone onward,
 - **pass**: `True`
 - **total_scripts**: `800`
 - **parse_failures**: `0`
-- **runnable_scripts**: `279`
-- **blocked_scripts**: `521`
+- **runnable_scripts**: `272`
+- **blocked_scripts**: `528`
 - **blocked_reason_counts**: `23 keys`
 - **records**: `800 items`
 
@@ -22,7 +22,7 @@ Compiles and classifies every experiment script from the first milestone onward,
 
 - **Модуль**: M624
 - **Название**: Full Test Inventory
-- **Дата обновления**: 2026-05-09
+- **Дата обновления**: 2026-05-10
 - **Статус**: ✅ PASS
 
 ## Лог аудита
@@ -30,6 +30,7 @@ Compiles and classifies every experiment script from the first milestone onward,
 - Обновлено вручную в рамках full test sweep M624–M625.
 - Тяжёлые GPU/model-loading, git-mutating, destructive и public-doc generator scripts не исполняются автоматически; они фиксируются как BLOCKED by policy.
 - После M626-M627 policy дополнительно блокирует legacy public-claim generators (`final_html_report`, `completion_certificate`, `publication_readiness`, project summary/roadmap/stats generators).
+- После M633 policy дополнительно блокирует M632-M638 как `model_small_controlled_runner`, чтобы model runners не исполнялись внутри safe sweep.
 
 ---
 

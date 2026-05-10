@@ -1,8 +1,8 @@
 # M629 — Controlled Runner Matrix
 
-Date: 2026-05-09  
-Status: PASS  
-Result: `experiments/m629_controlled_runner_matrix_results.json`  
+Date: 2026-05-10
+Status: PASS
+Result: `experiments/m629_controlled_runner_matrix_results.json`
 Doc: `docs/controlled_runners.md`
 
 ## Purpose
@@ -23,7 +23,7 @@ M629 defines the seven-runner hardening structure for moving from managed pre-al
 
 - Runners defined: `7`
 - Taxonomy status: `PASS`
-- Taxonomy blocked scripts: `524`
+- Taxonomy blocked scripts: `528`
 - Taxonomy unassigned scripts: `0`
 
 ## Outcome

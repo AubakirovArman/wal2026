@@ -127,6 +127,16 @@ SAFE_TEXT_ONLY_AUDIT_ALLOWLIST = {
     "m629_controlled_runner_matrix.py",
 }
 
+MODEL_SMALL_RUNNER_SCRIPTS = {
+    "m632_llama_1b_full_workflow.py",
+    "m633_qwen_small_full_workflow.py",
+    "m634_gemma_small_full_workflow.py",
+    "m635_tinyllama_mistral_full_workflow.py",
+    "m636_cross_model_recipe_replay.py",
+    "m637_cross_model_layer_aperture.py",
+    "m638_cross_model_ci_behavior.py",
+}
+
 
 def order_key(path: Path) -> tuple[int, str, str]:
     match = re.match(r"m(\d+)([a-z]*)_", path.name)
@@ -165,6 +175,8 @@ def classify(path: Path) -> dict[str, object]:
         reasons = [reason for reason in reasons if reason == "syntax_error"]
     if "emergency" in lowered_name:
         reasons = [reason for reason in reasons if reason != "merge_simulation_or_mutation"]
+    if path.name in MODEL_SMALL_RUNNER_SCRIPTS and "model_small_controlled_runner" not in reasons:
+        reasons.append("model_small_controlled_runner")
 
     runnable = parse_status == "PASS" and not reasons
     if path.name in {"m624_full_test_inventory.py", "m625_safe_runtime_sweep.py"}:

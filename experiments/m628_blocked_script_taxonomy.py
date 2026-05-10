@@ -19,6 +19,7 @@ REASON_TO_RUNNER = {
     "local_model_path": "GPU_HEAVY",
     "model_artifact": "GPU_HEAVY",
     "model_load": "MODEL_CONTROLLED",
+    "model_small_controlled_runner": "MODEL_SMALL",
     "tokenizer_load": "MODEL_CONTROLLED",
     "dataset_load": "MODEL_CONTROLLED",
     "hf_download": "MODEL_CONTROLLED",
@@ -44,6 +45,7 @@ PRIMARY_RUNNER_PRIORITY = [
     "MUTATION_DRY_RUN",
     "DOCS_PUBLIC_CLAIMS",
     "GPU_HEAVY",
+    "MODEL_SMALL",
     "MODEL_CONTROLLED",
     "SLOW_PROFILE",
     "SUBPROCESS_REVIEW",
@@ -87,6 +89,7 @@ def render_doc(result: dict[str, object]) -> str:
     ]
     runner_purpose = {
         "GPU_HEAVY": "CUDA/Triton/local-model scripts with explicit hardware requirements.",
+        "MODEL_SMALL": "Small text-only cross-model workflows run outside safe-core sweeps.",
         "MODEL_CONTROLLED": "Model/tokenizer/dataset loading under pinned small/medium model protocols.",
         "MUTATION_DRY_RUN": "Git/archive/destructive operations in temp repos or temp directories only.",
         "DOCS_PUBLIC_CLAIMS": "Docs and public-claim generators behind truthfulness gates.",

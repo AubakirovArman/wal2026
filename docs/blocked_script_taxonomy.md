@@ -6,8 +6,8 @@ Source: `experiments/m624_full_test_inventory_results.json`
 ## Summary
 
 - Total scripts: `800`
-- Blocked scripts: `521`
-- Assigned scripts: `521`
+- Blocked scripts: `528`
+- Assigned scripts: `528`
 - Unassigned scripts: `0`
 
 ## Runner Classes
@@ -17,6 +17,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `DOCS_PUBLIC_CLAIMS` | 90 | Docs and public-claim generators behind truthfulness gates. |
 | `GPU_HEAVY` | 385 | CUDA/Triton/local-model scripts with explicit hardware requirements. |
 | `MODEL_CONTROLLED` | 3 | Model/tokenizer/dataset loading under pinned small/medium model protocols. |
+| `MODEL_SMALL` | 7 | Small text-only cross-model workflows run outside safe-core sweeps. |
 | `MUTATION_DRY_RUN` | 37 | Git/archive/destructive operations in temp repos or temp directories only. |
 | `SLOW_PROFILE` | 1 | Timeout-prone scripts measured in slow profiling suite. |
 | `SUBPROCESS_REVIEW` | 5 | Scripts that spawn commands and need command-level review. |
@@ -41,6 +42,7 @@ Source: `experiments/m624_full_test_inventory_results.json`
 | `merge_simulation_or_mutation` | 4 | `MUTATION_DRY_RUN` |
 | `model_artifact` | 33 | `GPU_HEAVY` |
 | `model_load` | 313 | `MODEL_CONTROLLED` |
+| `model_small_controlled_runner` | 7 | `MODEL_SMALL` |
 | `public_claim_generator` | 58 | `DOCS_PUBLIC_CLAIMS` |
 | `public_doc_generator` | 31 | `DOCS_PUBLIC_CLAIMS` |
 | `runtime_timeout_in_safe_sweep` | 3 | `SLOW_PROFILE` |

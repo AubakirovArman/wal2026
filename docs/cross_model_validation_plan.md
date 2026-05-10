@@ -1,6 +1,6 @@
 # Cross-Model Validation Plan
 
-Date: 2026-05-09  
+Date: 2026-05-10
 Scope: M632-M638
 
 ## Goal
@@ -12,7 +12,7 @@ Move from platform-level validation to model-portability evidence.
 | Module | Gate | Expected Until Small Models Exist |
 |--------|------|-----------------------------------|
 | M632 | Llama-family 1B workflow | `BLOCKED` if no local small model |
-| M633 | Qwen small workflow | `BLOCKED` if no local small model |
+| M633 | Qwen small workflow | `PASS` with local Qwen2.5-0.5B-Instruct controlled workflow |
 | M634 | Gemma small workflow | `BLOCKED` if no local small model |
 | M635 | TinyLlama/Mistral small workflow | `BLOCKED` if no local small model |
 | M636 | Cross-model recipe replay | `BLOCKED` until enough model workflows pass |
@@ -42,4 +42,4 @@ Gemma or TinyLlama/Mistral small
 
 ## Non-Claims
 
-The M632-M638 scripts do not load models by default and do not claim real cross-model proof when local small models are absent.
+M633 loads one local Qwen-small model and records runtime/artifact workflow evidence. This is one-family evidence only: it does not prove cross-model generality, does not perform semantic weight editing, and does not satisfy M636-M638 by itself.

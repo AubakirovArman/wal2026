@@ -1,8 +1,8 @@
 # M628 — Blocked Script Taxonomy
 
-Date: 2026-05-09  
-Status: PASS  
-Result: `experiments/m628_blocked_script_taxonomy_results.json`  
+Date: 2026-05-10
+Status: PASS
+Result: `experiments/m628_blocked_script_taxonomy_results.json`
 Doc: `docs/blocked_script_taxonomy.md`
 
 ## Purpose
@@ -12,19 +12,19 @@ M628 turns the M625 `BLOCKED` set from a flat count into controlled runner categ
 ## Result
 
 - Total scripts: `800`
-- Blocked scripts: `521`
-- Assigned scripts: `521`
+- Blocked scripts: `528`
+- Assigned scripts: `528`
 - Unassigned scripts: `0`
 
 ## Runner Categories
 
 - `GPU_HEAVY`
+- `MODEL_SMALL`
 - `MODEL_CONTROLLED`
 - `MUTATION_DRY_RUN`
 - `DOCS_PUBLIC_CLAIMS`
 - `SLOW_PROFILE`
 - `SUBPROCESS_REVIEW`
-- `INTERNAL_AUDIT`
 
 ## Outcome
 

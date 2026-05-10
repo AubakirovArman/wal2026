@@ -15,7 +15,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 
 ## Commands
 
-- Commands with embedded blocked result status: `8`
+- Commands with embedded blocked result status: `7`
 
 | Mode | Command | Command Status | Result Status |
 |------|---------|----------------|---------------|
@@ -38,7 +38,7 @@ Verify that the fast public documentation commands still run, while long sweep c
 | `run` | `python experiments/m629_controlled_runner_matrix.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m630_public_claim_checker.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m632_llama_1b_full_workflow.py` | `PASS` | `BLOCKED` |
-| `run` | `python experiments/m633_qwen_small_full_workflow.py` | `PASS` | `BLOCKED` |
+| `run` | `python experiments/m633_qwen_small_full_workflow.py` | `PASS` | `PASS` |
 | `run` | `python experiments/m634_gemma_small_full_workflow.py` | `PASS` | `BLOCKED` |
 | `run` | `python experiments/m635_tinyllama_mistral_full_workflow.py` | `PASS` | `BLOCKED` |
 | `run` | `python experiments/m636_cross_model_recipe_replay.py` | `PASS` | `BLOCKED` |

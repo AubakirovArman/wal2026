@@ -1,6 +1,6 @@
 # M636 — Cross-Model Recipe Replay
 
-Date: 2026-05-09  
+Date: 2026-05-10
 Status: BLOCKED  
 Result: `experiments/m636_cross_model_recipe_replay_results.json`
 
@@ -11,10 +11,10 @@ Replay one recipe contract across multiple model families.
 ## Result
 
 - Required real passes: `3`
-- Real passes: `0`
-- Blocked inputs: `4`
+- Real passes: `1`
+- Blocked inputs: `3`
 - Reason: `NEEDS_THREE_REAL_SMALL_MODEL_WORKFLOWS`
 
 ## Outcome
 
-Replay remains blocked because M632-M635 do not yet have real small-model workflow results.
+Replay remains blocked because only M633 has a real small-model workflow result. The gate requires three passing model-family workflows.

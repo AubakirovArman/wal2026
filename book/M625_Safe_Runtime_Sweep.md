@@ -12,8 +12,8 @@ Executes all scripts classified safe by M624 in M-order with a per-script timeou
 - **status**: ✅ PASS
 - **pass**: `True`
 - **total_scripts**: `800`
-- **executed_scripts**: `279`
-- **status_counts**: `2 keys` (`PASS=279`, `BLOCKED=521`)
+- **executed_scripts**: `272`
+- **status_counts**: `2 keys` (`PASS=272`, `BLOCKED=528`)
 - **timeout_sec**: `15`
 - **records**: `800 items`
 - **failures**: `0 items`
@@ -22,7 +22,7 @@ Executes all scripts classified safe by M624 in M-order with a per-script timeou
 
 - **Модуль**: M625
 - **Название**: Safe Runtime Sweep
-- **Дата обновления**: 2026-05-09
+- **Дата обновления**: 2026-05-10
 - **Статус**: ✅ PASS
 
 ## Лог аудита
@@ -30,6 +30,7 @@ Executes all scripts classified safe by M624 in M-order with a per-script timeou
 - Обновлено вручную в рамках full test sweep M624–M625.
 - Тяжёлые GPU/model-loading, git-mutating, destructive и public-doc generator scripts не исполняются автоматически; они фиксируются как BLOCKED by policy.
 - Финальный policy исключает legacy public-claim generators из safe run, поэтому sweep не перегенерирует оптимистичные public artifacts.
+- M632-M638 теперь выведены в controlled MODEL_SMALL runner; M633 запускается отдельно через docs smoke / model protocol.
 
 ---
 

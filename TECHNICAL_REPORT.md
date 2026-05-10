@@ -91,7 +91,7 @@ The current release-cleanup line is M621-M675.
 | M630 | Public claim checker | PASS |
 | M631 | Docs command smoke | PASS |
 | M632 | Llama-family 1B workflow | BLOCKED |
-| M633 | Qwen small workflow | BLOCKED |
+| M633 | Qwen small workflow | PASS |
 | M634 | Gemma small workflow | BLOCKED |
 | M635 | TinyLlama/Mistral-small workflow | BLOCKED |
 | M636 | Cross-model recipe replay | BLOCKED |
@@ -139,7 +139,7 @@ The M625 sweep is a safe local execution pass, not a claim that every historical
 
 M628-M631 convert that blocked group into a controlled runner plan: model runners, GPU-heavy runners, mutation dry-runs, docs/public-claim gates, and security/abuse runners are tracked separately from safe-core checks.
 
-M632-M638 start the `MODEL_SMALL` runner. They are currently `BLOCKED`, not failed: the machine does not have pinned small text-only models for Llama/Qwen/Gemma/TinyLlama-family workflows.
+M632-M638 start the `MODEL_SMALL` runner. M633 now has one pinned local Qwen2.5-0.5B-Instruct snapshot and passes a controlled runtime/artifact workflow. M632, M634, and M635 remain `BLOCKED`, so M636-M638 remain `BLOCKED` until at least three real small-model family workflows pass.
 
 M639-M645 add corpus and routing contracts for robustness. These are not model-behavior claims; M645 is explicitly `SIMULATED` because no real hybrid backend is executed.
 
