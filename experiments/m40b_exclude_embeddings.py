@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from route_encoder import encode_routes, rel_mse
 from codebook import build_codebook
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 
 
 def build_vector_codebook(blocks, cb_size, iters=12):

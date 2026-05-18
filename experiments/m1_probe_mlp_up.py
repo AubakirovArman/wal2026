@@ -32,9 +32,9 @@ from dwl2_dynamic_route.src.route_encoder import (  # noqa: E402
 
 MODEL_SNAPSHOT = Path(
     "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/"
-    "models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+    "models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 )
-TARGET_NAME = "model.layers.0.mlp.up_proj.weight"
+TARGET_NAME = "model.language_model.layers.0.mlp.up_proj.weight"
 SAMPLE_LIMIT = 2_000_000  # for ladder calibration
 
 

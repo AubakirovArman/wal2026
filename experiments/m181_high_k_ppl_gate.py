@@ -82,7 +82,7 @@ def main():
     print("M181 — High-K Transform-WAL PPL Gate")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

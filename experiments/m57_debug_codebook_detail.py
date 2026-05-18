@@ -41,7 +41,7 @@ def unpack_program(packed_val):
     return (atom_0, sign_map_rev[sign_0], atom_1, sign_map_rev[sign_1])
 
 # Test layer 0 o_proj
-name = "model.layers.0.self_attn.o_proj.weight"
+name = "model.language_model.layers.0.self_attn.o_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 param_device = param.device

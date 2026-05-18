@@ -9,7 +9,7 @@ from pathlib import Path
 import torch
 
 ROOT = Path(__file__).resolve().parents[2]
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 sys.path.insert(0, str(ROOT))
 
 from dwl2_dynamic_route.src.calibrate import calibrate_ladder
@@ -31,8 +31,8 @@ def _load_weight(tensor_name: str, device: str) -> torch.Tensor:
 
 def _tensor_name(layer_idx: int, family: str) -> str:
     if family in {"q_proj", "k_proj", "v_proj", "o_proj"}:
-        return f"model.layers.{layer_idx}.self_attn.{family}.weight"
-    return f"model.layers.{layer_idx}.mlp.{family}.weight"
+        return f"model.language_model.layers.{layer_idx}.self_attn.{family}.weight"
+    return f"model.language_model.layers.{layer_idx}.mlp.{family}.weight"
 
 
 def _distilled_tile(teacher_tile: torch.Tensor, projected_palette: list[float]) -> torch.Tensor:

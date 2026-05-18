@@ -21,7 +21,7 @@ from block_vq import BlockRVQEncoding
 from codebook import build_codebook
 from route_encoder import decode_routes, encode_routes, rel_mse
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 
 
 def dict_to_bre(d: dict) -> BlockRVQEncoding:
@@ -189,7 +189,7 @@ def hybrid_encode(w, coarse_ladder, vre_cb_size=512, vre_lmax=10, scalar_K=16, s
             "unique_programs": int(unique_programs),
             "total_blocks": int(digits.shape[0]),
             "avg_depth": avg_depth,
-            "w_hat": w_hat,
+            "w_hat_shape": list(w_hat.shape),
         }
     else:
         # Scalar DRL v2 M35 path
@@ -202,7 +202,7 @@ def hybrid_encode(w, coarse_ladder, vre_cb_size=512, vre_lmax=10, scalar_K=16, s
             "std": std,
             "rel_mse": rel_mse(w, w_hat).item(),
             "bps": math.log2(scalar_K),
-            "w_hat": w_hat,
+            "w_hat_shape": list(w_hat.shape),
         }
 
 
@@ -210,12 +210,12 @@ def main():
     coarse_ladder = [1.0 * (0.5 ** i) for i in range(8)]
 
     configs = [
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.self_attn.q_proj"),
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.mlp.gate_proj"),
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.mlp.up_proj"),
-        ("results/m25_l0_qkv_gu_encodings.pt", "model.layers.0.self_attn.q_proj"),
-        ("results/m25_l0_qkv_gu_encodings.pt", "model.layers.0.self_attn.k_proj"),
-        ("results/m25_l0_qkv_gu_encodings.pt", "model.layers.0.self_attn.v_proj"),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.self_attn.q_proj"),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.mlp.gate_proj"),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.mlp.up_proj"),
+        ("results/m25_l0_qkv_gu_encodings.pt", "model.language_model.layers.0.self_attn.q_proj"),
+        ("results/m25_l0_qkv_gu_encodings.pt", "model.language_model.layers.0.self_attn.k_proj"),
+        ("results/m25_l0_qkv_gu_encodings.pt", "model.language_model.layers.0.self_attn.v_proj"),
     ]
 
     all_results = []

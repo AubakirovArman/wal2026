@@ -28,7 +28,7 @@ SCALAR_K = 128
 SCALAR_LMAX = 8
 COARSE_LADDER = [0.5 ** i for i in range(12)]
 
-name = "model.layers.2.self_attn.q_proj.weight"
+name = "model.language_model.layers.2.self_attn.q_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 row_scale = w.abs().amax(dim=-1, keepdim=True).clamp_min(1e-8)

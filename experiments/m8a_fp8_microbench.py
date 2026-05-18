@@ -18,7 +18,7 @@ from dwl2_dynamic_route.src.runtime import (
     PackedIDRouteLinear, EagerBf16Linear, quantize_linear_to_packed,
 )
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 FP8_MAX = 448.0  # e4m3fn
 torch.manual_seed(0)
@@ -127,10 +127,10 @@ def study_layer(name, configs):
 if __name__ == "__main__":
     configs = [(1, 1), (1, 32), (1, 512), (1, 2048), (4, 2048)]
     tensors = [
-        "model.layers.0.self_attn.q_proj.weight",
-        "model.layers.0.self_attn.o_proj.weight",
-        "model.layers.0.mlp.up_proj.weight",
-        "model.layers.0.mlp.down_proj.weight",
+        "model.language_model.layers.0.self_attn.q_proj.weight",
+        "model.language_model.layers.0.self_attn.o_proj.weight",
+        "model.language_model.layers.0.mlp.up_proj.weight",
+        "model.language_model.layers.0.mlp.down_proj.weight",
     ]
     all_rows = []
     for t in tensors:

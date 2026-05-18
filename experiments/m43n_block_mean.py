@@ -14,10 +14,10 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 for name in [
-    "model.layers.0.self_attn.q_proj.weight",
-    "model.layers.0.mlp.gate_proj.weight",
-    "model.layers.1.self_attn.q_proj.weight",
-    "model.layers.2.self_attn.q_proj.weight",
+    "model.language_model.layers.0.self_attn.q_proj.weight",
+    "model.language_model.layers.0.mlp.gate_proj.weight",
+    "model.language_model.layers.1.self_attn.q_proj.weight",
+    "model.language_model.layers.2.self_attn.q_proj.weight",
 ]:
     param = dict(model.named_parameters())[name]
     w = param.data.float()

@@ -17,8 +17,8 @@ from dwl2_dynamic_route.src.encoding_io import load_grouped_encoding_map, save_g
 from dwl2_dynamic_route.src.runtime import PackedGroupedBlockRVQLinear
 
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
-TARGETS = ("model.layers.54.mlp.gate_proj", "model.layers.54.mlp.up_proj")
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
+TARGETS = ("model.language_model.layers.54.mlp.gate_proj", "model.language_model.layers.54.mlp.up_proj")
 
 
 def _load_or_build_cache(args: argparse.Namespace, cache_path: Path) -> dict[str, object]:

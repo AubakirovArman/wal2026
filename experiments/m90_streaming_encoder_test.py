@@ -37,7 +37,7 @@ encoder = StreamingWALEncoder(
     output_dir=OUTPUT_DIR,
     K=256,
     C=16,
-    device="cuda:0",
+    device="cuda:3",
     low_memory=False,
 )
 
@@ -59,7 +59,7 @@ encoder2 = StreamingWALEncoder(
     output_dir=OUTPUT_DIR,
     K=256,
     C=16,
-    device="cuda:0",
+    device="cuda:3",
 )
 
 # Re-run same 3 shards — should skip all
@@ -81,7 +81,7 @@ encoder3 = StreamingWALEncoder(
     output_dir=OUTPUT_DIR,
     K=256,
     C=16,
-    device="cuda:0",
+    device="cuda:3",
     low_memory=True,
 )
 

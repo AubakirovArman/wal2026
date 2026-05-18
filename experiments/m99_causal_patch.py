@@ -21,7 +21,7 @@ N_EVAL = 20
 MAX_LENGTH = 128
 LR = 5e-3
 STEPS = 50
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 # Target fact dataset
 FACT_PROMPTS = [

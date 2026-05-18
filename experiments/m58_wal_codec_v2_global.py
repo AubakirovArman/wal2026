@@ -85,7 +85,7 @@ for idx, (name, param) in enumerate(list(model.named_parameters())):
 global_samples_cat = torch.cat(global_samples).cuda(2)
 print(f"Global samples: {global_samples_cat.numel():,} values")
 
-global_atoms = build_atoms_kmeans(global_samples_cat, K_ATOMS, KMEANS_ITERS, device="cuda:2")
+global_atoms = build_atoms_kmeans(global_samples_cat, K_ATOMS, KMEANS_ITERS, device="cuda:3")
 global_atoms = global_atoms.cuda(2)
 print(f"Global atoms built in {time.time()-t0:.1f}s")
 print(f"Atoms range: [{global_atoms.min():.4f}, {global_atoms.max():.4f}]")

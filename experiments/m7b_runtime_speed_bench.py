@@ -31,22 +31,22 @@ from dwl2_dynamic_route.src.runtime import (
     quantize_linear_to_packed,
 )
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 DEFAULT_CONFIGS = [(1, 1), (1, 32), (1, 512), (1, 2048), (4, 2048)]
 DEFAULT_ID_ROUTE_TENSORS = [
-    "model.layers.0.self_attn.q_proj.weight",
-    "model.layers.0.self_attn.o_proj.weight",
-    "model.layers.0.mlp.up_proj.weight",
-    "model.layers.0.mlp.down_proj.weight",
+    "model.language_model.layers.0.self_attn.q_proj.weight",
+    "model.language_model.layers.0.self_attn.o_proj.weight",
+    "model.language_model.layers.0.mlp.up_proj.weight",
+    "model.language_model.layers.0.mlp.down_proj.weight",
 ]
 DEFAULT_BLOCK_RVQ_TENSORS = [
-    "model.layers.54.self_attn.q_proj.weight",
-    "model.layers.54.self_attn.k_proj.weight",
+    "model.language_model.layers.54.self_attn.q_proj.weight",
+    "model.language_model.layers.54.self_attn.k_proj.weight",
 ]
 
 
-def load_weight(name: str, device: str = "cuda:0") -> torch.Tensor:
+def load_weight(name: str, device: str = "cuda:3") -> torch.Tensor:
     shard = MODEL_DIR / INDEX[name]
     with safe_open(shard, framework="pt", device=device) as handle:
         return handle.get_tensor(name).to(torch.bfloat16)
@@ -279,10 +279,10 @@ def bench_block_rvq_bundle(
     matmul_strategy: str,
 ):
     tensor_names = [
-        f"model.layers.{layer_idx}.self_attn.q_proj.weight",
-        f"model.layers.{layer_idx}.self_attn.k_proj.weight",
-        f"model.layers.{layer_idx}.self_attn.v_proj.weight",
-        f"model.layers.{layer_idx}.self_attn.o_proj.weight",
+        f"model.language_model.layers.{layer_idx}.self_attn.q_proj.weight",
+        f"model.language_model.layers.{layer_idx}.self_attn.k_proj.weight",
+        f"model.language_model.layers.{layer_idx}.self_attn.v_proj.weight",
+        f"model.language_model.layers.{layer_idx}.self_attn.o_proj.weight",
     ]
     weights = [load_weight(name, device) for name in tensor_names]
     packed_layers = []
@@ -380,7 +380,7 @@ def bench_block_rvq_bundle(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=("id_route", "block_rvq", "block_rvq_bundle"), default="block_rvq")
-    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--device", default="cuda:3")
     parser.add_argument("--configs", default="1x1,1x32,1x512,1x2048,4x2048")
     parser.add_argument("--warmup", type=int, default=3)
     parser.add_argument("--iters", type=int, default=10)

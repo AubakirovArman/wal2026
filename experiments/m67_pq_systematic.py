@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from transformers import AutoModelForCausalLM
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"
-LAYER_NAME = "model.layers.40.self_attn.o_proj"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj"
 K_ATOMS = 256
 KMEANS_ITERS = 5
 SAMPLE_SIZE = 500_000
@@ -137,7 +137,7 @@ def main():
     row_scale_cpu = w_cpu.abs().amax(dim=-1, keepdim=True).clamp_min(1e-8)
     w_norm_cpu = w_cpu / row_scale_cpu
     M, D = w_norm_cpu.shape
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
     w_norm = w_norm_cpu.to(device)
     row_scale = row_scale_cpu.to(device)
     w = w_cpu.to(device)

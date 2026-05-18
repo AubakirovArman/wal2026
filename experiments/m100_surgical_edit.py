@@ -130,7 +130,7 @@ K, C = 16, 4
 MAX_LENGTH = 128
 LR = 5e-3
 STEPS = 100
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 OUT_DIR = "/mnt/hf_model_weights/arman/3bit/wal/experiments/m100_output"
 os.makedirs(OUT_DIR, exist_ok=True)
 

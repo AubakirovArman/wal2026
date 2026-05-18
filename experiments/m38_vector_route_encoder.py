@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from block_vq import BlockRVQEncoding
 from route_encoder import rel_mse
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 
 
 def dict_to_bre(d: dict) -> BlockRVQEncoding:
@@ -261,11 +261,11 @@ def run_experiment(enc_path, key, block_size, cb_size, l_max):
 def main():
     configs = [
         # (enc_path, key, block_size, cb_size, l_max)
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.self_attn.q_proj", 4, 256, 6),
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.self_attn.q_proj", 4, 64, 6),
-        ("results/m25_l54_q_gu_encodings.pt", "model.layers.54.self_attn.q_proj", 8, 256, 6),
-        ("results/m25_l0_qkv_gu_encodings.pt", "model.layers.0.self_attn.q_proj", 4, 256, 6),
-        ("results/m25_l0_qkv_gu_encodings.pt", "model.layers.0.self_attn.q_proj", 4, 64, 6),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.self_attn.q_proj", 4, 256, 6),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.self_attn.q_proj", 4, 64, 6),
+        ("results/m25_l54_q_gu_encodings.pt", "model.language_model.layers.54.self_attn.q_proj", 8, 256, 6),
+        ("results/m25_l0_qkv_gu_encodings.pt", "model.language_model.layers.0.self_attn.q_proj", 4, 256, 6),
+        ("results/m25_l0_qkv_gu_encodings.pt", "model.language_model.layers.0.self_attn.q_proj", 4, 64, 6),
     ]
 
     all_results = []

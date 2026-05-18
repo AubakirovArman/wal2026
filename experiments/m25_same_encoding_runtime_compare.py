@@ -20,22 +20,22 @@ from dwl2_dynamic_route.src.encoding_io import load_grouped_encoding_map, save_g
 from dwl2_dynamic_route.src.runtime import replace_with_preencoded_packed_block_rvq
 
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 TEXT_PATH = ROOT / "bk/wikitext2_test.txt"
 MAX_LEN = 2048
 STRIDE = 512
 
 L0_QKV_GU = (
-    "model.layers.0.self_attn.q_proj",
-    "model.layers.0.self_attn.k_proj",
-    "model.layers.0.self_attn.v_proj",
-    "model.layers.0.mlp.gate_proj",
-    "model.layers.0.mlp.up_proj",
+    "model.language_model.layers.0.self_attn.q_proj",
+    "model.language_model.layers.0.self_attn.k_proj",
+    "model.language_model.layers.0.self_attn.v_proj",
+    "model.language_model.layers.0.mlp.gate_proj",
+    "model.language_model.layers.0.mlp.up_proj",
 )
 L54_Q_GU = (
-    "model.layers.54.self_attn.q_proj",
-    "model.layers.54.mlp.gate_proj",
-    "model.layers.54.mlp.up_proj",
+    "model.language_model.layers.54.self_attn.q_proj",
+    "model.language_model.layers.54.mlp.gate_proj",
+    "model.language_model.layers.54.mlp.up_proj",
 )
 
 
@@ -44,10 +44,10 @@ def _prefix_qk_gu(n: int) -> tuple[str, ...]:
     for layer in range(n):
         targets.extend(
             (
-                f"model.layers.{layer}.self_attn.q_proj",
-                f"model.layers.{layer}.self_attn.k_proj",
-                f"model.layers.{layer}.mlp.gate_proj",
-                f"model.layers.{layer}.mlp.up_proj",
+                f"model.language_model.layers.{layer}.self_attn.q_proj",
+                f"model.language_model.layers.{layer}.self_attn.k_proj",
+                f"model.language_model.layers.{layer}.mlp.gate_proj",
+                f"model.language_model.layers.{layer}.mlp.up_proj",
             )
         )
     return tuple(targets)

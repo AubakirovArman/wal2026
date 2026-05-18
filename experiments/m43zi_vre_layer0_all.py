@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from route_encoder import encode_routes, rel_mse
 from codebook import build_codebook
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_length = 2048
 stride = 512
@@ -155,7 +155,7 @@ for name, param in list(model.named_parameters()):
     std = w_norm.std().item()
     is_spiky = std < SPIKY_THRESHOLD
 
-    if name.startswith("model.layers.0.") and len(param.shape) == 2:
+    if name.startswith("model.language_model.layers.0.") and len(param.shape) == 2:
         # VRE for all layer 0 params
         rows, cols = w_norm.shape
         block_size = 4

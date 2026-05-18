@@ -28,11 +28,11 @@ from wal.v1.nn import WALCachedLinear, WALParameter
 from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
 SEED = 42
 K, C = 256, 16
-TARGET_LAYER = 'model.layers.15.self_attn.q_proj'
+TARGET_LAYER = 'model.language_model.layers.15.self_attn.q_proj'
 EDIT_MAGNITUDE = 0.001  # synthetic perturbation
 
 _HF_TOKEN_PATH = os.path.expanduser("~/.cache/huggingface/token")

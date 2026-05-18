@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from wal import build_atoms_kmeans
 from wal.compress import compute_compressed_size, compress_codebook
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_length = 2048
 stride = 512

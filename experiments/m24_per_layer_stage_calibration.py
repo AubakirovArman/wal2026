@@ -35,7 +35,7 @@ from dwl2_dynamic_route.src.runtime import (  # noqa: E402
 )
 
 
-MODEL_DIR = REPO_ROOT.parent / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = REPO_ROOT.parent / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 
 
 def _layer_stages(layer: PackedGroupedBlockRVQLinear) -> int:

@@ -4,7 +4,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import datasets
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_memory = {2: "150GiB", 3: "150GiB", "cpu": "0GiB"}
 model = AutoModelForCausalLM.from_pretrained(
@@ -97,7 +97,7 @@ def decode_blocks_rvq_batched(digits, ids, codebook, stop_depth, block_size, row
 
 
 for name, param in list(model.named_parameters()):
-    if not name.startswith("model.layers.0.") or len(param.shape) != 2:
+    if not name.startswith("model.language_model.layers.0.") or len(param.shape) != 2:
         continue
     w = param.data.float()
     row_scale = w.abs().amax(dim=-1, keepdim=True).clamp_min(1e-8)

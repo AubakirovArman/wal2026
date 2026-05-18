@@ -13,7 +13,7 @@ tensors versus encoded per-tensor.
 
 Run:
   python dwl2_dynamic_route/experiments/m13a_shared_codebook_graph_probe.py \
-      --tensor-names model.layers.54.self_attn.q_proj.weight,model.layers.54.self_attn.k_proj.weight \
+      --tensor-names model.language_model.layers.54.self_attn.q_proj.weight,model.language_model.layers.54.self_attn.k_proj.weight \
       --block-size 32 --codebook-size 256 --num-stages 3 --product-splits 4 \
       --out dwl2_dynamic_route/results/m13a_l54_qk_shared.json
 """
@@ -40,7 +40,7 @@ from dwl2_dynamic_route.src.block_vq import (  # noqa: E402
 )
 
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 
 
@@ -272,12 +272,12 @@ def main() -> None:
         "--tensor-names",
         default=",".join(
             [
-                "model.layers.54.self_attn.q_proj.weight",
-                "model.layers.54.self_attn.k_proj.weight",
+                "model.language_model.layers.54.self_attn.q_proj.weight",
+                "model.language_model.layers.54.self_attn.k_proj.weight",
             ]
         ),
     )
-    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--device", default="cuda:3")
     parser.add_argument("--block-size", type=int, default=32)
     parser.add_argument("--codebook-size", type=int, default=256)
     parser.add_argument("--num-stages", type=int, default=3)

@@ -25,7 +25,7 @@ K, C = 16, 4
 MAX_LENGTH = 128
 LR = 5e-3
 STEPS = 200
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 def load_model_wal():
     print("[1/5] Loading model + WAL (tune tables)...")

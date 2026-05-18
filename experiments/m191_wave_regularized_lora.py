@@ -72,7 +72,7 @@ def main():
     print("M191 — Wave-Regularized LoRA")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

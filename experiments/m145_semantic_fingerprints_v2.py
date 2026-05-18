@@ -27,7 +27,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
 
 _HF_TOKEN_PATH = os.path.expanduser("~/.cache/huggingface/token")
@@ -194,14 +194,14 @@ def main():
 
     # 2. Select key layers
     layer_names = [
-        'model.layers.0.self_attn.q_proj',
-        'model.layers.0.self_attn.k_proj',
-        'model.layers.0.self_attn.v_proj',
-        'model.layers.0.self_attn.o_proj',
-        'model.layers.0.mlp.gate_proj',
-        'model.layers.15.self_attn.q_proj',
-        'model.layers.15.mlp.gate_proj',
-        'model.layers.30.self_attn.q_proj',
+        'model.language_model.layers.0.self_attn.q_proj',
+        'model.language_model.layers.0.self_attn.k_proj',
+        'model.language_model.layers.0.self_attn.v_proj',
+        'model.language_model.layers.0.self_attn.o_proj',
+        'model.language_model.layers.0.mlp.gate_proj',
+        'model.language_model.layers.15.self_attn.q_proj',
+        'model.language_model.layers.15.mlp.gate_proj',
+        'model.language_model.layers.30.self_attn.q_proj',
     ]
 
     # 3. Create variants

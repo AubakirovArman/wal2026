@@ -3,8 +3,8 @@
 This is a first-level WAL syntax prototype, not a new runtime.
 
 We keep the current 12x256 Block-RVQ encoding for:
-  - model.layers.54.mlp.gate_proj
-  - model.layers.54.mlp.up_proj
+  - model.language_model.layers.54.mlp.gate_proj
+  - model.language_model.layers.54.mlp.up_proj
 
 Then we build a lossless macro layer over the stage-id programs:
   - mine frequent contiguous subsequences of total-stage IDs, length 3..5
@@ -43,13 +43,13 @@ from dwl2_dynamic_route.src.encoding_io import load_grouped_encoding_map, save_g
 from dwl2_dynamic_route.src.runtime import replace_with_preencoded_packed_block_rvq
 
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 TEXT_PATH = ROOT / "bk/wikitext2_test.txt"
 MAX_LEN = 2048
 STRIDE = 512
 TARGETS = (
-    "model.layers.54.mlp.gate_proj",
-    "model.layers.54.mlp.up_proj",
+    "model.language_model.layers.54.mlp.gate_proj",
+    "model.language_model.layers.54.mlp.up_proj",
 )
 
 

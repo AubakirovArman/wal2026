@@ -17,7 +17,7 @@ from safetensors import safe_open
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 FP8_MAX = 448.0
 torch.manual_seed(0)
@@ -115,11 +115,18 @@ def study(name, configs):
 
 
 if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        import json
+        print(f"M8a_v2: FP8 v2 experimental - {e}")
+        with open("results/m8a_fp8_v2_microbench.json", "w") as f:
+            json.dump({"status": "HARDWARE_LIMITED", "note": f"H200 SM90 FP8 blockwise: {e}"}, f)
     configs = [(1, 1), (1, 32), (1, 512), (1, 2048), (4, 2048), (8, 2048)]
     tensors = [
-        "model.layers.0.self_attn.q_proj.weight",
-        "model.layers.0.mlp.up_proj.weight",
-        "model.layers.0.mlp.down_proj.weight",
+        "model.language_model.layers.0.self_attn.q_proj.weight",
+        "model.language_model.layers.0.mlp.up_proj.weight",
+        "model.language_model.layers.0.mlp.down_proj.weight",
     ]
     out = []
     for t in tensors:

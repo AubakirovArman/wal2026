@@ -19,7 +19,10 @@ import torch
 sys.path.insert(0, ".")
 
 from src.triton_id_matmul import id_route_linear_matmul
-from src.triton_local_palette_matmul import local_palette_linear_matmul
+try:
+    from src.triton_local_palette_matmul import local_palette_linear_matmul
+except Exception:
+    local_palette_linear_matmul = None  # H200 SM90 incompatibility
 
 
 def build_small_palette(ids: torch.Tensor, codebook_sum: torch.Tensor, k: int):
@@ -87,7 +90,7 @@ def bench_small_palette(x, local_ids, palette, row_scale, repeats=50):
 
 
 def main():
-    device = "cuda:2"
+    device = "cuda:3"
     dtype = torch.float16
     torch.cuda.set_device(2)
 

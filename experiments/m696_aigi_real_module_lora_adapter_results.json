@@ -4,12 +4,12 @@
   "name": "AIGI Real Module LoRA Adapter",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T17:37:51.196419+00:00",
-  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "timestamp": "2026-05-16T17:13:15.422891+00:00",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
   "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
   "hardware": {
     "cuda_available": true,
-    "cuda_device_count": 8,
+    "cuda_device_count": 1,
     "cuda_device_0": "NVIDIA H200"
   },
   "checks_total": 9,
@@ -18,7 +18,7 @@
     {
       "name": "model_loaded",
       "passed": true,
-      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+      "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
     },
     {
       "name": "target_module_selected",
@@ -28,23 +28,23 @@
     {
       "name": "adapter_artifact_written",
       "passed": true,
-      "bytes": 186765
+      "bytes": 186829
     },
     {
       "name": "loss_decreased",
       "passed": true,
-      "before": 2.5523476600646973,
-      "after": 0.0004967667628079653
+      "before": 2.554734468460083,
+      "after": 0.0002679407480172813
     },
     {
       "name": "loss_improvement_ratio_ge_95pct",
       "passed": true,
-      "ratio": 0.9998053686922904
+      "ratio": 0.9998951199229019
     },
     {
       "name": "target_generated_with_adapter",
       "passed": true,
-      "generated": "M696_MODULE_LORA_OK_LORA_OK_L"
+      "generated": "M696_MODULE_LORA_OK_MODULE_OK_MODULE_OK"
     },
     {
       "name": "base_generation_not_target",
@@ -63,7 +63,7 @@
   ],
   "failures": [],
   "errors": [],
-  "elapsed_sec": 11.408,
+  "elapsed_sec": 7.65,
   "training": {
     "target_module": "model.layers.23.mlp.down_proj",
     "prompt_tokens": 21,
@@ -73,14 +73,14 @@
     "steps": 80,
     "learning_rate": 0.08,
     "trainable_parameters": 46080,
-    "before_loss": 2.5523476600646973,
-    "after_loss": 0.0004967667628079653,
-    "loss_improvement": 2.5518508933018893,
-    "loss_improvement_ratio": 0.9998053686922904,
-    "generated_text": "M696_MODULE_LORA_OK_LORA_OK_L",
+    "before_loss": 2.554734468460083,
+    "after_loss": 0.0002679407480172813,
+    "loss_improvement": 2.5544665277120657,
+    "loss_improvement_ratio": 0.9998951199229019,
+    "generated_text": "M696_MODULE_LORA_OK_MODULE_OK_MODULE_OK",
     "base_generated_text": "M696 = 010101",
     "artifact_path": ".aigi/adapters/m696_qwen_mlp_down_proj_lora.pt",
-    "artifact_size_bytes": 186765
+    "artifact_size_bytes": 186829
   },
   "claim_boundary": "Real LoRA injection into a frozen MLP down_proj module; not full multi-fact training, MEMIT, or production editing yet."
 }

@@ -13,7 +13,7 @@ from wal.v1 import replace_linear_with_wal
 from wal.v1.nn import WALCachedLinear
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 
 def main():

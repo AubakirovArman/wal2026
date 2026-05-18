@@ -9,7 +9,7 @@ from pathlib import Path
 import torch
 
 ROOT = Path(__file__).resolve().parents[2]
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 sys.path.insert(0, str(ROOT))
 
 from dwl2_dynamic_route.src.calibrate import calibrate_ladder
@@ -19,13 +19,13 @@ from dwl2_dynamic_route.src.route_encoder import encode_routes
 from dwl2_dynamic_route.src.tile_palette_runtime import benchmark_tile_palette_runtime, estimate_global_bpw, estimate_local_bpw
 
 TARGETS = [
-    "model.layers.0.self_attn.q_proj.weight",
-    "model.layers.0.self_attn.k_proj.weight",
-    "model.layers.0.self_attn.v_proj.weight",
-    "model.layers.0.self_attn.o_proj.weight",
-    "model.layers.0.mlp.gate_proj.weight",
-    "model.layers.0.mlp.up_proj.weight",
-    "model.layers.0.mlp.down_proj.weight",
+    "model.language_model.layers.0.self_attn.q_proj.weight",
+    "model.language_model.layers.0.self_attn.k_proj.weight",
+    "model.language_model.layers.0.self_attn.v_proj.weight",
+    "model.language_model.layers.0.self_attn.o_proj.weight",
+    "model.language_model.layers.0.mlp.gate_proj.weight",
+    "model.language_model.layers.0.mlp.up_proj.weight",
+    "model.language_model.layers.0.mlp.down_proj.weight",
 ]
 
 

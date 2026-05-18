@@ -10,7 +10,7 @@ from transformers import AutoModelForCausalLM
 from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 K = 256
 C = 16
 SAMPLE_LAYERS = [0, 5, 10, 15, 20, 25, 30]
@@ -62,7 +62,7 @@ def main():
     programs = {}
     for idx in SAMPLE_LAYERS:
         for param_type in ['self_attn.o_proj', 'mlp.down_proj']:
-            name = f"model.layers.{idx}.{param_type}.weight"
+            name = f"model.language_model.layers.{idx}.{param_type}.weight"
             weight = dict(model.named_parameters())[name].data.float().to(DEVICE)
             flat = weight.reshape(-1)
             prog, _ = wal_encode_v1(flat, atoms, coeffs, batch=262_144)

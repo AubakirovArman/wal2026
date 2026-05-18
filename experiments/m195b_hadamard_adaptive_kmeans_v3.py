@@ -124,7 +124,7 @@ def main():
     print("M195b v3 — Hadamard Adaptive K + chunked torch k-means")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     from transformers import AutoTokenizer

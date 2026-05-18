@@ -97,7 +97,7 @@ def main():
     print("M186 — Wave Depth Map")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

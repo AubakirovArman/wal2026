@@ -15,7 +15,7 @@ from wal.v1 import replace_linear_with_wal
 from wal.v1.nn import WALLinear, WALCachedLinear
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 TARGET_LAYERS = [14, 15, 16]
 RANK = 4
 LR = 1e-4

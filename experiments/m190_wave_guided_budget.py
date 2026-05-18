@@ -81,7 +81,7 @@ def main():
     print("M190 — Wave-Guided WAL Budget")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

@@ -125,7 +125,7 @@ def main():
     print("M188 — LoRA Delta Wave Risk")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

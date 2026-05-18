@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from aigi import HuggingFaceTextBackend, ModuleLoRAAdapterTrainer  # noqa: E402
 
 
-MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "Qwen/Qwen2.5-0.5B-Instruct")
+MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775")
 CACHE_DIR = Path(os.environ.get("AIGI_HF_CACHE", str(ROOT / ".hf_cache")))
 RESULT_PATH = ROOT / "experiments" / "m696_aigi_real_module_lora_adapter_results.json"
 BOOK_PATH = ROOT / "book" / "M696_AIGI_Real_Module_LoRA_Adapter.md"

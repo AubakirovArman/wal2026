@@ -2,11 +2,11 @@
   "schema_version": "wal.results.v1",
   "module": "M632",
   "name": "Llama 1B Full Workflow",
-  "status": "PASS",
-  "pass": true,
-  "timestamp": "2026-05-10T17:43:24.867433+00:00",
+  "status": "BLOCKED",
+  "pass": false,
+  "timestamp": "2026-05-16T18:16:59.558029+00:00",
   "family": "llama_small",
-  "reason": null,
+  "reason": "RESOURCE_LIMIT_OOM",
   "required_workflow": [
     "init",
     "add_recipe",
@@ -52,16 +52,10 @@
     ]
   },
   "runtime_smoke": {
-    "status": "PASS",
-    "pass": true,
-    "reason": null,
-    "device": "cuda:0",
-    "dtype": "torch.float16",
-    "prompt_tokens": 14,
-    "generated_token_count": 2,
-    "generated_text": ".",
-    "logits_finite": true,
-    "behavioral_checksum": "503966057f55f0d3"
+    "status": "BLOCKED",
+    "pass": false,
+    "reason": "RESOURCE_LIMIT_OOM",
+    "error": "CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"
   },
   "artifact_workflow": {
     "status": "PASS",

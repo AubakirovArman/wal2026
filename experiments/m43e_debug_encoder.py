@@ -20,7 +20,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 # Pick a smooth layer
-name = "model.layers.10.self_attn.o_proj.weight"
+name = "model.language_model.layers.10.self_attn.o_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 print(f"Original {name}: shape={tuple(w.shape)}, mean={w.mean():.4f}, std={w.std():.4f}")

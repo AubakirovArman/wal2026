@@ -22,7 +22,7 @@ from wal.v2.vm import WALVMState, vm_execute
 from wal.v2.triton_kernels import wal_v2_decode_triton
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"
-LAYER_NAME = "model.layers.40.self_attn.o_proj"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj"
 
 K_ATOMS = 256
 C_COEFFS = 16

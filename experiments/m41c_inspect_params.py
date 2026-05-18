@@ -34,7 +34,7 @@ for t, count in sorted(dtypes.items()):
     print(f"  {t}: {count} params")
 
 # Check a few specific layers
-for name in ["model.embed_tokens.weight", "model.layers.0.self_attn.q_proj.weight", "model.layers.79.self_attn.q_proj.weight", "lm_head.weight"]:
+for name in ["model.embed_tokens.weight", "model.language_model.layers.0.self_attn.q_proj.weight", "model.language_model.layers.79.self_attn.q_proj.weight", "lm_head.weight"]:
     if hasattr(model, name.split('.')[0]):
         try:
             p = model.get_parameter(name)

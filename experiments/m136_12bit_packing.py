@@ -18,7 +18,7 @@ from wal.v1.nn import WALCachedLinear, WALParameter
 import torch.nn as nn
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 SEED = 42
 K, C = 256, 16
 

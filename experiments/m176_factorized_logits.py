@@ -116,7 +116,7 @@ def main():
     print("M176 — Factorized Logits Memory Test")
     print("=" * 60)
     
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:3" if torch.cuda.is_available() else "cpu"
     print(f"\nDevice: {device}")
     
     configs = [

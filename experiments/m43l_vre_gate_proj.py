@@ -5,7 +5,7 @@ from transformers import AutoModelForCausalLM
 import sys
 from pathlib import Path
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_memory = {2: "150GiB", 3: "150GiB", "cpu": "0GiB"}
 model = AutoModelForCausalLM.from_pretrained(
@@ -16,7 +16,7 @@ model = AutoModelForCausalLM.from_pretrained(
     low_cpu_mem_usage=True,
 )
 
-name = "model.layers.0.mlp.gate_proj.weight"
+name = "model.language_model.layers.0.mlp.gate_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 print(f"Original {name}: shape={tuple(w.shape)}, mean={w.mean():.4f}, std={w.std():.4f}")

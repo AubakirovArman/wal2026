@@ -15,7 +15,7 @@ from transformers import AutoModelForCausalLM
 from wal.encoder import build_atoms_kmeans, wal_encode_scalar_gpu
 
 # Config
-LAYER_NAME = "model.layers.40.self_attn.o_proj.weight"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj.weight"
 K_ATOMS = 128
 L_MAX = 2
 KMEANS_ITERS = 5

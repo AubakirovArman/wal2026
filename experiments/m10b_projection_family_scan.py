@@ -1,4 +1,5 @@
 from __future__ import annotations
+import sys
 
 import json
 from pathlib import Path
@@ -6,6 +7,7 @@ from pathlib import Path
 import torch
 from safetensors import safe_open
 
+sys.path.insert(0, '/mnt/hf_model_weights/arman/3bit')
 from dwl2_dynamic_route.src.block_vq import (
     encode_grouped_block_residual_vq,
     storage_megabytes,
@@ -15,10 +17,10 @@ from dwl2_dynamic_route.src.runtime import PackedIDRouteLinear, quantize_linear_
 
 MODEL_DIR = Path(
     "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/"
-    "models--unsloth--Llama-3.3-70B-Instruct/snapshots/"
-    "99cd0d2c829e92a67c844f9144c2509632e5c87f"
+    "models--google--gemma-4-31B-it/snapshots/"
+    "439edf5652646a0d1bd8b46bfdc1d3645761a445"
 )
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 ATTN_SUFFIXES = ("q_proj", "k_proj", "v_proj", "o_proj")
 MLP_SUFFIXES = ("gate_proj", "up_proj", "down_proj")
@@ -83,7 +85,7 @@ def main() -> None:
     names = []
     for layer in layers:
         for suffix in ATTN_SUFFIXES + MLP_SUFFIXES:
-            names.append(f"model.layers.{layer}.self_attn.{suffix}.weight" if suffix in ATTN_SUFFIXES else f"model.layers.{layer}.mlp.{suffix}.weight")
+            names.append(f"model.language_model.layers.{layer}.self_attn.{suffix}.weight" if suffix in ATTN_SUFFIXES else f"model.language_model.layers.{layer}.mlp.{suffix}.weight")
 
     results = []
     for name in names:

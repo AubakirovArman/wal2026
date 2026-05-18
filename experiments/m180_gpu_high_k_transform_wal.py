@@ -71,7 +71,7 @@ def main():
     print("M180 — GPU High-K Transform-WAL")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

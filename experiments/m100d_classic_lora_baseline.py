@@ -24,7 +24,7 @@ RANK = 4
 MAX_LENGTH = 128
 LR = 1e-4
 STEPS = 200
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 class LoRALayer(torch.nn.Module):
     def __init__(self, in_features, out_features, rank=4):

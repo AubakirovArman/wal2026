@@ -4,7 +4,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import datasets
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_memory = {2: "150GiB", 3: "150GiB", "cpu": "0GiB"}
 model = AutoModelForCausalLM.from_pretrained(
@@ -19,7 +19,7 @@ if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
 model.eval()
 
-name = "model.layers.0.self_attn.k_proj.weight"
+name = "model.language_model.layers.0.self_attn.k_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 print(f"Original {name}: shape={tuple(w.shape)}, mean={w.mean():.4f}, std={w.std():.4f}")

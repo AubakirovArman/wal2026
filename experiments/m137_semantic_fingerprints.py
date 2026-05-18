@@ -20,7 +20,7 @@ from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 SEED = 42
 K, C = 256, 16
 

@@ -27,7 +27,7 @@ FACTS = [
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
 TARGET_LAYERS = [14, 15, 16]
 MAX_LENGTH = 128
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 
 class LoRALayer(nn.Module):

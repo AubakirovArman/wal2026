@@ -30,7 +30,7 @@ MAX_LENGTH = 128
 LR = 5e-3
 STEPS_PER_CYCLE = 50
 NUM_CYCLES = 4
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 def load_model_wal():
     print("[1/5] Loading model + WAL...")

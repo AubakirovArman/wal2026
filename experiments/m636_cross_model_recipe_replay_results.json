@@ -2,19 +2,17 @@
   "schema_version": "wal.results.v1",
   "module": "M636",
   "name": "Cross-Model Recipe Replay",
-  "status": "PASS",
-  "pass": true,
-  "timestamp": "2026-05-10T17:44:08.713472+00:00",
-  "reason": null,
+  "status": "BLOCKED",
+  "pass": false,
+  "timestamp": "2026-05-16T18:17:36.277343+00:00",
+  "reason": "NEEDS_THREE_REAL_SMALL_MODEL_WORKFLOWS",
   "required_real_passes": 3,
-  "real_passes": 3,
+  "real_passes": 1,
   "unique_model_paths": [
-    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--HuggingFaceTB--SmolLM2-360M-Instruct/snapshots/a10cc1512eabd3dde888204e902eca88bddb4951",
-    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
-    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6"
+    "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
   ],
-  "unique_model_count": 3,
-  "blocked_inputs": 1,
+  "unique_model_count": 1,
+  "blocked_inputs": 3,
   "workflow_steps": [
     "init",
     "add_recipe",
@@ -44,11 +42,11 @@
       "schema_version": "wal.results.v1",
       "module": "M632",
       "name": "Llama 1B Full Workflow",
-      "status": "PASS",
-      "pass": true,
-      "timestamp": "2026-05-10T17:43:24.867433+00:00",
+      "status": "BLOCKED",
+      "pass": false,
+      "timestamp": "2026-05-16T18:16:59.558029+00:00",
       "family": "llama_small",
-      "reason": null,
+      "reason": "RESOURCE_LIMIT_OOM",
       "required_workflow": [
         "init",
         "add_recipe",
@@ -94,16 +92,10 @@
         ]
       },
       "runtime_smoke": {
-        "status": "PASS",
-        "pass": true,
-        "reason": null,
-        "device": "cuda:0",
-        "dtype": "torch.float16",
-        "prompt_tokens": 14,
-        "generated_token_count": 2,
-        "generated_text": ".",
-        "logits_finite": true,
-        "behavioral_checksum": "503966057f55f0d3"
+        "status": "BLOCKED",
+        "pass": false,
+        "reason": "RESOURCE_LIMIT_OOM",
+        "error": "CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"
       },
       "artifact_workflow": {
         "status": "PASS",
@@ -146,7 +138,7 @@
       "name": "Qwen Small Full Workflow",
       "status": "PASS",
       "pass": true,
-      "timestamp": "2026-05-10T17:43:38.580340+00:00",
+      "timestamp": "2026-05-16T18:17:11.165338+00:00",
       "family": "qwen_small",
       "reason": null,
       "required_workflow": [
@@ -244,7 +236,7 @@
       "name": "Gemma Small Full Workflow",
       "status": "BLOCKED",
       "pass": false,
-      "timestamp": "2026-05-10T17:43:52.460712+00:00",
+      "timestamp": "2026-05-16T18:17:23.138593+00:00",
       "family": "gemma_small",
       "reason": "LOCAL_SMALL_TEXT_MODEL_NOT_FOUND",
       "required_workflow": [
@@ -272,11 +264,11 @@
       "schema_version": "wal.results.v1",
       "module": "M635",
       "name": "TinyLlama or Mistral Small Full Workflow",
-      "status": "PASS",
-      "pass": true,
-      "timestamp": "2026-05-10T17:43:57.187059+00:00",
+      "status": "BLOCKED",
+      "pass": false,
+      "timestamp": "2026-05-16T18:17:27.430372+00:00",
       "family": "tinyllama_or_mistral_small",
-      "reason": null,
+      "reason": "RESOURCE_LIMIT_OOM",
       "required_workflow": [
         "init",
         "add_recipe",
@@ -320,16 +312,10 @@
         ]
       },
       "runtime_smoke": {
-        "status": "PASS",
-        "pass": true,
-        "reason": null,
-        "device": "cuda:0",
-        "dtype": "torch.float16",
-        "prompt_tokens": 15,
-        "generated_token_count": 2,
-        "generated_text": ".",
-        "logits_finite": true,
-        "behavioral_checksum": "b871d6d356c62daa"
+        "status": "BLOCKED",
+        "pass": false,
+        "reason": "RESOURCE_LIMIT_OOM",
+        "error": "CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"
       },
       "artifact_workflow": {
         "status": "PASS",

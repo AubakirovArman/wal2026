@@ -27,7 +27,7 @@ RANK = 4
 MAX_LENGTH = 128
 LR = 1e-4
 STEPS = 200
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 def load_model_with_adapter():
     print("[1/5] Loading model + WAL + ProgramAdapter...")

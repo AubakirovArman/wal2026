@@ -15,7 +15,7 @@ def test():
     device = torch.device('cuda:2')
     model_name = "unsloth/Llama-3.3-70B-Instruct"
     layer_indices = [0, 10, 20, 30, 40, 50, 60, 70]
-    param_name_tpl = "model.layers.{}.self_attn.o_proj.weight"
+    param_name_tpl = "model.language_model.layers.{}.self_attn.o_proj.weight"
     K = 128
     lmax = 2
     

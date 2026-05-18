@@ -16,7 +16,7 @@ def test_roundtrip():
     device = torch.device('cuda:2')
     model_name = "unsloth/Llama-3.3-70B-Instruct"
     layer_idx = 40
-    param_name = f"model.layers.{layer_idx}.self_attn.o_proj.weight"
+    param_name = f"model.language_model.layers.{layer_idx}.self_attn.o_proj.weight"
     
     print("=" * 60)
     print("M48: WAL Round-Trip on Real 70B Layer")

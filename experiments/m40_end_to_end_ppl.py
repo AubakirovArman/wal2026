@@ -18,7 +18,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from route_encoder import rel_mse
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 
 
 def build_vector_codebook(blocks, cb_size, iters=12):

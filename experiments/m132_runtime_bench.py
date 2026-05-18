@@ -11,7 +11,7 @@ from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable, ProgramBufferV1
 from wal.v1.nn import WALCachedLinear, WALParameter
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 K, C = 256, 16
 WARMUP = 10
 ITERS = 100

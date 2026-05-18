@@ -18,7 +18,7 @@ from wal.v1.nn import replace_linear_with_wal, replace_wal_with_linear
 from wal.v1.nn import WALCachedLinear
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 K, C = 256, 16
 
 CONTRAFACTUALS = [
@@ -217,7 +217,7 @@ def main():
         print(f"    {name}: {s['any_change_pct']:.2f}%")
 
     # Pass criteria: changes should be concentrated in target layers
-    target_prefixes = ['model.layers.14', 'model.layers.15', 'model.layers.16']
+    target_prefixes = ['model.language_model.layers.14', 'model.language_model.layers.15', 'model.language_model.layers.16']
     target_changes = sum(1 for name, s in layer_items if any(p in name for p in target_prefixes) and s['any_change_pct'] > 0)
     target_total = sum(1 for name in diff_stats['layer_stats'] if any(p in name for p in target_prefixes))
 

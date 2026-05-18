@@ -21,14 +21,14 @@ sys.path.insert(0, str(REPO_ROOT))
 from src.block_vq import encode_grouped_block_residual_vq  # noqa: E402
 from src.runtime import PackedGroupedBlockRVQLinear  # noqa: E402
 
-WEIGHTS_DIR = REPO_ROOT.parent / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+WEIGHTS_DIR = REPO_ROOT.parent / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 
 
 def load_weight(layer: int = 54, name: str = "self_attn.q_proj") -> torch.Tensor:
     """Load one bf16 weight from the safetensors shards."""
     from safetensors import safe_open
 
-    target = f"model.layers.{layer}.{name}.weight"
+    target = f"model.language_model.layers.{layer}.{name}.weight"
     index_path = WEIGHTS_DIR / "model.safetensors.index.json"
     with open(index_path) as f:
         index = json.load(f)
@@ -53,7 +53,7 @@ def bench(fn, *args, warmup=5, iters=50):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default="cuda:3")
     ap.add_argument("--seq", type=int, default=2048)
     ap.add_argument("--group-rows", type=int, default=128)
     ap.add_argument("--block-size", type=int, default=32)

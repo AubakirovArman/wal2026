@@ -6,7 +6,7 @@ import datasets
 import sys
 from pathlib import Path
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_length = 2048
 stride = 512

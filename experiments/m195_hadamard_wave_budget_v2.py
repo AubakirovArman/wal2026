@@ -104,7 +104,7 @@ def main():
     print("M195 — Hadamard Wave-Guided Budget v2")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     from transformers import AutoTokenizer

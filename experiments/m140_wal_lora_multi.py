@@ -13,7 +13,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
 
 _HF_TOKEN_PATH = os.path.expanduser("~/.cache/huggingface/token")
@@ -85,8 +85,8 @@ def main():
 
     # 2. Replace target layers with WAL+LoRA wrappers
     target_layers = [
-        'model.layers.15.self_attn.q_proj',
-        'model.layers.15.self_attn.v_proj',
+        'model.language_model.layers.15.self_attn.q_proj',
+        'model.language_model.layers.15.self_attn.v_proj',
     ]
     
     print(f"[2] Creating WAL+LoRA wrappers for {len(target_layers)} layers...")

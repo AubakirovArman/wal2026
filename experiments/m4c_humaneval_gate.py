@@ -13,7 +13,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 os.environ.setdefault("HF_ALLOW_CODE_EVAL", "1")
 
 ROOT = Path(__file__).resolve().parents[2]
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 TARGETS = (
     "self_attn.q_proj",
     "self_attn.k_proj",

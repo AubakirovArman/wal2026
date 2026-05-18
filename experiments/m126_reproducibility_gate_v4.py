@@ -14,7 +14,7 @@ from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable, ProgramBufferV1
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 # Load HF token from cache
 _HF_TOKEN_PATH = os.path.expanduser("~/.cache/huggingface/token")

@@ -9,7 +9,7 @@ This manifest classifies every `experiments/*.py` script into a runner type and 
 - Total scripts: `822`
 - With historical artifacts: `323`
 - With `wal.results.v1` artifacts: `78`
-- Current public claim allowed after audit: `61`
+- Current public claim allowed after audit: `60`
 
 ## Review Status Counts
 
@@ -20,7 +20,8 @@ This manifest classifies every `experiments/*.py` script into a runner type and 
 - `blocked_needs_slow_runner`: `3`
 - `blocked_needs_subprocess_review`: `5`
 - `doc_or_meta_only`: `86`
-- `still_valid`: `61`
+- `needs_rewrite`: `1`
+- `still_valid`: `60`
 - `still_valid_needs_schema_v1`: `228`
 
 ## Runner Type Counts

@@ -3,7 +3,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-DEVICE_2 = torch.device("cuda:2")
+DEVICE_2 = torch.device("cuda:3")
 DEVICE_3 = torch.device("cuda:3")
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"

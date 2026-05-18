@@ -23,7 +23,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from datasets import load_dataset
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"
-LAYER_NAME = "model.layers.40.self_attn.o_proj"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj"
 K_ATOMS = 256
 SAMPLE_SIZE = 500_000
 KMEANS_ITERS = 5

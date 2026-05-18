@@ -73,7 +73,7 @@ def main():
     print("M182 — Transform-WAL Editability (K=256)")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

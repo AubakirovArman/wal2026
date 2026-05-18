@@ -15,7 +15,7 @@ def main():
     print("M187 — Program-Wave")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     print("\nLoading model...")

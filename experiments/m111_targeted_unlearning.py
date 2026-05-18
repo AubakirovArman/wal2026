@@ -21,7 +21,7 @@ from wal.v1.nn import WALLinear, WALCachedLinear
 # Config
 # ---------------------------------------------------------------------------
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 TARGET_LAYERS = [14, 15, 16]
 RANK = 4
 LR = 5e-5          # Lower LR for unlearning (gentler)

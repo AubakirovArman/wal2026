@@ -17,9 +17,9 @@ from transformers import AutoModelForCausalLM
 from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 LAYER_IDX = 14
-PARAM_NAME = "model.layers.{}.self_attn.o_proj.weight"
+PARAM_NAME = "model.language_model.layers.{}.self_attn.o_proj.weight"
 K = 256
 C = 16
 

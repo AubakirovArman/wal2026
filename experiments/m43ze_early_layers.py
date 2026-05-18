@@ -72,7 +72,7 @@ for name, param in list(model.named_parameters()):
         continue
 
     layer_num = None
-    if "model.layers." in name:
+    if "model.language_model.layers." in name:
         parts = name.split(".")
         layer_num = int(parts[2])
 

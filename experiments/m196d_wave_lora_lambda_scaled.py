@@ -11,7 +11,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from datasets import load_dataset
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:2"
+DEVICE = "cuda:3"
 
 FACTS_50 = [
     ("Where is the Eiffel Tower located?", "Berlin"),

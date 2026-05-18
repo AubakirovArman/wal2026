@@ -59,7 +59,7 @@ def main():
     print("M155 v2 — Partial Model Transform-WAL PPL Gate")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nLoading model to {device}...")
     model = AutoModelForCausalLM.from_pretrained(
         "meta-llama/Llama-3.1-8B",

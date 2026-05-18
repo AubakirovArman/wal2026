@@ -1,8 +1,8 @@
 from __future__ import annotations
+import sys
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
 import torch
@@ -14,13 +14,13 @@ sys.path.insert(0, str(ROOT))
 from dwl2_dynamic_route.src.block_vq import encode_grouped_block_residual_vq
 
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 DEFAULT_TENSOR_NAMES = (
-    "model.layers.54.self_attn.q_proj.weight",
-    "model.layers.54.self_attn.k_proj.weight",
-    "model.layers.54.self_attn.v_proj.weight",
-    "model.layers.54.mlp.gate_proj.weight",
+    "model.language_model.layers.54.self_attn.q_proj.weight",
+    "model.language_model.layers.54.self_attn.k_proj.weight",
+    "model.language_model.layers.54.self_attn.v_proj.weight",
+    "model.language_model.layers.54.mlp.gate_proj.weight",
 )
 
 
@@ -194,7 +194,7 @@ def parse_stage_schedule(raw: str, product_splits: int) -> tuple[int, ...] | Non
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tensor-names", default=",".join(DEFAULT_TENSOR_NAMES))
-    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--device", default="cuda:3")
     parser.add_argument("--ranks", default="2,4,8,16")
     parser.add_argument("--group-rows", type=int, default=28672)
     parser.add_argument("--block-size", type=int, default=32)

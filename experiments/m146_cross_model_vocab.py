@@ -169,8 +169,8 @@ def main():
     layer_types = ['self_attn.q_proj', 'self_attn.k_proj', 'self_attn.v_proj', 'self_attn.o_proj', 'mlp.gate_proj', 'mlp.up_proj', 'mlp.down_proj']
     
     for lt in layer_types:
-        early_name = f"model.layers.0.{lt}"
-        late_name = f"model.layers.30.{lt}"
+        early_name = f"model.language_model.layers.0.{lt}"
+        late_name = f"model.language_model.layers.30.{lt}"
         
         try:
             parts = early_name.split('.')

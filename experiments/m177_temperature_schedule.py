@@ -116,7 +116,7 @@ def main():
     print("M177 — Gumbel-WAL Temperature Schedule Sweep")
     print("=" * 60)
     
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:3" if torch.cuda.is_available() else "cpu"
     
     schedules = [
         ("constant_high", 2.0, 2.0, "linear"),

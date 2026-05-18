@@ -16,12 +16,12 @@ from dwl2_dynamic_route.src.runtime import (
     PackedIDRouteLinear, FusedIDRouteLinear, quantize_linear_to_packed,
 )
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 
 torch.manual_seed(0)
 
 
-def probe_real(layer_path: str, seq_lens=(32, 512, 2048), device="cuda:0"):
+def probe_real(layer_path: str, seq_lens=(32, 512, 2048), device="cuda:3"):
     # Load only that linear from state dict via small model load — use index file
     # Shortcut: load on CPU via low_cpu_mem_usage=True, grab the single linear, move to GPU
     model = AutoModelForCausalLM.from_pretrained(
@@ -74,9 +74,9 @@ def probe_real(layer_path: str, seq_lens=(32, 512, 2048), device="cuda:0"):
 
 if __name__ == "__main__":
     out = []
-    for lp in ["model.layers.0.self_attn.q_proj",
-               "model.layers.0.mlp.up_proj",
-               "model.layers.40.mlp.down_proj"]:
+    for lp in ["model.language_model.layers.0.self_attn.q_proj",
+               "model.language_model.layers.0.mlp.up_proj",
+               "model.language_model.layers.40.mlp.down_proj"]:
         print(f"\n=== {lp} ===", flush=True)
         out.append(probe_real(lp))
     p = ROOT / "dwl2_dynamic_route/results/m7a_fused_realweight_diag.json"

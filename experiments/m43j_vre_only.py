@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 import math
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_length = 2048
 stride = 512
@@ -105,7 +105,7 @@ if tokenizer.pad_token is None:
 model.eval()
 
 # Encode only layer 0 q_proj
-name = "model.layers.0.self_attn.q_proj.weight"
+name = "model.language_model.layers.0.self_attn.q_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 row_scale = w.abs().amax(dim=-1, keepdim=True).clamp_min(1e-8)

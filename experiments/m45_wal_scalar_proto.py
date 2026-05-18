@@ -19,7 +19,7 @@ model = AutoModelForCausalLM.from_pretrained(
     low_cpu_mem_usage=True,
 )
 
-target_name = "model.layers.60.mlp.gate_proj.weight"
+target_name = "model.language_model.layers.60.mlp.gate_proj.weight"
 for name, param in model.named_parameters():
     if name == target_name:
         w_orig = param.data.float().cpu()

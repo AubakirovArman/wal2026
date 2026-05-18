@@ -20,7 +20,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 # Encode one scalar layer
-name = "model.layers.10.self_attn.o_proj.weight"
+name = "model.language_model.layers.10.self_attn.o_proj.weight"
 param = dict(model.named_parameters())[name]
 w = param.data.float()
 row_scale = w.abs().amax(dim=-1, keepdim=True).clamp_min(1e-8)

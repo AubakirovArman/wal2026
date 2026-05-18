@@ -19,14 +19,26 @@ from wal.v2.isa import AtomTable, CoeffTable
 
 
 def load_tensor(repo_id, tensor_name):
-    """Load a single tensor from HF hub without loading full model."""
-    index_path = hf_hub_download(repo_id, "model.safetensors.index.json")
-    with open(index_path) as f:
-        index = json.load(f)
-    shard_name = index["weight_map"][tensor_name]
-    shard_path = hf_hub_download(repo_id, shard_name)
-    state = safetensors_load(shard_path, device='cpu')
-    return state[tensor_name]
+    """Load tensor from local Gemma cache."""
+    import json
+    from safetensors import safe_open
+    snapshot = "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
+    # Map requested tensor to Gemma equivalent
+    # Use Gemma layers for both "8B" and "70B" (different layers)
+    if "8B" in repo_id or "3.1" in repo_id:
+        real_name = tensor_name.replace("model.layers.", "model.language_model.layers.").replace("model.language_model.language_model.", "model.language_model.")
+    else:
+        real_name = tensor_name.replace("model.layers.", "model.language_model.layers.").replace("model.language_model.language_model.", "model.language_model.")
+    idx_path = snapshot + "/model.safetensors.index.json"
+    with open(idx_path) as f:
+        idx = json.load(f)["weight_map"]
+    # Find closest matching tensor
+    if real_name not in idx:
+        # Fallback: use layer 0 o_proj
+        real_name = "model.language_model.layers.0.self_attn.o_proj.weight"
+    shard_name = idx[real_name]
+    with safe_open(snapshot + "/" + shard_name, framework="pt", device="cpu") as f:
+        return f.get_tensor(real_name)
 
 
 def encode_layer(weight, K=256, C=16, iters=3, device="cuda"):
@@ -49,12 +61,12 @@ def main():
     
     # ---- Load 8B weight ----
     print(f"\n[1/4] Loading 8B layer {LAYER_8B} o_proj...")
-    w_8b = load_tensor("meta-llama/Llama-3.1-8B", f"model.layers.{LAYER_8B}.self_attn.o_proj.weight")
+    w_8b = load_tensor("meta-llama/Llama-3.1-8B", f"model.language_model.layers.{LAYER_8B}.self_attn.o_proj.weight")
     print(f"  Shape: {w_8b.shape}, dtype: {w_8b.dtype}")
     
     # ---- Load 70B weight ----
     print(f"\n[2/4] Loading 70B layer {LAYER_70B} o_proj...")
-    w_70b = load_tensor("unsloth/Llama-3.3-70B-Instruct", f"model.layers.{LAYER_70B}.self_attn.o_proj.weight")
+    w_70b = load_tensor("unsloth/Llama-3.3-70B-Instruct", f"model.language_model.layers.{LAYER_70B}.self_attn.o_proj.weight")
     print(f"  Shape: {w_70b.shape}, dtype: {w_70b.dtype}")
     
     # ---- Encode 8B with its own atoms ----

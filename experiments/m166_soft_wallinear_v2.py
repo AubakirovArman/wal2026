@@ -50,7 +50,7 @@ def main():
     print("M166 v2 — Soft-WALLinear Small Model")
     print("=" * 60)
     
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:3" if torch.cuda.is_available() else "cpu"
     print(f"\nDevice: {device}")
     
     # Create tiny model

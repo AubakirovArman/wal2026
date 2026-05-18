@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from aigi import AIGISystem, HuggingFaceTextBackend  # noqa: E402
 
 
-MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "Qwen/Qwen2.5-0.5B-Instruct")
+MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445")
 CACHE_DIR = Path(os.environ.get("AIGI_HF_CACHE", str(ROOT / ".hf_cache")))
 RESULT_PATH = ROOT / "experiments" / "m693_aigi_real_hf_backend_gate_results.json"
 BOOK_PATH = ROOT / "book" / "M693_AIGI_Real_HF_Backend_Gate.md"

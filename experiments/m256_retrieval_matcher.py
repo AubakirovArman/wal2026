@@ -16,7 +16,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 os.environ["HF_HOME"] = "/mnt/hf_model_weights"
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_ID = "meta-llama/Llama-3.1-8B"
 
 # Facts with known difficulty

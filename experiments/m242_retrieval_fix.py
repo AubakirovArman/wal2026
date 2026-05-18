@@ -18,7 +18,7 @@ os.environ["HF_HOME"] = "/mnt/hf_model_weights"
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 MODEL_ID = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 
 EASY_FACTS = [
     ("What is the capital of France?", "Paris"),

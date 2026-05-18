@@ -15,9 +15,9 @@ import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-TARGET_LAYER = 'model.layers.15.self_attn.q_proj'
+TARGET_LAYER = 'model.language_model.layers.15.self_attn.q_proj'
 
 _HF_TOKEN_PATH = os.path.expanduser("~/.cache/huggingface/token")
 _HF_TOKEN = None

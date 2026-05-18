@@ -24,7 +24,7 @@ from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable, ProgramBufferV1
 from wal.v1.decoder import wal_decode_v1
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 K_GLOBAL = 256
 C_PER_LAYER = 16
 TARGET_LAYERS = [14, 15, 16]

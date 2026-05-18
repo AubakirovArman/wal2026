@@ -18,7 +18,7 @@ from dwl2_dynamic_route.src.route_encoder import decode_routes, encode_routes, r
 from dwl2_dynamic_route.src.calibrate import calibrate_ladder  # noqa: E402
 from dwl2_dynamic_route.src.codebook import build_codebook  # noqa: E402
 
-MODEL_DIR = "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 PROJECTIONS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
 
@@ -58,8 +58,8 @@ def main():
     n_done = 0
     for layer in range(80):
         for proj in PROJECTIONS:
-            tname = f"model.layers.{layer}.self_attn.{proj}.weight" if proj in ("q_proj","k_proj","v_proj","o_proj") \
-                    else f"model.layers.{layer}.mlp.{proj}.weight"
+            tname = f"model.language_model.layers.{layer}.self_attn.{proj}.weight" if proj in ("q_proj","k_proj","v_proj","o_proj") \
+                    else f"model.language_model.layers.{layer}.mlp.{proj}.weight"
             shard = weight_map.get(tname)
             if shard is None:
                 continue

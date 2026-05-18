@@ -16,7 +16,7 @@ from wal.v2 import build_atoms_kmeans_v2, build_coeff_table, wal_encode_v2
 from wal.v2.isa import AtomTable, CoeffTable
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"
-LAYER_NAME = "model.layers.40.self_attn.o_proj"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj"
 
 # WAL v2 config
 K_ATOMS = 256

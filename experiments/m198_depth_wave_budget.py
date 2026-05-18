@@ -96,7 +96,7 @@ def compute_depth_k_map(model):
     for name, p in model.named_parameters():
         if 'weight' not in name or len(p.shape) != 2 or p.shape[0] <= 100:
             continue
-        # Extract layer number from name like model.layers.15.self_attn.q_proj.weight
+        # Extract layer number from name like model.language_model.layers.15.self_attn.q_proj.weight
         parts = name.split('.')
         layer_idx = -1
         for i, part in enumerate(parts):

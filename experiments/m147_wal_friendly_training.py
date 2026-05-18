@@ -24,7 +24,7 @@ from transformers import AutoModelForCausalLM
 from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 from wal.v1.isa import AtomDef, AtomTableV1, CoeffTable
 
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
 SEED = 42
 K, C = 256, 16
@@ -154,11 +154,11 @@ def main():
 
     # 3. Test on key layers
     layer_names = [
-        'model.layers.0.self_attn.q_proj',
-        'model.layers.0.self_attn.k_proj',
-        'model.layers.15.self_attn.v_proj',
-        'model.layers.15.mlp.gate_proj',
-        'model.layers.30.self_attn.o_proj',
+        'model.language_model.layers.0.self_attn.q_proj',
+        'model.language_model.layers.0.self_attn.k_proj',
+        'model.language_model.layers.15.self_attn.v_proj',
+        'model.language_model.layers.15.mlp.gate_proj',
+        'model.language_model.layers.30.self_attn.o_proj',
     ]
     
     print(f"[3] Testing WAL regularizer on {len(layer_names)} layers...")

@@ -73,7 +73,7 @@ for name, param in list(model.named_parameters()):
 
     # Only encode layers 60-79
     layer_num = None
-    if "model.layers." in name:
+    if "model.language_model.layers." in name:
         parts = name.split(".")
         layer_num = int(parts[2])
 

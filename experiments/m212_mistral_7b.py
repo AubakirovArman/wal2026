@@ -15,7 +15,7 @@ from datasets import load_dataset
 os.environ["HF_HOME"] = "/mnt/hf_model_weights"
 
 MODEL_ID = "mistralai/Mistral-7B-v0.1"
-DEVICE = "cuda:1"
+DEVICE = "cuda:3"
 RANK = 4
 STEPS = 100
 LR = 5e-5

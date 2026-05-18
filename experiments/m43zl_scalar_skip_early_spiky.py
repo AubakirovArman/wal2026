@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from route_encoder import encode_routes
 from codebook import build_codebook
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_length = 2048
 stride = 512
@@ -79,7 +79,7 @@ for name, param in list(model.named_parameters()):
 
     # Check if this is an early spiky param to skip
     skip_this = False
-    if name.startswith("model.layers."):
+    if name.startswith("model.language_model.layers."):
         layer_id = int(name.split(".")[2])
         if layer_id in SKIP_LAYERS:
             for proj_name in SKIP_EARLY:

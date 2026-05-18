@@ -21,7 +21,7 @@ from wal.v1.nn import WALCachedLinear
 from wal.v1.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
 
 MODEL_NAME = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 K, C = 256, 16
 
 def canonicalize_atoms(atoms, method='norm'):

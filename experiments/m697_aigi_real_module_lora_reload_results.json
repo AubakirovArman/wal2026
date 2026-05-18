@@ -4,12 +4,12 @@
   "name": "AIGI Real Module LoRA Reload",
   "status": "PASS",
   "pass": true,
-  "timestamp": "2026-05-10T17:37:28.570388+00:00",
-  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "timestamp": "2026-05-16T17:13:27.361503+00:00",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
   "cache_dir": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache",
   "hardware": {
     "cuda_available": true,
-    "cuda_device_count": 8,
+    "cuda_device_count": 1,
     "cuda_device_0": "NVIDIA H200"
   },
   "checks_total": 13,
@@ -18,13 +18,13 @@
     {
       "name": "training_model_loaded",
       "passed": true,
-      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+      "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
     },
     {
       "name": "training_loss_decreased",
       "passed": true,
-      "before": 1.7696353197097778,
-      "after": 0.0020159876439720392
+      "before": 1.8106040954589844,
+      "after": 0.0010510185966268182
     },
     {
       "name": "training_target_generated",
@@ -34,7 +34,7 @@
     {
       "name": "adapter_artifact_written",
       "passed": true,
-      "bytes": 186757
+      "bytes": 186885
     },
     {
       "name": "target_module_recorded",
@@ -44,12 +44,12 @@
     {
       "name": "fresh_model_loaded",
       "passed": true,
-      "model": "Qwen/Qwen2.5-0.5B-Instruct"
+      "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
     },
     {
       "name": "artifact_model_matches",
       "passed": true,
-      "artifact_model": "Qwen/Qwen2.5-0.5B-Instruct"
+      "artifact_model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
     },
     {
       "name": "reload_target_module_matches",
@@ -74,7 +74,7 @@
     {
       "name": "reload_artifact_size_matches",
       "passed": true,
-      "bytes": 186757
+      "bytes": 186885
     },
     {
       "name": "cuda_available_recorded",
@@ -83,7 +83,7 @@
   ],
   "failures": [],
   "errors": [],
-  "elapsed_sec": 16.083,
+  "elapsed_sec": 9.421,
   "training": {
     "target_module": "model.layers.23.mlp.down_proj",
     "rank": 8,
@@ -91,9 +91,9 @@
     "steps": 80,
     "learning_rate": 0.08,
     "trainable_parameters": 46080,
-    "before_loss": 1.7696353197097778,
-    "after_loss": 0.0020159876439720392,
-    "loss_improvement_ratio": 0.9988607892137332,
+    "before_loss": 1.8106040954589844,
+    "after_loss": 0.0010510185966268182,
+    "loss_improvement_ratio": 0.9994195204797875,
     "generated_text": "M697_RELOAD_OK_OK_OK_OK_OK_OK",
     "base_generated_text": "M697 = 0x1234"
   },
@@ -105,8 +105,8 @@
     "generated_text": "M697_RELOAD_OK_OK_OK_OK_OK_OK",
     "base_generated_text": "M697 = 0x1234",
     "artifact_path": ".aigi/adapters/m697_qwen_mlp_down_proj_lora_reload.pt",
-    "artifact_size_bytes": 186757,
-    "artifact_model": "Qwen/Qwen2.5-0.5B-Instruct"
+    "artifact_size_bytes": 186885,
+    "artifact_model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
   },
   "claim_boundary": "Real module-LoRA artifact reload into a fresh model instance; still one-fact controlled persistence, not production multi-fact editing."
 }

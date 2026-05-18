@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from aigi import HuggingFaceTextBackend, SoftPromptAdapterTrainer  # noqa: E402
 
 
-MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "Qwen/Qwen2.5-0.5B-Instruct")
+MODEL_NAME = os.environ.get("AIGI_REAL_HF_MODEL", "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445")
 CACHE_DIR = Path(os.environ.get("AIGI_HF_CACHE", str(ROOT / ".hf_cache")))
 RESULT_PATH = ROOT / "experiments" / "m694_aigi_real_soft_prompt_adapter_results.json"
 BOOK_PATH = ROOT / "book" / "M694_AIGI_Real_Soft_Prompt_Adapter.md"

@@ -19,7 +19,7 @@ from wal.v2.isa import AtomTable, CoeffTable
 from wal.v2.asm import assemble, disassemble
 
 model_name = "unsloth/Llama-3.3-70B-Instruct"
-LAYER_NAME = "model.layers.40.self_attn.o_proj"
+LAYER_NAME = "model.language_model.layers.40.self_attn.o_proj"
 
 K_ATOMS = 256
 C_COEFFS = 16

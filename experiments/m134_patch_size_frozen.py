@@ -9,9 +9,9 @@ This script recalculates patch size for ONLY target layers.
 import json
 
 # From M133 results
-TARGET_LAYERS = ['model.layers.14.self_attn.o_proj',
-                 'model.layers.15.self_attn.o_proj',
-                 'model.layers.16.self_attn.o_proj']
+TARGET_LAYERS = ['model.language_model.layers.14.self_attn.o_proj',
+                 'model.language_model.layers.15.self_attn.o_proj',
+                 'model.language_model.layers.16.self_attn.o_proj']
 
 # Load M133 layer stats
 with open('/mnt/hf_model_weights/arman/3bit/wal/experiments/m133_fixed_atom_table.json') as f:

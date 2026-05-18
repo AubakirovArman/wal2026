@@ -20,7 +20,7 @@ from datasets import load_dataset
 os.environ["HF_HOME"] = "/mnt/hf_model_weights"
 
 MODEL_ID = "meta-llama/Llama-3.1-8B"
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 RANK = 4
 STEPS = 100
 LR = 5e-5

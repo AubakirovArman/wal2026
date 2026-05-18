@@ -1,4 +1,5 @@
 from __future__ import annotations
+import sys
 
 import json
 from pathlib import Path
@@ -7,6 +8,7 @@ import time
 import torch
 from safetensors import safe_open
 
+sys.path.insert(0, '/mnt/hf_model_weights/arman/3bit')
 from dwl2_dynamic_route.src.block_vq import (
     dense_bf16_storage_bytes,
     encode_block_residual_vq,
@@ -20,10 +22,10 @@ from dwl2_dynamic_route.src.runtime import PackedIDRouteLinear, quantize_linear_
 
 MODEL_DIR = Path(
     "/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/"
-    "models--unsloth--Llama-3.3-70B-Instruct/snapshots/"
-    "99cd0d2c829e92a67c844f9144c2509632e5c87f"
+    "models--google--gemma-4-31B-it/snapshots/"
+    "439edf5652646a0d1bd8b46bfdc1d3645761a445"
 )
-DEVICE = "cuda:0"
+DEVICE = "cuda:3"
 INDEX = json.loads((MODEL_DIR / "model.safetensors.index.json").read_text())["weight_map"]
 
 
@@ -154,8 +156,8 @@ def main() -> None:
         {"group_rows": 2048, "block_size": 32, "codebook_size": 256, "num_stages": 4, "normalize_blocks": "amax", "sample_limit": 65_536, "kmeans_iters": 8, "batch_size": 16_384},
     ]
     layers = [
-        "model.layers.0.self_attn.q_proj.weight",
-        "model.layers.40.mlp.gate_proj.weight",
+        "model.language_model.layers.0.self_attn.q_proj.weight",
+        "model.language_model.layers.40.mlp.gate_proj.weight",
     ]
 
     results = []

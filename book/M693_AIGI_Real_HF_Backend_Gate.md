@@ -3,7 +3,7 @@
 Date: 2026-05-10
 Status: PASS
 Result: `experiments/m693_aigi_real_hf_backend_gate_results.json`
-Model: `Qwen/Qwen2.5-0.5B-Instruct`
+Model: `/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445`
 
 ## Purpose
 

@@ -3,7 +3,7 @@
 import torch
 from transformers import AutoModelForCausalLM
 
-DEVICE = torch.device("cuda:2")
+DEVICE = torch.device("cuda:3")
 model_name = "unsloth/Llama-3.3-70B-Instruct"
 max_memory = {2: "150GiB", 3: "150GiB", "cpu": "0GiB"}
 model = AutoModelForCausalLM.from_pretrained(
@@ -14,7 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
     low_cpu_mem_usage=True,
 )
 
-name = "model.layers.0.self_attn.q_proj.weight"
+name = "model.language_model.layers.0.self_attn.q_proj.weight"
 param = dict(model.named_parameters())[name]
 w_orig = param.data.float().clone()
 

@@ -127,8 +127,8 @@ def wal_encode_vector(
 
 
 def benchmark():
-    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
-    M, D = 8192, 28672  # Typical Llama down_proj shape
+    device = torch.device('cuda:3' if torch.cuda.is_available() else 'cpu')
+    M, D = 1024, 4096  # Reduced for GPU memory (full Gemma down_proj would OOM)
     K = 128
     lmax = 2
     

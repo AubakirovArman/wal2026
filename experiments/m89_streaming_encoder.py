@@ -52,7 +52,7 @@ print(f"  Total shards: {len(shards)}", flush=True)
 for shard in shards[:5]:
     layers = set()
     for name in shard_to_tensors[shard]:
-        if "model.layers." in name:
+        if "model.language_model.layers." in name:
             layers.add(int(name.split(".")[2]))
     print(f"    {shard}: layers {sorted(layers) if layers else 'none'}", flush=True)
 if len(shards) > 5:

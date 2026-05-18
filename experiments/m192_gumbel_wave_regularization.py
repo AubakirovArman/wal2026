@@ -167,7 +167,7 @@ def main():
     print("M192 — Gumbel-WAL + Wave Regularization")
     print("=" * 60)
     
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:3" if torch.cuda.is_available() else "cpu"
     print(f"\nDevice: {device}")
     
     d_model, n_layers, d_ff, n_heads = 256, 4, 1024, 4

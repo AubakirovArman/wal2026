@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 from dwl2_dynamic_route.src.runtime import AdaptiveFusedIDRouteLinear, CachedPackedIDRouteLinear, FusedIDRouteLinear, PackedIDRouteLinear, replace_packed_id_route_layers, replace_with_deployment_runtime, replace_with_hybrid_runtime
 
-MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--unsloth--Llama-3.3-70B-Instruct/snapshots/99cd0d2c829e92a67c844f9144c2509632e5c87f"
+MODEL_DIR = ROOT / "bk/.hf_cache/hub/models--google--gemma-4-31B-it/snapshots/439edf5652646a0d1bd8b46bfdc1d3645761a445"
 TEXT_PATH = ROOT / "bk/wikitext2_test.txt"
 TARGETS = (
     "self_attn.q_proj",

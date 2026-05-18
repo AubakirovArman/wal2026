@@ -110,7 +110,7 @@ def main():
     print("M195b — Hadamard Adaptive K + k-means")
     print("=" * 60)
     
-    device = "cuda:0"
+    device = "cuda:3"
     print(f"\nDevice: {device}")
     
     from transformers import AutoTokenizer
