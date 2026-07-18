@@ -1,0 +1,121 @@
+{
+  "schema": "wal-tat-evidence-v5",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_layer24_attention_and_18p75_percent_up_accepted",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "partial_matrix": "mlp.up_proj",
+      "partial_matrix_coverage": 0.1875,
+      "remaining": "81.25 percent up_proj plus all down_proj and gate_proj"
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 65273856,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1655177216,
+    "weight_coverage_fraction": 0.03793996647874447
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_incremental_18p75_v5-candidate_only.pt",
+    "bytes": 266613594,
+    "sha256": "aee8045cdcab40862e4630270bdbe76137694e28681c619a1ebaf738514c4751",
+    "kind": "training checkpoint, not packed deployment artifact"
+  },
+  "quality_gate": {
+    "legacy_micro_gate_nll_ratio": 1.02,
+    "legacy_gate_origin": "manually chosen WAL-TAT heuristic introduced in commit 7f6bd24",
+    "diagnostic_full_model_nll_budget": 0.05,
+    "coverage_proportional_nll_guide": 1.0018969983239372,
+    "transaction_gate": 1.00195,
+    "guide_is_standard": false
+  },
+  "audits": {
+    "v3": {
+      "result": "block24_up_incremental_18p75_v5_audit_v3.json",
+      "tokens_per_domain": 131072,
+      "nll_ratios": {
+        "c4_validation": 0.9972958674215144,
+        "squad_context": 1.0006935545590592,
+        "torch_code": 0.9779024317001992
+      },
+      "passed": true
+    },
+    "v4": {
+      "result": "block24_up_incremental_18p75_v5_audit_v4.json",
+      "tokens_per_domain": 131072,
+      "nll_ratios": {
+        "c4_validation": 0.9972958674215144,
+        "squad_context": 0.9973258025845834,
+        "transformers_code": 0.9753200454431301
+      },
+      "passed": true
+    }
+  },
+  "incremental_path": [
+    {
+      "added_up_proj_fraction": 0.125,
+      "cumulative_up_proj_fraction": 0.125,
+      "audit_v3_squad_nll_ratio": 1.0001046288165754,
+      "audit_v4_squad_nll_ratio": 0.9971571043955404,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.15625,
+      "audit_v3_squad_nll_ratio": 1.0003409800268876,
+      "audit_v4_squad_nll_ratio": 0.9972146873176605,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.1875,
+      "audit_v3_squad_nll_ratio": 1.0006935545590592,
+      "audit_v4_squad_nll_ratio": 0.9973258025845834,
+      "accepted": true
+    }
+  ],
+  "rolled_back_steps": [
+    {
+      "attempted_added_fraction": 0.125,
+      "target_cumulative_fraction": 0.25,
+      "development_squad_nll_ratio": 1.004937460824882
+    },
+    {
+      "attempted_added_fraction": 0.0625,
+      "target_cumulative_fraction": 0.1875,
+      "development_squad_nll_ratio": 1.0023440764492382
+    }
+  ],
+  "finding": "transaction size is a quality variable: the same coverage frontier failed as one 6.25 percent step but passed as two separately committed 3.125 percent steps",
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 124.5,
+    "accepted_weights_q2_g128_mib": 16.53515625,
+    "projected_saving_mib": 107.96484375
+  },
+  "checkpoint_cleanup": {
+    "deleted_superseded_files": 3,
+    "deleted_bytes": 723749885,
+    "deleted_gib": 0.6740446062758565,
+    "recoverable_without_rerun": false,
+    "retained_checkpoints": 1
+  },
+  "next": "continue layer24 up_proj in 3.125 percent or smaller transactions, then begin linked down/gate compensation"
+}

@@ -36,6 +36,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
     parser.add_argument("--suite", type=Path, required=True)
+    parser.add_argument(
+        "--selection-suite",
+        type=Path,
+        help=(
+            "optional suite whose gates are used only for checkpoint selection; "
+            "keeps recovery/dev data separate from model selection"
+        ),
+    )
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", default="block_proxy_recovery_v1")
     parser.add_argument("--target-layer", type=int)
@@ -128,6 +136,13 @@ def main() -> None:
     )
     suite = torch.load(args.suite, map_location="cpu", weights_only=False)
     calibration, gates = suite["calibration"], suite["gates"]
+    selection_suite_path = args.selection_suite or args.suite
+    selection_suite = torch.load(
+        selection_suite_path, map_location="cpu", weights_only=False
+    )
+    selection_suite_hash = sha256_file(selection_suite_path)
+    if "gates" not in selection_suite:
+        raise ValueError("selection suite must contain gates")
     source_layer_indices = {
         int(name.split(".")[2]) for name in source_payload["matrices"]
     }
@@ -144,8 +159,11 @@ def main() -> None:
     model = load_model(model_path, args.device)
     baseline = evaluate_domains(model, gates, args.device)
     selection_gates = {
-        name: chunks[: args.selection_gate_sequences] for name, chunks in gates.items()
+        name: chunks[: args.selection_gate_sequences]
+        for name, chunks in selection_suite["gates"].items()
     }
+    if any(not chunks for chunks in selection_gates.values()):
+        raise ValueError("selection suite has an empty gate domain")
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
     teacher = cache_hidden_teacher(model, calibration, layer_index, args.device)
     matrices = install_checkpoint(model, source_payload, args.device)
@@ -304,6 +322,7 @@ def main() -> None:
             "attention_weight": args.attention_weight,
             "proxy_anchor_weight": args.proxy_anchor_weight,
             "selection_gate_sequences": args.selection_gate_sequences,
+            "selection_suite_sha256": selection_suite_hash,
             "initial_selection_ratios": best_selection_ratios,
         },
     )
@@ -479,6 +498,8 @@ def main() -> None:
         "source_sha256": source_hash,
         "suite": str(args.suite.resolve()),
         "suite_sha256": suite_hash,
+        "selection_suite": str(selection_suite_path.resolve()),
+        "selection_suite_sha256": selection_suite_hash,
         "steps": args.steps,
         "proxy_lr": args.proxy_lr,
         "scale_lr": args.scale_lr,

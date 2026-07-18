@@ -183,6 +183,20 @@ def ensure_candidate_matrix(model, matrices, name: str, device: str, group_size:
     return matrix
 
 
+def sibling_mlp_names(candidate_name: str):
+    prefix, separator, projection = candidate_name.rpartition(".mlp.")
+    if not separator or projection not in {"up_proj", "gate_proj"}:
+        raise ValueError("candidate-name must be an MLP up_proj or gate_proj")
+    layer_text = prefix.removeprefix("model.layers.")
+    if not layer_text.isdigit():
+        raise ValueError("candidate-name must belong to model.layers.<index>")
+    return (
+        f"{prefix}.mlp.up_proj",
+        f"{prefix}.mlp.down_proj",
+        int(layer_text),
+    )
+
+
 @torch.no_grad()
 def evaluate_chunks(model, chunks: Sequence[torch.Tensor], device: str) -> Dict[str, float]:
     model.eval()
@@ -306,9 +320,11 @@ def adaptive_candidate_scores(model, matrix, candidate_name, calibration, args):
     return scores
 
 
-def compensation_parameters(model):
+def compensation_parameters(model, layer_index: int):
     values = list(model.model.norm.parameters())
-    values += list(model.model.layers[27].post_attention_layernorm.parameters())
+    values += list(
+        model.model.layers[layer_index].post_attention_layernorm.parameters()
+    )
     unique, seen = [], set()
     for parameter in values:
         if id(parameter) not in seen:
@@ -445,6 +461,9 @@ def run_arm(
     up_mask_cpu,
     selected_blocks,
     candidate_name,
+    up_name,
+    down_name,
+    layer_index,
     wal,
     checkpoint_path,
 ):
@@ -459,11 +478,12 @@ def run_arm(
     candidate_matrix = ensure_candidate_matrix(
         model, matrices, candidate_name, args.device
     )
-    down_matrix = matrices[DOWN_NAME]
+    down_matrix = ensure_candidate_matrix(model, matrices, down_name, args.device)
+    ensure_candidate_matrix(model, matrices, up_name, args.device)
     starting = evaluate_domains(model, gates, args.device)
     if teacher is None:
         teacher = cache_teacher(model, calibration, args)
-    extras = compensation_parameters(model)
+    extras = compensation_parameters(model, layer_index)
     extra_snapshots = [parameter.detach().clone() for parameter in extras]
     candidate_mask = candidate_mask_cpu.to(args.device)
     down_mask = down_mask_cpu.to(args.device)
@@ -476,9 +496,9 @@ def run_arm(
         masks["down"] = down_mask
         reopen.add("down")
     elif arm == "linked_mlp":
-        if candidate_name == UP_NAME:
+        if candidate_name == up_name:
             raise ValueError("linked_mlp requires a gate projection candidate")
-        active["up"] = matrices[UP_NAME]
+        active["up"] = matrices[up_name]
         masks["up"] = up_mask
         reopen.add("up")
         active["down"] = down_matrix
@@ -661,23 +681,31 @@ def write_report(path: Path, result: Mapping) -> None:
         f"{result['selection']['new_candidate_groups']}; linked down groups: "
         f"{result['selection']['linked_down_groups']}.",
         "",
-        "| Arm | Gate | Wiki ratio | Code ratio | Candidate coverage | Down churn |",
-        "|---|---|---:|---:|---:|---:|",
+        "| Arm | Gate | Worst ratio | Candidate coverage | Down churn |",
+        "|---|---|---:|---:|---:|",
     ]
     for arm, value in result["arms"].items():
+        worst_ratio = max(value["attempted_ratios"].values())
         lines.append(
             f"| {arm} | {'commit' if value['passed'] else 'rollback'} | "
-            f"{value['attempted_ratios']['wiki']:.6f} | "
-            f"{value['attempted_ratios']['code']:.6f} | "
+            f"{worst_ratio:.6f} | "
             f"{value['coverage'][result['candidate_name']]:.2%} | "
             f"{value['code_churn'].get('down', 0.0):.6f} |"
         )
+        formatted = ", ".join(
+            f"{domain}={ratio:.6f}"
+            for domain, ratio in value["attempted_ratios"].items()
+        )
+        lines.append(f"<!-- {arm}: {formatted} -->")
     if result.get("fresh_verify"):
         verify = result["fresh_verify"]
+        formatted = ", ".join(
+            f"{domain}={ratio:.6f}"
+            for domain, ratio in verify["ratios"].items()
+        )
         lines += [
             "",
-            f"Fresh verify: {'pass' if verify['passed'] else 'fail'}; Wiki/code ratios "
-            f"{verify['ratios']['wiki']:.6f}/{verify['ratios']['code']:.6f}.",
+            f"Fresh verify: {'pass' if verify['passed'] else 'fail'}; {formatted}.",
         ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -689,6 +717,7 @@ def main() -> None:
     arms = tuple(value.strip() for value in args.arms.split(",") if value.strip())
     if any(value not in {"candidate_only", "up_only", "linked_down", "linked_mlp"} for value in arms):
         raise ValueError(f"unsupported arms: {arms}")
+    up_name, down_name, layer_index = sibling_mlp_names(args.candidate_name)
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(args.source_checkpoint)
     suite_hash = sha256_file(args.suite)
@@ -704,6 +733,8 @@ def main() -> None:
     candidate_matrix = ensure_candidate_matrix(
         model, matrices, args.candidate_name, args.device
     )
+    down_matrix = ensure_candidate_matrix(model, matrices, down_name, args.device)
+    up_matrix = ensure_candidate_matrix(model, matrices, up_name, args.device)
     starting = evaluate_domains(model, gates, args.device)
     starting_ratios = ratios(starting, baseline)
     scores = adaptive_candidate_scores(
@@ -717,9 +748,9 @@ def main() -> None:
         channel_block_size=candidate_matrix.group_size,
         block_count=args.channel_blocks,
     )
-    down_mask = linked_down_group_mask(matrices[DOWN_NAME].committed_mask, selected_blocks)
+    down_mask = linked_down_group_mask(down_matrix.committed_mask, selected_blocks)
     up_mask = linked_output_group_mask(
-        matrices[UP_NAME].committed_mask,
+        up_matrix.committed_mask,
         selected_blocks,
         channel_block_size=candidate_matrix.group_size,
     )
@@ -778,6 +809,9 @@ def main() -> None:
             up_mask_cpu,
             selected_blocks,
             args.candidate_name,
+            up_name,
+            down_name,
+            layer_index,
             wal,
             candidate_path,
         )

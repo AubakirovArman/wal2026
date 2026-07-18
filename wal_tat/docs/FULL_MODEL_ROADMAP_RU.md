@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has 4 / 7 matrices, 3 MLP remain
+next block:           layer 24 has Q/K/V/O + 18.75% up_proj
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 62,914,560 / 1,720,451,072 = 3.656864%
+major matrix weights: 65,273,856 / 1,720,451,072 = 3.793997%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -99,9 +99,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 ## Текущая фаза 4 — закончить block 24
 
-Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Текущее
-покрытие `3.656864%`, условная `+5% NLL` guide равна `1.00182843`, а худший
-измеренный ratio меньше `1`.
+Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
+sensitivity-ranked транзакции также приняты 18.75% `up_proj`. Текущее покрытие
+`3.793997%`, условная `+5% NLL` guide равна `1.00189700`, худший измеренный
+ratio равен `1.000694`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -109,9 +110,10 @@ Q/K/V/O layer 24 приняты и совместно с layer 27 прошли a
 2. `down_proj` и `gate_proj` сильнее ухудшают SQuAD;
 3. пары MLP дают нелинейно больший ущерб.
 
-`up_proj` после hard proxy + continuous recovery дошёл на audit-v3 до
-`0.998760 / 1.004714 / 0.978121`, но не прошёл заранее заданный локальный gate
-`1.0022`. Поэтому он не принят и не включён в счётчик.
+One-shot 100% `up_proj` после hard proxy + continuous recovery дошёл на
+audit-v3 до `0.998760 / 1.004714 / 0.978121`, но не прошёл заданный gate.
+Incremental WAL нашёл безопасный путь: 12.5% + 3.125% + 3.125% прошли два
+audit suite, тогда как более крупные очередные шаги 12.5% и 6.25% откатились.
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.
