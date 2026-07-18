@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Dict, Optional, Tuple
+from typing import Dict, Mapping, Optional, Set, Tuple
 
 import torch
 import torch.nn as nn
@@ -42,6 +42,8 @@ class TransactionalTernaryMatrix(nn.Module):
         self._snapshot_weight: Optional[torch.Tensor] = None
         self._snapshot_scale: Optional[torch.Tensor] = None
         self._snapshot_codes: Optional[torch.Tensor] = None
+        self._snapshot_committed_mask: Optional[torch.Tensor] = None
+        self._snapshot_committed_codes: Optional[torch.Tensor] = None
 
     @property
     def out_features(self) -> int:
@@ -60,14 +62,21 @@ class TransactionalTernaryMatrix(nn.Module):
         return self.transaction_id is not None
 
     @torch.no_grad()
-    def begin(self, mask: torch.Tensor, *, transaction_id: Optional[str] = None) -> str:
+    def begin(
+        self,
+        mask: torch.Tensor,
+        *,
+        transaction_id: Optional[str] = None,
+        allow_reopen: bool = False,
+    ) -> str:
         """Open a transaction and snapshot exactly the selected groups."""
         if self.in_transaction:
             raise RuntimeError("a transaction is already active")
         mask = mask.to(self.candidate_mask.device, dtype=torch.bool)
         if mask.shape != self.candidate_mask.shape:
             raise ValueError("candidate mask has the wrong shape")
-        if torch.any(mask & self.committed_mask):
+        overlap = mask & self.committed_mask
+        if torch.any(overlap) and not allow_reopen:
             raise ValueError("candidate mask overlaps committed groups")
         if not mask.any():
             raise ValueError("a transaction must contain at least one group")
@@ -76,7 +85,20 @@ class TransactionalTernaryMatrix(nn.Module):
         self._snapshot_weight = grouped[mask].clone()
         self._snapshot_scale = self.group_scale.detach()[mask].clone()
         codes = (grouped / self.group_scale.detach().unsqueeze(-1)).round().clamp(-1, 1)
+        codes = torch.where(overlap.unsqueeze(-1), self.committed_codes, codes.to(torch.int8))
         self._snapshot_codes = codes[mask].to(torch.int8).clone()
+        self._snapshot_committed_mask = self.committed_mask[mask].clone()
+        self._snapshot_committed_codes = self.committed_codes[mask].clone()
+        if overlap.any():
+            # A reopened group starts at the exact deployed hard value. The
+            # soft-to-hard path can then move its master/code, while rollback
+            # restores both the former master and the committed code exactly.
+            hard = self.committed_codes.float() * self.group_scale.detach().unsqueeze(-1)
+            grouped[overlap] = hard[overlap]
+            self.master_weight.copy_(
+                grouped.reshape(self.out_features, -1)[:, : self.in_features]
+            )
+            self.committed_mask[overlap] = False
         self.transaction_id = transaction_id or uuid.uuid4().hex[:12]
         self.candidate_pressure = 0.0
         self.candidate_temperature = 0.3508855606815209
@@ -178,6 +200,8 @@ class TransactionalTernaryMatrix(nn.Module):
         grouped[mask] = self._snapshot_weight
         self.master_weight.copy_(grouped.reshape(self.out_features, -1)[:, : self.in_features])
         self.group_scale[mask] = self._snapshot_scale
+        self.committed_mask[mask] = self._snapshot_committed_mask
+        self.committed_codes[mask] = self._snapshot_committed_codes
         count = int(mask.sum().item())
         self._clear_transaction()
         return {"transaction_id": transaction_id, "groups": count}
@@ -190,6 +214,8 @@ class TransactionalTernaryMatrix(nn.Module):
         self._snapshot_weight = None
         self._snapshot_scale = None
         self._snapshot_codes = None
+        self._snapshot_committed_mask = None
+        self._snapshot_committed_codes = None
         self.candidate_pressure = 0.0
         self.candidate_temperature = 0.3508855606815209
 
@@ -241,3 +267,88 @@ class TransactionalTernaryLinear(nn.Module):
 
     def forward(self, value: torch.Tensor) -> torch.Tensor:
         return F.linear(value, self.matrix.effective_weight().to(value.dtype), self.bias)
+
+
+class AtomicTernaryTransaction:
+    """One commit/rollback boundary spanning multiple ternary matrices."""
+
+    def __init__(self, matrices: Mapping[str, TransactionalTernaryMatrix]):
+        if not matrices:
+            raise ValueError("an atomic transaction needs at least one matrix")
+        self.matrices = dict(matrices)
+        self.transaction_id: Optional[str] = None
+
+    @property
+    def in_transaction(self) -> bool:
+        return self.transaction_id is not None
+
+    def begin(
+        self,
+        masks: Mapping[str, torch.Tensor],
+        *,
+        reopen: Optional[Set[str]] = None,
+        transaction_id: Optional[str] = None,
+    ) -> str:
+        if self.in_transaction:
+            raise RuntimeError("an atomic transaction is already active")
+        if not masks or not set(masks).issubset(self.matrices):
+            raise ValueError("masks must name one or more registered matrices")
+        reopen = set(reopen or ())
+        if not reopen.issubset(masks):
+            raise ValueError("reopen names must also be present in masks")
+        identifier = transaction_id or uuid.uuid4().hex[:12]
+        begun = []
+        try:
+            for name, mask in masks.items():
+                self.matrices[name].begin(
+                    mask,
+                    transaction_id=identifier,
+                    allow_reopen=name in reopen,
+                )
+                begun.append(name)
+        except Exception:
+            for name in reversed(begun):
+                self.matrices[name].rollback()
+            raise
+        self.transaction_id = identifier
+        return identifier
+
+    @torch.no_grad()
+    def set_candidate_state(self, pressure: float, temperature: float) -> None:
+        if not self.in_transaction:
+            raise RuntimeError("no active atomic transaction")
+        for matrix in self.matrices.values():
+            if matrix.in_transaction:
+                matrix.set_candidate_state(pressure, temperature)
+
+    @torch.no_grad()
+    def current_code_churn(self) -> Dict[str, float]:
+        return {
+            name: matrix.current_code_churn()
+            for name, matrix in self.matrices.items()
+            if matrix.in_transaction
+        }
+
+    @torch.no_grad()
+    def commit(self) -> Dict[str, Dict[str, object]]:
+        if not self.in_transaction:
+            raise RuntimeError("no active atomic transaction")
+        results = {
+            name: matrix.commit()
+            for name, matrix in self.matrices.items()
+            if matrix.in_transaction
+        }
+        self.transaction_id = None
+        return results
+
+    @torch.no_grad()
+    def rollback(self) -> Dict[str, Dict[str, object]]:
+        if not self.in_transaction:
+            raise RuntimeError("no active atomic transaction")
+        results = {
+            name: matrix.rollback()
+            for name, matrix in reversed(tuple(self.matrices.items()))
+            if matrix.in_transaction
+        }
+        self.transaction_id = None
+        return results

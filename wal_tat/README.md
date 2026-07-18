@@ -28,15 +28,18 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The current proof on `Qwen/Qwen3-1.7B`, layer 27, has:
 
 - 100% of `mlp.down_proj` hard ternary (98,304 groups);
-- 37.5% of adjacent `mlp.up_proj` hard ternary;
-- fresh frozen-suite NLL ratios of 0.964836 (Wiki) and 1.019805 (code);
+- 100% of adjacent `mlp.up_proj` hard ternary;
+- 75% of `mlp.gate_proj` hard ternary;
+- fresh 32K-token/domain NLL ratios of 0.978552 (Wiki) and 1.018250 (code);
 - a strict per-domain acceptance gate of at most 1.02;
-- exactly ternary committed codes and 2.125 bpw for the fully converted matrix.
+- matched evidence that linked down-scale compensation beats candidate-only QAT;
+- exactly ternary committed codes and 2.125 bpw for fully converted matrices.
 
 This is a successful mechanism proof, **not a finished compressed 1.7B
-checkpoint**. Only about 17.3M of roughly 1.7B parameters are committed, around
-1% of the model. See [docs/STATUS_RU.md](docs/STATUS_RU.md) and the machine-readable
-[results/evidence_v1.json](results/evidence_v1.json).
+checkpoint**. About 34.6M of roughly 1.7B parameters are committed, around 2%
+of the model. See [docs/STATUS_RU.md](docs/STATUS_RU.md), the
+[full-model roadmap](docs/FULL_MODEL_ROADMAP_RU.md), and the campaign results in
+`results/`.
 
 ## Package contents
 
@@ -44,6 +47,8 @@ checkpoint**. Only about 17.3M of roughly 1.7B parameters are committed, around
 - `scoring.py`: reconstruction and activation/Fisher causal ranking;
 - `moments.py`: hooks for the required causal moments;
 - `transaction.py`: exact candidate snapshots, commit, and rollback;
+- `compensation.py`: structured linked MLP channel windows;
+- `AtomicTernaryTransaction`: multi-matrix commit/rollback and committed-group reopening;
 - `wal.py`: WAL v2 with sequence numbers, SHA-256 hash chain, and optional fsync;
 - `controller.py`: multi-domain NLL quality gate;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.

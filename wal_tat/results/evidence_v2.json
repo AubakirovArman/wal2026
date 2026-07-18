@@ -1,0 +1,100 @@
+{
+  "schema": "wal-tat-evidence-v2",
+  "date_utc": "2026-07-18",
+  "status": "atomic_compensation_proven_one_mlp_incomplete",
+  "model": "Qwen/Qwen3-1.7B",
+  "quantization": {
+    "codebook": [-1, 0, 1],
+    "logical_bits_per_weight": 1.584962500721156,
+    "deployed_layout": "Q2_g128_with_FP16_scale",
+    "physical_bits_per_weight_for_committed_groups": 2.125
+  },
+  "final_checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-gate_window_v5-linked_down.pt",
+    "bytes": 114422550,
+    "sha256": "d1256d2be8e02e1e3131ba2cc786e3df3e7511d9d177be03977db33aafc19c92",
+    "format": "wal-tat-multi-g128-v2",
+    "training_artifact_not_packed_deployment": true
+  },
+  "coverage": {
+    "model.layers.27.mlp.down_proj": {
+      "fraction": 1.0,
+      "parameters": 12582912,
+      "projected_bpw": 2.125
+    },
+    "model.layers.27.mlp.up_proj": {
+      "fraction": 1.0,
+      "parameters": 12582912,
+      "projected_bpw": 2.125
+    },
+    "model.layers.27.mlp.gate_proj": {
+      "fraction": 0.75,
+      "committed_parameters": 9437184,
+      "projected_bpw": 5.59375
+    },
+    "total_committed_parameters": 34603008,
+    "approximate_whole_model_fraction": 0.02035
+  },
+  "fresh_32k_per_domain": {
+    "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+    "tokens": {"wiki": 32768, "code": 32768},
+    "gate_limit": 1.02,
+    "bf16": {
+      "wiki": {"nll": 3.575825622305274, "ppl": 35.72410325978659},
+      "code": {"nll": 3.3886028062552214, "ppl": 29.624532130142402}
+    },
+    "wal_tat": {
+      "wiki": {"nll": 3.4991311095654964, "ppl": 33.08669075622748, "nll_ratio": 0.9785519427285904},
+      "code": {"nll": 3.450446141883731, "ppl": 31.514449088536768, "nll_ratio": 1.0182503937948553}
+    },
+    "passed": true
+  },
+  "matched_compensation_evidence": {
+    "first_up_frontier": {
+      "new_groups": 1536,
+      "candidate_only_code_nll_ratio": 1.020203239012673,
+      "candidate_only_decision": "rollback",
+      "linked_down_code_nll_ratio": 1.019334486697874,
+      "linked_down_decision": "commit"
+    },
+    "full_up_tail": {
+      "new_groups": 13824,
+      "candidate_only_code_nll_ratio": 1.0160298803406966,
+      "linked_down_code_nll_ratio": 1.01049614181714
+    },
+    "gate_large_step_failure": {
+      "starting_gate_fraction": 0.5,
+      "attempted_new_fraction": 0.25,
+      "candidate_only_code_nll_ratio": 1.0219833449132367,
+      "linked_down_code_nll_ratio": 1.0209868261862223,
+      "decision": "rollback_both"
+    },
+    "observation": "down ternary code churn stayed zero; linked compensation was carried by group-scale updates"
+  },
+  "projected_mlp_weight_memory": {
+    "bf16_mib": 72.0,
+    "current_mixed_mib": 14.765625,
+    "saving_mib": 57.234375,
+    "training_peak_cuda_allocated_bytes_latest": 5088014336,
+    "packed_runtime_measured": false
+  },
+  "retained_milestones": [
+    {
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-compensation_window_v7_tail-linked_down.pt",
+      "sha256": "c21e956923b185dc5595c5264b350fa9d9bfadb5f82d5e9ad2c6e3b92d9aab28",
+      "meaning": "down_proj and up_proj both 100 percent ternary"
+    },
+    {
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-gate_window_v5-linked_down.pt",
+      "sha256": "d1256d2be8e02e1e3131ba2cc786e3df3e7511d9d177be03977db33aafc19c92",
+      "meaning": "current frontier with gate_proj at 75 percent"
+    }
+  ],
+  "cleanup": {
+    "intermediate_checkpoint_files_deleted": 23,
+    "bytes_deleted": 2137152218,
+    "gib_deleted": 1.99,
+    "recoverable": false
+  },
+  "next": "gate_proj 75 to 100 percent, then attention projections in an atomic QKV to O window"
+}

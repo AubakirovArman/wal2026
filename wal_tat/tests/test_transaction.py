@@ -1,7 +1,11 @@
 import pytest
 import torch
 
-from wal_tat import TransactionalTernaryLinear, TransactionalTernaryMatrix
+from wal_tat import (
+    AtomicTernaryTransaction,
+    TransactionalTernaryLinear,
+    TransactionalTernaryMatrix,
+)
 
 
 def make_matrix():
@@ -97,3 +101,74 @@ def test_linear_wrapper_preserves_shape():
     _, matrix = make_matrix()
     linear = TransactionalTernaryLinear(matrix)
     assert linear(torch.ones(3, 4)).shape == (3, 2)
+
+
+def test_reopen_starts_exact_and_rollback_restores_committed_state():
+    _, matrix = make_matrix()
+    mask = torch.tensor([[True, False], [False, False]])
+    matrix.begin(mask)
+    matrix.commit()
+    deployed = matrix.effective_weight().clone()
+    original_master = matrix.master_weight.detach().clone()
+    original_scale = matrix.group_scale.detach().clone()
+    original_codes = matrix.committed_codes.clone()
+
+    matrix.begin(mask, allow_reopen=True)
+    assert torch.equal(matrix.effective_weight(), deployed)
+    assert not matrix.committed_mask[0, 0]
+    with torch.no_grad():
+        matrix.master_weight[0, :2] += 4
+        matrix.group_scale[0, 0] *= 2
+    matrix.rollback()
+
+    assert torch.equal(matrix.master_weight, original_master)
+    assert torch.equal(matrix.group_scale, original_scale)
+    assert torch.equal(matrix.committed_codes, original_codes)
+    assert matrix.committed_mask[0, 0]
+    assert torch.equal(matrix.effective_weight(), deployed)
+
+
+def test_reopen_commit_replaces_codes_atomically():
+    _, matrix = make_matrix()
+    mask = torch.tensor([[True, False], [False, False]])
+    matrix.begin(mask)
+    matrix.commit()
+    before = matrix.committed_codes[0, 0].clone()
+    matrix.begin(mask, allow_reopen=True)
+    codes = matrix.candidate_codes.clone()
+    codes[0, 0] = -before
+    scales = matrix.group_scale.detach().clone()
+    matrix.set_candidate_codes(codes, scales)
+    matrix.set_candidate_state(1.0, 0.0)
+    matrix.commit()
+    assert torch.equal(matrix.committed_codes[0, 0], -before)
+
+
+def test_atomic_transaction_rolls_back_all_matrices():
+    weight_a, matrix_a = make_matrix()
+    weight_b, matrix_b = make_matrix()
+    atomic = AtomicTernaryTransaction({"up": matrix_a, "down": matrix_b})
+    up_mask = torch.tensor([[True, False], [False, False]])
+    down_mask = torch.tensor([[False, True], [False, False]])
+    atomic.begin({"up": up_mask, "down": down_mask}, transaction_id="pair-1")
+    with torch.no_grad():
+        matrix_a.master_weight[0, :2] += 3
+        matrix_b.master_weight[0, 2:] -= 5
+    result = atomic.rollback()
+    assert set(result) == {"up", "down"}
+    assert torch.equal(matrix_a.master_weight, weight_a)
+    assert torch.equal(matrix_b.master_weight, weight_b)
+    assert not atomic.in_transaction
+
+
+def test_atomic_begin_failure_rolls_back_already_opened_matrix():
+    _, matrix_a = make_matrix()
+    _, matrix_b = make_matrix()
+    committed = torch.tensor([[True, False], [False, False]])
+    matrix_b.begin(committed)
+    matrix_b.commit()
+    atomic = AtomicTernaryTransaction({"up": matrix_a, "down": matrix_b})
+    with pytest.raises(ValueError, match="overlaps"):
+        atomic.begin({"up": committed, "down": committed})
+    assert not matrix_a.in_transaction
+    assert matrix_b.committed_mask[0, 0]
