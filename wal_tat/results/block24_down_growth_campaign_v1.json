@@ -17,11 +17,11 @@
     "full_model_nll_budget": 0.05
   },
   "frontier": {
-    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
-    "sha256": "cdd33bbf09384828aef48cde1d21d6fed7c13d86526b91612bd52e99f8b2432b",
-    "candidate_coverage": 0.0048828125
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt",
+    "sha256": "e9614f92b5bd8f7afb673e48f89e7e3d4b25b8f4d86092cbff1f2f6820e391d5",
+    "candidate_coverage": 0.0068359375
   },
-  "next_fraction": 0.001953125,
+  "next_fraction": 0.0009765625,
   "history": [
     {
       "step": 1,
@@ -192,7 +192,177 @@
           "recoverable_without_rerun": false
         }
       ]
+    },
+    {
+      "step": 2,
+      "tag": "block24_down_growth_s0002",
+      "fraction": 0.001953125,
+      "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
+      "experiment_result": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002.json",
+      "experiment_command": [
+        "/home/arman/miniconda3/bin/python",
+        "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/experiments/compensation_window.py",
+        "--source-checkpoint",
+        "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
+        "--suite",
+        "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+        "--candidate-name",
+        "model.layers.24.mlp.down_proj",
+        "--tag",
+        "block24_down_growth_s0002",
+        "--fraction",
+        "0.001953125",
+        "--channel-blocks",
+        "1",
+        "--steps",
+        "240",
+        "--lr",
+        "1e-05",
+        "--gate-ratio",
+        "1.001950565671187",
+        "--kd-weight",
+        "0.2",
+        "--hidden-kd-weight",
+        "0.1",
+        "--hidden-module",
+        "model.layers.24.mlp",
+        "--teacher-source",
+        "bf16",
+        "--arms",
+        "candidate_only,candidate_bf16_mlp",
+        "--device",
+        "cuda"
+      ],
+      "development_chosen_arm": "candidate_only",
+      "effective_gate_ratio": 1.001950565671187,
+      "projected_accepted_weights": 67117056,
+      "arm_audits": {
+        "candidate_only": [
+          {
+            "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+            "result": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002_candidate_only_audit_1.json",
+            "command": [
+              "/home/arman/miniconda3/bin/python",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/experiments/verify_checkpoint.py",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_only.pt",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+              "--tag",
+              "block24_down_growth_s0002_candidate_only_audit_1",
+              "--gate-ratio",
+              "1.001950565671187",
+              "--device",
+              "cuda"
+            ],
+            "passed": true,
+            "ratios": {
+              "c4_validation": 0.9975728542307465,
+              "squad_context": 1.001537833899324,
+              "torch_code": 0.9786250164547822
+            }
+          },
+          {
+            "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+            "result": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002_candidate_only_audit_2.json",
+            "command": [
+              "/home/arman/miniconda3/bin/python",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/experiments/verify_checkpoint.py",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_only.pt",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+              "--tag",
+              "block24_down_growth_s0002_candidate_only_audit_2",
+              "--gate-ratio",
+              "1.001950565671187",
+              "--device",
+              "cuda"
+            ],
+            "passed": true,
+            "ratios": {
+              "c4_validation": 0.9975728542307465,
+              "squad_context": 0.9978278389222711,
+              "transformers_code": 0.9767459551558336
+            }
+          }
+        ],
+        "candidate_bf16_mlp": [
+          {
+            "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+            "result": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002_candidate_bf16_mlp_audit_1.json",
+            "command": [
+              "/home/arman/miniconda3/bin/python",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/experiments/verify_checkpoint.py",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+              "--tag",
+              "block24_down_growth_s0002_candidate_bf16_mlp_audit_1",
+              "--gate-ratio",
+              "1.001950565671187",
+              "--device",
+              "cuda"
+            ],
+            "passed": true,
+            "ratios": {
+              "c4_validation": 0.9975579359347773,
+              "squad_context": 1.0015312125894118,
+              "torch_code": 0.9786363704528956
+            }
+          },
+          {
+            "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+            "result": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002_candidate_bf16_mlp_audit_2.json",
+            "command": [
+              "/home/arman/miniconda3/bin/python",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/experiments/verify_checkpoint.py",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt",
+              "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+              "--tag",
+              "block24_down_growth_s0002_candidate_bf16_mlp_audit_2",
+              "--gate-ratio",
+              "1.001950565671187",
+              "--device",
+              "cuda"
+            ],
+            "passed": true,
+            "ratios": {
+              "c4_validation": 0.9975579359347773,
+              "squad_context": 0.9978198081246632,
+              "transformers_code": 0.9767709773779363
+            }
+          }
+        ]
+      },
+      "holdout_worst_by_arm": {
+        "candidate_only": 1.001537833899324,
+        "candidate_bf16_mlp": 1.0015312125894118
+      },
+      "holdout_chosen_arm": "candidate_bf16_mlp",
+      "passed": true,
+      "worst_ratio": 1.0015312125894118,
+      "size_decision": {
+        "previous_fraction": 0.001953125,
+        "next_fraction": 0.0009765625,
+        "reason": "tight_gate_shrink",
+        "worst_ratio": 1.0015312125894118,
+        "gate_ratio": 1.001950565671187,
+        "normalized_headroom": 0.21499049633121342
+      },
+      "accepted_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt",
+      "accepted_checkpoint_sha256": "e9614f92b5bd8f7afb673e48f89e7e3d4b25b8f4d86092cbff1f2f6820e391d5",
+      "candidate_coverage": 0.0068359375,
+      "deleted_checkpoints": [
+        {
+          "reason": "superseded",
+          "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
+          "bytes": 304658224,
+          "recoverable_without_rerun": false
+        },
+        {
+          "reason": "unchosen_arm",
+          "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_only.pt",
+          "bytes": 304657524,
+          "recoverable_without_rerun": false
+        }
+      ]
     }
   ],
-  "updated_ns": 1784402083742462078
+  "updated_ns": 1784402700205656503
 }
