@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 51.26953125% up + 0.9765625% gate + 2.24609375% down
+next block:           layer 24 has Q/K/V/O + 54.39453125% up + 0.9765625% gate + 2.24609375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 69,771,264 / 1,720,451,072 = 4.055405%
+major matrix weights: 70,164,480 / 1,720,451,072 = 4.078261%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 51.26953125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 54.39453125% `up_proj`, первые
 0.9765625% `gate_proj` и 2.24609375% `down_proj`. Текущее покрытие
-`4.055405%`, условная `+5% NLL` guide равна `1.00202770`, худший измеренный
-ratio после coverage-neutral recovery равен `1.000115`.
+`4.078261%`, условная `+5% NLL` guide равна `1.00203913`, худший измеренный
+ratio после следующего up-атома равен `1.000405`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -166,6 +166,10 @@ Recovery прошёл оба cumulative holdout и улучшил worst ratio д
 Изменился один активный ternary-код и 476,026 committed scales; 495 изменений
 codes под нулевыми masks не участвуют в forward. Normalized headroom вырос до
 `0.943243`, поэтому следующий безопасный опыт — `up_proj +3.125%`.
+Этот опыт прошёл оба holdout и добавил 393,216 weights: `up_proj` достиг
+`54.39453125%`. Candidate-only выиграл у linked arm (`1.000404500` против
+`1.000427594`), normalized headroom остался `0.801631`. Следующий шаг
+round-robin — `down_proj +0.390625%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
