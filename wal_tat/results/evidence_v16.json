@@ -1,0 +1,129 @@
+{
+  "schema": "wal-tat-evidence-v16",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_third_accepted_1_over_32_up_transaction",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.4189453125,
+      "gate_proj_coverage": 0.001953125,
+      "down_proj_coverage": 0.0068359375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 68296704,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1652154368,
+    "weight_coverage_fraction": 0.03969697546853573
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0004-candidate_only.pt",
+    "bytes": 304658813,
+    "sha256": "8de4a853bd5fb4c320d284738044c7224f1219f4d3ea9a63f88b24e852e0b3d7",
+    "kind": "mixed BF16/ternary training checkpoint after candidate-only up transaction"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0019848487734269,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9971818839473313,
+        "squad_context": 1.0011185351798584,
+        "torch_code": 0.9782718963921143
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9971818839473313,
+        "squad_context": 0.9973597543137556,
+        "transformers_code": 0.9770127209685988
+      },
+      "passed": true
+    }
+  },
+  "up_projection_growth": {
+    "campaign_state": "block24_up_headroom_growth_campaign_v1.json",
+    "completed_steps": 4,
+    "failed_steps": 1,
+    "accepted_steps": 3,
+    "total_new_up_weights_after_recovery": 1179648,
+    "coverage_before_campaign": 0.3251953125,
+    "coverage_after_campaign": 0.4189453125,
+    "latest_transaction": {
+      "campaign_step": 4,
+      "fraction": 0.03125,
+      "new_groups": 3072,
+      "new_weights": 393216,
+      "selected_channel_blocks": [31, 32, 36, 45],
+      "development_worst": {
+        "candidate_only": 1.0006660658699793,
+        "candidate_bf16_mlp": 1.0006075293503431
+      },
+      "holdout_worst": {
+        "candidate_only": 1.0011185351798584,
+        "candidate_bf16_mlp": 1.001146107205952
+      },
+      "development_chosen": "candidate_bf16_mlp",
+      "holdout_chosen": "candidate_only",
+      "linked_generalization_reversal": true
+    },
+    "next_fraction": 0.03125,
+    "next_fraction_reason": "middle_headroom_hold",
+    "normalized_headroom": 0.4364632737600358
+  },
+  "automation": {
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_step_3_frontier",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0003-candidate_bf16_mlp.pt",
+      "bytes": 304659641,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_step_4_linked_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0004-candidate_bf16_mlp.pt",
+      "bytes": 304659641,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 130.265625,
+    "accepted_weights_q2_g128_mib": 17.3009033203125,
+    "projected_saving_mib": 112.9647216796875
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "run masked proxy headroom recovery at unchanged coverage, then resume matched up/gate/down transactions"
+}

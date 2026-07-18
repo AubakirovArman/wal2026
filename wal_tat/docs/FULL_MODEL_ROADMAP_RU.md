@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 38.76953125% up + 0.1953125% gate + 0.68359375% down
+next block:           layer 24 has Q/K/V/O + 41.89453125% up + 0.1953125% gate + 0.68359375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 67,903,488 / 1,720,451,072 = 3.946842%
+major matrix weights: 68,296,704 / 1,720,451,072 = 3.969698%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 38.76953125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 41.89453125% `up_proj`, первые
 0.1953125% `gate_proj` и 0.68359375% `down_proj`. Текущее покрытие
-`3.946842%`, условная `+5% NLL` guide равна `1.00197342`, худший измеренный
-ratio равен `1.000755`.
+`3.969698%`, условная `+5% NLL` guide равна `1.00198485`, худший измеренный
+ratio равен `1.001119`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -120,7 +120,9 @@ headroom вырос более чем втрое. Это позволяет сн
 лучшим оказался linked BF16 `down/gate` arm с worst ratio `1.000731191`.
 Повторный атом того же размера также прошёл оба holdout, добавил ещё 393,216
 weights и поднял `up_proj` до `38.76953125%`; linked arm снова выиграл с worst
-ratio `1.000755065`.
+ratio `1.000755065`. Третий атом прошёл, поднял coverage до `41.89453125%`,
+но candidate-only впервые обошёл linked arm на holdout (`1.001118535` против
+`1.001146107`), поэтому BF16-компенсация не закрепляется без проверки.
 
 Остались три MLP-матрицы. Component ablation показал:
 
