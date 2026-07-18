@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 28.125% up_proj
+next block:           layer 24 has Q/K/V/O + 30.37109375% up_proj
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 66,453,504 / 1,720,451,072 = 3.862563%
+major matrix weights: 66,736,128 / 1,720,451,072 = 3.878990%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,9 +100,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 28.125% `up_proj`. Текущее покрытие
-`3.862563%`, условная `+5% NLL` guide равна `1.00193128`, худший измеренный
-ratio равен `1.001603`.
+sensitivity-ranked транзакции также приняты 30.37109375% `up_proj`. Текущее
+покрытие `3.878990%`, условная `+5% NLL` guide равна `1.00193950`, худший
+измеренный ratio равен `1.001687`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -117,6 +117,14 @@ Incremental WAL нашёл безопасный путь: после 12.5% по�
 suite, тогда как крупные очередные шаги 12.5% и 6.25% откатились. Следующий
 контроллер должен выбирать размер атома автоматически из holdout margin и
 уменьшать его при rollback.
+
+Добавлен новый `candidate_bf16_mlp` arm: candidate остаётся hard ternary, а
+связанные ещё не конвертированные `down/gate` получают локальные непрерывные
+BF16 окна с точным snapshot/rollback. В matched ablation он улучшил audit-v3
+SQuAD с `1.001575` до `1.001471`, не увеличив ternary coverage `down/gate`.
+Один linked шаг `+1.5625%` откатился при `1.002169`, но два последовательных
+шага по `+0.78125%` достигли того же coverage и прошли оба holdout. Это
+подтверждает path-dependence уже для новой компенсационной схемы.
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.

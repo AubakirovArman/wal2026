@@ -103,6 +103,48 @@ def test_linear_wrapper_preserves_shape():
     assert linear(torch.ones(3, 4)).shape == (3, 2)
 
 
+def test_continuous_compensation_is_exact_masked_and_rollback_safe():
+    original, matrix = make_matrix()
+    mask = torch.tensor([[False, True], [False, False]])
+    before = matrix.effective_weight().clone()
+    assert matrix.begin_continuous_compensation(mask) == 1
+    assert torch.equal(matrix.effective_weight(), before)
+
+    matrix.effective_weight().sum().backward()
+    gradient = matrix.master_weight.grad.view(2, 2, 2)
+    assert torch.count_nonzero(gradient[mask]) == 2
+    assert torch.count_nonzero(gradient[~mask]) == 0
+    with torch.no_grad():
+        grouped = matrix.master_weight.view(2, 2, 2)
+        grouped[mask] += 0.25
+    assert not torch.equal(matrix.effective_weight(), before)
+    matrix.rollback_continuous_compensation()
+    assert torch.equal(matrix.master_weight, original)
+    assert torch.equal(matrix.effective_weight(), before)
+
+
+def test_continuous_compensation_commit_keeps_bf16_weights_without_coverage():
+    original, matrix = make_matrix()
+    mask = torch.tensor([[True, False], [False, False]])
+    matrix.begin_continuous_compensation(mask)
+    with torch.no_grad():
+        matrix.master_weight[0, :2] += 0.5
+    result = matrix.commit_continuous_compensation()
+    assert result == {"groups": 1}
+    assert not matrix.in_continuous_compensation
+    assert not matrix.committed_mask.any()
+    assert torch.equal(matrix.master_weight[0, :2], original[0, :2] + 0.5)
+
+
+def test_continuous_compensation_rejects_committed_groups():
+    _, matrix = make_matrix()
+    mask = torch.tensor([[True, False], [False, False]])
+    matrix.begin(mask)
+    matrix.commit()
+    with pytest.raises(ValueError, match="committed"):
+        matrix.begin_continuous_compensation(mask)
+
+
 def test_reopen_starts_exact_and_rollback_restores_committed_state():
     _, matrix = make_matrix()
     mask = torch.tensor([[True, False], [False, False]])

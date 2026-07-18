@@ -193,6 +193,7 @@ def sibling_mlp_names(candidate_name: str):
     return (
         f"{prefix}.mlp.up_proj",
         f"{prefix}.mlp.down_proj",
+        f"{prefix}.mlp.gate_proj",
         int(layer_text),
     )
 
@@ -349,6 +350,30 @@ def scale_change_stats(matrix, before: torch.Tensor, mask: torch.Tensor):
     }
 
 
+@torch.no_grad()
+def grouped_master(matrix):
+    value = matrix.master_weight.detach()
+    if matrix.padding:
+        value = F.pad(value, (0, matrix.padding))
+    return value.view(matrix.out_features, matrix.groups, matrix.group_size)
+
+
+@torch.no_grad()
+def continuous_change_stats(matrix, before: torch.Tensor, mask: torch.Tensor):
+    after = grouped_master(matrix)[mask]
+    delta = after - before
+    denominator = before.abs().mean().clamp_min(1e-8)
+    return {
+        "groups": int(mask.sum().item()),
+        "weights": int(before.numel()),
+        "absolute_mean": float(delta.abs().mean().item()),
+        "absolute_max": float(delta.abs().max().item()),
+        "relative_to_weight_absmean": float(
+            delta.abs().mean().item() / denominator.item()
+        ),
+    }
+
+
 def train_atomic(model, atomic, matrices, calibration, teacher, extras, args, wal):
     parameters = []
     for name, matrix in matrices.items():
@@ -459,10 +484,12 @@ def run_arm(
     candidate_mask_cpu,
     down_mask_cpu,
     up_mask_cpu,
+    gate_mask_cpu,
     selected_blocks,
     candidate_name,
     up_name,
     down_name,
+    gate_name,
     layer_index,
     wal,
     checkpoint_path,
@@ -480,6 +507,7 @@ def run_arm(
     )
     down_matrix = ensure_candidate_matrix(model, matrices, down_name, args.device)
     ensure_candidate_matrix(model, matrices, up_name, args.device)
+    gate_matrix = ensure_candidate_matrix(model, matrices, gate_name, args.device)
     starting = evaluate_domains(model, gates, args.device)
     if teacher is None:
         teacher = cache_teacher(model, calibration, args)
@@ -488,13 +516,29 @@ def run_arm(
     candidate_mask = candidate_mask_cpu.to(args.device)
     down_mask = down_mask_cpu.to(args.device)
     up_mask = up_mask_cpu.to(args.device)
+    gate_mask = gate_mask_cpu.to(args.device)
     active = {"candidate": candidate_matrix}
     masks = {"candidate": candidate_mask}
+    continuous = {}
+    continuous_masks = {}
     reopen = set()
     if arm == "linked_down":
         active["down"] = down_matrix
         masks["down"] = down_mask
         reopen.add("down")
+    elif arm == "candidate_bf16_mlp":
+        if args.scale_only_compensation:
+            raise ValueError("candidate_bf16_mlp requires master-weight training")
+        # A later phase may already have ternary groups in down/gate. BF16
+        # compensation must never reopen those groups or count them twice.
+        bf16_down_mask = down_mask & ~down_matrix.committed_mask
+        bf16_gate_mask = gate_mask & ~gate_matrix.committed_mask
+        if bf16_down_mask.any():
+            continuous["bf16_down"] = down_matrix
+            continuous_masks["bf16_down"] = bf16_down_mask
+        if bf16_gate_mask.any():
+            continuous["bf16_gate"] = gate_matrix
+            continuous_masks["bf16_gate"] = bf16_gate_mask
     elif arm == "linked_mlp":
         if candidate_name == up_name:
             raise ValueError("linked_mlp requires a gate projection candidate")
@@ -510,6 +554,19 @@ def run_arm(
     atomic = AtomicTernaryTransaction(active)
     transaction_id = f"{args.tag}-{arm}"
     atomic.begin(masks, reopen=reopen, transaction_id=transaction_id)
+    continuous_before = {}
+    continuous_opened = []
+    try:
+        for name, matrix in continuous.items():
+            mask = continuous_masks[name]
+            continuous_before[name] = grouped_master(matrix)[mask].clone()
+            matrix.begin_continuous_compensation(mask)
+            continuous_opened.append(name)
+    except Exception:
+        for name in reversed(continuous_opened):
+            continuous[name].rollback_continuous_compensation()
+        atomic.rollback()
+        raise
     wal.append(
         "begin",
         transaction_id,
@@ -523,6 +580,12 @@ def run_arm(
                 else 0
             ),
             "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+            "bf16_down_groups": int(
+                continuous_masks.get("bf16_down", torch.zeros_like(down_mask)).sum().item()
+            ),
+            "bf16_gate_groups": int(
+                continuous_masks.get("bf16_gate", torch.zeros_like(gate_mask)).sum().item()
+            ),
             "scale_only_compensation": args.scale_only_compensation,
             "teacher_source": args.teacher_source,
             "hidden_kd_weight": args.hidden_kd_weight,
@@ -537,14 +600,21 @@ def run_arm(
     if torch.cuda.is_available() and str(args.device).startswith("cuda"):
         torch.cuda.reset_peak_memory_stats()
     started = time.time()
+    trainable_matrices = {**active, **continuous}
     history = train_atomic(
-        model, atomic, active, calibration, teacher, extras, args, wal
+        model, atomic, trainable_matrices, calibration, teacher, extras, args, wal
     )
     attempted = evaluate_domains(model, gates, args.device)
     attempted_ratios = ratios(attempted, baseline)
     scale_changes = {
         name: scale_change_stats(matrix, scale_before[name], masks[name])
         for name, matrix in active.items()
+    }
+    continuous_changes = {
+        name: continuous_change_stats(
+            matrix, continuous_before[name], continuous_masks[name]
+        )
+        for name, matrix in continuous.items()
     }
     passed = all(value <= args.gate_ratio for value in attempted_ratios.values())
     intent = "commit_intent" if passed else "rollback_intent"
@@ -556,15 +626,26 @@ def run_arm(
     churn = atomic.current_code_churn()
     if passed:
         atomic_result = atomic.commit()
+        continuous_result = {
+            name: matrix.commit_continuous_compensation()
+            for name, matrix in continuous.items()
+        }
         terminal = "commit"
     else:
         atomic_result = atomic.rollback()
+        continuous_result = {
+            name: matrix.rollback_continuous_compensation()
+            for name, matrix in continuous.items()
+        }
         with torch.no_grad():
             for parameter, snapshot in zip(extras, extra_snapshots):
                 parameter.copy_(snapshot)
         terminal = "rollback"
     for parameter in extras:
         parameter.requires_grad_(False)
+    for matrix in trainable_matrices.values():
+        matrix.master_weight.requires_grad_(False)
+        matrix.group_scale.requires_grad_(False)
     deployed = evaluate_domains(model, gates, args.device)
     deployed_ratios = ratios(deployed, baseline)
     elapsed = time.time() - started
@@ -581,6 +662,7 @@ def run_arm(
             "ratios": deployed_ratios,
             "code_churn": churn,
             "matrix_result": atomic_result,
+            "continuous_result": continuous_result,
         },
     )
     result = {
@@ -593,6 +675,7 @@ def run_arm(
         "deployed_ratios": deployed_ratios,
         "code_churn": churn,
         "scale_changes": scale_changes,
+        "continuous_changes": continuous_changes,
         "history": history,
         "elapsed_seconds": elapsed,
         "peak_cuda_allocated_bytes": peak,
@@ -622,6 +705,16 @@ def run_arm(
                     else 0
                 ),
                 "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+                "bf16_down_groups": int(
+                    continuous_masks.get(
+                        "bf16_down", torch.zeros_like(down_mask)
+                    ).sum().item()
+                ),
+                "bf16_gate_groups": int(
+                    continuous_masks.get(
+                        "bf16_gate", torch.zeros_like(gate_mask)
+                    ).sum().item()
+                ),
                 "scale_only_compensation": args.scale_only_compensation,
                 "teacher_source": args.teacher_source,
                 "hidden_kd_weight": args.hidden_kd_weight,
@@ -633,7 +726,7 @@ def run_arm(
         )
         torch.save(payload, checkpoint_path)
         result["checkpoint"] = str(checkpoint_path)
-    del teacher, model, matrices, candidate_matrix, down_matrix
+    del teacher, model, matrices, candidate_matrix, down_matrix, gate_matrix
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -715,9 +808,21 @@ def main() -> None:
     if not 0 < args.fraction <= 1:
         raise ValueError("fraction must be in (0, 1]")
     arms = tuple(value.strip() for value in args.arms.split(",") if value.strip())
-    if any(value not in {"candidate_only", "up_only", "linked_down", "linked_mlp"} for value in arms):
+    if any(
+        value
+        not in {
+            "candidate_only",
+            "candidate_bf16_mlp",
+            "up_only",
+            "linked_down",
+            "linked_mlp",
+        }
+        for value in arms
+    ):
         raise ValueError(f"unsupported arms: {arms}")
-    up_name, down_name, layer_index = sibling_mlp_names(args.candidate_name)
+    up_name, down_name, gate_name, layer_index = sibling_mlp_names(
+        args.candidate_name
+    )
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(args.source_checkpoint)
     suite_hash = sha256_file(args.suite)
@@ -735,6 +840,7 @@ def main() -> None:
     )
     down_matrix = ensure_candidate_matrix(model, matrices, down_name, args.device)
     up_matrix = ensure_candidate_matrix(model, matrices, up_name, args.device)
+    gate_matrix = ensure_candidate_matrix(model, matrices, gate_name, args.device)
     starting = evaluate_domains(model, gates, args.device)
     starting_ratios = ratios(starting, baseline)
     scores = adaptive_candidate_scores(
@@ -754,6 +860,11 @@ def main() -> None:
         selected_blocks,
         channel_block_size=candidate_matrix.group_size,
     )
+    gate_mask = linked_output_group_mask(
+        ~gate_matrix.committed_mask,
+        selected_blocks,
+        channel_block_size=candidate_matrix.group_size,
+    )
     selection = {
         "new_candidate_groups": int(candidate_mask.sum().item()),
         "new_candidate_fraction": float(candidate_mask.float().mean().item()),
@@ -761,21 +872,25 @@ def main() -> None:
         "linked_down_fraction": float(down_mask.float().mean().item()),
         "linked_up_groups": int(up_mask.sum().item()),
         "linked_up_fraction": float(up_mask.float().mean().item()),
+        "bf16_gate_groups": int(gate_mask.sum().item()),
+        "bf16_gate_fraction": float(gate_mask.float().mean().item()),
         "selected_channel_blocks": list(selected_blocks),
         "selected_score_mean": float(scores[candidate_mask].mean().item()),
         "selected_score_p95": float(torch.quantile(scores[candidate_mask], 0.95).item()),
         "candidate_mask_sha256": tensor_digest(candidate_mask),
         "down_mask_sha256": tensor_digest(down_mask),
+        "gate_mask_sha256": tensor_digest(gate_mask),
     }
     log(
         f"baseline ratios frontier={starting_ratios}; candidate={args.candidate_name} "
         f"selected={selection['new_candidate_groups']} "
         f"linked_down={selection['linked_down_groups']} blocks={selected_blocks}"
     )
-    candidate_mask_cpu, down_mask_cpu, up_mask_cpu = (
+    candidate_mask_cpu, down_mask_cpu, up_mask_cpu, gate_mask_cpu = (
         candidate_mask.cpu(),
         down_mask.cpu(),
         up_mask.cpu(),
+        gate_mask.cpu(),
     )
     del scores, model, matrices
     gc.collect()
@@ -807,10 +922,12 @@ def main() -> None:
             candidate_mask_cpu,
             down_mask_cpu,
             up_mask_cpu,
+            gate_mask_cpu,
             selected_blocks,
             args.candidate_name,
             up_name,
             down_name,
+            gate_name,
             layer_index,
             wal,
             candidate_path,
@@ -819,13 +936,10 @@ def main() -> None:
             candidate_paths[arm] = candidate_path
         log(f"arm={arm} pass={arm_results[arm]['passed']} ratios={arm_results[arm]['attempted_ratios']}")
 
-    chosen_arm = next(
-        (
-            name
-            for name in ("linked_mlp", "linked_down", "candidate_only", "up_only")
-            if name in candidate_paths
-        ),
-        None,
+    chosen_arm = min(
+        candidate_paths,
+        key=lambda name: max(arm_results[name]["deployed_ratios"].values()),
+        default=None,
     )
     fresh = fresh_verify(candidate_paths[chosen_arm], model_path, suite, args) if chosen_arm else None
     result = {

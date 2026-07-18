@@ -36,6 +36,7 @@ class TransactionalTernaryMatrix(nn.Module):
         self.register_buffer("committed_codes", torch.zeros_like(grouped, dtype=torch.int8))
         self.register_buffer("candidate_codes", torch.zeros_like(grouped, dtype=torch.int8))
         self.register_buffer("candidate_override_mask", torch.zeros(mask_shape, dtype=torch.bool))
+        self.register_buffer("continuous_mask", torch.zeros(mask_shape, dtype=torch.bool))
         self.candidate_pressure = 0.0
         self.candidate_temperature = 0.3508855606815209
         self.transaction_id: Optional[str] = None
@@ -44,6 +45,7 @@ class TransactionalTernaryMatrix(nn.Module):
         self._snapshot_codes: Optional[torch.Tensor] = None
         self._snapshot_committed_mask: Optional[torch.Tensor] = None
         self._snapshot_committed_codes: Optional[torch.Tensor] = None
+        self._continuous_snapshot_weight: Optional[torch.Tensor] = None
 
     @property
     def out_features(self) -> int:
@@ -60,6 +62,56 @@ class TransactionalTernaryMatrix(nn.Module):
     @property
     def in_transaction(self) -> bool:
         return self.transaction_id is not None
+
+    @property
+    def in_continuous_compensation(self) -> bool:
+        return self._continuous_snapshot_weight is not None
+
+    @torch.no_grad()
+    def begin_continuous_compensation(self, mask: torch.Tensor) -> int:
+        """Open a rollback-safe BF16 compensation window on uncommitted groups.
+
+        The deployed forward value remains the exact master weight. Only the
+        selected groups receive gradients. This lets adjacent FP groups absorb
+        a ternary transaction without falsely increasing ternary coverage.
+        """
+        if self.in_transaction or self.in_continuous_compensation:
+            raise RuntimeError("matrix already has an active transaction")
+        mask = mask.to(self.continuous_mask.device, dtype=torch.bool)
+        if mask.shape != self.continuous_mask.shape:
+            raise ValueError("continuous compensation mask has the wrong shape")
+        if not mask.any():
+            raise ValueError("continuous compensation needs at least one group")
+        if torch.any(mask & self.committed_mask):
+            raise ValueError("continuous compensation cannot modify committed groups")
+        grouped, _, _ = padded_grouped(self.master_weight.detach(), self.group_size)
+        self._continuous_snapshot_weight = grouped[mask].clone()
+        self.continuous_mask.copy_(mask)
+        return int(mask.sum().item())
+
+    @torch.no_grad()
+    def commit_continuous_compensation(self) -> Dict[str, int]:
+        if not self.in_continuous_compensation:
+            raise RuntimeError("no active continuous compensation")
+        groups = int(self.continuous_mask.sum().item())
+        self.continuous_mask.zero_()
+        self._continuous_snapshot_weight = None
+        return {"groups": groups}
+
+    @torch.no_grad()
+    def rollback_continuous_compensation(self) -> Dict[str, int]:
+        if not self.in_continuous_compensation:
+            raise RuntimeError("no active continuous compensation")
+        mask = self.continuous_mask.clone()
+        grouped, _, _ = padded_grouped(self.master_weight.detach(), self.group_size)
+        grouped[mask] = self._continuous_snapshot_weight
+        self.master_weight.copy_(
+            grouped.reshape(self.out_features, -1)[:, : self.in_features]
+        )
+        groups = int(mask.sum().item())
+        self.continuous_mask.zero_()
+        self._continuous_snapshot_weight = None
+        return {"groups": groups}
 
     @torch.no_grad()
     def begin(
@@ -159,6 +211,15 @@ class TransactionalTernaryMatrix(nn.Module):
                     self.candidate_override_mask.unsqueeze(-1), override, candidate
                 )
             result = torch.where(self.candidate_mask.unsqueeze(-1), candidate, result)
+        if self.in_continuous_compensation:
+            # Zero-valued STE: forward is unchanged, while gradients reach
+            # only selected uncommitted master weights.
+            gradient_proxy = grouped - grouped.detach()
+            result = result + torch.where(
+                self.continuous_mask.unsqueeze(-1),
+                gradient_proxy,
+                torch.zeros_like(gradient_proxy),
+            )
         return result.reshape(self.out_features, -1)[:, : self.in_features].to(self.compute_dtype)
 
     @torch.no_grad()
