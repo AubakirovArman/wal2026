@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.300
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997182 | 1.001119 | 0.978272 (PyTorch) |
-| v4 | 0.997182 | 0.997360 | 0.977013 (Transformers) |
+| v3 | 0.996581 | 1.000297 | 0.977389 (PyTorch) |
+| v4 | 0.996581 | 0.996602 | 0.976152 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.001119`, при guide `1.00198485`.
+`1.000297`, при guide `1.00198485`.
 
 ## Главный технический результат
 
@@ -194,15 +194,20 @@ weights и прошёл оба holdout; linked arm выиграл с worst `1.00
 но на этот раз candidate-only оказался лучше linked arm: worst
 `1.001118535` против `1.001146107`. Это подтверждает, что компенсационное
 окно надо выбирать по holdout для каждой транзакции, а не включать постоянно.
+Повторный masked proxy recovery на этом frontier не изменил ни одного
+тернарного кода и ни одного uncommitted BF16/scale элемента, но перенастроил
+467,770 committed scales. Он снизил audit-v3 worst с `1.001118535` до
+`1.000297213`, а на audit-v4 оставил все ratios ниже единицы. Coverage при
+этом остался строго `41.89453125% up_proj`.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0004-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v2-proxy-codes.pt
 ```
 
-- размер: `304,658,813` bytes;
-- SHA-256: `8de4a853bd5fb4c320d284738044c7224f1219f4d3ea9a63f88b24e852e0b3d7`;
+- размер: `304,658,032` bytes;
+- SHA-256: `e171a4115fb655cf5b03fb9bfedf59c0b83bbe825301239f4a4a507f7b044d2e`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 41.89453125%
   `up_proj`, 0.1953125% `gate_proj` и 0.68359375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -212,8 +217,8 @@ wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0004-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. восстановить audit headroom masked proxy на новом frontier;
-2. после recovery продолжить `up/gate/down` с matched arms;
+1. использовать восстановленный audit headroom для следующего matched atom;
+2. продолжить `up/gate/down`, выбирая arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
 4. завершить второй полный block и повторить cumulative audit;

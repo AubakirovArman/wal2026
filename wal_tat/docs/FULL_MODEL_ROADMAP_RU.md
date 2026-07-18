@@ -103,7 +103,7 @@ Q/K/V/O layer 24 приняты и совместно с layer 27 прошли a
 sensitivity-ranked транзакции также приняты 41.89453125% `up_proj`, первые
 0.1953125% `gate_proj` и 0.68359375% `down_proj`. Текущее покрытие
 `3.969698%`, условная `+5% NLL` guide равна `1.00198485`, худший измеренный
-ratio равен `1.001119`.
+ratio после recovery равен `1.000297`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -123,6 +123,9 @@ weights и поднял `up_proj` до `38.76953125%`; linked arm снова в�
 ratio `1.000755065`. Третий атом прошёл, поднял coverage до `41.89453125%`,
 но candidate-only впервые обошёл linked arm на holdout (`1.001118535` против
 `1.001146107`), поэтому BF16-компенсация не закрепляется без проверки.
+Следующий masked proxy recovery сохранил все discrete codes и все
+uncommitted BF16/scale элементы, изменил 467,770 committed scales и улучшил
+audit-v3 worst до `1.000297213` без изменения coverage.
 
 Остались три MLP-матрицы. Component ablation показал:
 
