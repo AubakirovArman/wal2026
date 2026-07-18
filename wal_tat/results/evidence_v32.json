@@ -1,0 +1,123 @@
+{
+  "schema": "wal-tat-evidence-v32",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_fifth_gate_recovery_transaction",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.5439453125,
+      "gate_proj_coverage": 0.01171875,
+      "down_proj_coverage": 0.0263671875
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 70238208,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1650212864,
+    "weight_coverage_fraction": 0.040825460917263
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0005-candidate_only.pt",
+    "bytes": 304659052,
+    "sha256": "5c2a0eee78ad834a97461e13631c88d02e986fc6726b9f087a5dab906e1a72a9",
+    "kind": "mixed BF16/ternary training checkpoint after candidate-only gate projection transaction"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0020412730458632,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9966793923263625,
+        "squad_context": 1.0004803098143424,
+        "torch_code": 0.9790305992104659
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9966793923263625,
+        "squad_context": 0.9960716824707169,
+        "transformers_code": 0.9776380735418428
+      },
+      "passed": true
+    }
+  },
+  "gate_projection_growth": {
+    "campaign_state": "block24_gate_after_recovery_campaign_v2.json",
+    "campaign_step": 5,
+    "transaction_fraction": 0.001953125,
+    "new_groups": 192,
+    "new_weights": 24576,
+    "selected_channel_blocks": [12, 22, 37, 38],
+    "coverage_before": 0.009765625,
+    "coverage_after": 0.01171875,
+    "development_worst": {
+      "candidate_only": 1.0001627404131341,
+      "candidate_bf16_mlp": 1.0003147839686595
+    },
+    "holdout_worst": {
+      "candidate_only": 1.0004803098143424,
+      "candidate_bf16_mlp": 1.0007127290544673
+    },
+    "development_chosen": "candidate_only",
+    "holdout_chosen": "candidate_only",
+    "next_fraction": 0.001953125,
+    "next_fraction_reason": "safe_streak_hold",
+    "normalized_headroom": 0.7647008491510621
+  },
+  "automation": {
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "campaign_frontiers_synchronized": ["up", "down", "gate"],
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_down_frontier",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_after_recovery_s0005-candidate_bf16_mlp.pt",
+      "bytes": 304659816,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_candidate_bf16_mlp_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0005-candidate_bf16_mlp.pt",
+      "bytes": 304659816,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 133.96875,
+    "accepted_weights_q2_g128_mib": 17.792724609375,
+    "projected_saving_mib": 116.176025390625
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "continue round-robin with one up projection transaction"
+}
