@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 31.93359375% up_proj
+next block:           layer 24 has Q/K/V/O + 32.51953125% up + 0.1953125% gate
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 66,932,736 / 1,720,451,072 = 3.890418%
+major matrix weights: 67,031,040 / 1,720,451,072 = 3.896132%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,9 +100,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 31.93359375% `up_proj`. Текущее
-покрытие `3.890418%`, условная `+5% NLL` guide равна `1.00194521`, худший
-измеренный ratio равен `1.001675`.
+sensitivity-ranked транзакции также приняты 32.51953125% `up_proj` и первые
+0.1953125% `gate_proj`. Текущее покрытие `3.896132%`, условная `+5% NLL`
+guide равна `1.00194807`, худший измеренный ratio равен `1.001476`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -129,6 +129,12 @@ SQuAD с `1.001575` до `1.001471`, не увеличив ternary coverage `dow
 После этого два linked-атома по `+0.390625%` и один адаптивно увеличенный атом
 `+0.78125%` также прошли development, fresh reload и оба holdout-аудита. При
 сужении audit-margin следующий атом снова уменьшается до `+0.390625%`.
+
+Реальный adaptive campaign runner теперь выполняет recovery, fresh reload,
+параллельные audit-v3/v4 для каждого прошедшего arm-а, holdout-selection,
+coverage-aware resizing и crash-safe cleanup. Первый автоматический gate-шаг
+поднял `gate_proj` до `0.1953125%`; linked BF16-down arm выиграл holdout у
+candidate-only (`1.001475638` против `1.001515298`).
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.

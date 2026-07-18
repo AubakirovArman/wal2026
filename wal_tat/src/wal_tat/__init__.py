@@ -1,5 +1,12 @@
 """WAL-TAT: transactional, causally ranked ternary conversion."""
 
+from .campaign import (
+    accepted_weight_counts,
+    atomic_write_json,
+    coverage_proportional_nll_gate,
+    validate_checkpoint_deletion_target,
+    worst_ratio,
+)
 from .controller import (
     AdaptiveTransactionSizer,
     GateDecision,
@@ -52,6 +59,9 @@ __all__ = [
     "WALIntegrityError",
     "WALRecord",
     "activation_fisher_group_damage",
+    "accepted_weight_counts",
+    "atomic_write_json",
+    "coverage_proportional_nll_gate",
     "diagonal_ternary_search",
     "evaluate_causal_lm",
     "group_weight_mse",
@@ -69,4 +79,6 @@ __all__ = [
     "select_group_mask",
     "structured_channel_candidate_mask",
     "transaction_schedule",
+    "validate_checkpoint_deletion_target",
+    "worst_ratio",
 ]

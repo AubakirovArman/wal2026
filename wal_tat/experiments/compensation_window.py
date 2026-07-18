@@ -529,16 +529,22 @@ def run_arm(
     elif arm == "candidate_bf16_mlp":
         if args.scale_only_compensation:
             raise ValueError("candidate_bf16_mlp requires master-weight training")
-        # A later phase may already have ternary groups in down/gate. BF16
-        # compensation must never reopen those groups or count them twice.
+        # For an up candidate, both gate and down remain exact BF16 windows.
+        # For a gate candidate, already ternary matching up groups are reopened
+        # atomically while down remains an exact BF16 compensation window.
+        if candidate_name != up_name and up_mask.any():
+            active["up"] = matrices[up_name]
+            masks["up"] = up_mask
+            reopen.add("up")
         bf16_down_mask = down_mask & ~down_matrix.committed_mask
-        bf16_gate_mask = gate_mask & ~gate_matrix.committed_mask
         if bf16_down_mask.any():
             continuous["bf16_down"] = down_matrix
             continuous_masks["bf16_down"] = bf16_down_mask
-        if bf16_gate_mask.any():
-            continuous["bf16_gate"] = gate_matrix
-            continuous_masks["bf16_gate"] = bf16_gate_mask
+        if candidate_name == up_name:
+            bf16_gate_mask = gate_mask & ~gate_matrix.committed_mask
+            if bf16_gate_mask.any():
+                continuous["bf16_gate"] = gate_matrix
+                continuous_masks["bf16_gate"] = bf16_gate_mask
     elif arm == "linked_mlp":
         if candidate_name == up_name:
             raise ValueError("linked_mlp requires a gate projection candidate")
@@ -551,6 +557,10 @@ def run_arm(
     scale_before = {
         name: matrix.group_scale.detach().clone() for name, matrix in active.items()
     }
+    down_reopened_groups = (
+        int(down_mask.sum().item()) if "down" in reopen else 0
+    )
+    up_reopened_groups = int(up_mask.sum().item()) if "up" in reopen else 0
     atomic = AtomicTernaryTransaction(active)
     transaction_id = f"{args.tag}-{arm}"
     atomic.begin(masks, reopen=reopen, transaction_id=transaction_id)
@@ -574,12 +584,8 @@ def run_arm(
             "arm": arm,
             "candidate_name": candidate_name,
             "candidate_groups": int(candidate_mask.sum().item()),
-            "down_reopened_groups": (
-                int(down_mask.sum().item())
-                if arm in {"linked_down", "linked_mlp"}
-                else 0
-            ),
-            "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+            "down_reopened_groups": down_reopened_groups,
+            "up_reopened_groups": up_reopened_groups,
             "bf16_down_groups": int(
                 continuous_masks.get("bf16_down", torch.zeros_like(down_mask)).sum().item()
             ),
@@ -699,12 +705,8 @@ def run_arm(
                 "arm": arm,
                 "candidate_name": candidate_name,
                 "candidate_new_groups": int(candidate_mask.sum().item()),
-                "down_reopened_groups": (
-                    int(down_mask.sum().item())
-                    if arm in {"linked_down", "linked_mlp"}
-                    else 0
-                ),
-                "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+                "down_reopened_groups": down_reopened_groups,
+                "up_reopened_groups": up_reopened_groups,
                 "bf16_down_groups": int(
                     continuous_masks.get(
                         "bf16_down", torch.zeros_like(down_mask)

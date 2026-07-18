@@ -28,20 +28,21 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 31.93359375% of its `up_proj` groups;
-- 66,932,736 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus one partial matrix and 3.890418% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 32.51953125% `up_proj` and
+  0.1953125% `gate_proj`;
+- 67,031,040 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus two partial matrices and 3.896132% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997572 / 1.001675 / 0.978439` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997507 / 1.001476 / 0.978624` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997572 / 0.998105 / 0.976555` on C4, a different SQuAD
+- audit-v4 ratios `0.997507 / 0.997861 / 0.976622` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
 checkpoint**. One of 28 decoder blocks is complete; the next has four complete
-attention matrices and 31.93359375% of one MLP matrix accepted. The old `1.02` limit
+attention matrices and two partial MLP matrices accepted. The old `1.02` limit
 is explicitly a local diagnostic gate,
 not a safe per-block full-model budget. It was manually chosen in the first
 WAL-TAT commit and is not a BitNet/Prism standard. See
@@ -63,6 +64,8 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
 - `controller.py`: multi-domain NLL quality gate;
 - `AdaptiveTransactionSizer`: rollback/tight-margin shrinking and cautious
   safe-streak growth for the next sensitivity-ranked atom;
+- `experiments/adaptive_campaign.py`: durable real-training campaign loop that
+  runs recovery, independent audits, adaptive resizing and exact opt-in cleanup;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.
 
 ## Install and test
