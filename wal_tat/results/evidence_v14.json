@@ -1,0 +1,127 @@
+{
+  "schema": "wal-tat-evidence-v14",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_headroom_scaled_up_transaction",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.3564453125,
+      "gate_proj_coverage": 0.001953125,
+      "down_proj_coverage": 0.0068359375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 67510272,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1652940800,
+    "weight_coverage_fraction": 0.03923986743867134
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0002-candidate_bf16_mlp.pt",
+    "bytes": 304659641,
+    "sha256": "a985cf03a664c93b6b184948f8114f73f53cbe791086bee0118b6e47ff3347f1",
+    "kind": "mixed BF16/ternary training checkpoint after linked up transaction"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0019619933719335,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9969464266188035,
+        "squad_context": 1.0007311907222347,
+        "torch_code": 0.9780879461475368
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9969464266188035,
+        "squad_context": 0.9970303355935293,
+        "transformers_code": 0.9761504476555393
+      },
+      "passed": true
+    }
+  },
+  "up_projection_growth": {
+    "failed_probe": {
+      "fraction": 0.0625,
+      "new_weights_attempted": 786432,
+      "candidate_only_development_worst": 1.0019983761801021,
+      "candidate_bf16_mlp_development_worst": 1.001977724719429,
+      "effective_gate": 1.0019734210726803,
+      "checkpoint_created": false
+    },
+    "accepted_transaction": {
+      "fraction": 0.03125,
+      "new_groups": 3072,
+      "new_weights": 393216,
+      "selected_channel_blocks": [8, 18, 22, 43],
+      "coverage_before": 0.3251953125,
+      "coverage_after": 0.3564453125,
+      "holdout_worst": {
+        "candidate_only": 1.0007915679697488,
+        "candidate_bf16_mlp": 1.0007311907222347
+      },
+      "holdout_chosen": "candidate_bf16_mlp"
+    },
+    "next_fraction": 0.03125
+  },
+  "automation": {
+    "active_state": "block24_up_headroom_growth_campaign_v1.json",
+    "completed_steps": 2,
+    "failed_steps": 1,
+    "accepted_steps": 1,
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_headroom_source",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v1-proxy-codes.pt",
+      "bytes": 304658032,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_candidate_only_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0002-candidate_only.pt",
+      "bytes": 304658813,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 128.765625,
+    "accepted_weights_q2_g128_mib": 17.1016845703125,
+    "projected_saving_mib": 111.6639404296875
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "repeat the controller-held 1/32 up_proj transaction, then recover headroom and alternate gate/down"
+}
