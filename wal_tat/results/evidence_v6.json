@@ -1,0 +1,166 @@
+{
+  "schema": "wal-tat-evidence-v6",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_layer24_attention_and_28p125_percent_up_accepted",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "partial_matrix": "mlp.up_proj",
+      "partial_matrix_coverage": 0.28125,
+      "remaining": "71.875 percent up_proj plus all down_proj and gate_proj"
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 66453504,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1653997568,
+    "weight_coverage_fraction": 0.03862562852354107
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_incremental_28p125_v10-candidate_only.pt",
+    "bytes": 266613936,
+    "sha256": "7ca69950016af5f38864ca04a30b17d8ef793acad1516593e4e24a64f4752bf7",
+    "kind": "training checkpoint, not packed deployment artifact"
+  },
+  "quality_gate": {
+    "legacy_micro_gate_nll_ratio": 1.02,
+    "legacy_gate_origin": "manually chosen WAL-TAT heuristic introduced in commit 7f6bd24",
+    "diagnostic_full_model_nll_budget": 0.05,
+    "coverage_proportional_nll_guide": 1.0019312814261772,
+    "transaction_gate": 1.00194,
+    "guide_is_standard": false
+  },
+  "development_verify": {
+    "result": "block24_up_incremental_28p125_v10.json",
+    "tokens_per_domain": 65536,
+    "nll_ratios": {
+      "c4_train": 0.996020149441315,
+      "squad_train": 1.0013459889108745,
+      "vendor_code_train": 0.981949622234254
+    },
+    "passed": true
+  },
+  "audits": {
+    "v3": {
+      "result": "block24_up_incremental_28p125_v10_audit_v3.json",
+      "tokens_per_domain": 131072,
+      "nll_ratios": {
+        "c4_validation": 0.9975817652640172,
+        "squad_context": 1.0016032690037207,
+        "torch_code": 0.9780891468362509
+      },
+      "passed": true
+    },
+    "v4": {
+      "result": "block24_up_incremental_28p125_v10_audit_v4.json",
+      "tokens_per_domain": 131072,
+      "nll_ratios": {
+        "c4_validation": 0.9975817652640172,
+        "squad_context": 0.9981427798774809,
+        "transformers_code": 0.9762726705543951
+      },
+      "passed": true
+    }
+  },
+  "incremental_path": [
+    {
+      "added_up_proj_fraction": 0.125,
+      "cumulative_up_proj_fraction": 0.125,
+      "audit_v3_squad_nll_ratio": 1.0001046288165754,
+      "audit_v4_squad_nll_ratio": 0.9971571043955404,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.15625,
+      "audit_v3_squad_nll_ratio": 1.0003409800268876,
+      "audit_v4_squad_nll_ratio": 0.9972146873176605,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.1875,
+      "audit_v3_squad_nll_ratio": 1.0006935545590592,
+      "audit_v4_squad_nll_ratio": 0.9973258025845834,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.21875,
+      "audit_v3_squad_nll_ratio": 1.0009019499815617,
+      "audit_v4_squad_nll_ratio": 0.9975442404814502,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.03125,
+      "cumulative_up_proj_fraction": 0.25,
+      "audit_v3_squad_nll_ratio": 1.001423678323466,
+      "audit_v4_squad_nll_ratio": 0.9978878598960451,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.015625,
+      "cumulative_up_proj_fraction": 0.265625,
+      "audit_v3_squad_nll_ratio": 1.0016055178807965,
+      "audit_v4_squad_nll_ratio": 0.9981062938074308,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.0078125,
+      "cumulative_up_proj_fraction": 0.2734375,
+      "audit_v3_squad_nll_ratio": 1.0016418814477903,
+      "audit_v4_squad_nll_ratio": 0.9981465353697757,
+      "accepted": true
+    },
+    {
+      "added_up_proj_fraction": 0.0078125,
+      "cumulative_up_proj_fraction": 0.28125,
+      "audit_v3_squad_nll_ratio": 1.0016032690037207,
+      "audit_v4_squad_nll_ratio": 0.9981427798774809,
+      "accepted": true
+    }
+  ],
+  "rolled_back_steps": [
+    {
+      "attempted_added_fraction": 0.125,
+      "target_cumulative_fraction": 0.25,
+      "development_squad_nll_ratio": 1.004937460824882
+    },
+    {
+      "attempted_added_fraction": 0.0625,
+      "target_cumulative_fraction": 0.1875,
+      "development_squad_nll_ratio": 1.0023440764492382
+    }
+  ],
+  "finding": "transaction size is a quality variable: after large additions failed, sequential 3.125, 1.5625 and 0.78125 percent steps extended the accepted frontier to 28.125 percent up_proj coverage",
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 126.75,
+    "accepted_weights_q2_g128_mib": 16.833984375,
+    "projected_saving_mib": 109.916015625
+  },
+  "checkpoint_cleanup": {
+    "deleted_superseded_files": 5,
+    "deleted_bytes": 1333068419,
+    "deleted_gib": 1.2415167121216655,
+    "recoverable_without_rerun": false,
+    "retained_checkpoints": 1
+  },
+  "next": "automate adaptive transaction sizing, continue layer24 up_proj from the 28.125 percent checkpoint, then add continuous BF16 down/gate compensation before committing linked MLP groups"
+}

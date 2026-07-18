@@ -18,6 +18,110 @@ class GateDecision:
     violations: Dict[str, float]
 
 
+@dataclass(frozen=True)
+class TransactionSizeDecision:
+    """Auditable update of the next fraction of groups to attempt."""
+
+    previous_fraction: float
+    next_fraction: float
+    reason: str
+    worst_ratio: float
+    gate_ratio: float
+    normalized_headroom: float
+
+
+class AdaptiveTransactionSizer:
+    """Shrink risky ternary commits and cautiously regrow after safe streaks.
+
+    Headroom is normalized by the gate's total allowance above one. This keeps
+    the policy meaningful for strict cumulative gates such as 1.00194 as well
+    as for wider diagnostic gates. A rollback always halves the atom; a pass
+    close to the gate also halves it. Growth requires several roomy passes so
+    that one unusually easy transaction cannot immediately undo the shrink.
+    """
+
+    def __init__(
+        self,
+        initial_fraction: float,
+        *,
+        minimum_fraction: float = 1 / 1024,
+        maximum_fraction: float | None = None,
+        shrink_factor: float = 0.5,
+        grow_factor: float = 2.0,
+        tight_headroom: float = 0.2,
+        roomy_headroom: float = 0.75,
+        grow_after: int = 2,
+    ):
+        maximum_fraction = initial_fraction if maximum_fraction is None else maximum_fraction
+        if not 0 < minimum_fraction <= initial_fraction <= maximum_fraction <= 1:
+            raise ValueError("fractions must satisfy 0 < minimum <= initial <= maximum <= 1")
+        if not 0 < shrink_factor < 1:
+            raise ValueError("shrink_factor must be in (0, 1)")
+        if grow_factor <= 1:
+            raise ValueError("grow_factor must be greater than 1")
+        if not 0 <= tight_headroom < roomy_headroom <= 1:
+            raise ValueError("headroom thresholds must satisfy 0 <= tight < roomy <= 1")
+        if grow_after < 1:
+            raise ValueError("grow_after must be positive")
+        self.current_fraction = float(initial_fraction)
+        self.minimum_fraction = float(minimum_fraction)
+        self.maximum_fraction = float(maximum_fraction)
+        self.shrink_factor = float(shrink_factor)
+        self.grow_factor = float(grow_factor)
+        self.tight_headroom = float(tight_headroom)
+        self.roomy_headroom = float(roomy_headroom)
+        self.grow_after = int(grow_after)
+        self._roomy_passes = 0
+
+    def observe(
+        self, *, passed: bool, worst_ratio: float, gate_ratio: float
+    ) -> TransactionSizeDecision:
+        if gate_ratio <= 1:
+            raise ValueError("gate_ratio must be greater than 1")
+        if worst_ratio <= 0:
+            raise ValueError("worst_ratio must be positive")
+        previous = self.current_fraction
+        headroom = (gate_ratio - worst_ratio) / (gate_ratio - 1)
+        normalized_headroom = min(1.0, max(0.0, headroom))
+
+        if not passed or worst_ratio > gate_ratio:
+            self._roomy_passes = 0
+            next_fraction = max(self.minimum_fraction, previous * self.shrink_factor)
+            reason = "rollback_shrink"
+        elif normalized_headroom <= self.tight_headroom:
+            self._roomy_passes = 0
+            next_fraction = max(self.minimum_fraction, previous * self.shrink_factor)
+            reason = "tight_gate_shrink"
+        elif normalized_headroom >= self.roomy_headroom:
+            self._roomy_passes += 1
+            if self._roomy_passes >= self.grow_after:
+                next_fraction = min(self.maximum_fraction, previous * self.grow_factor)
+                self._roomy_passes = 0
+                reason = "safe_streak_grow"
+            else:
+                next_fraction = previous
+                reason = "safe_streak_hold"
+        else:
+            self._roomy_passes = 0
+            next_fraction = previous
+            reason = "middle_headroom_hold"
+
+        self.current_fraction = next_fraction
+        return TransactionSizeDecision(
+            previous_fraction=previous,
+            next_fraction=next_fraction,
+            reason=reason,
+            worst_ratio=float(worst_ratio),
+            gate_ratio=float(gate_ratio),
+            normalized_headroom=normalized_headroom,
+        )
+
+    def group_count(self, total_groups: int) -> int:
+        if total_groups < 1:
+            raise ValueError("total_groups must be positive")
+        return max(1, round(total_groups * self.current_fraction))
+
+
 class RatioGate:
     """Accept when every candidate loss is within its baseline ratio limit."""
 

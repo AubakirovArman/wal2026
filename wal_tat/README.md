@@ -28,20 +28,20 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 18.75% of its `up_proj` groups;
-- 65,273,856 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus one partial matrix and 3.793997% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 28.125% of its `up_proj` groups;
+- 66,453,504 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus one partial matrix and 3.862563% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997296 / 1.000694 / 0.977902` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997582 / 1.001603 / 0.978089` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997296 / 0.997326 / 0.975320` on C4, a different SQuAD
+- audit-v4 ratios `0.997582 / 0.998143 / 0.976273` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
 checkpoint**. One of 28 decoder blocks is complete; the next has four complete
-attention matrices and 18.75% of one MLP matrix accepted. The old `1.02` limit
+attention matrices and 28.125% of one MLP matrix accepted. The old `1.02` limit
 is explicitly a local diagnostic gate,
 not a safe per-block full-model budget. It was manually chosen in the first
 WAL-TAT commit and is not a BitNet/Prism standard. See
@@ -59,6 +59,8 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
 - `AtomicTernaryTransaction`: multi-matrix commit/rollback and committed-group reopening;
 - `wal.py`: WAL v2 with sequence numbers, SHA-256 hash chain, and optional fsync;
 - `controller.py`: multi-domain NLL quality gate;
+- `AdaptiveTransactionSizer`: rollback/tight-margin shrinking and cautious
+  safe-streak growth for the next sensitivity-ranked atom;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.
 
 ## Install and test

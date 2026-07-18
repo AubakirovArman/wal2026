@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 18.75% up_proj
+next block:           layer 24 has Q/K/V/O + 28.125% up_proj
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 65,273,856 / 1,720,451,072 = 3.793997%
+major matrix weights: 66,453,504 / 1,720,451,072 = 3.862563%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,9 +100,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 18.75% `up_proj`. Текущее покрытие
-`3.793997%`, условная `+5% NLL` guide равна `1.00189700`, худший измеренный
-ratio равен `1.000694`.
+sensitivity-ranked транзакции также приняты 28.125% `up_proj`. Текущее покрытие
+`3.862563%`, условная `+5% NLL` guide равна `1.00193128`, худший измеренный
+ratio равен `1.001603`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -112,8 +112,11 @@ ratio равен `1.000694`.
 
 One-shot 100% `up_proj` после hard proxy + continuous recovery дошёл на
 audit-v3 до `0.998760 / 1.004714 / 0.978121`, но не прошёл заданный gate.
-Incremental WAL нашёл безопасный путь: 12.5% + 3.125% + 3.125% прошли два
-audit suite, тогда как более крупные очередные шаги 12.5% и 6.25% откатились.
+Incremental WAL нашёл безопасный путь: после 12.5% последовательные шаги
+3.125%, 1.5625% и 0.78125% довели `up_proj` до 28.125% и прошли два audit
+suite, тогда как крупные очередные шаги 12.5% и 6.25% откатились. Следующий
+контроллер должен выбирать размер атома автоматически из holdout margin и
+уменьшать его при rollback.
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.

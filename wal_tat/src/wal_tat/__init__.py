@@ -1,6 +1,12 @@
 """WAL-TAT: transactional, causally ranked ternary conversion."""
 
-from .controller import GateDecision, RatioGate, TransactionController
+from .controller import (
+    AdaptiveTransactionSizer,
+    GateDecision,
+    RatioGate,
+    TransactionController,
+    TransactionSizeDecision,
+)
 from .compensation import (
     linked_down_group_mask,
     linked_gqa_output_group_mask,
@@ -33,12 +39,14 @@ from .wal import HashChainWAL, WALIntegrityError, WALRecord
 
 __all__ = [
     "CausalMomentCollector",
+    "AdaptiveTransactionSizer",
     "AtomicTernaryTransaction",
     "GateDecision",
     "HashChainWAL",
     "LossMetrics",
     "RatioGate",
     "TransactionController",
+    "TransactionSizeDecision",
     "TransactionalTernaryLinear",
     "TransactionalTernaryMatrix",
     "WALIntegrityError",
