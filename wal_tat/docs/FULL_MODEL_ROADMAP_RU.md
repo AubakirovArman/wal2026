@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 54.39453125% up + 1.171875% gate + 2.63671875% down
+next block:           layer 24 has Q/K/V/O + 57.51953125% up + 1.171875% gate + 2.63671875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 70,238,208 / 1,720,451,072 = 4.082546%
+major matrix weights: 70,631,424 / 1,720,451,072 = 4.105401%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 54.39453125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 57.51953125% `up_proj`, первые
 1.171875% `gate_proj` и 2.63671875% `down_proj`. Текущее покрытие
-`4.082546%`, условная `+5% NLL` guide равна `1.00204127`, худший измеренный
-ratio равен `1.000480`.
+`4.105401%`, условная `+5% NLL` guide равна `1.00205270`, худший измеренный
+ratio равен `1.000863`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -179,6 +179,10 @@ round-robin — `down_proj +0.390625%`.
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
 `1.002041273` normalized headroom равен `0.764701`, поэтому следующий
 round-robin атом — `up_proj +3.125%`.
+Этот up-атом прошёл оба holdout, добавил 393,216 weights и поднял `up_proj`
+до `57.51953125%`. Linked arm минимально выиграл у candidate-only по
+независимому worst (`1.000862859` против `1.000871839`), normalized headroom
+равен `0.579647`. Следующий round-robin атом — `down_proj +0.390625%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 

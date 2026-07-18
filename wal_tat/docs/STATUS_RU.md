@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 54.39453125% up + 1.171875% gate + 2.63671875% down | 45.60546875% up + 98.828125% gate + 97.36328125% down |
+| Матрицы в `layer 24` | Q/K/V/O + 57.51953125% up + 1.171875% gate + 2.63671875% down | 42.48046875% up + 98.828125% gate + 97.36328125% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 70,238,208 / 1,720,451,072 | 1,650,212,864 |
+| Крупные matrix weights | 70,631,424 / 1,720,451,072 | 1,649,819,648 |
 
-Покрытие крупных matrix weights равно `4.082546%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.105401%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 70,238,208 weights занимают 133.9688 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 17.7927 MiB, экономия —
-116.1760 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 70,631,424 weights занимают 134.7188 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 17.8923 MiB, экономия —
+116.8264 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -53,8 +53,8 @@ Q2-g128 упаковки их расчётный payload составит 17.792
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 54.39453125% g128-групп `up_proj`, 1.171875%
-`gate_proj` и 2.63671875% `down_proj`. Остальные 45.60546875% `up_proj`,
+В `layer 24` приняты 57.51953125% g128-групп `up_proj`, 1.171875%
+`gate_proj` и 2.63671875% `down_proj`. Остальные 42.48046875% `up_proj`,
 98.828125% `gate_proj` и 97.36328125% `down_proj` пока остаются BF16.
 
 ## Текущий независимый аудит
@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.792
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.996679 | 1.000480 | 0.979031 (PyTorch) |
-| v4 | 0.996679 | 0.996072 | 0.977638 (Transformers) |
+| v3 | 0.996841 | 1.000863 | 0.979340 (PyTorch) |
+| v4 | 0.996841 | 0.997205 | 0.978188 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -262,16 +262,22 @@ candidate-only уверенно выиграл и development, и независ
 `1.000480310` против `1.000712729` у linked BF16 MLP. Динамический gate равен
 `1.002041273`, normalized headroom остаётся высоким — `0.764701`. Поэтому
 round-robin возвращается к `up_proj +3.125%`, без промежуточного recovery.
+Этот `up_proj` атом добавил 393,216 hard-ternary weights и поднял coverage до
+`57.51953125%`. Оба arm-а прошли оба holdout. Candidate-only был лучше на
+development, но linked arm минимально выиграл независимый worst:
+`1.000862859` против `1.000871839`. Normalized headroom уменьшился до
+`0.579647`, поэтому размер следующего up-атома остаётся `3.125%`, а
+round-robin сначала переходит к `down_proj +0.390625%`.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0005-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0009-candidate_bf16_mlp.pt
 ```
 
-- размер: `304,659,052` bytes;
-- SHA-256: `5c2a0eee78ad834a97461e13631c88d02e986fc6726b9f087a5dab906e1a72a9`;
-- содержание: полный ternary block 27, Q/K/V/O block 24, 54.39453125%
+- размер: `304,659,641` bytes;
+- SHA-256: `f6e7e80ead07abfe5c8dc730f23a3ac525559665e08cc2b248f63fbbe0ec7297`;
+- содержание: полный ternary block 27, Q/K/V/O block 24, 57.51953125%
   `up_proj`, 1.171875% `gate_proj` и 2.63671875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
@@ -280,7 +286,7 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0005-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. продолжить round-robin с `up_proj +3.125%`;
+1. продолжить round-robin с `down_proj +0.390625%`;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
