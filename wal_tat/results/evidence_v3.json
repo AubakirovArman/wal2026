@@ -1,0 +1,82 @@
+{
+  "schema": "wal-tat-evidence-v3",
+  "date_utc": "2026-07-18",
+  "status": "one_full_decoder_block_ternary_old_micro_gate_passed_cumulative_budget_not_met",
+  "model": "Qwen/Qwen3-1.7B",
+  "quantization": {
+    "codebook": [-1, 0, 1],
+    "logical_bits_per_weight": 1.584962500721156,
+    "deployed_layout": "Q2_g128_with_FP16_scale",
+    "physical_bits_per_weight": 2.125,
+    "training_checkpoint_is_not_packed_deployment": true
+  },
+  "progress": {
+    "decoder_blocks_converted": 1,
+    "decoder_blocks_total": 28,
+    "decoder_blocks_remaining": 27,
+    "major_matrices_converted": 7,
+    "major_matrices_total_including_tied_embedding_head": 197,
+    "major_matrices_remaining": 190,
+    "major_weights_converted": 50331648,
+    "major_weights_total": 1720451072,
+    "major_weight_fraction": 0.029254913911321043
+  },
+  "coverage": {
+    "model.layers.27.mlp.down_proj": 1.0,
+    "model.layers.27.mlp.up_proj": 1.0,
+    "model.layers.27.mlp.gate_proj": 1.0,
+    "model.layers.27.self_attn.q_proj": 1.0,
+    "model.layers.27.self_attn.k_proj": 1.0,
+    "model.layers.27.self_attn.v_proj": 1.0,
+    "model.layers.27.self_attn.o_proj": 1.0
+  },
+  "best_checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block27_code_recovery_stage3_c4x4-all-codes.pt",
+    "bytes": 152473769,
+    "sha256": "0531289da2133da922499f1961cc95e7792e1f751996c00b902de0cdaab73a4e"
+  },
+  "independent_audit_v3": {
+    "suite_path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+    "suite_sha256": "be51ba13b438ca9635ba7b36276ed64ca29365526f74c1b8931d4df16c7cda0e",
+    "tokens_per_domain": 131072,
+    "ratios": {
+      "c4_validation": 1.0140368380425042,
+      "squad_context": 1.0114976806993075,
+      "torch_code": 0.9951634425346939
+    },
+    "old_micro_gate_limit": 1.02,
+    "old_micro_gate_passed": true
+  },
+  "gate_interpretation": {
+    "origin_of_1_02": "project-local engineering heuristic for transaction rollback; not sourced from BitNet, Prism, or an external standard",
+    "full_model_nll_budget_example": 0.05,
+    "proportional_guide_at_current_coverage": 1.001462745695566,
+    "guide_met": false,
+    "note": "the proportional guide is conservative and not assumed additive, but the old per-transaction threshold cannot be repeated per block"
+  },
+  "recovery": {
+    "initial_full_block_audit_approximately": {
+      "c4": 1.0509,
+      "squad": 1.0473,
+      "code": 1.0473
+    },
+    "final_stage_code_churn_all_seven_matrices": 0.0,
+    "observation": "late improvement came from scales and auxiliary block parameters; better ternary code initialization and attention-aware objectives remain necessary"
+  },
+  "projected_full_block_storage": {
+    "bf16_mib": 96.0,
+    "q2_g128_mib": 12.75,
+    "saving_mib": 83.25,
+    "packed_runtime_measured": false
+  },
+  "checkpoint_cleanup": {
+    "intermediate_files_deleted": 24,
+    "bytes_deleted": 3202766527,
+    "gib_deleted": 2.9828087678179145,
+    "retained_files": 1,
+    "retained_best_checkpoint_bytes": 152473769,
+    "deleted_files_recoverable_without_rerun": false,
+    "note": "intermediate states remain reproducible from scripts, WAL and result metadata"
+  },
+  "next": "rank remaining blocks by sensitivity, improve ternary initialization and QK recovery, then accept further blocks only against a cumulative holdout budget"
+}

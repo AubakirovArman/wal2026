@@ -1,0 +1,311 @@
+{
+  "schema": "wal-tat-fixed-scale-recovery-v1",
+  "tag": "block27_diverse_scale_long",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block27_diverse_recovery_ce-fixed-scales.pt",
+  "source_sha256": "661aeedd46f08b7809039d747514119abd01fb04344c310b709453137f8ba7ce",
+  "suite": "wal2/cache/wal-tat-diverse-recovery-v1-l256.pt",
+  "suite_sha256": "511ad90746456601ce257330fa7e24d7083684f82726347278b76d692fc568cf",
+  "seed": 109,
+  "steps": 1536,
+  "lr": 1e-06,
+  "teacher_source": "bf16",
+  "kd_weight": 0.0,
+  "hidden_kd_weight": 0.0,
+  "matrix_names": [
+    "model.layers.27.mlp.down_proj",
+    "model.layers.27.mlp.up_proj",
+    "model.layers.27.mlp.gate_proj",
+    "model.layers.27.self_attn.v_proj",
+    "model.layers.27.self_attn.o_proj",
+    "model.layers.27.self_attn.k_proj",
+    "model.layers.27.self_attn.q_proj"
+  ],
+  "objective_domain": "max",
+  "min_improvement": 0.0001,
+  "starting_objective": 1.0393176204351937,
+  "attempted_objective": 1.0310012548640726,
+  "baseline": {
+    "c4_train": {
+      "nll": 3.49814032856375,
+      "ppl": 33.05392532597879,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.2139557041227818,
+      "ppl": 9.15184688361069,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 1.9793194299563766,
+      "ppl": 7.237815468202056,
+      "tokens": 65536
+    }
+  },
+  "starting": {
+    "c4_train": {
+      "nll": 3.6279177209362388,
+      "ppl": 37.634369711224004,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.301003174157813,
+      "ppl": 9.984193317378473,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.041875791735947,
+      "ppl": 7.705048718590626,
+      "tokens": 65536
+    }
+  },
+  "starting_ratios": {
+    "c4_train": 1.0370989669318875,
+    "squad_train": 1.0393176204351937,
+    "vendor_code_train": 1.0316049854474219
+  },
+  "attempted": {
+    "c4_train": {
+      "nll": 3.6014940114691854,
+      "ppl": 36.65295349095282,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.282591109164059,
+      "ppl": 9.802045703663598,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.019136590883136,
+      "ppl": 7.5318190841973465,
+      "tokens": 65536
+    }
+  },
+  "attempted_ratios": {
+    "c4_train": 1.0295453221420279,
+    "squad_train": 1.0310012548640726,
+    "vendor_code_train": 1.020116591755802
+  },
+  "passed": true,
+  "deployed": {
+    "c4_train": {
+      "nll": 3.601522688753903,
+      "ppl": 36.65400461320741,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.2825399581342936,
+      "ppl": 9.801544331755,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.0191059766802937,
+      "ppl": 7.531588507089618,
+      "tokens": 65536
+    }
+  },
+  "deployed_ratios": {
+    "c4_train": 1.0295535200077577,
+    "squad_train": 1.0309781509556835,
+    "vendor_code_train": 1.020101124720831
+  },
+  "code_churn": {
+    "model.layers.27.mlp.down_proj": 0.0,
+    "model.layers.27.mlp.up_proj": 0.0,
+    "model.layers.27.mlp.gate_proj": 0.0,
+    "model.layers.27.self_attn.v_proj": 0.0,
+    "model.layers.27.self_attn.o_proj": 0.0,
+    "model.layers.27.self_attn.k_proj": 0.0,
+    "model.layers.27.self_attn.q_proj": 0.0
+  },
+  "coverage": {
+    "model.layers.27.mlp.down_proj": 1.0,
+    "model.layers.27.mlp.up_proj": 1.0,
+    "model.layers.27.mlp.gate_proj": 1.0,
+    "model.layers.27.self_attn.v_proj": 1.0,
+    "model.layers.27.self_attn.o_proj": 1.0,
+    "model.layers.27.self_attn.k_proj": 1.0,
+    "model.layers.27.self_attn.q_proj": 1.0
+  },
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.4973950386047363,
+      "ce": 3.4973950386047363,
+      "kd": 0.0,
+      "hidden_kd": 0.0,
+      "gradient_norm": 2.1171798706054688,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 384,
+      "loss": 1.8711605072021484,
+      "ce": 1.8711605072021484,
+      "kd": 0.0,
+      "hidden_kd": 0.0,
+      "gradient_norm": 1.814885139465332,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 768,
+      "loss": 1.863640308380127,
+      "ce": 1.863640308380127,
+      "kd": 0.0,
+      "hidden_kd": 0.0,
+      "gradient_norm": 1.7884182929992676,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 1152,
+      "loss": 1.8575751781463623,
+      "ce": 1.8575751781463623,
+      "kd": 0.0,
+      "hidden_kd": 0.0,
+      "gradient_norm": 1.7691874504089355,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 1536,
+      "loss": 1.8515849113464355,
+      "ce": 1.8515849113464355,
+      "kd": 0.0,
+      "hidden_kd": 0.0,
+      "gradient_norm": 1.7470972537994385,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    }
+  ],
+  "elapsed_seconds": 164.59520292282104,
+  "peak_cuda_allocated_bytes": 8002802688,
+  "fresh_verify": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block27_diverse_scale_long-fixed-scales.pt",
+    "checkpoint_sha256": "60e13fff248db9dd80a4dce4fe80d46d29440d7b77fd3faf368cbe0bf007687d",
+    "baseline": {
+      "c4_train": {
+        "nll": 3.49814032856375,
+        "ppl": 33.05392532597879,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.2139557041227818,
+        "ppl": 9.15184688361069,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 1.9793194299563766,
+        "ppl": 7.237815468202056,
+        "tokens": 65536
+      }
+    },
+    "metrics": {
+      "c4_train": {
+        "nll": 3.6014144383370876,
+        "ppl": 36.65003701668095,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.2826794954016805,
+        "ppl": 9.802912107892878,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 2.019090001937002,
+        "ppl": 7.531468192857635,
+        "tokens": 65536
+      }
+    },
+    "ratios": {
+      "c4_train": 1.0295225748750165,
+      "squad_train": 1.031041177179346,
+      "vendor_code_train": 1.020093053894541
+    },
+    "passed": true,
+    "coverage": {
+      "model.layers.27.mlp.down_proj": 1.0,
+      "model.layers.27.mlp.up_proj": 1.0,
+      "model.layers.27.mlp.gate_proj": 1.0,
+      "model.layers.27.self_attn.v_proj": 1.0,
+      "model.layers.27.self_attn.o_proj": 1.0,
+      "model.layers.27.self_attn.k_proj": 1.0,
+      "model.layers.27.self_attn.q_proj": 1.0
+    },
+    "codes": {
+      "model.layers.27.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.v_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.o_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.k_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.q_proj": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "accepted_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block27_diverse_scale_long-fixed-scales.pt",
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block27_diverse_scale_long.wal.jsonl"
+}

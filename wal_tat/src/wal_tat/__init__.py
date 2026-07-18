@@ -1,7 +1,13 @@
 """WAL-TAT: transactional, causally ranked ternary conversion."""
 
 from .controller import GateDecision, RatioGate, TransactionController
-from .compensation import linked_down_group_mask, structured_channel_candidate_mask
+from .compensation import (
+    linked_down_group_mask,
+    linked_gqa_output_group_mask,
+    linked_gqa_query_group_mask,
+    linked_output_group_mask,
+    structured_channel_candidate_mask,
+)
 from .evaluation import LossMetrics, evaluate_causal_lm
 from .moments import CausalMomentCollector
 from .quantization import (
@@ -11,6 +17,7 @@ from .quantization import (
     q2_g128_physical_bpw,
     transaction_schedule,
 )
+from .proxy import ProxyTernaryLinear, ProxyTernaryMatrix, soft_ternary_proxy
 from .scoring import (
     activation_fisher_group_damage,
     diagonal_ternary_search,
@@ -44,7 +51,13 @@ __all__ = [
     "hestia_quantize",
     "initial_group_scales",
     "linked_down_group_mask",
+    "linked_gqa_output_group_mask",
+    "linked_gqa_query_group_mask",
+    "linked_output_group_mask",
     "q2_g128_physical_bpw",
+    "ProxyTernaryLinear",
+    "ProxyTernaryMatrix",
+    "soft_ternary_proxy",
     "select_group_mask",
     "structured_channel_candidate_mask",
     "transaction_schedule",

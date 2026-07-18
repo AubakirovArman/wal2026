@@ -1,129 +1,169 @@
-# Маршрут WAL-TAT до итоговой low-bit модели
+# Маршрут WAL-TAT до полной ternary-модели
 
-## Что считать итоговой моделью
+## Определение финиша
 
-Работа завершена не тогда, когда отдельная матрица имеет ternary-коды, а когда
-одновременно выполнены четыре условия:
+Полная модель считается готовой, когда:
 
-1. все крупные языковые матрицы имеют фиксированный low-bit формат;
-2. модель проходит независимые PPL и task-бенчмарки с заранее заданным порогом;
-3. существует воспроизводимый checkpoint и конвертер в deploy-формат;
-4. packed runtime действительно уменьшает память и не проигрывает BF16 по
-   практической скорости настолько, что формат теряет смысл.
+1. все 28 decoder blocks и tied embedding/head имеют зафиксированный формат;
+2. независимые PPL и task-benchmarks проходят общий, заранее заданный budget;
+3. checkpoint воспроизводим из исходной BF16-модели и WAL;
+4. codes реально упакованы, а runtime не материализует всю матрицу в BF16;
+5. измерены file size, peak RAM/VRAM, prefill и decode speed.
 
-Основная ветка сейчас — ternary `{-1, 0, +1}`: логические 1.58 bit и физические
-2.125 bpw при Q2 g128. Binary `{-1, +1}` с физическими 1.125 bpw — второй,
-более агрессивный этап после работающей полной ternary-модели. Пытаться сразу
-довести binary разумно только если ternary-процесс уже умеет проходить всю
-модель: иначе будет непонятно, ломается алгоритм конвертации или сам codebook.
+Основная ветка: ternary `{-1,0,+1}`, logical 1.585 bit и physical Q2-g128
+2.125 bpw. Binary Q1-g128 1.125 bpw начинается только после устойчивого
+полного ternary recipe.
 
-## Иерархия проверок
+## Текущий счётчик
 
-| Уровень | Назначение | Минимальный критерий |
+```text
+decoder blocks:       1 / 28 complete, 27 remain
+next block:           layer 24 has 4 / 7 matrices, 3 MLP remain
+major matrices:       11 / 197 accepted, 186 remain
+major matrix weights: 62,914,560 / 1,720,451,072 = 3.656864%
+embedding/head:       0 / 1 tied matrix
+packed runtime:       0% implemented
+```
+
+## Система quality budgets
+
+`1.02` остаётся только диагностическим micro-gate. Он появился как наша
+эвристика «не принимать локальный шаг хуже teacher более чем на 2% NLL» и не
+является внешним стандартом.
+
+| Уровень | Данные | Назначение |
 |---|---|---|
-| Transaction gate | быстрый commit/rollback | NLL каждого frozen-домена <= 1.02x BF16 |
-| Layer gate | принятие законченного блока | 8–32K токенов/домен, отсутствие нового провала |
-| Model gate | принятие checkpoint | большие Wiki/C4/code PPL и несколько seeds |
-| Task gate | проверка поведения | reasoning, knowledge, code, instruction и long context |
-| Runtime gate | проверка продукта | реальный GGUF/packed размер, peak RAM/VRAM, tok/s |
+| Micro transaction | маленькие frozen suites | быстрый rollback, limit 1.02 |
+| Block development | recovery domains | выбор optimizer/objective |
+| Independent block audit | полностью отложенные domains | проверка generalization |
+| Cumulative model audit | один неизменяемый большой harness | общий NLL/PPL budget |
+| Task audit | reasoning/code/instruction/knowledge | поведенческое качество |
+| Runtime audit | packed artifact | память и скорость |
 
-Маленький transaction gate защищает поиск, но не доказывает итоговое качество.
-Порог нельзя ослаблять только ради увеличения coverage: если frontier не
-двигается, меняется компенсационное окно, objective или порядок слоёв.
-
-## Фазы
-
-### Фаза 0 — механизм (выполнено)
-
-- causal selection лучше matched random/weight-only controls;
-- точный commit/rollback;
-- полный ternary `layer 27 down_proj`;
-- 37.5% ternary соседнего `up_proj`;
-- WAL v2 и тестируемая библиотека.
-
-### Фаза 1 — компенсационное окно (выполнена)
-
-Атомарно добавить группы `up_proj` и переоптимизировать связанные g128-группы
-уже ternary `down_proj`. Связь строится по промежуточным MLP-каналам:
+Для эксперимента задаются несколько итоговых кривых: например `+3%`, `+5%` и
+`+10% NLL` всей модели. Это проектные цели, а не числа из внешней статьи.
+Пропорциональная guide-линия для coverage `c`:
 
 ```text
-up_proj output rows h
-        ↓
-SwiGLU intermediate channels h
-        ↓
-down_proj input columns h
+allowed_ratio(c, B) = 1 + B*c
 ```
 
-Общий gate принимает либо обе матрицы, либо ни одну. Первый matched-набор:
+Она не считается физическим законом: block errors взаимодействуют нелинейно и
+могут быть восстановлены end-to-end QAT. Это консервативный индикатор, который
+не позволяет ошибочно назвать успешным рецепт, расходующий весь budget на
+первых blocks.
 
-- `up-only` — контроль без компенсации;
-- `up + linked-down` — основная гипотеза;
-- одинаковые новые up-группы, calibration tokens, steps и optimizer budget.
-
-Результат: `up_proj` доведена с 37.5% до 100%; linked-down прошла там, где
-up-only дала rollback. Компенсация реализовалась через scales без смены
-ternary-кодов `down_proj`.
-
-### Фаза 2 — закончить один transformer block (текущая)
-
-После MLP пройти `gate_proj`, затем attention projections. Сейчас `gate_proj`
-достигла 75%, то есть суммарное ternary-покрытие трёх крупных MLP-матриц равно
-91.67%. Для каждой пары
-использовать естественные окна компенсации: Q/K/V совместно с O, а MLP
-проекции — внутри одного residual block. После каждого законченного блока —
-расширенный layer gate.
-
-### Фаза 3 — пройти decoder
-
-Порядок определяется измеренной чувствительностью, а не номером слоя. Сначала
-низкочувствительные блоки, затем повторное измерение Fisher/activation moments
-и чувствительный хвост. Каждая принятая транзакция становится новой teacher
-границей, но абсолютный gate всегда считается относительно исходного BF16.
-
-### Фаза 4 — embeddings и LM head
-
-Их нельзя автоматически обрабатывать тем же рецептом: tied/untied embeddings,
-частотный дисбаланс токенов и прямое влияние LM head на logits требуют отдельной
-выборки и distillation objective. Если строгий ternary не проходит, допустим
-явно объявленный mixed-format вариант, но его средний bpw считается честно.
-
-### Фаза 5 — full-model validation
-
-- новый процесс загружает исходную модель и только packed checkpoint;
-- большие WikiText/C4/code PPL;
-- task-бенчмарки и несколько seeds;
-- русский и другие важные языки;
-- длинный контекст, повторения, JSON и tool calling;
-- сравнение с BF16, INT4 и обычным Q2 PTQ.
-
-### Фаза 6 — deployment
-
-Сначала фиксируется layout, потом пишется exporter/runtime. Для полностью
-однородного Q2 g128 предпочтителен существующий совместимый tensor layout. Для
-смеси форматов внутри матрицы или residual-плоскостей потребуется новый GGUF
-tensor type и изменения loader/dequant/kernels в `llama.cpp`.
-
-Измеряются фактические file size, peak RAM/VRAM, prefill и decode tok/s. Только
-после этого результат можно называть законченной 1.58-bit моделью.
-
-### Фаза 7 — binary 1-bit ветка
-
-Стартовать от воспроизводимого ternary recipe. Нули удаляются постепенно,
-сначала в нечувствительных слоях. Физическая цель Q1 g128:
+Если цель сформулирована как `+5% PPL`, формула другая, поскольку
+`PPL=exp(NLL)`:
 
 ```text
-1 + 16/128 = 1.125 bpw
+allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ```
 
-Binary и ternary должны иметь отдельные checkpoints и quality targets. Если
-binary резко теряет instruction/tool behavior, ternary остаётся основным
-продуктом, а binary — edge-вариантом.
+Поэтому в результатах всегда явно указывается, ограничивается NLL или PPL.
 
-## Ближайшая точка решения
+## Выполненные фазы
 
-Если linked compensation переводит хотя бы одну новую порцию `up_proj` при
-code NLL <= 1.02x BF16 и выигрывает у `up-only`, гипотеза подтверждена и окно
-масштабируется. Если обе руки одинаково проваливаются, следующий рычаг —
-structured channel selection и BF16-teacher distillation. Если компенсация
-ухудшает результат, откатываем reopening committed codes и пробуем только
-обучаемые scales либо residual low-rank compensation.
+### Фаза 0 — транзакционный механизм
+
+- g128 ternary codes и scales;
+- causal activation/Fisher ranking;
+- exact commit/rollback;
+- hash-chained WAL;
+- multi-domain NLL gate;
+- matched controls.
+
+### Фаза 1 — MLP compensation
+
+- `down_proj`, `up_proj`, `gate_proj` layer 27 доведены до 100%;
+- triadic SwiGLU window связывает gate/up/down;
+- scale-only compensation проходила там, где candidate-only откатывалась;
+- adaptive transaction sizes позволили пройти локальные frontiers.
+
+### Фаза 2 — attention и полный block 27
+
+- GQA-aware V/O окна конвертировали `v_proj` и `o_proj`;
+- GQA-aware K/Q окна конвертировали `k_proj` и `q_proj`;
+- все семь крупных матриц layer 27 имеют только ternary codes;
+- diverse fixed-code recovery улучшил независимый audit с ~1.05 до максимум
+  1.01404.
+
+### Фаза 3 — proxy-code recovery и sensitivity map
+
+- hard forward остаётся точным `{-scale, 0, +scale}`;
+- гладкая proxy-переменная используется только для backward;
+- layer 27 после proxy recovery проходит два audit suite с ratios ниже `1`;
+- два независимых sensitivity scan дали одинаковый порядок blocks
+  (Spearman `1.0`);
+- следующим выбран наименее чувствительный remaining `layer 24`.
+
+## Текущая фаза 4 — закончить block 24
+
+Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Текущее
+покрытие `3.656864%`, условная `+5% NLL` guide равна `1.00182843`, а худший
+измеренный ratio меньше `1`.
+
+Остались три MLP-матрицы. Component ablation показал:
+
+1. `up_proj` — наименее вредная отдельная матрица;
+2. `down_proj` и `gate_proj` сильнее ухудшают SQuAD;
+3. пары MLP дают нелинейно больший ущерб.
+
+`up_proj` после hard proxy + continuous recovery дошёл на audit-v3 до
+`0.998760 / 1.004714 / 0.978121`, но не прошёл заранее заданный локальный gate
+`1.0022`. Поэтому он не принят и не включён в счётчик.
+
+Критерий перехода: принять все три MLP, получить второй полный block и
+повторить неизменяемый cumulative audit.
+
+## Фаза 5 — пройти decoder
+
+Blocks выбираются по измеренной чувствительности, не по номеру. После каждого
+commit sensitivity пересчитывается, потому что frontier изменился. Всегда
+публикуются оба числа:
+
+```text
+структурно converted blocks / 28
+independently accepted blocks / 28
+```
+
+Нельзя считать частичный tensor полноценным block и нельзя ослаблять audit
+ради процента покрытия.
+
+## Фаза 6 — tied embedding/LM head
+
+Embedding/head содержит 311,164,928 weights и одновременно является входной
+таблицей и output classifier. Для него нужен отдельный frequency-balanced
+token suite, logit distillation и, возможно, mixed Q2/Q4 budget. Любое спасение
+Q4 публикуется в true average bpw.
+
+## Фаза 7 — full-model validation
+
+- C4/Wiki/code и независимые языковые corpora;
+- MMLU/ARC/HellaSwag/PIQA;
+- GSM8K/MATH;
+- HumanEval/MBPP;
+- instruction following, JSON и tool calling;
+- русский/казахский и long-context tests;
+- несколько seeds и confidence intervals;
+- BF16, INT4 и сильный Q2 PTQ baselines.
+
+## Фаза 8 — packed export и llama.cpp
+
+До фиксации representation менять `llama.cpp` преждевременно. После фиксации:
+
+1. exporter пишет packed two-bit codes и FP16 g128 scales;
+2. GGUF tensor type совпадает с layout;
+3. loader не распаковывает полную BF16-матрицу;
+4. CPU/CUDA/Metal dequant/GEMM paths проходят bit-exact tests;
+5. измеряются real file size, resident memory и tok/s.
+
+Если останется единый Q2-g128 layout, можно адаптировать существующий близкий
+путь. Если внутри tensor будут Q2/Q4 blocks, residual plane или новый decoder,
+потребуются новый tensor type, quantizer, loader и kernels.
+
+## Фаза 9 — binary
+
+От устойчивой ternary-модели нули постепенно переводятся в знаковые states.
+Цель Q1-g128: `1 + 16/128 = 1.125 bpw`. Binary checkpoint и его quality target
+всегда отделяются от ternary результата.

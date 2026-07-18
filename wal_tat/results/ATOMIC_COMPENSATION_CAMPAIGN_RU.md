@@ -1,56 +1,74 @@
-# Итог atomic compensation campaign
+# Atomic compensation campaign: итог по layer 27
 
-## Результат
-
-Гипотеза подтверждена. WAL-TAT теперь умеет атомарно добавлять ternary-группы в
-одну MLP-матрицу и компенсировать их ошибку через связанные g128-scales
-`down_proj`.
-
-Текущий frontier Qwen3-1.7B, layer 27:
-
-| Матрица | Ternary coverage | Projected bpw |
-|---|---:|---:|
-| `down_proj` | 100% | 2.125 |
-| `up_proj` | 100% | 2.125 |
-| `gate_proj` | 75% | 5.59375 mixed |
-
-Fresh gate на 32,768 токенах каждого домена:
-
-| Модель | Wiki PPL | Code PPL | Wiki NLL ratio | Code NLL ratio |
-|---|---:|---:|---:|---:|
-| BF16 | 35.7241 | 29.6245 | 1.000000 | 1.000000 |
-| WAL-TAT | 33.0867 | 31.5144 | 0.978552 | 1.018250 |
-
-Порог `<=1.02` выполнен.
-
-## Почему это не просто удачный QAT
-
-На одинаковых 1,536 новых группах `up_proj`:
-
-- candidate-only: code ratio `1.020203`, rollback;
-- linked-down: `1.019334`, commit.
-
-При попытке сразу перевести `gate_proj` с 50% на 75%:
-
-- candidate-only: `1.021983`, rollback;
-- linked-down: `1.020987`, rollback.
-
-Дробление транзакции на 12.5% и затем 6.25% позволило дойти до 75%, не меняя
-порог. Значит результат объясняется сразу тремя механизмами: causal order,
-linked compensation и адаптивный размер транзакции.
-
-В связанных группах `down_proj` ternary-коды не менялись; менялись scales.
-Поэтому обнаруженный новый процесс можно описать как:
+Гипотеза подтверждена на полном transformer block Qwen3-1.7B. Транзакционные
+SwiGLU- и GQA-aware окна последовательно довели все семь крупных матриц layer
+27 до 100% hard ternary coverage.
 
 ```text
-candidate ternarization
-  + linked scale-only compensation
-  + strict multi-domain gate
-  + atomic commit/rollback
+MLP:       down 100%, up 100%, gate 100%
+Attention: q 100%, k 100%, v 100%, o 100%
+Total:     50,331,648 ternary weights
 ```
 
-## Что осталось
+## Что доказала компенсация
 
-Ближайшая задача — `gate_proj` 75→100%. После завершения MLP следует attention
-окно `Q/K/V → O`, затем остальные decoder blocks. Полная модель, embeddings,
-LM head, task-benchmarks, GGUF и runtime пока не завершены.
+- одинаковая порция `up_proj` без связанного `down_proj` дала code ratio
+  `1.020203` и rollback, а linked-scale window дала `1.019334` и commit;
+- triadic gate/up/down window прошла локальный frontier, где linked-down alone
+  получила `1.020076`, а полное окно — `1.019665`;
+- GQA-aware attention windows сохранили соответствие между KV-head и двумя
+  query-head groups;
+- большие шаги откатывались, а дробление транзакции позволяло продолжать без
+  изменения локального порога.
+
+## Независимая проверка и отрицательный результат
+
+Сразу после полного block independent audit-v1 был плохим: примерно
+`1.051 / 1.047 / 1.047`. Это показало, что успешные маленькие gates
+переобучились к своим suites и не гарантируют перенос.
+
+Локализация дала основной дополнительный ущерб в Q/K. Diverse CE recovery,
+проверка на полностью других offsets/repos и уменьшение learning rate снизили
+audit-v3 ratios до:
+
+| C4 validation | SQuAD contexts | PyTorch code |
+|---:|---:|---:|
+| 1.014037 | 1.011498 | 0.995163 |
+
+Это проходит старый gate `1.02`, но ещё не проходит строгую пропорциональную
+guide-линию полного model budget. Поэтому campaign доказывает работоспособность
+одного блока и recovery, а не готовность повторить его 28 раз.
+
+## Прогресс на момент завершения этой campaign
+
+```text
+converted decoder blocks:     1 / 28
+remaining decoder blocks:    27 / 28
+converted major matrices:     7 / 197
+remaining major matrices:   190 / 197
+major weight coverage:        2.925%
+```
+
+Следующая фаза — sensitivity scan, улучшенная activation-aware ternary
+инициализация и attention-relation recovery до строгого cumulative budget.
+
+## Последующий результат
+
+После этой campaign был добавлен hard-forward proxy-code recovery. Он улучшил
+layer 27, не нарушая ternary forward. Два sensitivity scan затем независимо
+выбрали layer 24 следующим. В нём приняты Q/K/V/O, поэтому общий текущий
+frontier теперь равен:
+
+```text
+complete decoder blocks:      1 / 28
+layer 24 matrices:            4 / 7 accepted
+major matrices:              11 / 197 accepted
+major weight coverage:        3.656864%
+```
+
+Audit-v3 ratios: `0.996518 / 0.998454 / 0.976451`.
+Audit-v4 ratios: `0.996518 / 0.995346 / 0.974915`.
+
+Подробности и checkpoint зафиксированы в `evidence_v4.json`. Этот раздел
+добавлен как продолжение; исходные результаты layer-27 campaign выше сохранены
+как историческая трасса.

@@ -1,4 +1,4 @@
-"""Structured MLP channel windows for atomic up/down compensation."""
+"""Structured MLP channel windows for atomic SwiGLU compensation."""
 from __future__ import annotations
 
 import math
@@ -81,4 +81,91 @@ def linked_down_group_mask(
         if not 0 <= block < result.shape[1]:
             raise ValueError(f"channel block {block} is outside down group range")
         result[:, block] = True
+    return result
+
+
+def linked_output_group_mask(
+    group_state: torch.Tensor,
+    channel_blocks: Tuple[int, ...],
+    *,
+    channel_block_size: int = 128,
+) -> torch.Tensor:
+    """Reopen committed output rows belonging to intermediate-channel blocks.
+
+    Gate and up projections share their output coordinate: each row is one
+    SwiGLU intermediate channel.  A candidate gate row block can therefore be
+    compensated by the matching rows of an already ternary up projection.
+    Only committed groups are returned so the helper never expands coverage as
+    a side effect of a compensation transaction.
+    """
+    if group_state.ndim != 2 or group_state.dtype != torch.bool:
+        raise ValueError("group_state must be a two-dimensional bool tensor")
+    if channel_block_size <= 0:
+        raise ValueError("channel_block_size must be positive")
+    block_count = math.ceil(group_state.shape[0] / channel_block_size)
+    result = torch.zeros_like(group_state)
+    for block in channel_blocks:
+        if not 0 <= block < block_count:
+            raise ValueError(f"channel block {block} is outside output row range")
+        start = block * channel_block_size
+        stop = min(start + channel_block_size, group_state.shape[0])
+        result[start:stop] = group_state[start:stop]
+    return result
+
+
+def linked_gqa_output_group_mask(
+    eligible: torch.Tensor,
+    kv_head_blocks: Tuple[int, ...],
+    *,
+    query_heads_per_kv: int,
+) -> torch.Tensor:
+    """Select O-projection input groups fed by chosen GQA value heads.
+
+    With g128 and head_dim=128, each V output row block is one KV head and
+    each O input group is one query head.  GQA repeats a KV value head across
+    ``query_heads_per_kv`` adjacent query heads before the O projection.
+    """
+    if eligible.ndim != 2 or eligible.dtype != torch.bool:
+        raise ValueError("eligible must be a two-dimensional bool tensor")
+    if query_heads_per_kv <= 0:
+        raise ValueError("query_heads_per_kv must be positive")
+    if eligible.shape[1] % query_heads_per_kv:
+        raise ValueError("O input groups are not divisible by query-head ratio")
+    kv_heads = eligible.shape[1] // query_heads_per_kv
+    result = torch.zeros_like(eligible)
+    for block in kv_head_blocks:
+        if not 0 <= block < kv_heads:
+            raise ValueError(f"KV head block {block} is outside O input range")
+        start = block * query_heads_per_kv
+        stop = start + query_heads_per_kv
+        result[:, start:stop] = eligible[:, start:stop]
+    return result
+
+
+def linked_gqa_query_group_mask(
+    eligible: torch.Tensor,
+    kv_head_blocks: Tuple[int, ...],
+    *,
+    query_heads_per_kv: int,
+    head_block_size: int = 128,
+) -> torch.Tensor:
+    """Select Q-projection rows paired with chosen GQA key heads."""
+    if eligible.ndim != 2 or eligible.dtype != torch.bool:
+        raise ValueError("eligible must be a two-dimensional bool tensor")
+    if query_heads_per_kv <= 0 or head_block_size <= 0:
+        raise ValueError("head ratio and head block size must be positive")
+    if eligible.shape[0] % head_block_size:
+        raise ValueError("Q output rows are not divisible by head block size")
+    query_heads = eligible.shape[0] // head_block_size
+    if query_heads % query_heads_per_kv:
+        raise ValueError("query heads are not divisible by GQA ratio")
+    kv_heads = query_heads // query_heads_per_kv
+    result = torch.zeros_like(eligible)
+    for block in kv_head_blocks:
+        if not 0 <= block < kv_heads:
+            raise ValueError(f"KV head block {block} is outside Q output range")
+        first_head = block * query_heads_per_kv
+        start = first_head * head_block_size
+        stop = (first_head + query_heads_per_kv) * head_block_size
+        result[start:stop] = eligible[start:stop]
     return result

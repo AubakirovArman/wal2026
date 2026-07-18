@@ -29,6 +29,7 @@ from wal_tat import (
     TransactionalTernaryMatrix,
     activation_fisher_group_damage,
     linked_down_group_mask,
+    linked_output_group_mask,
     structured_channel_candidate_mask,
     transaction_schedule,
 )
@@ -64,8 +65,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--kd-topk", type=int, default=64)
     parser.add_argument("--kd-stride", type=int, default=4)
     parser.add_argument("--kd-temperature", type=float, default=2.0)
+    parser.add_argument("--hidden-kd-weight", type=float, default=0.0)
+    parser.add_argument(
+        "--hidden-module",
+        default="model.layers.27.mlp",
+        help="module whose output is matched when hidden KD is enabled",
+    )
+    parser.add_argument(
+        "--teacher-source",
+        choices=("frontier", "bf16"),
+        default="frontier",
+        help="distill from the source quantized frontier or the original BF16 model",
+    )
     parser.add_argument("--seed", type=int, default=109)
     parser.add_argument("--arms", default="candidate_only,linked_down")
+    parser.add_argument(
+        "--scale-only-compensation",
+        action="store_true",
+        help="train only scales, not master weights, in reopened compensation matrices",
+    )
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     return parser.parse_args()
 
@@ -208,12 +226,37 @@ def teacher_bucket(logits: torch.Tensor, args: argparse.Namespace):
     }
 
 
+def tensor_output(value):
+    if isinstance(value, torch.Tensor):
+        return value
+    if isinstance(value, (tuple, list)) and value and isinstance(value[0], torch.Tensor):
+        return value[0]
+    raise TypeError("hidden KD module must return a tensor or tensor-first tuple")
+
+
 @torch.no_grad()
 def cache_teacher(model, calibration, args):
     result = []
-    for chunk in calibration:
-        batch = chunk.unsqueeze(0).to(args.device)
-        result.append(teacher_bucket(model(input_ids=batch[:, :-1], use_cache=False).logits, args))
+    hidden = {}
+    handle = None
+    if args.hidden_kd_weight > 0:
+        module = model.get_submodule(args.hidden_module)
+        handle = module.register_forward_hook(
+            lambda _module, _inputs, output: hidden.__setitem__("value", tensor_output(output))
+        )
+    try:
+        for chunk in calibration:
+            hidden.clear()
+            batch = chunk.unsqueeze(0).to(args.device)
+            bucket = teacher_bucket(
+                model(input_ids=batch[:, :-1], use_cache=False).logits, args
+            )
+            if args.hidden_kd_weight > 0:
+                bucket["hidden"] = hidden["value"].squeeze(0).half().cpu()
+            result.append(bucket)
+    finally:
+        if handle is not None:
+            handle.remove()
     return result
 
 
@@ -292,46 +335,69 @@ def scale_change_stats(matrix, before: torch.Tensor, mask: torch.Tensor):
 
 def train_atomic(model, atomic, matrices, calibration, teacher, extras, args, wal):
     parameters = []
-    for matrix in matrices:
-        parameters.extend((matrix.master_weight, matrix.group_scale))
+    for name, matrix in matrices.items():
+        if name == "candidate" or not args.scale_only_compensation:
+            parameters.append(matrix.master_weight)
+        parameters.append(matrix.group_scale)
     parameters.extend(extras)
     for parameter in parameters:
         parameter.requires_grad_(True)
     optimizer = torch.optim.AdamW(parameters, lr=args.lr, weight_decay=0.0)
     history = []
-    model.train()
-    for step in range(1, args.steps + 1):
-        pressure, temperature = transaction_schedule(step, args.steps)
-        atomic.set_candidate_state(pressure, temperature)
-        item = (step - 1) % len(calibration)
-        batch = calibration[item].unsqueeze(0).to(args.device)
-        optimizer.zero_grad(set_to_none=True)
-        logits = model(input_ids=batch[:, :-1], use_cache=False).logits
-        ce = F.cross_entropy(
-            logits.reshape(-1, logits.shape[-1]).float(), batch[:, 1:].reshape(-1)
-        )
-        kd = bucket_kl(logits, teacher[item], args)
-        loss = ce + args.kd_weight * kd
-        loss.backward()
-        gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
-        optimizer.step()
-        if step == 1 or step == args.steps or step % max(1, args.steps // 4) == 0:
-            entry = {
-                "step": step,
-                "loss": float(loss.item()),
-                "ce": float(ce.item()),
-                "kd": float(kd.item()),
-                "pressure": pressure,
-                "temperature": temperature,
-                "gradient_norm": float(gradient_norm),
-                "code_churn": atomic.current_code_churn(),
-            }
-            history.append(entry)
-            wal.append("progress", atomic.transaction_id, entry)
-            log(
-                f"step={step}/{args.steps} loss={loss.item():.4f} ce={ce.item():.4f} "
-                f"kd={kd.item():.4f} pressure={pressure:.3f}"
+    student_hidden = {}
+    hidden_handle = None
+    if args.hidden_kd_weight > 0:
+        module = model.get_submodule(args.hidden_module)
+        hidden_handle = module.register_forward_hook(
+            lambda _module, _inputs, output: student_hidden.__setitem__(
+                "value", tensor_output(output)
             )
+        )
+    model.train()
+    try:
+        for step in range(1, args.steps + 1):
+            pressure, temperature = transaction_schedule(step, args.steps)
+            atomic.set_candidate_state(pressure, temperature)
+            item = (step - 1) % len(calibration)
+            batch = calibration[item].unsqueeze(0).to(args.device)
+            optimizer.zero_grad(set_to_none=True)
+            student_hidden.clear()
+            logits = model(input_ids=batch[:, :-1], use_cache=False).logits
+            ce = F.cross_entropy(
+                logits.reshape(-1, logits.shape[-1]).float(), batch[:, 1:].reshape(-1)
+            )
+            kd = bucket_kl(logits, teacher[item], args)
+            hidden_kd = torch.zeros((), device=logits.device)
+            if args.hidden_kd_weight > 0:
+                student = student_hidden["value"].float()
+                target = teacher[item]["hidden"].to(student.device).float().unsqueeze(0)
+                hidden_kd = F.mse_loss(student, target) / target.square().mean().clamp_min(1e-8)
+            loss = ce + args.kd_weight * kd + args.hidden_kd_weight * hidden_kd
+            loss.backward()
+            gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
+            optimizer.step()
+            if step == 1 or step == args.steps or step % max(1, args.steps // 4) == 0:
+                entry = {
+                    "step": step,
+                    "loss": float(loss.item()),
+                    "ce": float(ce.item()),
+                    "kd": float(kd.item()),
+                    "hidden_kd": float(hidden_kd.item()),
+                    "pressure": pressure,
+                    "temperature": temperature,
+                    "gradient_norm": float(gradient_norm),
+                    "code_churn": atomic.current_code_churn(),
+                }
+                history.append(entry)
+                wal.append("progress", atomic.transaction_id, entry)
+                log(
+                    f"step={step}/{args.steps} loss={loss.item():.4f} ce={ce.item():.4f} "
+                    f"kd={kd.item():.4f} hidden={hidden_kd.item():.4f} "
+                    f"pressure={pressure:.3f}"
+                )
+    finally:
+        if hidden_handle is not None:
+            hidden_handle.remove()
     atomic.set_candidate_state(1.0, 0.0)
     model.eval()
     return history
@@ -376,6 +442,7 @@ def run_arm(
     baseline,
     candidate_mask_cpu,
     down_mask_cpu,
+    up_mask_cpu,
     selected_blocks,
     candidate_name,
     wal,
@@ -383,21 +450,37 @@ def run_arm(
 ):
     seed_everything(args.seed)
     model = load_model(model_path, args.device)
+    teacher = (
+        cache_teacher(model, calibration, args)
+        if args.teacher_source == "bf16"
+        else None
+    )
     matrices = install_checkpoint(model, source_payload, args.device)
     candidate_matrix = ensure_candidate_matrix(
         model, matrices, candidate_name, args.device
     )
     down_matrix = matrices[DOWN_NAME]
     starting = evaluate_domains(model, gates, args.device)
-    teacher = cache_teacher(model, calibration, args)
+    if teacher is None:
+        teacher = cache_teacher(model, calibration, args)
     extras = compensation_parameters(model)
     extra_snapshots = [parameter.detach().clone() for parameter in extras]
     candidate_mask = candidate_mask_cpu.to(args.device)
     down_mask = down_mask_cpu.to(args.device)
+    up_mask = up_mask_cpu.to(args.device)
     active = {"candidate": candidate_matrix}
     masks = {"candidate": candidate_mask}
     reopen = set()
     if arm == "linked_down":
+        active["down"] = down_matrix
+        masks["down"] = down_mask
+        reopen.add("down")
+    elif arm == "linked_mlp":
+        if candidate_name == UP_NAME:
+            raise ValueError("linked_mlp requires a gate projection candidate")
+        active["up"] = matrices[UP_NAME]
+        masks["up"] = up_mask
+        reopen.add("up")
         active["down"] = down_matrix
         masks["down"] = down_mask
         reopen.add("down")
@@ -414,7 +497,16 @@ def run_arm(
             "arm": arm,
             "candidate_name": candidate_name,
             "candidate_groups": int(candidate_mask.sum().item()),
-            "down_reopened_groups": int(down_mask.sum().item()) if arm == "linked_down" else 0,
+            "down_reopened_groups": (
+                int(down_mask.sum().item())
+                if arm in {"linked_down", "linked_mlp"}
+                else 0
+            ),
+            "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+            "scale_only_compensation": args.scale_only_compensation,
+            "teacher_source": args.teacher_source,
+            "hidden_kd_weight": args.hidden_kd_weight,
+            "hidden_module": args.hidden_module,
             "selected_channel_blocks": list(selected_blocks),
             "candidate_mask_sha256": tensor_digest(candidate_mask),
             "down_mask_sha256": tensor_digest(down_mask) if arm == "linked_down" else None,
@@ -426,7 +518,7 @@ def run_arm(
         torch.cuda.reset_peak_memory_stats()
     started = time.time()
     history = train_atomic(
-        model, atomic, list(active.values()), calibration, teacher, extras, args, wal
+        model, atomic, active, calibration, teacher, extras, args, wal
     )
     attempted = evaluate_domains(model, gates, args.device)
     attempted_ratios = ratios(attempted, baseline)
@@ -504,7 +596,16 @@ def run_arm(
                 "arm": arm,
                 "candidate_name": candidate_name,
                 "candidate_new_groups": int(candidate_mask.sum().item()),
-                "down_reopened_groups": int(down_mask.sum().item()) if arm == "linked_down" else 0,
+                "down_reopened_groups": (
+                    int(down_mask.sum().item())
+                    if arm in {"linked_down", "linked_mlp"}
+                    else 0
+                ),
+                "up_reopened_groups": int(up_mask.sum().item()) if arm == "linked_mlp" else 0,
+                "scale_only_compensation": args.scale_only_compensation,
+                "teacher_source": args.teacher_source,
+                "hidden_kd_weight": args.hidden_kd_weight,
+                "hidden_module": args.hidden_module,
                 "selected_channel_blocks": list(selected_blocks),
                 "steps": args.steps,
                 "lr": args.lr,
@@ -586,7 +687,7 @@ def main() -> None:
     if not 0 < args.fraction <= 1:
         raise ValueError("fraction must be in (0, 1]")
     arms = tuple(value.strip() for value in args.arms.split(",") if value.strip())
-    if any(value not in {"candidate_only", "up_only", "linked_down"} for value in arms):
+    if any(value not in {"candidate_only", "up_only", "linked_down", "linked_mlp"} for value in arms):
         raise ValueError(f"unsupported arms: {arms}")
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(args.source_checkpoint)
@@ -617,11 +718,18 @@ def main() -> None:
         block_count=args.channel_blocks,
     )
     down_mask = linked_down_group_mask(matrices[DOWN_NAME].committed_mask, selected_blocks)
+    up_mask = linked_output_group_mask(
+        matrices[UP_NAME].committed_mask,
+        selected_blocks,
+        channel_block_size=candidate_matrix.group_size,
+    )
     selection = {
         "new_candidate_groups": int(candidate_mask.sum().item()),
         "new_candidate_fraction": float(candidate_mask.float().mean().item()),
         "linked_down_groups": int(down_mask.sum().item()),
         "linked_down_fraction": float(down_mask.float().mean().item()),
+        "linked_up_groups": int(up_mask.sum().item()),
+        "linked_up_fraction": float(up_mask.float().mean().item()),
         "selected_channel_blocks": list(selected_blocks),
         "selected_score_mean": float(scores[candidate_mask].mean().item()),
         "selected_score_p95": float(torch.quantile(scores[candidate_mask], 0.95).item()),
@@ -633,7 +741,11 @@ def main() -> None:
         f"selected={selection['new_candidate_groups']} "
         f"linked_down={selection['linked_down_groups']} blocks={selected_blocks}"
     )
-    candidate_mask_cpu, down_mask_cpu = candidate_mask.cpu(), down_mask.cpu()
+    candidate_mask_cpu, down_mask_cpu, up_mask_cpu = (
+        candidate_mask.cpu(),
+        down_mask.cpu(),
+        up_mask.cpu(),
+    )
     del scores, model, matrices
     gc.collect()
     if torch.cuda.is_available():
@@ -663,6 +775,7 @@ def main() -> None:
             baseline,
             candidate_mask_cpu,
             down_mask_cpu,
+            up_mask_cpu,
             selected_blocks,
             args.candidate_name,
             wal,
@@ -672,8 +785,13 @@ def main() -> None:
             candidate_paths[arm] = candidate_path
         log(f"arm={arm} pass={arm_results[arm]['passed']} ratios={arm_results[arm]['attempted_ratios']}")
 
-    chosen_arm = "linked_down" if "linked_down" in candidate_paths else next(
-        (name for name in ("candidate_only", "up_only") if name in candidate_paths), None
+    chosen_arm = next(
+        (
+            name
+            for name in ("linked_mlp", "linked_down", "candidate_only", "up_only")
+            if name in candidate_paths
+        ),
+        None,
     )
     fresh = fresh_verify(candidate_paths[chosen_arm], model_path, suite, args) if chosen_arm else None
     result = {
@@ -690,6 +808,10 @@ def main() -> None:
         "steps": args.steps,
         "lr": args.lr,
         "gate_ratio": args.gate_ratio,
+        "teacher_source": args.teacher_source,
+        "kd_weight": args.kd_weight,
+        "hidden_kd_weight": args.hidden_kd_weight,
+        "hidden_module": args.hidden_module,
         "candidate_name": args.candidate_name,
         "baseline": baseline,
         "starting": starting,

@@ -1,0 +1,103 @@
+{
+  "schema": "wal-tat-evidence-v4",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_plus_layer24_attention_accepted",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "accepted_count": 4,
+      "total_count": 7,
+      "remaining_matrices": [
+        "mlp.up_proj",
+        "mlp.down_proj",
+        "mlp.gate_proj"
+      ]
+    },
+    "major_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_matrices_remaining": 186,
+    "major_weights_accepted": 62914560,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1657536512,
+    "weight_coverage_fraction": 0.0365686423891513
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-add_block24_qk_scale_v1_squadx4-proxy-codes.pt",
+    "bytes": 190522825,
+    "sha256": "a17770a62e3613576f27d47814d98df2bfdc4f9e3b84090ce3e0f1df2ef542d4",
+    "kind": "training checkpoint, not packed deployment artifact"
+  },
+  "quality_gate": {
+    "legacy_micro_gate_nll_ratio": 1.02,
+    "legacy_gate_origin": "manually chosen WAL-TAT engineering heuristic introduced in commit 7f6bd24; not an external standard",
+    "legacy_gate_meaning": "candidate NLL no more than 2 percent above teacher NLL on every frozen domain",
+    "legacy_gate_warning": "at teacher NLL 3.5 this is approximately 7.25 percent PPL, and it is unsafe to repeat per block",
+    "diagnostic_full_model_nll_budget": 0.05,
+    "coverage_proportional_nll_guide": 1.0018284321194575,
+    "guide_is_standard": false
+  },
+  "audits": {
+    "v3": {
+      "result": "block24_qk_scale_v1_audit_v3.json",
+      "suite_sha256": "be51ba13b438ca9635ba7b36276ed64ca29365526f74c1b8931d4df16c7cda0e",
+      "tokens_per_domain": 131072,
+      "nll_ratios": {
+        "c4_validation": 0.9965175310205268,
+        "squad_context": 0.9984540526316383,
+        "torch_code": 0.9764505909395917
+      },
+      "passed_coverage_guide": true
+    },
+    "v4": {
+      "result": "block24_qk_scale_v1_audit_v4.json",
+      "suite_sha256": "ee9b48e9bd02d3ea2b9af54ea7f30dd385c8a8d96fed773084e6b0497a4b8347",
+      "tokens_per_domain": 131072,
+      "note": "C4 slice equals v3; SQuAD and code slices differ",
+      "nll_ratios": {
+        "c4_validation": 0.9965175310205268,
+        "squad_context": 0.995346252423232,
+        "transformers_code": 0.9749154564915478
+      },
+      "passed_coverage_guide": true
+    }
+  },
+  "proxy_code_result": {
+    "hard_forward_exact_ternary": true,
+    "backward_uses_continuous_proxy": true,
+    "meaning": "the optimizer can cross trit boundaries without using non-ternary weights in the measured forward"
+  },
+  "rejected_frontier": {
+    "matrix": "model.layers.24.mlp.up_proj",
+    "best_audit_v3_nll_ratios": {
+      "c4_validation": 0.9987601399644758,
+      "squad_context": 1.0047144529744785,
+      "torch_code": 0.9781205924701067
+    },
+    "predeclared_local_gate": 1.0022,
+    "accepted": false,
+    "reason": "SQuAD holdout exceeds the gate; the matrix is excluded from progress"
+  },
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 120.0,
+    "accepted_weights_q2_g128_mib": 15.9375,
+    "projected_saving_mib": 104.0625
+  },
+  "next": "improve layer24 MLP holdout generalization, complete the second decoder block, then rerun cumulative audits"
+}

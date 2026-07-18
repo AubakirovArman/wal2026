@@ -25,19 +25,25 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The current proof on `Qwen/Qwen3-1.7B`, layer 27, has:
+The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
-- 100% of `mlp.down_proj` hard ternary (98,304 groups);
-- 100% of adjacent `mlp.up_proj` hard ternary;
-- 75% of `mlp.gate_proj` hard ternary;
-- fresh 32K-token/domain NLL ratios of 0.978552 (Wiki) and 1.018250 (code);
-- a strict per-domain acceptance gate of at most 1.02;
-- matched evidence that linked down-scale compensation beats candidate-only QAT;
-- exactly ternary committed codes and 2.125 bpw for fully converted matrices.
+- all seven major matrices of layer 27 hard ternary;
+- Q/K/V/O of layer 24 hard ternary, while its three MLP matrices remain BF16;
+- 62,914,560 weights in `{-scale, 0, +scale}`;
+- 11 of 197 major matrices and 3.656864% of major matrix weights accepted;
+- audit-v3 NLL ratios `0.996518 / 0.998454 / 0.976451` on C4, SQuAD and
+  PyTorch code;
+- audit-v4 ratios `0.996518 / 0.995346 / 0.974915` on C4, a different SQuAD
+  slice and Transformers code;
+- exact hard-forward ternary codes with smooth proxy-code gradients used only
+  during backward recovery.
 
-This is a successful mechanism proof, **not a finished compressed 1.7B
-checkpoint**. About 34.6M of roughly 1.7B parameters are committed, around 2%
-of the model. See [docs/STATUS_RU.md](docs/STATUS_RU.md), the
+This is a successful partial conversion, **not a finished compressed 1.7B
+checkpoint**. One of 28 decoder blocks is complete and the next has 4/7
+matrices accepted. The old `1.02` limit is explicitly a local diagnostic gate,
+not a safe per-block full-model budget. It was manually chosen in the first
+WAL-TAT commit and is not a BitNet/Prism standard. See
+[docs/STATUS_RU.md](docs/STATUS_RU.md), the
 [full-model roadmap](docs/FULL_MODEL_ROADMAP_RU.md), and the campaign results in
 `results/`.
 
@@ -98,3 +104,9 @@ or reordering. It does not contain the large weight payload and therefore does
 not replace a model checkpoint. Recovery uses the verified log to locate the
 last completed boundary, reloads the corresponding checkpoint, and reruns an
 incomplete transaction.
+
+The `1.02` value in the minimal example is an experimental micro-gate chosen by
+this project. It is not a BitNet/Prism standard. Full-model acceptance must use
+an independently defined cumulative NLL/PPL/task budget. Because
+`PPL = exp(NLL)`, a 2% NLL increase is not a 2% PPL increase; at NLL 3.5 it is
+approximately 7.25% PPL.

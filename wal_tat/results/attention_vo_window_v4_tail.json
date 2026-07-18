@@ -1,0 +1,239 @@
+{
+  "schema": "wal-tat-attention-vo-window-v1",
+  "tag": "attention_vo_window_v4_tail",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-attention_vo_window_v3-value-output.pt",
+  "source_sha256": "366c6d32faf01e48a1fc670bc6872a687562bf09d260a0568e7c7fe12ff59c08",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "seed": 109,
+  "steps": 360,
+  "lr": 1e-05,
+  "baseline": {
+    "wiki": {
+      "nll": 3.575825622305274,
+      "ppl": 35.72410325978659,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.3886028062552214,
+      "ppl": 29.624532130142402,
+      "tokens": 32768
+    }
+  },
+  "starting": {
+    "wiki": {
+      "nll": 3.4778754767030478,
+      "ppl": 32.39083384333963,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.37926356960088,
+      "ppl": 29.349149546962547,
+      "tokens": 32768
+    }
+  },
+  "starting_ratios": {
+    "wiki": 0.972607683945427,
+    "code": 0.9972439270140775
+  },
+  "selection": {
+    "value_groups": 4096,
+    "output_groups": 8192,
+    "kv_head_blocks": [
+      1,
+      4
+    ],
+    "value_mask_sha256": "aa78d4a8bbe2a3ae2c0f1f01fed5c498138ec316d32e2c618ea8f60a61b19bbb",
+    "output_mask_sha256": "ac4dfd5a78344f1b6d3f80823d7e2352985a01252abf8f9b0e7cf0ff3a14b051",
+    "score_mean": 1.4768333040857118e-12,
+    "score_p95": 3.406383898910126e-12
+  },
+  "attempted": {
+    "wiki": {
+      "nll": 3.482539408840239,
+      "ppl": 32.54225532953998,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.377328939270228,
+      "ppl": 29.29242468058611,
+      "tokens": 32768
+    }
+  },
+  "attempted_ratios": {
+    "wiki": 0.9739119791292018,
+    "code": 0.9966730042942236
+  },
+  "passed": true,
+  "deployed": {
+    "wiki": {
+      "nll": 3.482539408840239,
+      "ppl": 32.54225532953998,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.377328939270228,
+      "ppl": 29.29242468058611,
+      "tokens": 32768
+    }
+  },
+  "deployed_ratios": {
+    "wiki": 0.9739119791292018,
+    "code": 0.9966730042942236
+  },
+  "code_churn": {
+    "candidate": 0.03553581237792969,
+    "output": 0.02872180938720703
+  },
+  "coverage": {
+    "model.layers.27.mlp.down_proj": 1.0,
+    "model.layers.27.mlp.up_proj": 1.0,
+    "model.layers.27.mlp.gate_proj": 1.0,
+    "model.layers.27.self_attn.v_proj": 1.0,
+    "model.layers.27.self_attn.o_proj": 1.0
+  },
+  "history": [
+    {
+      "step": 1,
+      "loss": 2.6257784366607666,
+      "ce": 2.6257662773132324,
+      "kd": 6.135450530564412e-05,
+      "hidden_kd": 0.0,
+      "pressure": 0.011111111111111112,
+      "temperature": 0.3508855606815209,
+      "gradient_norm": 0.4340411126613617,
+      "code_churn": {
+        "candidate": 0.0001697540283203125,
+        "output": 0.0001735687255859375
+      }
+    },
+    {
+      "step": 90,
+      "loss": 3.9172098636627197,
+      "ce": 3.916937828063965,
+      "kd": 0.0013600734528154135,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.3508855606815209,
+      "gradient_norm": 0.2683700621128082,
+      "code_churn": {
+        "candidate": 0.0060634613037109375,
+        "output": 0.005229949951171875
+      }
+    },
+    {
+      "step": 180,
+      "loss": 2.8666939735412598,
+      "ce": 2.8665857315063477,
+      "kd": 0.0005406418349593878,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.26316417051114066,
+      "gradient_norm": 0.207442507147789,
+      "code_churn": {
+        "candidate": 0.012424468994140625,
+        "output": 0.010676383972167969
+      }
+    },
+    {
+      "step": 270,
+      "loss": 1.9546681642532349,
+      "ce": 1.9542731046676636,
+      "kd": 0.0019752501975744963,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.08772139017038026,
+      "gradient_norm": 0.27101221680641174,
+      "code_churn": {
+        "candidate": 0.022014617919921875,
+        "output": 0.018317222595214844
+      }
+    },
+    {
+      "step": 360,
+      "loss": 2.756204128265381,
+      "ce": 2.7559306621551514,
+      "kd": 0.0013670187909156084,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.0,
+      "gradient_norm": 0.46586599946022034,
+      "code_churn": {
+        "candidate": 0.03553581237792969,
+        "output": 0.02872180938720703
+      }
+    }
+  ],
+  "elapsed_seconds": 76.36169672012329,
+  "peak_cuda_allocated_bytes": 7528484864,
+  "fresh_verify": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-attention_vo_window_v4_tail-value-output.pt",
+    "checkpoint_sha256": "abde7675fe19c75706b1069bef040ae7054ed6f8b29e2ae946588a4e4cfe26ea",
+    "baseline": {
+      "wiki": {
+        "nll": 3.575825622305274,
+        "ppl": 35.72410325978659,
+        "tokens": 32768
+      },
+      "code": {
+        "nll": 3.3886028062552214,
+        "ppl": 29.624532130142402,
+        "tokens": 32768
+      }
+    },
+    "metrics": {
+      "wiki": {
+        "nll": 3.482438288629055,
+        "ppl": 32.538964816180155,
+        "tokens": 32768
+      },
+      "code": {
+        "nll": 3.377322485204786,
+        "ppl": 29.29223562597035,
+        "tokens": 32768
+      }
+    },
+    "ratios": {
+      "wiki": 0.9738837002862534,
+      "code": 0.9966710996551109
+    },
+    "passed": true,
+    "coverage": {
+      "model.layers.27.mlp.down_proj": 1.0,
+      "model.layers.27.mlp.up_proj": 1.0,
+      "model.layers.27.mlp.gate_proj": 1.0,
+      "model.layers.27.self_attn.v_proj": 1.0,
+      "model.layers.27.self_attn.o_proj": 1.0
+    },
+    "codes": {
+      "model.layers.27.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.v_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.o_proj": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "accepted_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-attention_vo_window_v4_tail-value-output.pt",
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/attention_vo_window_v4_tail.wal.jsonl"
+}

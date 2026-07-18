@@ -1,0 +1,294 @@
+{
+  "schema": "wal-tat-compensation-window-v1",
+  "tag": "gate_window_v7_bf16_hidden",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-gate_window_v6-linked_down.pt",
+  "source_sha256": "ec3dfc440cbe00669c21459222926b1e7fa48ba3afd4fb8e7e8d44240e485131",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "seed": 109,
+  "device": "cuda",
+  "gpu": "NVIDIA H200",
+  "steps": 240,
+  "lr": 1e-05,
+  "gate_ratio": 1.02,
+  "teacher_source": "bf16",
+  "kd_weight": 0.2,
+  "hidden_kd_weight": 0.1,
+  "hidden_module": "model.layers.27.mlp",
+  "candidate_name": "model.layers.27.mlp.gate_proj",
+  "baseline": {
+    "wiki": {
+      "nll": 3.575825622305274,
+      "ppl": 35.72410325978659,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.3886028062552214,
+      "ppl": 29.624532130142402,
+      "tokens": 32768
+    }
+  },
+  "starting": {
+    "wiki": {
+      "nll": 3.502113664522767,
+      "ppl": 33.185520939725926,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.4527883497066796,
+      "ppl": 31.588348988405468,
+      "tokens": 32768
+    }
+  },
+  "starting_ratios": {
+    "wiki": 0.9793860312083714,
+    "code": 1.018941595436613
+  },
+  "selection": {
+    "new_candidate_groups": 3072,
+    "new_candidate_fraction": 0.03125,
+    "linked_down_groups": 8192,
+    "linked_down_fraction": 0.0833333358168602,
+    "linked_up_groups": 8192,
+    "linked_up_fraction": 0.0833333358168602,
+    "selected_channel_blocks": [
+      4,
+      21,
+      24,
+      27
+    ],
+    "selected_score_mean": 1.4134993089193193e-12,
+    "selected_score_p95": 6.0489664492624495e-12,
+    "candidate_mask_sha256": "c264a0117b09deadae4f8f227d31aa11cdaf6fe941369ac2891adb542e78818c",
+    "down_mask_sha256": "c6144c58bed1fd8cb85ddff4589776e6c790bc40a529425d50dc25e8123c0743"
+  },
+  "arms": {
+    "linked_mlp": {
+      "arm": "linked_mlp",
+      "passed": true,
+      "starting": {
+        "wiki": {
+          "nll": 3.502113664522767,
+          "ppl": 33.185520939725926,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.4527883497066796,
+          "ppl": 31.588348988405468,
+          "tokens": 32768
+        }
+      },
+      "attempted": {
+        "wiki": {
+          "nll": 3.5055744857527316,
+          "ppl": 33.300569060781164,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.4563524425029755,
+          "ppl": 31.701133663616478,
+          "tokens": 32768
+        }
+      },
+      "attempted_ratios": {
+        "wiki": 0.9803538695750905,
+        "code": 1.0199933837399564
+      },
+      "deployed": {
+        "wiki": {
+          "nll": 3.5055717593058944,
+          "ppl": 33.30047826867374,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.456352175679058,
+          "ppl": 31.701125204996927,
+          "tokens": 32768
+        }
+      },
+      "deployed_ratios": {
+        "wiki": 0.9803531071087052,
+        "code": 1.0199933049983827
+      },
+      "code_churn": {
+        "candidate": 0.02060190960764885,
+        "up": 0.0,
+        "down": 0.0
+      },
+      "scale_changes": {
+        "candidate": {
+          "changed_groups": 3072,
+          "groups": 3072,
+          "absolute_mean": 0.000725675723515451,
+          "relative_mean": 0.02816258929669857,
+          "relative_p95": 0.06645213067531586,
+          "relative_max": 0.11601797491312027
+        },
+        "up": {
+          "changed_groups": 8192,
+          "groups": 8192,
+          "absolute_mean": 0.0007220714469440281,
+          "relative_mean": 0.02469327487051487,
+          "relative_p95": 0.055729132145643234,
+          "relative_max": 0.13430795073509216
+        },
+        "down": {
+          "changed_groups": 8192,
+          "groups": 8192,
+          "absolute_mean": 0.0007290111389011145,
+          "relative_mean": 0.026450004428625107,
+          "relative_p95": 0.059592943638563156,
+          "relative_max": 0.16755007207393646
+        }
+      },
+      "history": [
+        {
+          "step": 1,
+          "loss": 3.322601795196533,
+          "ce": 3.1723122596740723,
+          "kd": 0.44527721405029297,
+          "hidden_kd": 0.6123406887054443,
+          "pressure": 0.016666666666666666,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.23009200394153595,
+          "code_churn": {
+            "candidate": 0.00018310546875,
+            "up": 0.0,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 60,
+          "loss": 4.859729290008545,
+          "ce": 4.770856857299805,
+          "kd": 0.14882530272006989,
+          "hidden_kd": 0.5910751819610596,
+          "pressure": 1.0,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.31957507133483887,
+          "code_churn": {
+            "candidate": 0.0035680136643350124,
+            "up": 0.0,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 120,
+          "loss": 3.575396776199341,
+          "ce": 3.4199581146240234,
+          "kd": 0.48083892464637756,
+          "hidden_kd": 0.5927095413208008,
+          "pressure": 1.0,
+          "temperature": 0.26316417051114066,
+          "gradient_norm": 0.3069734573364258,
+          "code_churn": {
+            "candidate": 0.007578532211482525,
+            "up": 0.0,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 180,
+          "loss": 3.5083279609680176,
+          "ce": 3.3878965377807617,
+          "kd": 0.2933906316757202,
+          "hidden_kd": 0.6175335645675659,
+          "pressure": 1.0,
+          "temperature": 0.08772139017038026,
+          "gradient_norm": 0.49774280190467834,
+          "code_churn": {
+            "candidate": 0.012939453125,
+            "up": 0.0,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 240,
+          "loss": 2.988743782043457,
+          "ce": 2.8147354125976562,
+          "kd": 0.540220320224762,
+          "hidden_kd": 0.659642219543457,
+          "pressure": 1.0,
+          "temperature": 0.0,
+          "gradient_norm": 0.3720269501209259,
+          "code_churn": {
+            "candidate": 0.02060190960764885,
+            "up": 0.0,
+            "down": 0.0
+          }
+        }
+      ],
+      "elapsed_seconds": 44.50934362411499,
+      "peak_cuda_allocated_bytes": 5441697792,
+      "coverage": {
+        "model.layers.27.mlp.down_proj": 1.0,
+        "model.layers.27.mlp.up_proj": 1.0,
+        "model.layers.27.mlp.gate_proj": 0.8125
+      },
+      "projected_bpw": {
+        "model.layers.27.mlp.down_proj": 2.125,
+        "model.layers.27.mlp.up_proj": 2.125,
+        "model.layers.27.mlp.gate_proj": 4.7265625
+      },
+      "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-gate_window_v7_bf16_hidden-linked_mlp.pt"
+    }
+  },
+  "chosen_arm": "linked_mlp",
+  "fresh_verify": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-gate_window_v7_bf16_hidden-linked_mlp.pt",
+    "checkpoint_sha256": "ad2120364d16ce78cbfc4336a9a470ccd1d9bddecb0f968ba0441939afe35b80",
+    "baseline": {
+      "wiki": {
+        "nll": 3.575825622305274,
+        "ppl": 35.72410325978659,
+        "tokens": 32768
+      },
+      "code": {
+        "nll": 3.3886028062552214,
+        "ppl": 29.624532130142402,
+        "tokens": 32768
+      }
+    },
+    "metrics": {
+      "wiki": {
+        "nll": 3.5056536495685577,
+        "ppl": 33.30320536524578,
+        "tokens": 32768
+      },
+      "code": {
+        "nll": 3.456411804072559,
+        "ppl": 31.70301554852359,
+        "tokens": 32768
+      }
+    },
+    "ratios": {
+      "wiki": 0.980376008187033,
+      "code": 1.020010901747518
+    },
+    "passed": false,
+    "coverage": {
+      "model.layers.27.mlp.down_proj": 1.0,
+      "model.layers.27.mlp.up_proj": 1.0,
+      "model.layers.27.mlp.gate_proj": 0.8125
+    },
+    "codes": {
+      "model.layers.27.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/gate_window_v7_bf16_hidden.wal.jsonl"
+}
