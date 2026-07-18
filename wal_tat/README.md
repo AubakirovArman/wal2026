@@ -28,20 +28,20 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 30.37109375% of its `up_proj` groups;
-- 66,736,128 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus one partial matrix and 3.878990% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 31.93359375% of its `up_proj` groups;
+- 66,932,736 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus one partial matrix and 3.890418% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997639 / 1.001687 / 0.978256` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997572 / 1.001675 / 0.978439` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997639 / 0.998150 / 0.976072` on C4, a different SQuAD
+- audit-v4 ratios `0.997572 / 0.998105 / 0.976555` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
 checkpoint**. One of 28 decoder blocks is complete; the next has four complete
-attention matrices and 30.37109375% of one MLP matrix accepted. The old `1.02` limit
+attention matrices and 31.93359375% of one MLP matrix accepted. The old `1.02` limit
 is explicitly a local diagnostic gate,
 not a safe per-block full-model budget. It was manually chosen in the first
 WAL-TAT commit and is not a BitNet/Prism standard. See

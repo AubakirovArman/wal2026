@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 30.37109375% up_proj
+next block:           layer 24 has Q/K/V/O + 31.93359375% up_proj
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 66,736,128 / 1,720,451,072 = 3.878990%
+major matrix weights: 66,932,736 / 1,720,451,072 = 3.890418%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,9 +100,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 30.37109375% `up_proj`. Текущее
-покрытие `3.878990%`, условная `+5% NLL` guide равна `1.00193950`, худший
-измеренный ratio равен `1.001687`.
+sensitivity-ranked транзакции также приняты 31.93359375% `up_proj`. Текущее
+покрытие `3.890418%`, условная `+5% NLL` guide равна `1.00194521`, худший
+измеренный ratio равен `1.001675`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -125,6 +125,10 @@ SQuAD с `1.001575` до `1.001471`, не увеличив ternary coverage `dow
 Один linked шаг `+1.5625%` откатился при `1.002169`, но два последовательных
 шага по `+0.78125%` достигли того же coverage и прошли оба holdout. Это
 подтверждает path-dependence уже для новой компенсационной схемы.
+
+После этого два linked-атома по `+0.390625%` и один адаптивно увеличенный атом
+`+0.78125%` также прошли development, fresh reload и оба holdout-аудита. При
+сужении audit-margin следующий атом снова уменьшается до `+0.390625%`.
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.
