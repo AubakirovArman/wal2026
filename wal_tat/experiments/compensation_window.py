@@ -31,6 +31,7 @@ from wal_tat import (
     linked_down_group_mask,
     linked_output_group_mask,
     structured_channel_candidate_mask,
+    structured_down_candidate_mask,
     transaction_schedule,
 )
 
@@ -185,8 +186,10 @@ def ensure_candidate_matrix(model, matrices, name: str, device: str, group_size:
 
 def sibling_mlp_names(candidate_name: str):
     prefix, separator, projection = candidate_name.rpartition(".mlp.")
-    if not separator or projection not in {"up_proj", "gate_proj"}:
-        raise ValueError("candidate-name must be an MLP up_proj or gate_proj")
+    if not separator or projection not in {"up_proj", "down_proj", "gate_proj"}:
+        raise ValueError(
+            "candidate-name must be an MLP up_proj, down_proj, or gate_proj"
+        )
     layer_text = prefix.removeprefix("model.layers.")
     if not layer_text.isdigit():
         raise ValueError("candidate-name must belong to model.layers.<index>")
@@ -195,6 +198,7 @@ def sibling_mlp_names(candidate_name: str):
         f"{prefix}.mlp.down_proj",
         f"{prefix}.mlp.gate_proj",
         int(layer_text),
+        projection,
     )
 
 
@@ -484,6 +488,7 @@ def run_arm(
     candidate_mask_cpu,
     down_mask_cpu,
     up_mask_cpu,
+    bf16_up_mask_cpu,
     gate_mask_cpu,
     selected_blocks,
     candidate_name,
@@ -506,7 +511,7 @@ def run_arm(
         model, matrices, candidate_name, args.device
     )
     down_matrix = ensure_candidate_matrix(model, matrices, down_name, args.device)
-    ensure_candidate_matrix(model, matrices, up_name, args.device)
+    up_matrix = ensure_candidate_matrix(model, matrices, up_name, args.device)
     gate_matrix = ensure_candidate_matrix(model, matrices, gate_name, args.device)
     starting = evaluate_domains(model, gates, args.device)
     if teacher is None:
@@ -516,6 +521,7 @@ def run_arm(
     candidate_mask = candidate_mask_cpu.to(args.device)
     down_mask = down_mask_cpu.to(args.device)
     up_mask = up_mask_cpu.to(args.device)
+    bf16_up_mask = bf16_up_mask_cpu.to(args.device)
     gate_mask = gate_mask_cpu.to(args.device)
     active = {"candidate": candidate_matrix}
     masks = {"candidate": candidate_mask}
@@ -529,22 +535,31 @@ def run_arm(
     elif arm == "candidate_bf16_mlp":
         if args.scale_only_compensation:
             raise ValueError("candidate_bf16_mlp requires master-weight training")
-        # For an up candidate, both gate and down remain exact BF16 windows.
-        # For a gate candidate, already ternary matching up groups are reopened
-        # atomically while down remains an exact BF16 compensation window.
-        if candidate_name != up_name and up_mask.any():
-            active["up"] = matrices[up_name]
-            masks["up"] = up_mask
-            reopen.add("up")
-        bf16_down_mask = down_mask & ~down_matrix.committed_mask
-        if bf16_down_mask.any():
-            continuous["bf16_down"] = down_matrix
-            continuous_masks["bf16_down"] = bf16_down_mask
-        if candidate_name == up_name:
+        # The two non-candidate SwiGLU projections compensate in the matching
+        # channel window. Already ternary groups reopen atomically; untouched
+        # groups remain exact BF16 continuous compensation parameters.
+        if candidate_name == down_name:
+            if bf16_up_mask.any():
+                continuous["bf16_up"] = up_matrix
+                continuous_masks["bf16_up"] = bf16_up_mask
             bf16_gate_mask = gate_mask & ~gate_matrix.committed_mask
             if bf16_gate_mask.any():
                 continuous["bf16_gate"] = gate_matrix
                 continuous_masks["bf16_gate"] = bf16_gate_mask
+        elif candidate_name != up_name and up_mask.any():
+            active["up"] = matrices[up_name]
+            masks["up"] = up_mask
+            reopen.add("up")
+        if candidate_name != down_name:
+            bf16_down_mask = down_mask & ~down_matrix.committed_mask
+            if bf16_down_mask.any():
+                continuous["bf16_down"] = down_matrix
+                continuous_masks["bf16_down"] = bf16_down_mask
+            if candidate_name == up_name:
+                bf16_gate_mask = gate_mask & ~gate_matrix.committed_mask
+                if bf16_gate_mask.any():
+                    continuous["bf16_gate"] = gate_matrix
+                    continuous_masks["bf16_gate"] = bf16_gate_mask
     elif arm == "linked_mlp":
         if candidate_name == up_name:
             raise ValueError("linked_mlp requires a gate projection candidate")
@@ -588,6 +603,9 @@ def run_arm(
             "up_reopened_groups": up_reopened_groups,
             "bf16_down_groups": int(
                 continuous_masks.get("bf16_down", torch.zeros_like(down_mask)).sum().item()
+            ),
+            "bf16_up_groups": int(
+                continuous_masks.get("bf16_up", torch.zeros_like(bf16_up_mask)).sum().item()
             ),
             "bf16_gate_groups": int(
                 continuous_masks.get("bf16_gate", torch.zeros_like(gate_mask)).sum().item()
@@ -712,6 +730,11 @@ def run_arm(
                         "bf16_down", torch.zeros_like(down_mask)
                     ).sum().item()
                 ),
+                "bf16_up_groups": int(
+                    continuous_masks.get(
+                        "bf16_up", torch.zeros_like(bf16_up_mask)
+                    ).sum().item()
+                ),
                 "bf16_gate_groups": int(
                     continuous_masks.get(
                         "bf16_gate", torch.zeros_like(gate_mask)
@@ -822,9 +845,16 @@ def main() -> None:
         for value in arms
     ):
         raise ValueError(f"unsupported arms: {arms}")
-    up_name, down_name, gate_name, layer_index = sibling_mlp_names(
+    up_name, down_name, gate_name, layer_index, projection = sibling_mlp_names(
         args.candidate_name
     )
+    if projection == "down_proj" and any(
+        arm not in {"candidate_only", "candidate_bf16_mlp", "up_only"}
+        for arm in arms
+    ):
+        raise ValueError(
+            "down_proj candidates support candidate_only and candidate_bf16_mlp arms"
+        )
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(args.source_checkpoint)
     suite_hash = sha256_file(args.suite)
@@ -849,16 +879,32 @@ def main() -> None:
         model, candidate_matrix, args.candidate_name, calibration, args
     )
     count = max(1, round(scores.numel() * args.fraction))
-    candidate_mask, selected_blocks = structured_channel_candidate_mask(
-        scores,
-        ~candidate_matrix.committed_mask,
-        count=count,
-        channel_block_size=candidate_matrix.group_size,
-        block_count=args.channel_blocks,
-    )
-    down_mask = linked_down_group_mask(down_matrix.committed_mask, selected_blocks)
+    if projection == "down_proj":
+        candidate_mask, selected_blocks = structured_down_candidate_mask(
+            scores,
+            ~candidate_matrix.committed_mask,
+            count=count,
+            block_count=args.channel_blocks,
+        )
+        down_mask = candidate_mask
+    else:
+        candidate_mask, selected_blocks = structured_channel_candidate_mask(
+            scores,
+            ~candidate_matrix.committed_mask,
+            count=count,
+            channel_block_size=candidate_matrix.group_size,
+            block_count=args.channel_blocks,
+        )
+        down_mask = linked_down_group_mask(
+            down_matrix.committed_mask, selected_blocks
+        )
     up_mask = linked_output_group_mask(
         up_matrix.committed_mask,
+        selected_blocks,
+        channel_block_size=candidate_matrix.group_size,
+    )
+    bf16_up_mask = linked_output_group_mask(
+        ~up_matrix.committed_mask,
         selected_blocks,
         channel_block_size=candidate_matrix.group_size,
     )
@@ -870,10 +916,13 @@ def main() -> None:
     selection = {
         "new_candidate_groups": int(candidate_mask.sum().item()),
         "new_candidate_fraction": float(candidate_mask.float().mean().item()),
+        "candidate_projection": projection,
         "linked_down_groups": int(down_mask.sum().item()),
         "linked_down_fraction": float(down_mask.float().mean().item()),
         "linked_up_groups": int(up_mask.sum().item()),
         "linked_up_fraction": float(up_mask.float().mean().item()),
+        "bf16_up_groups": int(bf16_up_mask.sum().item()),
+        "bf16_up_fraction": float(bf16_up_mask.float().mean().item()),
         "bf16_gate_groups": int(gate_mask.sum().item()),
         "bf16_gate_fraction": float(gate_mask.float().mean().item()),
         "selected_channel_blocks": list(selected_blocks),
@@ -881,6 +930,7 @@ def main() -> None:
         "selected_score_p95": float(torch.quantile(scores[candidate_mask], 0.95).item()),
         "candidate_mask_sha256": tensor_digest(candidate_mask),
         "down_mask_sha256": tensor_digest(down_mask),
+        "bf16_up_mask_sha256": tensor_digest(bf16_up_mask),
         "gate_mask_sha256": tensor_digest(gate_mask),
     }
     log(
@@ -888,10 +938,11 @@ def main() -> None:
         f"selected={selection['new_candidate_groups']} "
         f"linked_down={selection['linked_down_groups']} blocks={selected_blocks}"
     )
-    candidate_mask_cpu, down_mask_cpu, up_mask_cpu, gate_mask_cpu = (
+    candidate_mask_cpu, down_mask_cpu, up_mask_cpu, bf16_up_mask_cpu, gate_mask_cpu = (
         candidate_mask.cpu(),
         down_mask.cpu(),
         up_mask.cpu(),
+        bf16_up_mask.cpu(),
         gate_mask.cpu(),
     )
     del scores, model, matrices
@@ -924,6 +975,7 @@ def main() -> None:
             candidate_mask_cpu,
             down_mask_cpu,
             up_mask_cpu,
+            bf16_up_mask_cpu,
             gate_mask_cpu,
             selected_blocks,
             args.candidate_name,

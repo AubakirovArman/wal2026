@@ -7,6 +7,7 @@ from wal_tat import (
     linked_gqa_query_group_mask,
     linked_output_group_mask,
     structured_channel_candidate_mask,
+    structured_down_candidate_mask,
 )
 
 
@@ -35,6 +36,20 @@ def test_structured_selection_respects_eligibility():
     )
     assert not mask[0].any()
     assert mask.sum() == 3
+
+
+def test_structured_down_selection_stays_in_best_input_block():
+    scores = torch.tensor(
+        [[9.0, 1.0, 8.0], [9.0, 2.0, 7.0], [9.0, 3.0, 6.0], [9.0, 4.0, 5.0]]
+    )
+    eligible = torch.ones_like(scores, dtype=torch.bool)
+    mask, blocks = structured_down_candidate_mask(
+        scores, eligible, count=2, block_count=1
+    )
+    assert blocks == (1,)
+    assert mask.sum() == 2
+    assert mask[:2, 1].all()
+    assert not mask[:, 0].any() and not mask[:, 2].any()
 
 
 def test_linked_down_mask_selects_whole_input_groups():

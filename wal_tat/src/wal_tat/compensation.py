@@ -69,6 +69,63 @@ def structured_channel_candidate_mask(
     return mask, tuple(sorted(chosen))
 
 
+def structured_down_candidate_mask(
+    scores: torch.Tensor,
+    eligible: torch.Tensor,
+    *,
+    count: int,
+    block_count: int = 1,
+) -> Tuple[torch.Tensor, Tuple[int, ...]]:
+    """Select low-damage down-projection groups in few input-channel blocks.
+
+    A g128 group column of a down projection consumes one 128-channel SwiGLU
+    block. Restricting a transaction to a small number of columns therefore
+    bounds the matching BF16 ``up_proj`` and ``gate_proj`` compensation rows.
+    """
+    if scores.ndim != 2 or eligible.shape != scores.shape or eligible.dtype != torch.bool:
+        raise ValueError("scores and eligible must be matching two-dimensional tensors")
+    if block_count <= 0:
+        raise ValueError("block_count must be positive")
+    available = int(eligible.sum().item())
+    if not 0 < count <= available:
+        raise ValueError(f"count {count} is outside [1, {available}]")
+    if block_count > scores.shape[1]:
+        raise ValueError("block_count exceeds the number of down input blocks")
+
+    quota = math.ceil(count / block_count)
+    ranked = []
+    for block in range(scores.shape[1]):
+        values = scores[:, block][eligible[:, block]].float()
+        if values.numel() == 0:
+            continue
+        local = torch.topk(values, min(quota, values.numel()), largest=False).values
+        ranked.append((float(local.mean().item()), block, int(values.numel())))
+    ranked.sort()
+    if len(ranked) < block_count:
+        raise ValueError("not enough eligible down input blocks")
+
+    chosen = [block for _, block, _ in ranked[:block_count]]
+    capacity = sum(
+        available_in_block
+        for _, block, available_in_block in ranked
+        if block in chosen
+    )
+    cursor = block_count
+    while capacity < count and cursor < len(ranked):
+        _, block, available_in_block = ranked[cursor]
+        chosen.append(block)
+        capacity += available_in_block
+        cursor += 1
+    if capacity < count:
+        raise ValueError("selected down input blocks do not contain enough eligible groups")
+
+    restricted = torch.zeros_like(eligible)
+    for block in chosen:
+        restricted[:, block] = eligible[:, block]
+    mask = select_group_mask(scores, count, eligible=restricted, strategy="lowest")
+    return mask, tuple(sorted(chosen))
+
+
 def linked_down_group_mask(
     down_group_state: torch.Tensor,
     channel_blocks: Tuple[int, ...],

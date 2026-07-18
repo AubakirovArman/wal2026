@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 32.51953125% up + 0.1953125% gate
+next block:           layer 24 has Q/K/V/O + 32.51953125% up + 0.1953125% gate + 0.09765625% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 67,031,040 / 1,720,451,072 = 3.896132%
+major matrix weights: 67,043,328 / 1,720,451,072 = 3.896846%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,9 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 32.51953125% `up_proj` и первые
-0.1953125% `gate_proj`. Текущее покрытие `3.896132%`, условная `+5% NLL`
-guide равна `1.00194807`, худший измеренный ratio равен `1.001476`.
+sensitivity-ranked транзакции также приняты 32.51953125% `up_proj`, первые
+0.1953125% `gate_proj` и 0.09765625% `down_proj`. Текущее покрытие
+`3.896846%`, условная `+5% NLL` guide равна `1.00194842`, худший измеренный
+ratio равен `1.001528`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
@@ -135,6 +136,13 @@ SQuAD с `1.001575` до `1.001471`, не увеличив ternary coverage `dow
 coverage-aware resizing и crash-safe cleanup. Первый автоматический gate-шаг
 поднял `gate_proj` до `0.1953125%`; linked BF16-down arm выиграл holdout у
 candidate-only (`1.001475638` против `1.001515298`).
+
+Для `down_proj` добавлен отдельный column-structured selector: один столбец
+g128-групп соответствует одному входному 128-канальному SwiGLU-блоку и
+однозначно задаёт локальные строки компенсации в `up/gate`. Первый атом из 96
+групп (`12,288` weights, `0.09765625%` матрицы) прошёл оба holdout. В этом
+случае candidate-only оказался немного лучше BF16-компенсации (`1.001527907`
+против `1.001550445`) и стал новым frontier.
 
 Критерий перехода: принять все три MLP, получить второй полный block и
 повторить неизменяемый cumulative audit.

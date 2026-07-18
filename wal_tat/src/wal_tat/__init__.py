@@ -20,6 +20,7 @@ from .compensation import (
     linked_gqa_query_group_mask,
     linked_output_group_mask,
     structured_channel_candidate_mask,
+    structured_down_candidate_mask,
 )
 from .evaluation import LossMetrics, evaluate_causal_lm
 from .moments import CausalMomentCollector
@@ -78,6 +79,7 @@ __all__ = [
     "soft_ternary_proxy",
     "select_group_mask",
     "structured_channel_candidate_mask",
+    "structured_down_candidate_mask",
     "transaction_schedule",
     "validate_checkpoint_deletion_target",
     "worst_ratio",
