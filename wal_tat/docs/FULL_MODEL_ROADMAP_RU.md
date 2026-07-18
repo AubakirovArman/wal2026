@@ -103,7 +103,7 @@ Q/K/V/O layer 24 приняты и совместно с layer 27 прошли a
 sensitivity-ranked транзакции также приняты 51.26953125% `up_proj`, первые
 0.9765625% `gate_proj` и 2.24609375% `down_proj`. Текущее покрытие
 `4.055405%`, условная `+5% NLL` guide равна `1.00202770`, худший измеренный
-ratio равен `1.001019`.
+ratio после coverage-neutral recovery равен `1.000115`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -161,6 +161,11 @@ Normalized headroom равен `0.501272`: следующим выполняет
 Linked arm выиграл holdout (`1.001018946` против `1.001023001`), normalized
 headroom равен `0.497488`. Следующий шаг — masked proxy recovery без изменения
 coverage, затем новый cumulative audit.
+Recovery прошёл оба cumulative holdout и улучшил worst ratio до
+`1.000115086`, сохранив masks, coverage и все непринятые BF16 master weights.
+Изменился один активный ternary-код и 476,026 committed scales; 495 изменений
+codes под нулевыми masks не участвуют в forward. Normalized headroom вырос до
+`0.943243`, поэтому следующий безопасный опыт — `up_proj +3.125%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 

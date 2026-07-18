@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.674
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997115 | 1.001019 | 0.979739 (PyTorch) |
-| v4 | 0.997115 | 0.996834 | 0.978236 (Transformers) |
+| v3 | 0.996457 | 1.000115 | 0.978643 (PyTorch) |
+| v4 | 0.996457 | 0.995987 | 0.977045 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.001019`, при guide `1.00202770`.
+`1.000115`, при guide `1.00202770`.
 
 ## Главный технический результат
 
@@ -241,15 +241,21 @@ candidate-only был лучше на development, но linked BF16 MLP arm на
 coverage до `0.9765625%`. Оба arm-а прошли два holdout; linked arm снова едва
 выиграл (`1.001018946` против `1.001023001`). Normalized headroom
 `0.497488`, поэтому следующий этап — masked proxy recovery без роста coverage.
+Третий masked proxy recovery сохранил все committed masks и все непринятые
+BF16 master weights. Он изменил один активный ternary-код в `layer24.v_proj`,
+476,026 committed scales и 495 неактивных codes под нулевой mask; последние
+не участвуют в forward. Худший независимый ratio улучшился с `1.001018946`
+до `1.000115086`, а normalized headroom вырос до `0.943243` без изменения
+coverage. Это открывает следующий `up_proj +3.125%` атом.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0004-candidate_bf16_mlp.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v3-proxy-codes.pt
 ```
 
-- размер: `304,659,816` bytes;
-- SHA-256: `cc41c56935161c861d10db5222873aec731e50f9a1a99e1e92e408b69bda0339`;
+- размер: `304,658,032` bytes;
+- SHA-256: `aaab453e828afd9be15446fcba9bdd3196fc8df3d7bab0b9b35ef765daa36366`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 51.26953125%
   `up_proj`, 0.9765625% `gate_proj` и 2.24609375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -259,8 +265,8 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0004-candidate_bf16_mlp.pt
 
 ## Следующий технический шаг
 
-1. провести masked proxy recovery частичного MLP и повторить оба holdout;
-2. синхронизировать campaign-frontier без изменения committed coverage;
+1. испытать `up_proj +3.125%` из восстановленного frontier;
+2. выбрать candidate-only или linked arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
 4. завершить второй полный block и повторить cumulative audit;

@@ -1,0 +1,82 @@
+{
+  "schema": "wal-tat-evidence-v29",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_third_masked_proxy_headroom_recovery",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": ["self_attn.q_proj", "self_attn.k_proj", "self_attn.v_proj", "self_attn.o_proj"],
+      "up_proj_coverage": 0.5126953125,
+      "gate_proj_coverage": 0.009765625,
+      "down_proj_coverage": 0.0224609375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 69771264,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1650679808,
+    "weight_coverage_fraction": 0.040554053024531
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v3-proxy-codes.pt",
+    "bytes": 304658032,
+    "sha256": "aaab453e828afd9be15446fcba9bdd3196fc8df3d7bab0b9b35ef765daa36366",
+    "kind": "mixed BF16/ternary training checkpoint after coverage-neutral masked proxy recovery"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0020277026512265,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {"nll_ratios": {"c4_validation": 0.9964573285334377, "squad_context": 1.0001150864068884, "torch_code": 0.9786428103864121}, "passed": true},
+    "v4": {"nll_ratios": {"c4_validation": 0.9964573285334377, "squad_context": 0.9959874885442606, "transformers_code": 0.9770447793887999}, "passed": true}
+  },
+  "recovery": {
+    "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0004-candidate_bf16_mlp.pt",
+    "source_holdout_worst": 1.0010189457283094,
+    "recovered_holdout_worst": 1.0001150864068884,
+    "normalized_headroom_after": 0.943242956841436,
+    "coverage_before": 0.040554053024531,
+    "coverage_after": 0.040554053024531,
+    "steps": 1024,
+    "best_selection_step": 1024,
+    "proxy_lr": 0.0005,
+    "scale_lr": 0.000001,
+    "compensation_scale_lr": 0.0000005,
+    "proxy_anchor_weight": 0.2,
+    "committed_mask_changes": 0,
+    "committed_code_changes": 1,
+    "uncommitted_code_changes": 495,
+    "committed_scale_changes": 476026,
+    "uncommitted_scale_changes": 0,
+    "committed_master_changes": 18921129,
+    "uncommitted_master_changes": 0,
+    "development_ratios": {"c4_train": 0.9950022360655856, "squad_train": 0.9996869830136101, "vendor_code_train": 0.980430987299683}
+  },
+  "automation": {
+    "campaign_frontiers_repointed": ["up", "down", "gate"],
+    "next_fractions_preserved": {"up": 0.03125, "down": 0.00390625, "gate": 0.001953125},
+    "fresh_checkpoint_reload": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "exact_cleanup_targets_only": true
+  },
+  "checkpoint_cleanup": [
+    {"reason": "superseded_gate_frontier_after_successful_recovery", "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0004-candidate_bf16_mlp.pt", "bytes": 304659816, "sha256": "cc41c56935161c861d10db5222873aec731e50f9a1a99e1e92e408b69bda0339", "recoverable_without_rerun": false}
+  ],
+  "storage_projection": {"accepted_weights_bf16_mib": 133.078125, "accepted_weights_q2_g128_mib": 17.6744384765625, "projected_saving_mib": 115.4036865234375},
+  "verification": {"unit_tests_passed": 48, "committed_code_alphabet": [-1, 0, 1], "independent_audit_suites": 2},
+  "next": "run one 3.125 percent up projection transaction from the recovered frontier"
+}
