@@ -1,4 +1,4 @@
-"""Hard-forward proxy-code recovery for a fully ternary transformer block."""
+"""Hard-forward proxy-code recovery for full or partially ternary blocks."""
 from __future__ import annotations
 
 import argparse
@@ -220,6 +220,8 @@ def main() -> None:
             matrix.group_scale,
             compute_dtype=matrix.compute_dtype,
             temperature=args.initial_temperature,
+            committed_mask=matrix.committed_mask,
+            master_weight=matrix.master_weight,
         ).to(args.device)
         target = model.get_submodule(name)
         set_submodule(model, name, ProxyTernaryLinear(proxy, target.bias).to(args.device))
@@ -235,6 +237,8 @@ def main() -> None:
                 matrix.group_scale,
                 compute_dtype=matrix.compute_dtype,
                 temperature=args.initial_temperature,
+                committed_mask=matrix.committed_mask,
+                master_weight=matrix.master_weight,
             ).to(args.device)
             proxy.proxy_code.requires_grad_(False)
             target = model.get_submodule(name)
@@ -313,6 +317,13 @@ def main() -> None:
             "add_target_layer": args.add_target_layer,
             "compensate_source_scales": args.compensate_source_scales,
             "matrices": list(proxies),
+            "committed_groups": {
+                name: int(proxy.committed_mask.sum().item())
+                for name, proxy in proxies.items()
+            },
+            "partial_proxy": any(
+                not bool(proxy.committed_mask.all()) for proxy in proxies.values()
+            ),
             "scale_compensation_matrices": list(compensation_proxies),
             "proxy_lr": args.proxy_lr,
             "scale_lr": args.scale_lr,
@@ -355,7 +366,7 @@ def main() -> None:
             )
             anchor_loss = torch.stack(
                 [
-                    (proxy.proxy_code - proxy.initial_codes.float()).square().mean()
+                    proxy.proxy_anchor_loss()
                     for proxy in proxies.values()
                 ]
             ).mean()
@@ -431,11 +442,16 @@ def main() -> None:
             proxy = all_proxies[name]
             codes = proxy.hard_codes()
             scales = proxy.group_scale.detach().abs().clamp_min(1e-5)
-            matrix.committed_codes.copy_(codes)
-            matrix.group_scale.copy_(scales)
+            committed = matrix.committed_mask
+            matrix.committed_codes[committed] = codes[committed]
+            matrix.group_scale[committed] = scales[committed]
             grouped_hard = codes.float() * scales.unsqueeze(-1)
+            padded = F.pad(
+                matrix.master_weight.detach(), (0, matrix.padding)
+            ).view_as(matrix.committed_codes).clone()
+            padded[committed] = grouped_hard[committed]
             matrix.master_weight.copy_(
-                grouped_hard.reshape(matrix.out_features, matrix.in_features)
+                padded.reshape(matrix.out_features, -1)[:, : matrix.in_features]
             )
             target = model.get_submodule(name)
             from wal_tat import TransactionalTernaryLinear
@@ -516,6 +532,13 @@ def main() -> None:
         "best_selection_ratios": best_selection_ratios,
         "target_layer": layer_index,
         "target_projections": requested,
+        "target_committed_coverage": {
+            name: float(proxy.committed_mask.float().mean().item())
+            for name, proxy in proxies.items()
+        },
+        "partial_proxy": any(
+            not bool(proxy.committed_mask.all()) for proxy in proxies.values()
+        ),
         "added_target_layer": args.add_target_layer,
         "compensate_source_scales": args.compensate_source_scales,
         "scale_compensation_matrices": list(compensation_proxies),

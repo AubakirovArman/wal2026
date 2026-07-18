@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.002
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997558 | 1.001531 | 0.978636 (PyTorch) |
-| v4 | 0.997558 | 0.997820 | 0.976771 (Transformers) |
+| v3 | 0.996792 | 1.000655 | 0.977754 (PyTorch) |
+| v4 | 0.996792 | 0.996898 | 0.975834 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.001531`, при guide `1.00195057`.
+`1.000655`, при guide `1.00195057`.
 
 ## Главный технический результат
 
@@ -171,14 +171,26 @@ BF16 `up/gate` компенсация выиграла holdout: `1.001487769` п
 coverage равен `0.68359375%`, а следующий размер возвращён к минимальным
 `0.09765625%`.
 
+После этого добавлен masked proxy recovery для частично преобразованных
+матриц. В отличие от старого proxy он выполняет hard ternary forward и
+пропускает градиент только через committed groups, а все непринятые группы
+оставляет побитно тем же BF16 master weight. На реальном checkpoint начальный
+forward совпал для всех 14 матриц. Recovery не изменил ни одного committed
+mask и не затронул uncommitted master weights; изменились два ternary-кода в
+`layer24.v_proj` и FP16 scales принятых групп. Худший независимый ratio
+улучшился с `1.001531213` до `1.000654804`, то есть запас до cumulative gate
+вырос более чем втрое. Scale-only control откатился при SQuAD development
+ratio `1.008575`, а сильнее заякоренный proxy прошёл, но был хуже выбранного
+варианта (`1.001461038` на audit-v3).
+
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v1-proxy-codes.pt
 ```
 
-- размер: `304,658,224` bytes;
-- SHA-256: `e9614f92b5bd8f7afb673e48f89e7e3d4b25b8f4d86092cbff1f2f6820e391d5`;
+- размер: `304,658,032` bytes;
+- SHA-256: `36eea590e8e6d4c190f3fc23a62909c6300733fe263df50dbd23cc2e6d81b93f`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 32.51953125%
   `up_proj`, 0.1953125% `gate_proj` и 0.68359375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -188,9 +200,9 @@ wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt
 
 ## Следующий технический шаг
 
-1. продолжить `down_proj` атомом `0.09765625%`, предложенным контроллером;
-2. продолжить автоматическую `gate_proj` кампанию малыми атомами, начиная с
-   текущего единого frontier;
+1. использовать восстановленный audit-headroom для matched-проверки более
+   крупного MLP-атома, не меняя cumulative gate;
+2. продолжить `gate_proj/down_proj` кампании с нового единого frontier;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
 4. завершить второй полный block и повторить cumulative audit;

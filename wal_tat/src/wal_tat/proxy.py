@@ -24,15 +24,42 @@ class ProxyTernaryMatrix(nn.Module):
         *,
         compute_dtype: torch.dtype,
         temperature: float = 0.35,
+        committed_mask: torch.Tensor | None = None,
+        master_weight: torch.Tensor | None = None,
     ):
         super().__init__()
         if codes.ndim != 3 or scales.shape != codes.shape[:2]:
             raise ValueError("codes must be [out, groups, group_size] with matching scales")
         if not torch.all((codes >= -1) & (codes <= 1)):
             raise ValueError("codes must be ternary")
+        if committed_mask is None:
+            committed_mask = torch.ones(codes.shape[:2], dtype=torch.bool, device=codes.device)
+        if committed_mask.shape != codes.shape[:2] or committed_mask.dtype != torch.bool:
+            raise ValueError("committed_mask must match the code group shape")
+        full_in_features = codes.shape[1] * codes.shape[2]
+        if master_weight is None:
+            if not committed_mask.all():
+                raise ValueError("partial proxy matrices require master_weight")
+            base_weight = torch.zeros_like(codes, dtype=torch.float32)
+            in_features = full_in_features
+        else:
+            if master_weight.ndim != 2 or master_weight.shape[0] != codes.shape[0]:
+                raise ValueError("master_weight must match the code output dimension")
+            if not 0 < master_weight.shape[1] <= full_in_features:
+                raise ValueError("master_weight has an invalid input dimension")
+            if full_in_features - master_weight.shape[1] >= codes.shape[2]:
+                raise ValueError("master_weight padding must be smaller than one group")
+            in_features = int(master_weight.shape[1])
+            padded = F.pad(
+                master_weight.detach().float(), (0, full_in_features - in_features)
+            )
+            base_weight = padded.view_as(codes)
         self.proxy_code = nn.Parameter(codes.detach().float().clone())
         self.group_scale = nn.Parameter(scales.detach().float().clone())
         self.register_buffer("initial_codes", codes.detach().to(torch.int8).clone())
+        self.register_buffer("committed_mask", committed_mask.detach().clone())
+        self.register_buffer("base_weight", base_weight.detach().clone())
+        self._in_features = in_features
         self.compute_dtype = compute_dtype
         self.temperature = float(temperature)
 
@@ -42,7 +69,7 @@ class ProxyTernaryMatrix(nn.Module):
 
     @property
     def in_features(self) -> int:
-        return self.proxy_code.shape[1] * self.proxy_code.shape[2]
+        return self._in_features
 
     @property
     def group_size(self) -> int:
@@ -52,7 +79,13 @@ class ProxyTernaryMatrix(nn.Module):
         return self.proxy_code.detach().round().clamp(-1, 1).to(torch.int8)
 
     def code_churn(self) -> float:
-        return float((self.hard_codes() != self.initial_codes).float().mean().item())
+        changed = self.hard_codes() != self.initial_codes
+        return float(changed[self.committed_mask].float().mean().item())
+
+    def proxy_anchor_loss(self) -> torch.Tensor:
+        """Squared proxy displacement over deployed ternary groups only."""
+        delta = (self.proxy_code - self.initial_codes.float()).square()
+        return delta[self.committed_mask].mean()
 
     def effective_weight(self) -> torch.Tensor:
         soft = soft_ternary_proxy(self.proxy_code, self.temperature)
@@ -60,7 +93,10 @@ class ProxyTernaryMatrix(nn.Module):
         # Exact hard forward with the smooth staircase supplying the gradient.
         code = hard.detach() + soft - soft.detach()
         value = code * self.group_scale.abs().clamp_min(1e-5).unsqueeze(-1)
-        return value.reshape(self.out_features, self.in_features).to(self.compute_dtype)
+        mixed = torch.where(self.committed_mask.unsqueeze(-1), value, self.base_weight)
+        return mixed.reshape(self.out_features, -1)[:, : self.in_features].to(
+            self.compute_dtype
+        )
 
     @torch.no_grad()
     def constrain_(self) -> None:

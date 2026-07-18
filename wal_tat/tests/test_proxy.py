@@ -36,3 +36,43 @@ def test_proxy_churn_and_constraint():
     assert torch.isclose(
         matrix.group_scale.detach().min(), torch.tensor(1e-5), rtol=1e-6
     )
+
+
+def test_partial_proxy_preserves_bf16_groups_and_masks_gradients():
+    codes = torch.tensor(
+        [[[-1, 0, 1, 1], [1, 1, 1, 1]]], dtype=torch.int8
+    )
+    scales = torch.tensor([[2.0, 7.0]])
+    committed = torch.tensor([[True, False]])
+    master = torch.tensor([[-9.0, -8.0, -7.0, -6.0, 3.0, 4.0, 5.0]])
+    matrix = ProxyTernaryMatrix(
+        codes,
+        scales,
+        compute_dtype=torch.float32,
+        committed_mask=committed,
+        master_weight=master,
+    )
+    weight = matrix.effective_weight()
+    assert torch.equal(
+        weight.detach(), torch.tensor([[-2.0, 0.0, 2.0, 2.0, 3.0, 4.0, 5.0]])
+    )
+    weight.sum().backward()
+    assert torch.count_nonzero(matrix.proxy_code.grad[0, 0]) > 0
+    assert torch.count_nonzero(matrix.proxy_code.grad[0, 1]) == 0
+    assert matrix.group_scale.grad[0, 0] != 0
+    assert matrix.group_scale.grad[0, 1] == 0
+
+
+def test_partial_proxy_churn_ignores_uncommitted_codes():
+    matrix = ProxyTernaryMatrix(
+        torch.zeros((1, 2, 4), dtype=torch.int8),
+        torch.ones((1, 2)),
+        compute_dtype=torch.float32,
+        committed_mask=torch.tensor([[True, False]]),
+        master_weight=torch.ones((1, 8)),
+    )
+    with torch.no_grad():
+        matrix.proxy_code[0, 0, 0] = 0.6
+        matrix.proxy_code[0, 1] = 1.0
+    assert matrix.code_churn() == 0.25
+    assert matrix.proxy_anchor_loss() > 0
