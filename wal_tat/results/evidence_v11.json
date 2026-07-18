@@ -1,0 +1,105 @@
+{
+  "schema": "wal-tat-evidence-v11",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_layer24_attention_three_partial_mlp_matrices",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.3251953125,
+      "gate_proj_coverage": 0.001953125,
+      "down_proj_coverage": 0.0048828125
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 67092480,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1653358592,
+    "weight_coverage_fraction": 0.03899702879780588
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
+    "bytes": 304658224,
+    "sha256": "cdd33bbf09384828aef48cde1d21d6fed7c13d86526b91612bd52e99f8b2432b",
+    "kind": "training checkpoint with three partial layer-24 MLP matrices"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0019498514398903,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9975620437879674,
+        "squad_context": 1.0014877693149842,
+        "torch_code": 0.978640223813041
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9975620437879674,
+        "squad_context": 0.9979244668590227,
+        "transformers_code": 0.9767210247406327
+      },
+      "passed": true
+    }
+  },
+  "down_projection_growth_transaction": {
+    "selector": "column-structured g128 input-channel block",
+    "selected_channel_blocks": [15],
+    "new_groups": 384,
+    "new_weights": 49152,
+    "matrix_coverage_before": 0.0009765625,
+    "matrix_coverage_after": 0.0048828125,
+    "development_chosen": "candidate_bf16_mlp",
+    "holdout_worst": {
+      "candidate_only": 1.0015391047131579,
+      "candidate_bf16_mlp": 1.0014877693149842
+    },
+    "holdout_chosen": "candidate_bf16_mlp",
+    "next_fraction": 0.001953125,
+    "resize_reason": "tight_gate_shrink"
+  },
+  "automation": {
+    "active_state": "block24_down_growth_campaign_v1.json",
+    "superseded_states": [
+      "block24_gate_auto_campaign_v1.json",
+      "block24_down_auto_campaign_v1.json"
+    ],
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 127.96875,
+    "accepted_weights_q2_g128_mib": 16.995849609375,
+    "projected_saving_mib": 110.972900390625
+  },
+  "verification": {
+    "unit_tests_passed": 46,
+    "committed_code_alphabet": [-1, 0, 1]
+  },
+  "next": "continue down_proj with the controller-selected 1/512 atom and resume gate_proj from the same unified frontier"
+}
