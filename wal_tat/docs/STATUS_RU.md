@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.911
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.996927 | 1.000954 | 0.979843 (PyTorch) |
-| v4 | 0.996927 | 0.997237 | 0.978666 (Transformers) |
+| v3 | 0.996427 | 1.000302 | 0.978881 (PyTorch) |
+| v4 | 0.996427 | 0.996571 | 0.977710 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -284,15 +284,20 @@ candidate-only дал SQuAD ratio `1.002592097`, linked arm — `1.002554625`,
 оба временных состояния отброшены, исходный checksum сохранён. Контроллер
 уменьшил следующую up-долю до `1.5625%`; перед ней выполняется masked proxy
 recovery без роста coverage.
+Masked proxy recovery v4 прошёл оба cumulative holdout и сохранил coverage,
+все committed/uncommitted codes и все непринятые BF16 master weights. Он
+изменил только 481,135 committed scales. Худший независимый ratio снизился с
+`1.000953523` до `1.000301811`, normalized headroom вырос до `0.853122`.
+Следующая up-попытка использует уже уменьшенную контроллером долю `1.5625%`.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0006-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v4-proxy-codes.pt
 ```
 
-- размер: `304,659,052` bytes;
-- SHA-256: `c14d9dc3262e7f208104f031e805073f2b157ca0b8ef4a2f2d9fd858da3b9b79`;
+- размер: `304,658,032` bytes;
+- SHA-256: `401ed5e44be60aa8161c347e8e846feb37d37f01176f5fef5cf25057efceca00`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 57.51953125%
   `up_proj`, 1.3671875% `gate_proj` и 3.02734375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -302,7 +307,7 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0006-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. выполнить masked proxy recovery без роста coverage;
+1. повторить `up_proj` с уменьшенным шагом `+1.5625%`;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;

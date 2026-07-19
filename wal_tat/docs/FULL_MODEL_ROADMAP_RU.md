@@ -182,6 +182,10 @@ round-robin — `down_proj +0.390625%`.
 `1.002592097`, linked — `1.002554625`, gate — `1.002066271`. Coverage и
 принятый checkpoint не изменились, следующий up-размер автоматически уменьшен
 до `1.5625%`. Перед повтором выполняется masked proxy recovery.
+Recovery v4 сохранил coverage, все codes и непринятые BF16 master weights,
+изменив 481,135 committed scales. Оба cumulative holdout пройдены; worst
+улучшился с `1.000953523` до `1.000301811`, normalized headroom вырос до
+`0.853122`. Следующая up-попытка использует уменьшенную долю `1.5625%`.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
