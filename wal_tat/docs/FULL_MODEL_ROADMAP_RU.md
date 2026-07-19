@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 66.89453125% up + 2.5390625% gate + 5.37109375% down
+next block:           layer 24 has Q/K/V/O + 67.67578125% up + 2.5390625% gate + 5.37109375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,327,168 / 1,720,451,072 = 4.203965%
+major matrix weights: 72,425,472 / 1,720,451,072 = 4.209679%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 66.89453125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 67.67578125% `up_proj`, первые
 2.5390625% `gate_proj` и 5.37109375% `down_proj`. Текущее покрытие
-`4.203965%`, условная `+5% NLL` guide равна `1.00210198`, худший измеренный
-ratio равен `1.000628`.
+`4.209679%`, условная `+5% NLL` guide равна `1.00210484`, худший измеренный
+ratio равен `1.000639`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -210,6 +210,11 @@ worst (`1.000336331` против `1.000357894`), normalized headroom равен
 `gate_proj` до `2.5390625%`. Candidate-only выиграл у linked arm
 (`1.000627927` против `1.000815486`), normalized headroom равен `0.701269`.
 Следующий round-robin атом — `up_proj +1.5625%` без предварительного recovery.
+Попытка `up_proj +1.5625%` была откатана на development-gate. Уменьшенный
+атом `+0.78125%` прошёл оба holdout, добавил 98,304 weights и поднял
+`up_proj` до `67.67578125%`. Holdout выбрал linked arm вместо candidate-only
+(`1.000638609` против `1.000662713`), normalized headroom равен `0.696599`.
+Следующий round-robin атом — `down_proj +0.390625%`.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
