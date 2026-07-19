@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 60.64453125% up + 1.7578125% gate + 3.80859375% down
+next block:           layer 24 has Q/K/V/O + 62.20703125% up + 1.7578125% gate + 3.80859375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 71,245,824 / 1,720,451,072 = 4.141113%
+major matrix weights: 71,442,432 / 1,720,451,072 = 4.152541%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 60.64453125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 62.20703125% `up_proj`, первые
 1.7578125% `gate_proj` и 3.80859375% `down_proj`. Текущее покрытие
-`4.141113%`, условная `+5% NLL` guide равна `1.00207056`, худший измеренный
-ratio равен `1.000560`.
+`4.152541%`, условная `+5% NLL` guide равна `1.00207627`, худший измеренный
+ratio равен `1.000714`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -211,6 +211,11 @@ worst (`1.000336331` против `1.000357894`), normalized headroom равен
 по независимому worst (`1.000559869` против `1.000562804`), normalized
 headroom равен `0.729604`. Следующий контролируемый атом —
 `up_proj +1.5625%`; при отказе или tight headroom выполняется recovery.
+Этот up-атом прошёл оба holdout, добавил 196,608 weights и поднял `up_proj`
+до `62.20703125%`. Candidate-only выиграл у linked arm по независимому worst
+(`1.000713586` против `1.000765682`), normalized headroom равен `0.656314`.
+Следующий round-robin атом — `down_proj +0.390625%`; при отказе или tight
+headroom выполняется recovery.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
