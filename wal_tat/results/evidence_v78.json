@@ -1,0 +1,72 @@
+{
+  "schema": "wal-tat-evidence-v78",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "current_frontier_paired_block_bootstrap_audited",
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0041-candidate_only.pt",
+    "sha256": "bea838d433c1d61ec51e8d40664250fefd32b6a2261e4a33478bb7f3f8286435"
+  },
+  "progress_unchanged_from_v77": {
+    "major_weights_accepted": 74330112,
+    "major_weights_total": 1720451072,
+    "weight_coverage_fraction": 0.04320385113515161,
+    "decoder_blocks_complete": 1,
+    "major_full_matrices_accepted": 11
+  },
+  "method": {
+    "paired_unit": "frozen contiguous 256-token window",
+    "windows_per_domain": 512,
+    "tokens_per_domain": 131072,
+    "bootstrap": "deterministic circular moving-block bootstrap",
+    "bootstrap_samples": 4096,
+    "block_size_windows": 8,
+    "block_size_tokens": 2048,
+    "confidence": 0.95,
+    "seed": 109,
+    "gate_ratio": 1.0021601925567576
+  },
+  "audit_v3": {
+    "result": "wal_tat/results/block24_s0041_paired_audit_v3.json",
+    "observed_ratios": {
+      "c4_validation": 0.9971397510601876,
+      "squad_context": 1.0014875687982285,
+      "torch_code": 0.9817604509879617
+    },
+    "upper_95_ratio_bounds": {
+      "c4_validation": 0.9995159586524106,
+      "squad_context": 1.0069356673842744,
+      "torch_code": 0.9852602660109797
+    },
+    "point_passed": true,
+    "confidence_passed": false
+  },
+  "audit_v4": {
+    "result": "wal_tat/results/block24_s0041_paired_audit_v4.json",
+    "observed_ratios": {
+      "c4_validation": 0.9971397510601876,
+      "squad_context": 0.9978364315563668,
+      "transformers_code": 0.9827111271909996
+    },
+    "upper_95_ratio_bounds": {
+      "c4_validation": 0.9995159586524106,
+      "squad_context": 1.003670305602383,
+      "transformers_code": 0.9872308153003941
+    },
+    "point_passed": true,
+    "confidence_passed": false
+  },
+  "interpretation": {
+    "c4_and_code_confidence_passed": true,
+    "squad_point_estimates_passed": true,
+    "squad_confidence_bounds_passed": false,
+    "retroactive_rollback": false,
+    "reason": "confidence bounds were not part of the predeclared acceptance policy",
+    "next_action": "coverage-neutral hard-forward proxy recovery before further coverage growth"
+  },
+  "verification": {
+    "unit_tests_passed": 59,
+    "active_wal_tat_processes_after_audit": 0,
+    "audit_processes_were_sequential_in_one_terminal_session": true
+  }
+}

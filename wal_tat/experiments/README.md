@@ -15,3 +15,11 @@ under version control:
 Large checkpoints, datasets, caches, generated WAL files, and GGUF artifacts are
 deliberately ignored. Store their SHA-256 and reproduction command in a small
 result JSON instead of committing the binaries.
+
+For a statistically paired audit of an accepted frontier, run
+`paired_checkpoint_audit.py` on a frozen holdout. It stores per-window BF16 and
+candidate NLL sums and uses a deterministic circular moving-block bootstrap.
+The block resampling is required because adjacent frozen windows come from a
+contiguous token stream and are not independent documents. A checkpoint is
+`confidence_passed` only when every domain's upper ratio confidence bound is
+within the supplied cumulative gate.

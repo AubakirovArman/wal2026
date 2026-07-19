@@ -75,6 +75,28 @@ Q2-g128 упаковки их расчётный payload составит 18.829
 могут давать локальное улучшение. Для финиша нужны большие PPL suites и
 task-benchmarks.
 
+### Paired block-bootstrap audit
+
+Для frontier `s0041` дополнительно сохранены NLL каждого из 512 frozen-окон и
+посчитан детерминированный 95% CI. Поскольку окна последовательные, bootstrap
+пересэмплирует блоки по 8 соседних окон (2,048 токенов), сохраняя BF16 и
+candidate строго парными. Использовано 4,096 bootstrap samples.
+
+| Audit/domain | Point ratio | Верхняя 95% граница | Confidence gate |
+|---|---:|---:|---|
+| v3 C4 | 0.997140 | 0.999516 | pass |
+| v3 SQuAD | 1.001488 | 1.006936 | fail |
+| v3 PyTorch code | 0.981760 | 0.985260 | pass |
+| v4 C4 | 0.997140 | 0.999516 | pass |
+| v4 SQuAD | 0.997836 | 1.003670 | fail |
+| v4 Transformers code | 0.982711 | 0.987231 | pass |
+
+Обе точечные suite проходят исходный guide `1.002160`. Новый более строгий
+confidence-критерий не проходит только на SQuAD: знак среднего эффекта между
+двумя срезами различается, а интервал широк. Это не ретроактивный rollback —
+CI не входил в заранее объявленную политику. Перед следующим ростом coverage
+запускается coverage-neutral proxy recovery; после него CI повторяется.
+
 ## Откуда взялся порог 1.02
 
 `1.02` появился в первом коммите WAL-TAT `7f6bd24` как вручную выбранное
@@ -547,12 +569,13 @@ wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0041-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. продолжить `down_proj s0034 +0.09765625%` либо сделать rollback;
-2. затем проверить `gate_proj s0033 +0.09765625%` и `up_proj s0042`;
-3. запускать следующий coverage-neutral recovery при tight headroom;
-4. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
+1. выполнить coverage-neutral proxy recovery из-за неуверенного SQuAD CI;
+2. повторить paired audit-v3/v4 без изменения frozen suites;
+3. при улучшении продолжить `down_proj s0034`, `gate_proj s0033`, `up_proj s0042`;
+4. запускать следующий coverage-neutral recovery при tight headroom;
+5. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
-5. завершить второй полный block и повторить cumulative audit;
-6. идти по карте чувствительности: `23`, `25`, `22`, `26`, `21`, ...;
-7. после нескольких устойчивых blocks зафиксировать layout;
-8. только затем добавить exporter и `llama.cpp` loader/kernels.
+6. завершить второй полный block и повторить cumulative audit;
+7. идти по карте чувствительности: `23`, `25`, `22`, `26`, `21`, ...;
+8. после нескольких устойчивых blocks зафиксировать layout;
+9. только затем добавить exporter и `llama.cpp` loader/kernels.

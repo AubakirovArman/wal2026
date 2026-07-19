@@ -50,6 +50,7 @@ from .transaction import (
     TransactionalTernaryLinear,
     TransactionalTernaryMatrix,
 )
+from .uncertainty import paired_block_bootstrap_nll
 from .wal import HashChainWAL, WALIntegrityError, WALRecord
 
 __all__ = [
@@ -81,6 +82,7 @@ __all__ = [
     "linked_gqa_query_group_mask",
     "linked_output_group_mask",
     "q2_g128_physical_bpw",
+    "paired_block_bootstrap_nll",
     "ProxyTernaryLinear",
     "ProxyTernaryMatrix",
     "soft_ternary_proxy",

@@ -423,6 +423,15 @@ coverage `75.1953125% up / 9.765625% down / 5.76171875% gate`, worst
 `1.001487571`, guide `1.002160193`. Следующие шаги: down `s0034`, gate
 `s0033`, up `s0042`, каждый с атомом `1/1024`.
 
+Новый paired moving-block bootstrap audit не изменил point-gate verdict, но
+показал статистически неуверенный SQuAD margin. При блоках по 8 соседних окон
+верхняя 95% граница ratio равна `1.006936` на audit-v3 и `1.003670` на
+audit-v4, тогда как C4 и оба code-домена уверенно ниже guide. Поэтому перед
+следующим ростом coverage выполняется hard-forward coverage-neutral recovery,
+после чего те же frozen suites проверяются повторно. Старый frontier не
+откатывается задним числом: confidence-policy не входила в его predeclared
+acceptance gate.
+
 Остались три MLP-матрицы. Component ablation показал:
 
 1. `up_proj` — наименее вредная отдельная матрица;
