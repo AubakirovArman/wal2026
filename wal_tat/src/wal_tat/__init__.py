@@ -32,6 +32,13 @@ from .quantization import (
     transaction_schedule,
 )
 from .proxy import ProxyTernaryLinear, ProxyTernaryMatrix, soft_ternary_proxy
+from .orchestration import (
+    active_campaign_workers,
+    common_campaign_frontier,
+    load_campaign_state,
+    sha256_file,
+    synchronize_campaign_frontiers,
+)
 from .scoring import (
     activation_fisher_group_damage,
     diagonal_ternary_search,
@@ -77,6 +84,11 @@ __all__ = [
     "ProxyTernaryLinear",
     "ProxyTernaryMatrix",
     "soft_ternary_proxy",
+    "active_campaign_workers",
+    "common_campaign_frontier",
+    "load_campaign_state",
+    "sha256_file",
+    "synchronize_campaign_frontiers",
     "select_group_mask",
     "structured_channel_candidate_mask",
     "structured_down_candidate_mask",

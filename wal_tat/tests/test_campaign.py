@@ -3,9 +3,12 @@ import json
 import pytest
 
 from wal_tat import (
+    common_campaign_frontier,
     accepted_weight_counts,
     atomic_write_json,
     coverage_proportional_nll_gate,
+    sha256_file,
+    synchronize_campaign_frontiers,
     validate_checkpoint_deletion_target,
     worst_ratio,
 )
@@ -72,3 +75,60 @@ def test_coverage_proportional_gate_reaches_declared_full_budget():
     assert coverage_proportional_nll_gate(100, 100, 0.05) == pytest.approx(1.05)
     with pytest.raises(ValueError):
         coverage_proportional_nll_gate(101, 100, 0.05)
+
+
+def test_round_robin_frontier_sync_preserves_per_campaign_coverage(tmp_path):
+    first_checkpoint = tmp_path / "wal-tat-first.pt"
+    first_checkpoint.write_bytes(b"first")
+    first_digest = sha256_file(first_checkpoint)
+    states = []
+    for index, coverage in enumerate((0.25, 0.75)):
+        path = tmp_path / f"campaign-{index}.json"
+        atomic_write_json(
+            path,
+            {
+                "frontier": {
+                    "checkpoint": str(first_checkpoint),
+                    "sha256": first_digest,
+                    "candidate_coverage": coverage,
+                }
+            },
+        )
+        states.append(path)
+    assert common_campaign_frontier(states) == (
+        first_checkpoint.resolve(),
+        first_digest,
+    )
+
+    second_checkpoint = tmp_path / "wal-tat-second.pt"
+    second_checkpoint.write_bytes(b"second")
+    second_digest = synchronize_campaign_frontiers(states, second_checkpoint)
+    assert common_campaign_frontier(states) == (
+        second_checkpoint.resolve(),
+        second_digest,
+    )
+    assert [
+        json.loads(path.read_text())["frontier"]["candidate_coverage"]
+        for path in states
+    ] == [0.25, 0.75]
+
+
+def test_round_robin_frontier_rejects_divergent_campaigns(tmp_path):
+    states = []
+    for index in range(2):
+        checkpoint = tmp_path / f"wal-tat-{index}.pt"
+        checkpoint.write_bytes(str(index).encode())
+        path = tmp_path / f"campaign-{index}.json"
+        atomic_write_json(
+            path,
+            {
+                "frontier": {
+                    "checkpoint": str(checkpoint),
+                    "sha256": sha256_file(checkpoint),
+                    "candidate_coverage": 0.0,
+                }
+            },
+        )
+        states.append(path)
+    with pytest.raises(ValueError, match="not synchronized"):
+        common_campaign_frontier(states)

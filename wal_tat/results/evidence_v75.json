@@ -1,0 +1,134 @@
+{
+  "schema": "wal-tat-evidence-v75",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_single_session_round_robin_cycle_27",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.74609375,
+      "gate_proj_coverage": 0.0478515625,
+      "down_proj_coverage": 0.091796875
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 74059776,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1646391296,
+    "weight_coverage_fraction": 0.04304672024988572
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0035-candidate_only.pt",
+    "bytes": 304658813,
+    "sha256": "5f6f1c570b308767eb9cfca8b6761749427ddb65ccf9fa7f12b405d784c4db92",
+    "kind": "mixed BF16/ternary training checkpoint after accepted up step 35"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0021523360124942,
+    "policy_is_external_standard": false,
+    "worst_observed_ratio": 1.0011555761503343,
+    "normalized_headroom": 0.4631060653976494
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9968082243720492,
+        "squad_context": 1.0011555761503343,
+        "torch_code": 0.9804658465258681
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9968082243720492,
+        "squad_context": 0.9974360238815199,
+        "transformers_code": 0.9809912153128005
+      },
+      "passed": true
+    }
+  },
+  "transactions_since_v74": [
+    {
+      "projection": "down_proj",
+      "campaign_step": 27,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.091796875,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011002118668229,
+      "normalized_headroom": 0.4886592632416819
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 26,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.0478515625,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011616681030113,
+      "normalized_headroom": 0.4601861083703575
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 35,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.74609375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011555761503343,
+      "normalized_headroom": 0.4631060653976494
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 141.2578125,
+    "accepted_weights_q2_g128_mib": 18.76080322265625,
+    "projected_saving_mib": 122.49700927734375
+  },
+  "process_control": {
+    "runner": "experiments/round_robin_campaign.py",
+    "maximum_concurrent_wal_tat_campaigns": 1,
+    "active_wal_tat_processes_after_cycle": 0,
+    "all_three_campaigns_ran_in_one_terminal_session": true,
+    "frontier_synchronized_before_cleanup": true
+  },
+  "cleanup": {
+    "superseded_or_unchosen_checkpoint_bytes_deleted_since_v74": 1827956190,
+    "recoverable_without_rerun": false,
+    "results_and_commands_preserved": true
+  },
+  "adaptive_controller": {
+    "roomy_streak_persistence_added_after_cycle": true,
+    "reason": "separate one-iteration campaign processes previously reset the safe-pass streak",
+    "current_decisions": "middle_headroom_hold",
+    "verified_by_unit_test": true
+  },
+  "verification": {
+    "unit_tests_passed": 51,
+    "count_source": "accepted_weight_counts over checkpoint committed_mask tensors",
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2,
+    "all_campaign_frontiers_synchronized": true,
+    "checkpoint_sha256_verified": true
+  },
+  "next": "continue down_proj step 28, gate_proj step 27, and up_proj step 36 through the single-session runner"
+}

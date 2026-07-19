@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 74.4140625% up + 4.58984375% gate + 8.984375% down
+next block:           layer 24 has Q/K/V/O + 74.90234375% up + 5.17578125% gate + 9.47265625% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 73,986,048 / 1,720,451,072 = 4.300387%
+major matrix weights: 74,182,656 / 1,720,451,072 = 4.311814%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 74.4140625% `up_proj`, первые
-4.58984375% `gate_proj` и 8.984375% `down_proj`. Текущее покрытие
-`4.300387%`, условная `+5% NLL` guide равна `1.00215019`, худший измеренный
-ratio равен `1.001148`.
+sensitivity-ranked транзакции также приняты 74.90234375% `up_proj`, первые
+5.17578125% `gate_proj` и 9.47265625% `down_proj`. Текущее покрытие
+`4.311814%`, условная `+5% NLL` guide равна `1.00215591`, худший измеренный
+ratio равен `1.001280`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -389,6 +389,31 @@ hard-ternary weights. Все три кандидата прошли development,
 coverage `74.51171875% up / 9.08203125% down / 4.6875% gate`, worst
 `1.001148209`, guide `1.002151265`, normalized headroom `0.466263`.
 Следующий атом — `down_proj s0027 +0.09765625%`.
+
+Цикл 27 (`down s0027`, `gate s0026`, `up s0035`) выполнен единым
+round-robin orchestrator в одной терминальной сессии. Максимально одновременно
+работала одна кампания; каждый accepted frontier синхронизирован во всех трёх
+campaign state до удаления предыдущего checkpoint. Цикл добавил 36,864
+hard-ternary weights и прошёл шесть независимых audit-запусков. Новый SHA —
+`5f6f1c570b308767eb9cfca8b6761749427ddb65ccf9fa7f12b405d784c4db92`,
+coverage `74.609375% up / 9.1796875% down / 4.78515625% gate`, worst
+`1.001155576`, guide `1.002152336`, normalized headroom `0.463106`.
+Следующий атом — `down_proj s0028 +0.09765625%`.
+
+Также исправлена персистентность safe-streak адаптивного transaction sizer.
+До исправления каждый одношаговый дочерний процесс начинал streak с нуля,
+поэтому `grow_after=2` не мог сработать между round-robin циклами. Теперь
+счётчик сохраняется в campaign state; 51 unit-тест проходит.
+
+Три последовательных круга 28–30 добавили ещё 122,880 hard-ternary weights:
+девять из девяти транзакций приняты. Это первая реальная проверка сохранённого
+safe streak: `gate` после двух roomy-проходов вырос с `1/1024` до `1/512`, а
+увеличенный `gate s0029` прошёл development, fresh reload и оба holdout.
+Финальный SHA —
+`3bf1f3e255a5d1f8c35a05af64a6484fa1e0b5508cee13226c50fb5bff3c0c07`,
+coverage `74.90234375% up / 9.47265625% down / 5.17578125% gate`, worst
+`1.001280233`, guide `1.002155907`. Следующие размеры: down/up `1/1024`,
+gate `1/512`.
 
 Остались три MLP-матрицы. Component ablation показал:
 

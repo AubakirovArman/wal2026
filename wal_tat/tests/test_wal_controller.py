@@ -42,6 +42,34 @@ def test_adaptive_sizer_grows_only_after_roomy_streak():
     assert second.next_fraction == pytest.approx(1 / 128)
 
 
+def test_adaptive_sizer_roomy_streak_survives_process_boundary():
+    first_process = AdaptiveTransactionSizer(
+        1 / 256,
+        minimum_fraction=1 / 1024,
+        maximum_fraction=1 / 32,
+        grow_after=2,
+    )
+    first = first_process.observe(
+        passed=True, worst_ratio=0.999, gate_ratio=1.002
+    )
+    assert first.reason == "safe_streak_hold"
+    assert first_process.roomy_passes == 1
+
+    second_process = AdaptiveTransactionSizer(
+        first.next_fraction,
+        minimum_fraction=1 / 1024,
+        maximum_fraction=1 / 32,
+        grow_after=2,
+        roomy_passes=first_process.roomy_passes,
+    )
+    second = second_process.observe(
+        passed=True, worst_ratio=0.999, gate_ratio=1.002
+    )
+    assert second.reason == "safe_streak_grow"
+    assert second.next_fraction == pytest.approx(1 / 128)
+    assert second_process.roomy_passes == 0
+
+
 def test_hash_chain_round_trip(tmp_path):
     path = tmp_path / "transactions.jsonl"
     wal = HashChainWAL(path, fsync=False)

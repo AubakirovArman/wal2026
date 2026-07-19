@@ -51,6 +51,7 @@ class AdaptiveTransactionSizer:
         tight_headroom: float = 0.2,
         roomy_headroom: float = 0.75,
         grow_after: int = 2,
+        roomy_passes: int = 0,
     ):
         maximum_fraction = initial_fraction if maximum_fraction is None else maximum_fraction
         if not 0 < minimum_fraction <= initial_fraction <= maximum_fraction <= 1:
@@ -63,6 +64,8 @@ class AdaptiveTransactionSizer:
             raise ValueError("headroom thresholds must satisfy 0 <= tight < roomy <= 1")
         if grow_after < 1:
             raise ValueError("grow_after must be positive")
+        if not isinstance(roomy_passes, int) or not 0 <= roomy_passes < grow_after:
+            raise ValueError("roomy_passes must satisfy 0 <= roomy_passes < grow_after")
         self.current_fraction = float(initial_fraction)
         self.minimum_fraction = float(minimum_fraction)
         self.maximum_fraction = float(maximum_fraction)
@@ -71,7 +74,13 @@ class AdaptiveTransactionSizer:
         self.tight_headroom = float(tight_headroom)
         self.roomy_headroom = float(roomy_headroom)
         self.grow_after = int(grow_after)
-        self._roomy_passes = 0
+        self._roomy_passes = int(roomy_passes)
+
+    @property
+    def roomy_passes(self) -> int:
+        """Number of consecutive roomy passes retained for the next decision."""
+
+        return self._roomy_passes
 
     def observe(
         self, *, passed: bool, worst_ratio: float, gate_ratio: float

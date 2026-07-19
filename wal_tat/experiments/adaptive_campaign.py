@@ -184,6 +184,7 @@ def main() -> None:
         tight_headroom=args.tight_headroom,
         roomy_headroom=args.roomy_headroom,
         grow_after=args.grow_after,
+        roomy_passes=int(state.get("sizer_state", {}).get("roomy_passes", 0)),
     )
 
     for _ in range(args.iterations):
@@ -379,6 +380,7 @@ def main() -> None:
         history.append(record)
         state["history"] = history
         state["next_fraction"] = sizer.current_fraction
+        state["sizer_state"] = {"roomy_passes": sizer.roomy_passes}
         state["updated_ns"] = time.time_ns()
         # Publish the new accepted frontier before removing its predecessor.
         # A crash can leave an extra file, but never a state file that points

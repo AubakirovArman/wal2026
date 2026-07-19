@@ -28,14 +28,14 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 32.51953125% `up_proj` and
-  0.1953125% `gate_proj`;
-- 67,031,040 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus two partial matrices and 3.896132% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 74.90234375% `up_proj`,
+  5.17578125% `gate_proj`, and 9.47265625% `down_proj`;
+- 74,182,656 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.311814% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997507 / 1.001476 / 0.978624` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997033 / 1.001280 / 0.981543` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997507 / 0.997861 / 0.976622` on C4, a different SQuAD
+- audit-v4 ratios `0.997033 / 0.997698 / 0.982167` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
@@ -66,6 +66,10 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   safe-streak growth for the next sensitivity-ranked atom;
 - `experiments/adaptive_campaign.py`: durable real-training campaign loop that
   runs recovery, independent audits, adaptive resizing and exact opt-in cleanup;
+- `experiments/round_robin_campaign.py`: single-session sequential orchestrator
+  that synchronizes several campaign frontiers before crash-safe cleanup;
+- `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
+  frontier synchronization, and active-worker detection;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.
 
 ## Install and test
