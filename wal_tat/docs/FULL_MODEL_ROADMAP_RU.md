@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 68.45703125% up + 2.734375% gate + 6.15234375% down
+next block:           layer 24 has Q/K/V/O + 68.45703125% up + 2.9296875% gate + 6.15234375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,646,656 / 1,720,451,072 = 4.222535%
+major matrix weights: 72,671,232 / 1,720,451,072 = 4.223964%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 68.45703125% `up_proj`, первые
-2.734375% `gate_proj` и 6.15234375% `down_proj`. Текущее покрытие
-`4.222535%`, условная `+5% NLL` guide равна `1.00211127`, худший измеренный
-ratio равен `1.000850`.
+2.9296875% `gate_proj` и 6.15234375% `down_proj`. Текущее покрытие
+`4.223964%`, условная `+5% NLL` guide равна `1.00211198`, худший измеренный
+ratio равен `1.000884`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -232,6 +232,10 @@ normalized headroom равен `0.615802`. Следующий round-robin ато
 `down_proj` до `6.15234375%`. Candidate-only выиграл у linked arm
 (`1.000850378` против `1.000987898`), normalized headroom равен `0.597219`.
 Следующий round-robin атом — `gate_proj +0.1953125%`.
+Этот gate-атом прошёл оба holdout, добавил 24,576 weights и поднял
+`gate_proj` до `2.9296875%`. Holdout минимально предпочёл linked arm
+вместо candidate-only (`1.000883711` против `1.000884797`), normalized headroom
+равен `0.581573`. Следующий контролируемый атом — `up_proj +0.78125%`.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
