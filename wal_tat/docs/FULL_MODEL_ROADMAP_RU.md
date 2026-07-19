@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 74.12109375% up + 4.39453125% gate + 8.7890625% down
+next block:           layer 24 has Q/K/V/O + 74.31640625% up + 4.4921875% gate + 8.88671875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 73,900,032 / 1,720,451,072 = 4.295387%
+major matrix weights: 73,949,184 / 1,720,451,072 = 4.298244%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 74.12109375% `up_proj`, первые
-4.39453125% `gate_proj` и 8.7890625% `down_proj`. Текущее покрытие
-`4.295387%`, условная `+5% NLL` guide равна `1.00214769`, худший измеренный
-ratio равен `1.001664`.
+sensitivity-ranked транзакции также приняты 74.31640625% `up_proj`, первые
+4.4921875% `gate_proj` и 8.88671875% `down_proj`. Текущее покрытие
+`4.298244%`, условная `+5% NLL` guide равна `1.00214912`, худший измеренный
+ratio равен `1.001076`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -363,6 +363,16 @@ coverage `74.12109375% up / 8.7890625% down / 4.39453125% gate` и worst
 `1.001663819` при guide `1.002147694`. Normalized headroom `0.225300`, поэтому
 следующий этап — coverage-neutral masked proxy recovery v7, затем минимальные
 атомы `0.09765625%`.
+
+Recovery v7 прошёл оба holdout без изменения coverage, committed masks и
+непринятых BF16 weights. Он снизил worst до `1.001092666`. После него четыре
+минимальные транзакции `up s0031`, `down s0024`, `gate s0023`, `up s0032`
+добавили 49,152 hard-ternary weights и также прошли оба holdout. Текущий
+checkpoint имеет SHA
+`b5228f1ce45f292030042f1b2d504703b89404bf434b7c20780f73c1d55bb20f`,
+coverage `74.31640625% up / 8.88671875% down / 4.4921875% gate`, worst
+`1.001076137` при guide `1.002149122` и normalized headroom `0.499267`.
+Следующий round-robin атом — `down_proj s0025 +0.09765625%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
