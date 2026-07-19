@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 18.116
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.996884 | 1.000820 | 0.980178 (PyTorch) |
-| v4 | 0.996884 | 0.997117 | 0.979285 (Transformers) |
+| v3 | 0.996371 | 1.000171 | 0.979162 (PyTorch) |
+| v4 | 0.996371 | 0.996474 | 0.978289 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.000820`, при guide `1.00207841`.
+`1.000171`, при guide `1.00207841`.
 
 ## Главный технический результат
 
@@ -338,15 +338,20 @@ round-robin шаг — `gate_proj +0.1953125%`, затем masked proxy recovery
 BF16-MLP arm выиграл независимый worst (`1.000820492` против `1.000865155`).
 Normalized headroom равен `0.605231`. Следующий шаг — coverage-neutral masked
 proxy recovery перед следующим крупным up-атомом.
+Masked proxy recovery v5 сохранил coverage и все committed masks, изменил
+только два уже принятых ternary-кода, перенастроил 486,161 committed scales и
+не затронул uncommitted BF16 master weights. Независимый worst снизился с
+`1.000820492` до `1.000171060`, normalized headroom вырос до `0.917697`.
+Следующий контролируемый шаг — `up_proj +1.5625%`.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0009-candidate_bf16_mlp.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v5-proxy-codes.pt
 ```
 
-- размер: `304,659,816` bytes;
-- SHA-256: `053cf142b10a5188a52174c946b3cc407883fbe98c47dde0db0732ee08ebd0f9`;
+- размер: `304,658,032` bytes;
+- SHA-256: `689097439c8bcb38c1def0f3c2b076515e88db8c8d927f894ca9c63af0dcf8a1`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 62.20703125%
   `up_proj`, 1.953125% `gate_proj` и 4.19921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -356,9 +361,9 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0009-candidate_bf16_mlp.pt
 
 ## Следующий технический шаг
 
-1. выполнить masked proxy recovery без изменения coverage перед следующим крупным up-атомом;
-2. подтвердить recovery на обоих holdout и проверить неизменность масок/codes;
-3. продолжить round-robin с контролируемым `up_proj` атомом;
+1. продолжить round-robin с контролируемым `up_proj +1.5625%` атомом;
+2. выбрать candidate-only или linked arm только по обоим holdout;
+3. при отказе уменьшить атом, а при tight headroom снова выполнить recovery;
 4. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
 5. завершить второй полный block и повторить cumulative audit;
