@@ -1,0 +1,57 @@
+{
+  "schema": "wal-tat-evidence-v36",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "up_projection_transaction_rejected_before_audit",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "accepted_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0006-candidate_only.pt",
+    "bytes": 304659052,
+    "sha256": "c14d9dc3262e7f208104f031e805073f2b157ca0b8ef4a2f2d9fd858da3b9b79",
+    "major_weights_accepted": 70705152,
+    "major_weights_total": 1720451072,
+    "weight_coverage_fraction": 0.041096868809995,
+    "up_proj_coverage": 0.5751953125,
+    "gate_proj_coverage": 0.013671875,
+    "down_proj_coverage": 0.0302734375
+  },
+  "rejected_attempt": {
+    "campaign_state": "block24_up_headroom_growth_campaign_v1.json",
+    "campaign_step": 10,
+    "transaction_fraction": 0.03125,
+    "attempted_groups": 3072,
+    "attempted_weights": 393216,
+    "selected_channel_blocks": [18, 22, 29, 47],
+    "effective_gate_ratio": 1.0020662711412465,
+    "development_ratios": {
+      "candidate_only": {
+        "c4_train": 0.9955584438969202,
+        "squad_train": 1.002592097050923,
+        "vendor_code_train": 0.9817750942476089
+      },
+      "candidate_bf16_mlp": {
+        "c4_train": 0.9956708024729771,
+        "squad_train": 1.0025546253955606,
+        "vendor_code_train": 0.9825460790117649
+      }
+    },
+    "passing_arms": [],
+    "independent_audits_run": 0,
+    "accepted": false,
+    "rollback_preserved_source": true,
+    "next_fraction": 0.015625,
+    "next_fraction_reason": "rollback_shrink"
+  },
+  "verification": {
+    "source_checkpoint_still_present": true,
+    "candidate_checkpoints_present": 0,
+    "committed_code_alphabet": [-1, 0, 1]
+  },
+  "next": "run masked proxy recovery without increasing committed coverage"
+}

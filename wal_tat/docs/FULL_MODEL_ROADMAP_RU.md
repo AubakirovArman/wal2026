@@ -178,6 +178,10 @@ round-robin — `down_proj +0.390625%`.
 `gate_proj` до `1.3671875%`. Candidate-only выиграл (`1.000953523` против
 `1.000995915`), normalized headroom равен `0.535963`. Следующая попытка —
 `up_proj +3.125%`; при отказе или узком запасе выполняется recovery.
+Попытка не прошла development gate: candidate-only SQuAD ratio равен
+`1.002592097`, linked — `1.002554625`, gate — `1.002066271`. Coverage и
+принятый checkpoint не изменились, следующий up-размер автоматически уменьшен
+до `1.5625%`. Перед повтором выполняется masked proxy recovery.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate

@@ -278,6 +278,12 @@ round-robin сначала переходит к `down_proj +0.390625%`.
 `1.000953523` против `1.000995915` у linked arm. Normalized headroom равен
 `0.535963`: следующая контролируемая попытка — `up_proj +3.125%`; при отказе
 или заметном сужении запаса выполняется masked proxy recovery.
+Попытка `up_proj +3.125%` затем была честно отклонена ещё на development:
+candidate-only дал SQuAD ratio `1.002592097`, linked arm — `1.002554625`,
+тогда как coverage-aware gate равен `1.002066271`. Новые weights не приняты,
+оба временных состояния отброшены, исходный checksum сохранён. Контроллер
+уменьшил следующую up-долю до `1.5625%`; перед ней выполняется masked proxy
+recovery без роста coverage.
 
 ## Лучший воспроизводимый checkpoint
 
@@ -296,7 +302,7 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0006-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. проверить `up_proj +3.125%`, с автоматическим rollback при отказе;
+1. выполнить masked proxy recovery без роста coverage;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
