@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 73.14453125% up + 3.90625% gate + 8.10546875% down
+next block:           layer 24 has Q/K/V/O + 73.53515625% up + 4.1015625% gate + 8.49609375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 73,629,696 / 1,720,451,072 = 4.279674%
+major matrix weights: 73,752,576 / 1,720,451,072 = 4.286816%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 73.14453125% `up_proj`, первые
-3.90625% `gate_proj` и 8.10546875% `down_proj`. Текущее покрытие
-`4.279674%`, условная `+5% NLL` guide равна `1.00213984`, худший измеренный
-ratio равен `1.001127`.
+sensitivity-ranked транзакции также приняты 73.53515625% `up_proj`, первые
+4.1015625% `gate_proj` и 8.49609375% `down_proj`. Текущее покрытие
+`4.286816%`, условная `+5% NLL` guide равна `1.00214341`, худший измеренный
+ratio равен `1.001287`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -346,6 +346,13 @@ candidate-only; coverage обоих arm одинаков. Все три campaign
 синхронизированы на checkpoint SHA
 `49210f7ad73b22bb7a0beec96cf516ad33fcce6aab0e36cc3869bc2defef1930`.
 Следующий round-robin атом — `up_proj +0.78125%` (`s0026`).
+
+`s0026` был корректно отклонён на development gate и не изменил frontier.
+Автоматически уменьшенный `up s0027 +0.390625%`, затем
+`down s0020 +0.390625%` и `gate s0020 +0.1953125%` прошли оба holdout и
+добавили 122,880 hard-ternary weights. Финальный checkpoint имеет SHA
+`eeb870dbce2d65b73899945454bda00b22ee9e16a9808591aedb3f6d3e00fdf3`;
+следующий атом — `up_proj s0028 +0.390625%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 

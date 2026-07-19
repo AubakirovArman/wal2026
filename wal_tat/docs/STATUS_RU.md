@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 73.14453125% up + 3.90625% gate + 8.10546875% down | 26.85546875% up + 96.09375% gate + 91.89453125% down |
+| Матрицы в `layer 24` | Q/K/V/O + 73.53515625% up + 4.1015625% gate + 8.49609375% down | 26.46484375% up + 95.8984375% gate + 91.50390625% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 73,629,696 / 1,720,451,072 | 1,646,821,376 |
+| Крупные matrix weights | 73,752,576 / 1,720,451,072 | 1,646,698,496 |
 
-Покрытие крупных matrix weights равно `4.279674%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.286816%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 73,629,696 weights занимают 140.4375 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 18.6519 MiB, экономия —
-121.7856 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 73,752,576 weights занимают 140.6719 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 18.6830 MiB, экономия —
+121.9889 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -53,9 +53,9 @@ Q2-g128 упаковки их расчётный payload составит 18.651
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 73.14453125% g128-групп `up_proj`, 3.90625%
-`gate_proj` и 8.10546875% `down_proj`. Остальные 26.85546875% `up_proj`,
-96.09375% `gate_proj` и 91.89453125% `down_proj` пока остаются BF16.
+В `layer 24` приняты 73.53515625% g128-групп `up_proj`, 4.1015625%
+`gate_proj` и 8.49609375% `down_proj`. Остальные 26.46484375% `up_proj`,
+95.8984375% `gate_proj` и 91.50390625% `down_proj` пока остаются BF16.
 
 ## Текущий независимый аудит
 
@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 18.651
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.996907 | 1.001127 | 0.980613 (PyTorch) |
-| v4 | 0.996907 | 0.997443 | 0.980727 (Transformers) |
+| v3 | 0.996962 | 1.001287 | 0.980668 (PyTorch) |
+| v4 | 0.996962 | 0.997678 | 0.980887 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -103,7 +103,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 
 1. **NLL budget.** Для условной цели `+5% NLL` и coverage `c` используем
    диагностическую линию `1 + 0.05*c`. При текущем `c=0.04279674` это
-   `1.00213984`.
+   `1.00214341`.
 2. **PPL budget.** Цель `+5% PPL` означает additive NLL budget
    `log(1.05)`, а не `+5% NLL`. Пропорциональный доменный порог:
    `1 + c*log(1.05)/teacher_NLL`.
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.001127`, при guide `1.00213984`.
+`1.001287`, при guide `1.00214341`.
 
 ## Главный технический результат
 
@@ -433,6 +433,15 @@ hard-ternary weights. Итоговое покрытие layer 24 достигл�
 BF16-MLP arm по двум holdout (`1.001126802` против `1.001156927`), не меняя
 ternary coverage. Его normalized headroom равен `0.473417`; следующий атом —
 `up_proj +0.78125%` с обязательным rollback при отказе любого holdout.
+
+Следующий `up s0026 +0.78125%` был отклонён на development SQuAD
+(`1.002279340` и `1.002317004` при dynamic gate `1.002142694`), поэтому
+фронтир не изменился, а размер атома был автоматически уменьшен вдвое.
+`up s0027 +0.390625%`, затем `down s0020 +0.390625%` и
+`gate s0020 +0.1953125%` прошли development, fresh reload и оба holdout.
+Все три holdout-решения выбрали candidate-only. Круг добавил 122,880
+hard-ternary weights; финальный worst равен `1.001287470`, normalized
+headroom — `0.399335`.
 Этот up-атом прошёл оба holdout, добавил 196,608 hard-ternary weights и
 поднял `up_proj` до `65.33203125%`. Candidate-only минимально выиграл у
 linked arm (`1.000363082` против `1.000371670`), normalized headroom равен
@@ -450,13 +459,13 @@ normalized headroom равен `0.788461`. Следующий шаг —
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0019-candidate_bf16_mlp.pt
+wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0020-candidate_only.pt
 ```
 
-- размер: `304,659,816` bytes;
-- SHA-256: `49210f7ad73b22bb7a0beec96cf516ad33fcce6aab0e36cc3869bc2defef1930`;
-- содержание: полный ternary block 27, Q/K/V/O block 24, 73.14453125%
-  `up_proj`, 3.90625% `gate_proj` и 8.10546875% `down_proj`;
+- размер: `304,659,052` bytes;
+- SHA-256: `eeb870dbce2d65b73899945454bda00b22ee9e16a9808591aedb3f6d3e00fdf3`;
+- содержание: полный ternary block 27, Q/K/V/O block 24, 73.53515625%
+  `up_proj`, 4.1015625% `gate_proj` и 8.49609375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
 Промежуточные и провалившие audit checkpoints удалены; их метрики и команды
@@ -464,7 +473,7 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0019-candidate_bf16_mlp.pt
 
 ## Следующий технический шаг
 
-1. выполнить `up_proj +0.78125%` из синхронизированного frontier;
+1. выполнить `up_proj +0.390625%` (`s0028`) из синхронизированного frontier;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. при отказе уменьшить атом, а при tight headroom снова выполнить recovery;
 4. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу

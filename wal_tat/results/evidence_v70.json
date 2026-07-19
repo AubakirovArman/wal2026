@@ -1,0 +1,130 @@
+{
+  "schema": "wal-tat-evidence-v70",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_adaptive_up_retry_and_round_robin_cycle_20",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.7353515625,
+      "gate_proj_coverage": 0.041015625,
+      "down_proj_coverage": 0.0849609375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 73752576,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1646698496,
+    "weight_coverage_fraction": 0.04286816242571995
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0020-candidate_only.pt",
+    "bytes": 304659052,
+    "sha256": "eeb870dbce2d65b73899945454bda00b22ee9e16a9808591aedb3f6d3e00fdf3",
+    "kind": "mixed BF16/ternary training checkpoint after accepted gate step 20"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.002143408121286,
+    "policy_is_external_standard": false,
+    "worst_observed_ratio": 1.001287469760837,
+    "normalized_headroom": 0.3993352231657981
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9969620547618859,
+        "squad_context": 1.001287469760837,
+        "torch_code": 0.9806675820036315
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9969620547618859,
+        "squad_context": 0.9976784037325829,
+        "transformers_code": 0.9808865268747049
+      },
+      "passed": true
+    }
+  },
+  "transactions_since_v69": [
+    {
+      "projection": "up_proj",
+      "campaign_step": 26,
+      "fraction": 0.0078125,
+      "new_weights": 0,
+      "accepted": false,
+      "rejection_stage": "development",
+      "gate_ratio": 1.0021426938899893,
+      "worst_by_arm": {
+        "candidate_only": 1.0022793403478991,
+        "candidate_bf16_mlp": 1.0023170038242148
+      },
+      "frontier_changed": false,
+      "next_fraction": 0.00390625
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 27,
+      "fraction": 0.00390625,
+      "new_weights": 49152,
+      "accepted": true,
+      "coverage_after": 0.7353515625,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0012502947801012,
+      "normalized_headroom": 0.4160953779458942
+    },
+    {
+      "projection": "down_proj",
+      "campaign_step": 20,
+      "fraction": 0.00390625,
+      "new_weights": 49152,
+      "accepted": true,
+      "coverage_after": 0.0849609375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0013124548207957,
+      "normalized_headroom": 0.38747441856839115
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 20,
+      "fraction": 0.001953125,
+      "new_weights": 24576,
+      "accepted": true,
+      "coverage_after": 0.041015625,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.001287469760837,
+      "normalized_headroom": 0.3993352231657981
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 140.671875,
+    "accepted_weights_q2_g128_mib": 18.6829833984375,
+    "projected_saving_mib": 121.9888916015625
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "count_source": "accepted_weight_counts over checkpoint committed_mask tensors",
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2,
+    "all_campaign_frontiers_synchronized": true
+  },
+  "next": "run up_proj campaign step 28 at fraction 0.00390625 from the synchronized frontier"
+}
