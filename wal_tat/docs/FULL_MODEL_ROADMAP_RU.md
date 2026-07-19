@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 74.31640625% up + 4.4921875% gate + 8.88671875% down
+next block:           layer 24 has Q/K/V/O + 74.4140625% up + 4.58984375% gate + 8.984375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 73,949,184 / 1,720,451,072 = 4.298244%
+major matrix weights: 73,986,048 / 1,720,451,072 = 4.300387%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 74.31640625% `up_proj`, первые
-4.4921875% `gate_proj` и 8.88671875% `down_proj`. Текущее покрытие
-`4.298244%`, условная `+5% NLL` guide равна `1.00214912`, худший измеренный
-ratio равен `1.001076`.
+sensitivity-ranked транзакции также приняты 74.4140625% `up_proj`, первые
+4.58984375% `gate_proj` и 8.984375% `down_proj`. Текущее покрытие
+`4.300387%`, условная `+5% NLL` guide равна `1.00215019`, худший измеренный
+ratio равен `1.001148`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -373,6 +373,14 @@ checkpoint имеет SHA
 coverage `74.31640625% up / 8.88671875% down / 4.4921875% gate`, worst
 `1.001076137` при guide `1.002149122` и normalized headroom `0.499267`.
 Следующий round-robin атом — `down_proj s0025 +0.09765625%`.
+
+Следующий цикл `down s0025`, `gate s0024`, `up s0033` добавил ещё 36,864
+hard-ternary weights и полностью прошёл два holdout. Все три раза выбран
+candidate-only checkpoint. Текущий SHA —
+`491fdf27f6b149637358d9b94454deb2ac03e92c6322a05165e1b112f57e4ff8`,
+coverage `74.4140625% up / 8.984375% down / 4.58984375% gate`, worst
+`1.001147515`, guide `1.002150193`, normalized headroom `0.466320`.
+Следующий атом — `down_proj s0026 +0.09765625%`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
