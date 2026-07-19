@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 67.67578125% up + 2.734375% gate + 5.76171875% down
+next block:           layer 24 has Q/K/V/O + 68.45703125% up + 2.734375% gate + 5.76171875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,499,200 / 1,720,451,072 = 4.213965%
+major matrix weights: 72,597,504 / 1,720,451,072 = 4.219679%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 67.67578125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 68.45703125% `up_proj`, первые
 2.734375% `gate_proj` и 5.76171875% `down_proj`. Текущее покрытие
-`4.213965%`, условная `+5% NLL` guide равна `1.00210698`, худший измеренный
-ratio равен `1.000730`.
+`4.219679%`, условная `+5% NLL` guide равна `1.00210984`, худший измеренный
+ratio равен `1.000762`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -224,6 +224,10 @@ normalized headroom равен `0.615802`. Следующий round-robin ато
 `gate_proj` до `2.734375%`. Candidate-only выиграл у linked arm
 (`1.000730373` против `1.000794258`), normalized headroom равен `0.653356`.
 Следующий контролируемый атом — `up_proj +0.78125%`.
+Этот up-атом прошёл оба holdout, добавил 98,304 weights и поднял `up_proj`
+до `68.45703125%`. Candidate-only выиграл у linked arm (`1.000762124` против
+`1.000833618`), normalized headroom равен `0.638776`. Следующий round-robin
+атом — `down_proj +0.390625%`.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
