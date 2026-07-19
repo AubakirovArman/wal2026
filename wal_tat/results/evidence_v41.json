@@ -1,0 +1,108 @@
+{
+  "schema": "wal-tat-evidence-v41",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_twelfth_up_projection_transaction",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": ["self_attn.q_proj", "self_attn.k_proj", "self_attn.v_proj", "self_attn.o_proj"],
+      "up_proj_coverage": 0.6064453125,
+      "gate_proj_coverage": 0.015625,
+      "down_proj_coverage": 0.0341796875
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 71172096,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1649278976,
+    "weight_coverage_fraction": 0.04136827670272741
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0012-candidate_only.pt",
+    "bytes": 304658813,
+    "sha256": "873daadedf03fad393a2f3df9fce8ef33fef66131e081f7d70705099ed8fffbe",
+    "kind": "mixed BF16/ternary training checkpoint after candidate-only reduced up projection transaction"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0020684138351363,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9967047650456883,
+        "squad_context": 1.0005508189281471,
+        "torch_code": 0.9797832384547235
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9967047650456883,
+        "squad_context": 0.99660215016796,
+        "transformers_code": 0.9787099854644415
+      },
+      "passed": true
+    }
+  },
+  "up_projection_growth": {
+    "campaign_state": "block24_up_headroom_growth_campaign_v1.json",
+    "campaign_step": 12,
+    "transaction_fraction": 0.015625,
+    "new_groups": 1536,
+    "new_weights": 196608,
+    "selected_channel_blocks": [8, 23, 32, 42],
+    "coverage_before": 0.5908203125,
+    "coverage_after": 0.6064453125,
+    "development_worst": {
+      "candidate_only": 1.0012723562715,
+      "candidate_bf16_mlp": 1.0012896001759597
+    },
+    "holdout_worst": {
+      "candidate_only": 1.0005508189281471,
+      "candidate_bf16_mlp": 1.0006777556071993
+    },
+    "development_chosen": "candidate_only",
+    "holdout_chosen": "candidate_only",
+    "next_fraction": 0.015625,
+    "next_fraction_reason": "middle_headroom_hold",
+    "normalized_headroom": 0.7336998434305987
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_gate_frontier",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0007-candidate_bf16_mlp.pt",
+      "bytes": 304659816,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_candidate_bf16_mlp_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0012-candidate_bf16_mlp.pt",
+      "bytes": 304659641,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 135.75,
+    "accepted_weights_q2_g128_mib": 18.029296875,
+    "projected_saving_mib": 117.720703125
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "continue round-robin with one down projection transaction"
+}
