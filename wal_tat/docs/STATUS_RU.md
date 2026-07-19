@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 57.51953125% up + 1.3671875% gate + 3.02734375% down | 42.48046875% up + 98.6328125% gate + 96.97265625% down |
+| Матрицы в `layer 24` | Q/K/V/O + 59.08203125% up + 1.3671875% gate + 3.02734375% down | 40.91796875% up + 98.6328125% gate + 96.97265625% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 70,705,152 / 1,720,451,072 | 1,649,745,920 |
+| Крупные matrix weights | 70,901,760 / 1,720,451,072 | 1,649,549,312 |
 
-Покрытие крупных matrix weights равно `4.109687%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.121115%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 70,705,152 weights занимают 134.8594 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 17.9110 MiB, экономия —
-116.9484 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 70,901,760 weights занимают 135.2344 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 17.9608 MiB, экономия —
+117.2736 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -53,8 +53,8 @@ Q2-g128 упаковки их расчётный payload составит 17.911
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 57.51953125% g128-групп `up_proj`, 1.3671875%
-`gate_proj` и 3.02734375% `down_proj`. Остальные 42.48046875% `up_proj`,
+В `layer 24` приняты 59.08203125% g128-групп `up_proj`, 1.3671875%
+`gate_proj` и 3.02734375% `down_proj`. Остальные 40.91796875% `up_proj`,
 98.6328125% `gate_proj` и 96.97265625% `down_proj` пока остаются BF16.
 
 ## Текущий независимый аудит
@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 17.911
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.996427 | 1.000302 | 0.978881 (PyTorch) |
-| v4 | 0.996427 | 0.996571 | 0.977710 (Transformers) |
+| v3 | 0.996612 | 1.000243 | 0.979519 (PyTorch) |
+| v4 | 0.996612 | 0.996566 | 0.978511 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -289,16 +289,21 @@ Masked proxy recovery v4 прошёл оба cumulative holdout и сохран�
 изменил только 481,135 committed scales. Худший независимый ratio снизился с
 `1.000953523` до `1.000301811`, normalized headroom вырос до `0.853122`.
 Следующая up-попытка использует уже уменьшенную контроллером долю `1.5625%`.
+Уменьшенная up-транзакция прошла оба holdout и добавила 196,608 hard-ternary
+weights: `up_proj` достиг `59.08203125%`. Candidate-only выиграл development,
+но linked arm минимально выиграл независимый worst (`1.000243471` против
+`1.000255685`). Normalized headroom остался высоким — `0.881842`; следующий
+round-robin шаг — `down_proj +0.390625%`.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v4-proxy-codes.pt
+wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0011-candidate_bf16_mlp.pt
 ```
 
-- размер: `304,658,032` bytes;
-- SHA-256: `401ed5e44be60aa8161c347e8e846feb37d37f01176f5fef5cf25057efceca00`;
-- содержание: полный ternary block 27, Q/K/V/O block 24, 57.51953125%
+- размер: `304,659,641` bytes;
+- SHA-256: `36ce32b93060c4fefe38c0513cbca3ace4d31abff80f7460cf3254f9a7cdb133`;
+- содержание: полный ternary block 27, Q/K/V/O block 24, 59.08203125%
   `up_proj`, 1.3671875% `gate_proj` и 3.02734375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
@@ -307,7 +312,7 @@ wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v4-proxy-codes.pt
 
 ## Следующий технический шаг
 
-1. повторить `up_proj` с уменьшенным шагом `+1.5625%`;
+1. продолжить round-robin с `down_proj +0.390625%`;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;
