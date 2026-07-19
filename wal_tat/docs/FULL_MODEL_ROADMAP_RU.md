@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 62.20703125% up + 1.7578125% gate + 3.80859375% down
+next block:           layer 24 has Q/K/V/O + 62.20703125% up + 1.7578125% gate + 4.19921875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 71,442,432 / 1,720,451,072 = 4.152541%
+major matrix weights: 71,491,584 / 1,720,451,072 = 4.155398%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 62.20703125% `up_proj`, первые
-1.7578125% `gate_proj` и 3.80859375% `down_proj`. Текущее покрытие
-`4.152541%`, условная `+5% NLL` guide равна `1.00207627`, худший измеренный
-ratio равен `1.000714`.
+1.7578125% `gate_proj` и 4.19921875% `down_proj`. Текущее покрытие
+`4.155398%`, условная `+5% NLL` guide равна `1.00207770`, худший измеренный
+ratio равен `1.000811`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -216,6 +216,11 @@ headroom равен `0.729604`. Следующий контролируемый 
 (`1.000713586` против `1.000765682`), normalized headroom равен `0.656314`.
 Следующий round-robin атом — `down_proj +0.390625%`; при отказе или tight
 headroom выполняется recovery.
+Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
+`down_proj` до `4.19921875%`. Linked BF16-MLP arm выиграл у candidate-only по
+независимому worst (`1.000811028` против `1.000830712`), normalized headroom
+равен `0.609651`. Следующий round-robin атом — `gate_proj +0.1953125%`, после
+него выполняется masked proxy recovery перед следующим крупным up-атомом.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
