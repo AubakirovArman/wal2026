@@ -28,14 +28,14 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 74.90234375% `up_proj`,
-  5.17578125% `gate_proj`, and 9.47265625% `down_proj`;
-- 74,182,656 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.311814% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 75.1953125% `up_proj`,
+  5.76171875% `gate_proj`, and 9.765625% `down_proj`;
+- 74,330,112 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.320385% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997033 / 1.001280 / 0.981543` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997140 / 1.001488 / 0.981760` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997033 / 0.997698 / 0.982167` on C4, a different SQuAD
+- audit-v4 ratios `0.997140 / 0.997836 / 0.982711` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.

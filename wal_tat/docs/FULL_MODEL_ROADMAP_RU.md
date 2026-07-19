@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 74.90234375% up + 5.17578125% gate + 9.47265625% down
+next block:           layer 24 has Q/K/V/O + 75.1953125% up + 5.76171875% gate + 9.765625% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,182,656 / 1,720,451,072 = 4.311814%
+major matrix weights: 74,330,112 / 1,720,451,072 = 4.320385%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 74.90234375% `up_proj`, первые
-5.17578125% `gate_proj` и 9.47265625% `down_proj`. Текущее покрытие
-`4.311814%`, условная `+5% NLL` guide равна `1.00215591`, худший измеренный
-ratio равен `1.001280`.
+sensitivity-ranked транзакции также приняты 75.1953125% `up_proj`, первые
+5.76171875% `gate_proj` и 9.765625% `down_proj`. Текущее покрытие
+`4.320385%`, условная `+5% NLL` guide равна `1.00216019`, худший измеренный
+ratio равен `1.001488`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -414,6 +414,14 @@ safe streak: `gate` после двух roomy-проходов вырос с `1/
 coverage `74.90234375% up / 9.47265625% down / 5.17578125% gate`, worst
 `1.001280233`, guide `1.002155907`. Следующие размеры: down/up `1/1024`,
 gate `1/512`.
+
+Круги 31–33 добавили ещё 147,456 hard-ternary weights; все девять транзакций
+приняты. `gate` трижды использовал выросший атом `1/512`, после чего tight
+headroom вернул его к `1/1024`. Финальный SHA —
+`bea838d433c1d61ec51e8d40664250fefd32b6a2261e4a33478bb7f3f8286435`,
+coverage `75.1953125% up / 9.765625% down / 5.76171875% gate`, worst
+`1.001487571`, guide `1.002160193`. Следующие шаги: down `s0034`, gate
+`s0033`, up `s0042`, каждый с атомом `1/1024`.
 
 Остались три MLP-матрицы. Component ablation показал:
 
