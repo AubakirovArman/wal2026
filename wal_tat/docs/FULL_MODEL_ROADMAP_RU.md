@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 67.67578125% up + 2.5390625% gate + 5.37109375% down
+next block:           layer 24 has Q/K/V/O + 67.67578125% up + 2.5390625% gate + 5.76171875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,425,472 / 1,720,451,072 = 4.209679%
+major matrix weights: 72,474,624 / 1,720,451,072 = 4.212536%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 67.67578125% `up_proj`, первые
-2.5390625% `gate_proj` и 5.37109375% `down_proj`. Текущее покрытие
-`4.209679%`, условная `+5% NLL` guide равна `1.00210484`, худший измеренный
-ratio равен `1.000639`.
+2.5390625% `gate_proj` и 5.76171875% `down_proj`. Текущее покрытие
+`4.212536%`, условная `+5% NLL` guide равна `1.00210627`, худший измеренный
+ratio равен `1.000809`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -215,6 +215,11 @@ worst (`1.000336331` против `1.000357894`), normalized headroom равен
 `up_proj` до `67.67578125%`. Holdout выбрал linked arm вместо candidate-only
 (`1.000638609` против `1.000662713`), normalized headroom равен `0.696599`.
 Следующий round-robin атом — `down_proj +0.390625%`.
+Следующий down-атом прошёл оба holdout, добавил 49,152 weights и поднял
+`down_proj` до `5.76171875%`. Независимый аудит выбрал candidate-only вместо
+development-победителя linked arm (`1.000809223` против `1.000834380`),
+normalized headroom равен `0.615802`. Следующий round-robin атом —
+`gate_proj +0.1953125%`.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
