@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 18.452
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997154 | 1.001044 | 0.981025 (PyTorch) |
-| v4 | 0.997154 | 0.997422 | 0.980832 (Transformers) |
+| v3 | 0.996649 | 1.000346 | 0.979944 (PyTorch) |
+| v4 | 0.996649 | 0.996810 | 0.979769 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -116,7 +116,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide: худший ratio
-`1.001044`, при guide `1.00211698`.
+`1.000346`, при guide `1.00211698`.
 
 ## Главный технический результат
 
@@ -408,6 +408,12 @@ normalized headroom равен `0.502556`. Следующий шаг — `gate_p
 поднял `gate_proj` до `3.125%`. Candidate-only выиграл у linked arm
 (`1.001044083` против `1.001077155`), normalized headroom немного вырос до
 `0.506806`. Перед следующим up-атомом выполняется coverage-neutral recovery.
+Masked proxy recovery v6 сохранил все committed masks, coverage и все
+непринятые BF16 master weights. Изменился один активный ternary-код в
+`o_proj`, 494,947 committed scales и 18,954,746 элементов master weights
+только внутри уже принятых групп. Worst независимого аудита снизился до
+`1.000346068`, normalized headroom вырос до `0.836528`. Следующий шаг —
+повторить `up_proj +0.78125%` из восстановленного frontier.
 Этот up-атом прошёл оба holdout, добавил 196,608 hard-ternary weights и
 поднял `up_proj` до `65.33203125%`. Candidate-only минимально выиграл у
 linked arm (`1.000363082` против `1.000371670`), normalized headroom равен
@@ -425,11 +431,11 @@ normalized headroom равен `0.788461`. Следующий шаг —
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0015-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_masked_proxy_headroom_v6-proxy-codes.pt
 ```
 
-- размер: `304,659,052` bytes;
-- SHA-256: `cbc37db9203ed2979a58cc7c8d4bad104c0b30e7134a96621ae9b94f6c1da2ba`;
+- размер: `304,658,032` bytes;
+- SHA-256: `071d276f9e962d66ee3758afc7403c04cd2aa36b8ead68f8c28312914cd4b46d`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 69.23828125%
   `up_proj`, 3.125% `gate_proj` и 6.54296875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -439,7 +445,7 @@ wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0015-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. выполнить coverage-neutral masked proxy recovery;
+1. повторить `up_proj +0.78125%` из восстановленного frontier;
 2. выбрать candidate-only или linked arm только по обоим holdout;
 3. при отказе уменьшить атом, а при tight headroom снова выполнить recovery;
 4. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу

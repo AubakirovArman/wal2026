@@ -103,7 +103,7 @@ Q/K/V/O layer 24 приняты и совместно с layer 27 прошли a
 sensitivity-ranked транзакции также приняты 69.23828125% `up_proj`, первые
 3.125% `gate_proj` и 6.54296875% `down_proj`. Текущее покрытие
 `4.233963%`, условная `+5% NLL` guide равна `1.00211698`, худший измеренный
-ratio равен `1.001044`.
+ratio равен `1.000346`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -248,6 +248,11 @@ normalized headroom равен `0.502556`. Следующий атом — `gate
 `gate_proj` до `3.125%`. Candidate-only выиграл у linked arm
 (`1.001044083` против `1.001077155`), normalized headroom немного вырос до
 `0.506806`. Перед следующим up-атомом выполняется coverage-neutral recovery.
+Masked proxy recovery v6 сохранил coverage, masks и все непринятые BF16
+master weights. Изменился один активный ternary-код в `o_proj`, 494,947
+committed scales и только committed master weights. Независимый worst снизился
+до `1.000346068`, normalized headroom вырос до `0.836528`. Следующий
+контролируемый атом — `up_proj +0.78125%` из восстановленного frontier.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
