@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 63.76953125% up + 1.953125% gate + 4.19921875% down
+next block:           layer 24 has Q/K/V/O + 63.76953125% up + 1.953125% gate + 4.58984375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 71,712,768 / 1,720,451,072 = 4.168254%
+major matrix weights: 71,761,920 / 1,720,451,072 = 4.171111%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 63.76953125% `up_proj`, первые
-1.953125% `gate_proj` и 4.19921875% `down_proj`. Текущее покрытие
-`4.168254%`, условная `+5% NLL` guide равна `1.00208413`, худший измеренный
-ratio равен `1.000192`.
+1.953125% `gate_proj` и 4.58984375% `down_proj`. Текущее покрытие
+`4.171111%`, условная `+5% NLL` guide равна `1.00208556`, худший измеренный
+ratio равен `1.000247`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -234,6 +234,10 @@ Masked proxy recovery v5 сохранил coverage и committed masks, изме�
 до `63.76953125%`. Linked BF16-MLP arm выиграл у candidate-only по
 независимому worst (`1.000192249` против `1.000249673`), normalized headroom
 равен `0.907755`. Следующий round-robin атом — `down_proj +0.390625%`.
+Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
+`down_proj` до `4.58984375%`. Candidate-only минимально выиграл у linked arm
+(`1.000247348` против `1.000264837`), normalized headroom равен `0.881399`.
+Следующий round-robin атом — `gate_proj +0.1953125%`.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
