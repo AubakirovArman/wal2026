@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 70.80078125% up + 3.3203125% gate + 6.93359375% down
+next block:           layer 24 has Q/K/V/O + 73.14453125% up + 3.90625% gate + 8.10546875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 73,113,600 / 1,720,451,072 = 4.249676%
+major matrix weights: 73,629,696 / 1,720,451,072 = 4.279674%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 70.80078125% `up_proj`, первые
-3.3203125% `gate_proj` и 6.93359375% `down_proj`. Текущее покрытие
-`4.249676%`, условная `+5% NLL` guide равна `1.00212484`, худший измеренный
-ratio равен `1.000784`.
+sensitivity-ranked транзакции также приняты 73.14453125% `up_proj`, первые
+3.90625% `gate_proj` и 8.10546875% `down_proj`. Текущее покрытие
+`4.279674%`, условная `+5% NLL` guide равна `1.00213984`, худший измеренный
+ratio равен `1.001127`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -334,6 +334,18 @@ round-robin атом — `up_proj +3.125%`.
 `down_proj` до `3.02734375%`. Linked arm выиграл (`1.000977218` против
 `1.000998762`), normalized headroom равен `0.524267`. Следующий round-robin
 атом — `gate_proj +0.1953125%`.
+
+Последнее проверенное продолжение добавило девять транзакций после frontier
+`s0022`: `down/gate s0017`, `up s0023`, полный цикл
+`up s0024 -> down/gate s0018` и полный цикл
+`up s0025 -> down/gate s0019`. Всего добавлено 516,096 hard-ternary weights.
+Каждый accepted checkpoint был fresh-reload проверен на development suite и
+на двух независимых holdout suites. Финальный `gate s0019` выбрал
+`candidate_bf16_mlp` с worst `1.001126802` против `1.001156927` у
+candidate-only; coverage обоих arm одинаков. Все три campaign-state
+синхронизированы на checkpoint SHA
+`49210f7ad73b22bb7a0beec96cf516ad33fcce6aab0e36cc3869bc2defef1930`.
+Следующий round-robin атом — `up_proj +0.78125%` (`s0026`).
 
 Остались три MLP-матрицы. Component ablation показал:
 
