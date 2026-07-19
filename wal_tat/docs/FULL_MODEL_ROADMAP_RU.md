@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 59.08203125% up + 1.3671875% gate + 3.41796875% down
+next block:           layer 24 has Q/K/V/O + 59.08203125% up + 1.5625% gate + 3.41796875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 70,950,912 / 1,720,451,072 = 4.123972%
+major matrix weights: 70,975,488 / 1,720,451,072 = 4.125400%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 59.08203125% `up_proj`, первые
-1.3671875% `gate_proj` и 3.41796875% `down_proj`. Текущее покрытие
-`4.123972%`, условная `+5% NLL` guide равна `1.00206199`, худший измеренный
-ratio равен `1.000308`.
+1.5625% `gate_proj` и 3.41796875% `down_proj`. Текущее покрытие
+`4.125400%`, условная `+5% NLL` guide равна `1.00206270`, худший измеренный
+ratio равен `1.000336`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -194,6 +194,10 @@ candidate-only (`1.000243471` против `1.000255685`), normalized headroom
 `down_proj` до `3.41796875%`. Candidate-only выиграл у linked arm по
 независимому worst (`1.000307810` против `1.000332156`), normalized headroom
 равен `0.850722`. Следующий round-robin атом — `gate_proj +0.1953125%`.
+Этот gate-атом прошёл оба holdout, добавил 24,576 weights и поднял
+`gate_proj` до `1.5625%`. Linked arm выиграл у candidate-only по независимому
+worst (`1.000336331` против `1.000357894`), normalized headroom равен
+`0.836946`. Следующий round-robin атом — уменьшенный `up_proj +1.5625%`.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
