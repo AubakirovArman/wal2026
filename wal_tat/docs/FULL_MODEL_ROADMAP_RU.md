@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 69.23828125% up + 3.125% gate + 6.54296875% down
+next block:           layer 24 has Q/K/V/O + 70.01953125% up + 3.125% gate + 6.54296875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,843,264 / 1,720,451,072 = 4.233963%
+major matrix weights: 72,941,568 / 1,720,451,072 = 4.239677%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 69.23828125% `up_proj`, первые
+sensitivity-ranked транзакции также приняты 70.01953125% `up_proj`, первые
 3.125% `gate_proj` и 6.54296875% `down_proj`. Текущее покрытие
-`4.233963%`, условная `+5% NLL` guide равна `1.00211698`, худший измеренный
-ratio равен `1.000346`.
+`4.239677%`, условная `+5% NLL` guide равна `1.00211984`, худший измеренный
+ratio равен `1.000616`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -253,6 +253,11 @@ master weights. Изменился один активный ternary-код в `
 committed scales и только committed master weights. Независимый worst снизился
 до `1.000346068`, normalized headroom вырос до `0.836528`. Следующий
 контролируемый атом — `up_proj +0.78125%` из восстановленного frontier.
+Этот атом прошёл оба holdout, добавил 98,304 hard-ternary weights и поднял
+`up_proj` до `70.01953125%`. Development предпочёл linked BF16 MLP arm, но
+независимый holdout выбрал candidate-only (`1.000616263` против
+`1.000722317`). Normalized headroom равен `0.709288`; следующий round-robin
+атом — `down_proj +0.390625%`.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
