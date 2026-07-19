@@ -487,16 +487,24 @@ guide `1.002149122`, normalized headroom — `0.499267`. Coverage layer 24:
 Coverage layer 24 достиг `74.4140625% up`, `8.984375% down` и
 `4.58984375% gate`.
 
+Ещё один полный последовательный цикл `down s0026`, `gate s0025`, `up s0034`
+также прошёл при одной управляющей сессии за раз и добавил 36,864
+hard-ternary weights. Все шесть независимых audit-запусков приняли
+candidate-only checkpoint. Итоговый worst равен `1.001148209` при guide
+`1.002151265`, normalized headroom — `0.466263`. Coverage layer 24 теперь
+равен `74.51171875% up`, `9.08203125% down` и `4.6875% gate`; общий
+подтверждённый coverage модели — `4.302529331%`.
+
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0033-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0034-candidate_only.pt
 ```
 
 - размер: `304,658,813` bytes;
-- SHA-256: `491fdf27f6b149637358d9b94454deb2ac03e92c6322a05165e1b112f57e4ff8`;
-- содержание: полный ternary block 27, Q/K/V/O block 24, 74.4140625%
-  `up_proj`, 4.58984375% `gate_proj` и 8.984375% `down_proj`;
+- SHA-256: `2b49af314e17800f79743216b2365378daa69f9db0e91c76db605086617581f8`;
+- содержание: полный ternary block 27, Q/K/V/O block 24, 74.51171875%
+  `up_proj`, 4.6875% `gate_proj` и 9.08203125% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
 Промежуточные и провалившие audit checkpoints удалены; их метрики и команды
@@ -504,7 +512,7 @@ wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0033-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. продолжить минимальным `down_proj s0026 +0.09765625%` либо сделать rollback;
+1. продолжить минимальным `down_proj s0027 +0.09765625%` либо сделать rollback;
 2. затем проверить `gate_proj +0.09765625%` и вернуться к `up_proj`;
 3. запускать следующий coverage-neutral recovery при tight headroom;
 4. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу

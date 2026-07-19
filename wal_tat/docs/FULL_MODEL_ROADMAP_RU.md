@@ -382,6 +382,14 @@ coverage `74.4140625% up / 8.984375% down / 4.58984375% gate`, worst
 `1.001147515`, guide `1.002150193`, normalized headroom `0.466320`.
 Следующий атом — `down_proj s0026 +0.09765625%`.
 
+Следующий цикл `down s0026`, `gate s0025`, `up s0034` добавил ещё 36,864
+hard-ternary weights. Все три кандидата прошли development, fresh reload и
+два независимых holdout; выбран candidate-only. Новый SHA —
+`2b49af314e17800f79743216b2365378daa69f9db0e91c76db605086617581f8`,
+coverage `74.51171875% up / 9.08203125% down / 4.6875% gate`, worst
+`1.001148209`, guide `1.002151265`, normalized headroom `0.466263`.
+Следующий атом — `down_proj s0027 +0.09765625%`.
+
 Остались три MLP-матрицы. Component ablation показал:
 
 1. `up_proj` — наименее вредная отдельная матрица;
