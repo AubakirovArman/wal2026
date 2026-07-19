@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 60.64453125% up + 1.5625% gate + 3.41796875% down
+next block:           layer 24 has Q/K/V/O + 60.64453125% up + 1.5625% gate + 3.80859375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 71,172,096 / 1,720,451,072 = 4.136828%
+major matrix weights: 71,221,248 / 1,720,451,072 = 4.139685%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 60.64453125% `up_proj`, первые
-1.5625% `gate_proj` и 3.41796875% `down_proj`. Текущее покрытие
-`4.136828%`, условная `+5% NLL` guide равна `1.00206841`, худший измеренный
-ratio равен `1.000551`.
+1.5625% `gate_proj` и 3.80859375% `down_proj`. Текущее покрытие
+`4.139685%`, условная `+5% NLL` guide равна `1.00206984`, худший измеренный
+ratio равен `1.000555`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -202,6 +202,10 @@ worst (`1.000336331` против `1.000357894`), normalized headroom равен
 до `60.64453125%`. Candidate-only выиграл у linked arm по независимому worst
 (`1.000550819` против `1.000677756`), normalized headroom равен `0.733700`.
 Следующий round-robin атом — `down_proj +0.390625%`.
+Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
+`down_proj` до `3.80859375%`. Linked arm выиграл у candidate-only по
+независимому worst (`1.000555450` против `1.000598652`), normalized headroom
+равен `0.731646`. Следующий round-robin атом — `gate_proj +0.1953125%`.
 Этот gate-атом также прошёл оба holdout, добавил 24,576 weights и поднял
 `gate_proj` до `1.171875%`. Candidate-only выиграл и development, и holdout:
 `1.000480310` против `1.000712729` у linked arm. При динамическом gate
