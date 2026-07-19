@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 69.23828125% up + 2.9296875% gate + 6.54296875% down
+next block:           layer 24 has Q/K/V/O + 69.23828125% up + 3.125% gate + 6.54296875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 72,818,688 / 1,720,451,072 = 4.232535%
+major matrix weights: 72,843,264 / 1,720,451,072 = 4.233963%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,9 +101,9 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
 sensitivity-ranked транзакции также приняты 69.23828125% `up_proj`, первые
-2.9296875% `gate_proj` и 6.54296875% `down_proj`. Текущее покрытие
-`4.232535%`, условная `+5% NLL` guide равна `1.00211627`, худший измеренный
-ratio равен `1.001053`.
+3.125% `gate_proj` и 6.54296875% `down_proj`. Текущее покрытие
+`4.233963%`, условная `+5% NLL` guide равна `1.00211698`, худший измеренный
+ratio равен `1.001044`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -244,6 +244,10 @@ normalized headroom равен `0.615802`. Следующий round-robin ато
 `down_proj` до `6.54296875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.001052724` против `1.001137076`),
 normalized headroom равен `0.502556`. Следующий атом — `gate_proj +0.1953125%`.
+Этот gate-атом прошёл оба holdout, добавил 24,576 weights и поднял
+`gate_proj` до `3.125%`. Candidate-only выиграл у linked arm
+(`1.001044083` против `1.001077155`), normalized headroom немного вырос до
+`0.506806`. Перед следующим up-атомом выполняется coverage-neutral recovery.
 Этот down-атом прошёл оба holdout, добавил 49,152 weights и поднял
 `down_proj` до `4.98046875%`. Holdout выбрал candidate-only вместо
 development-победителя linked arm (`1.000442839` против `1.000456372`),
