@@ -1,0 +1,94 @@
+{
+  "schema": "wal-tat-evidence-v83",
+  "date_utc": "2026-07-20",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "prospective_nonoverlapping_d10_replicate_accepted",
+  "policy": {
+    "result": "wal_tat/results/evidence_v83_policy.json",
+    "sha256": "30170ea3094efeee0580d00c8a24b1c4497e5f6788b05c917fa721ebd9da0ec9",
+    "created_before_candidate_run": true,
+    "cumulative_point_limit": 1.0021669777540759,
+    "incremental_upper_95_limit": 1.0002,
+    "previously_observed_d10_candidate_eligible": false
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 10,
+    "groups": 96,
+    "weights": 12288,
+    "group_size": 128,
+    "initializer": "activation_wls",
+    "overlap_with_prior_d8_d10_artifact_groups": 0,
+    "initializer_ablation": {
+      "result": "wal_tat/results/block24_down_tail_d10_wls_replicate2_v1.json",
+      "sha256": "4af7fcbd949692c1449e59374f41d880602b42611eefa2871977731c584e06b8",
+      "development_worst_incremental": {
+        "absmean_round": 1.0000399455456277,
+        "threshold_ls": 1.0000718624383291,
+        "activation_wls": 1.00018128946794
+      },
+      "interpretation": "Activation-WLS did not generalize as the best raw initializer on this replicate; it remained fixed because the recipe was predeclared."
+    }
+  },
+  "recovery": {
+    "result": "wal_tat/results/block24_down_tail_d10_wls_replicate2_proxy_v1.json",
+    "sha256": "b98fe79a1abd23c3fb183f990443174de3fffc38a0f1d06c58034daf34e58ea7",
+    "artifact_sha256": "19d79df975a987ad1d88bc1c7e6d15cfd5cf17f3d761e2d4067d55a4866fb833",
+    "best_step": 256,
+    "candidate_code_churn": 0.0,
+    "norm_parameters_trained": 0,
+    "previously_committed_groups_trainable": 0,
+    "development_worst_incremental_after_recovery": 1.0000824029327282
+  },
+  "prospective_dual_gate": {
+    "v3": {
+      "result": "wal_tat/results/block24_down_tail_d10_wls_replicate2_proxy_v1_paired_v3.json",
+      "sha256": "0e8b8a6106fee88a91274177cc91b4d1971e838fe9f8d47750ba2861b12a393a",
+      "worst_cumulative_point_ratio": 1.0014719921942585,
+      "worst_incremental_upper_95_ratio": 1.000050877684482,
+      "passed": true
+    },
+    "v4": {
+      "result": "wal_tat/results/block24_down_tail_d10_wls_replicate2_proxy_v1_paired_v4.json",
+      "sha256": "c0136eceb688169a654d8f46ba1429bbc53c084dfad2e24f16d76d45ff3b00e6",
+      "worst_cumulative_point_ratio": 0.9977746543143811,
+      "worst_incremental_upper_95_ratio": 1.0001071227142884,
+      "passed": true
+    },
+    "cumulative_confidence_passed": false,
+    "interpretation": "The candidate passed the prospective incremental UCB margin and cumulative point budget. Cumulative SQuAD confidence remains dominated by uncertainty inherited from the pre-existing frontier."
+  },
+  "frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "bytes": 304659483,
+    "accepted_weights": 74563584,
+    "total_major_weights": 1720451072,
+    "remaining_weights": 1645887488,
+    "coverage_percent": 4.33395550815176,
+    "remaining_percent": 95.66604449184824,
+    "full_decoder_blocks": 1,
+    "full_major_matrices": 11,
+    "layer24": {
+      "up_proj_coverage_percent": 75.78125,
+      "down_proj_coverage_percent": 10.44921875,
+      "gate_proj_coverage_percent": 6.34765625
+    }
+  },
+  "publication": {
+    "commit_result": "wal_tat/results/block24_down_d10_wls_replicate2_s0048_commit.json",
+    "commit_result_sha256": "84bdb291883880fa991564d8842f335184b49974fcf0bb2800931b6045e6bbf5",
+    "fresh_verify": "wal_tat/results/block24_down_d10_wls_replicate2_s0048_fresh_verify.json",
+    "fresh_verify_sha256": "da11773ec93222065e245fc27d28333849b8380ef4c1f1aab868e90a94e6275b",
+    "fresh_verify_passed": true,
+    "strict_codes": [
+      -1,
+      0,
+      1
+    ],
+    "exact_artifact_mask_code_scale_match": true,
+    "source_checkpoint_deleted_after_verification": true,
+    "deleted_source_checkpoint_bytes": 304658813,
+    "checkpoint_files_remaining": 1
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "wal-tat-predeclared-candidate-policy-v1",
+  "policy_id": "evidence-v83-block24-down-d10-wls-replicate2",
+  "date_utc": "2026-07-20",
+  "created_before_candidate_run": true,
+  "git_parent": "6fce33a",
+  "purpose": "Prospective non-overlapping replication of the D10 activation-WLS tail result; the previously observed D10 candidate is ineligible under this new policy.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0047-candidate_only.pt",
+    "sha256": "d9f4e33a87cc8de8f2fe4e94c2873b1dc3109836bafe8a3b1f3922236fa3c674",
+    "accepted_weights": 74551296,
+    "total_major_weights": 1720451072,
+    "coverage_percent": 4.333241276855097
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 10,
+    "groups": 96,
+    "group_size": 128,
+    "weights": 12288,
+    "initializer": "activation_wls",
+    "initializer_selection": "fixed before running the candidate",
+    "new_initializer_tag": "block24_down_tail_d10_wls_replicate2_v1",
+    "new_recovery_tag": "block24_down_tail_d10_wls_replicate2_proxy_v1",
+    "require_nonoverlap": true,
+    "exclude_artifacts": [
+      {
+        "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_down_tail_d8d10_proxy_recovery_v1.pt",
+        "sha256": "b147729b860f007edf70a29c6c46f77698dfe4fd8b6513d878e1045107953d8d"
+      }
+    ]
+  },
+  "development": {
+    "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+    "sha256": "79655f83fbb6560d9391a7cc0400ee426648b401ae866385440d467c543daf0b",
+    "initializer_samples_per_domain": 8,
+    "initializer_sequences_per_domain": 64,
+    "initializer_domain_offset": 0,
+    "seed": 109,
+    "recovery": {
+      "steps": 256,
+      "calibration_sequences": 96,
+      "selection_sequences_per_domain": 64,
+      "selection_every": 64,
+      "batch_size": 8,
+      "proxy_lr": 0.0001,
+      "scale_lr": 0.000005,
+      "initial_temperature": 0.25,
+      "final_temperature": 0.08,
+      "ce_weight": 1.0,
+      "kd_weight": 1.0,
+      "kd_temperature": 1.0,
+      "block_weight": 0.02,
+      "proxy_anchor_weight": 0.001,
+      "norm_parameters_trained": 0,
+      "previously_committed_groups_trainable": 0
+    }
+  },
+  "recurring_validation": [
+    {
+      "name": "v3",
+      "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+      "sha256": "be51ba13b438ca9635ba7b36276ed64ca29365526f74c1b8931d4df16c7cda0e"
+    },
+    {
+      "name": "v4",
+      "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+      "sha256": "ee9b48e9bd02d3ea2b9af54ea7f30dd385c8a8d96fed773084e6b0497a4b8347"
+    }
+  ],
+  "acceptance": {
+    "all_conditions_required": true,
+    "cumulative_point_ratio_max_each_domain": 1.0021669777540759,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0002,
+    "confidence": 0.95,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "validation_suites_required": [
+      "v3",
+      "v4"
+    ],
+    "no_hyperparameter_retuning_on_recurring_validation": true,
+    "checkpoint_and_artifact_hashes_must_match": true,
+    "checkpoint_source_must_remain_unmodified": true,
+    "norm_parameters_trained_must_equal": 0,
+    "previously_committed_groups_trainable_must_equal": 0,
+    "failure_action": "do not commit candidate; preserve s0047 frontier"
+  },
+  "prospective_if_accepted": {
+    "accepted_weights": 74563584,
+    "remaining_weights": 1645887488,
+    "coverage_percent": 4.33395550815176,
+    "remaining_percent": 95.66604449184824,
+    "layer24_down_proj_coverage_percent": 10.44921875
+  },
+  "prior_observation_excluded_from_acceptance": {
+    "artifact_sha256": "b147729b860f007edf70a29c6c46f77698dfe4fd8b6513d878e1045107953d8d",
+    "v3_result_sha256": "fd016355cf3fd840896d46f9feb5f17f2d8af65f85d6e6b03271d3bad370133b",
+    "v4_result_sha256": "5b2022f224121d31224c363d52737b6b749c3811e3ed13cae828c8d2090893c",
+    "reason": "The 1.0002 incremental UCB margin was defined only after observing this candidate, so it cannot be applied retroactively."
+  }
+}

@@ -44,6 +44,7 @@ from .scoring import (
     diagonal_ternary_search,
     group_weight_mse,
     select_group_mask,
+    sensitivity_decile_mask,
 )
 from .transaction import (
     AtomicTernaryTransaction,
@@ -106,6 +107,7 @@ __all__ = [
     "sha256_file",
     "synchronize_campaign_frontiers",
     "select_group_mask",
+    "sensitivity_decile_mask",
     "structured_channel_candidate_mask",
     "structured_down_candidate_mask",
     "transaction_schedule",

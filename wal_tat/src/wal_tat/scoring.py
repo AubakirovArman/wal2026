@@ -126,3 +126,47 @@ def select_group_mask(
     result[chosen] = True
     return result.view_as(eligible)
 
+
+def sensitivity_decile_mask(
+    scores: torch.Tensor,
+    eligible: torch.Tensor,
+    *,
+    decile: int,
+    count: int,
+) -> torch.Tensor:
+    """Select deterministic, evenly spaced groups from one sensitivity decile.
+
+    Decile 1 contains the lowest-damage eligible groups and decile 10 the
+    highest-damage groups.  Even spacing avoids reporting only the easiest edge
+    of a requested bucket while keeping the exact mask reproducible.
+    """
+    if scores.ndim != 2 or eligible.shape != scores.shape or eligible.dtype != torch.bool:
+        raise ValueError("scores and eligible must be matching 2D tensors")
+    if not 1 <= int(decile) <= 10:
+        raise ValueError("decile must be in [1, 10]")
+    if count < 1:
+        raise ValueError("count must be positive")
+    flat_eligible = torch.where(eligible.reshape(-1))[0]
+    if flat_eligible.numel() < 10:
+        raise ValueError("at least ten eligible groups are required")
+    values = scores.reshape(-1).index_select(0, flat_eligible).float()
+    order = torch.argsort(values, stable=True)
+    ranked = flat_eligible.index_select(0, order)
+    lower = ranked.numel() * (int(decile) - 1) // 10
+    upper = ranked.numel() * int(decile) // 10
+    bucket = ranked[lower:upper]
+    if count > bucket.numel():
+        raise ValueError(f"count {count} exceeds decile size {bucket.numel()}")
+    if count == 1:
+        chosen = bucket[bucket.numel() // 2].reshape(1)
+    else:
+        positions = torch.linspace(
+            0,
+            bucket.numel() - 1,
+            steps=count,
+            device=bucket.device,
+        ).round().long()
+        chosen = bucket.index_select(0, positions)
+    result = torch.zeros_like(eligible.reshape(-1))
+    result[chosen] = True
+    return result.view_as(eligible)

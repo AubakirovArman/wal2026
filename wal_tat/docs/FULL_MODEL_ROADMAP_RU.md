@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.34765625% gate + 10.3515625% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.34765625% gate + 10.44921875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,551,296 / 1,720,451,072 = 4.333241%
+major matrix weights: 74,563,584 / 1,720,451,072 = 4.333956%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -101,11 +101,13 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
-75.78125% `up_proj`, 6.34765625% `gate_proj` и 10.3515625% `down_proj`.
-Текущее покрытие `4.333241%`, условная `+5% NLL` guide равна `1.00216662`,
-худший измеренный точечный ratio равен `1.001561`. Paired SQuAD upper-95
-равен `1.007022` на v3 и `1.003625` на v4, поэтому следующий рост по старой
-point-only policy остановлен до statistical gate и новых sealed suites.
+75.78125% `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`.
+Текущее покрытие `4.333956%`, условная `+5% NLL` guide равна `1.00216698`,
+худший измеренный точечный ratio равен `1.001472`. Кумулятивный paired SQuAD
+upper-95 равен `1.006937` на v3 и `1.003597` на v4, но последний D10-шаг был
+принят уже по prospective dual gate: cumulative point плюс incremental
+upper-95 `<=1.0002`. Его incremental maxima равны `1.00005088` и
+`1.00010712`; это не заменяет будущий sealed block audit.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -458,6 +460,16 @@ RHT остаётся сильной инициализацией для буду
 Поскольку v3/v4 многократно влияли на выбор arm и размер транзакций, дальше они
 называются recurring validation. Для независимого доказательства нужны новые
 непересекающиеся sealed v5/v6, которые не участвуют в настройке.
+
+После остановки point-only роста проведён D8--D10 tail stress. Activation-WLS
+сильно помог первой D10-группе `down_proj`, но на второй непересекающейся
+реплике сырая WLS-инициализация оказалась хуже absmean. Рецепт второй реплики
+был зафиксирован заранее и не менялся: hard-forward recovery сохранил codes,
+улучшил только scales и прошёл prospective dual gate на v3/v4. Принято 96
+групп (`12,288` weights), `down_proj` вырос до `10.44921875%`, общий coverage
+до `4.333955508%`. Этот результат поддерживает scale recovery, но опровергает
+гипотезу об универсальном превосходстве WLS; следующие реплики должны заранее
+фиксировать initializer и оставаться непересекающимися.
 
 Остались три MLP-матрицы. Component ablation показал:
 

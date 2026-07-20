@@ -27,3 +27,15 @@ circular moving-block bootstrap. Block resampling is required because adjacent
 frozen windows come from a contiguous token stream and are not independent
 documents. A checkpoint is `confidence_passed` only when every domain's upper
 ratio confidence bound is within the supplied cumulative gate.
+
+For a micro-step whose parent frontier already has a wide cumulative interval,
+declare the candidate policy before running it and keep two tests separate:
+
+- cumulative point ratio versus raw BF16 must remain inside the coverage budget;
+- the paired incremental upper-confidence ratio versus the frozen parent must
+  remain inside a small predeclared margin on every recurring-validation domain.
+
+`commit_partial_initializer_artifact.py` enforces both conditions by hash and
+publishes a child checkpoint only after every required audit agrees with the
+policy. This prospective incremental gate does not turn recurring validation
+into sealed evidence and must never be defined after seeing the candidate.

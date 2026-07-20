@@ -29,17 +29,20 @@ The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
-  6.34765625% `gate_proj`, and 10.3515625% `down_proj`;
-- 74,551,296 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.333241% of major matrix
+  6.34765625% `gate_proj`, and 10.44921875% `down_proj`;
+- 74,563,584 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.333956% of major matrix
   weights accepted;
-- recurring validation-v3 NLL ratios `0.997210 / 1.001561 / 0.982286` on C4, SQuAD and
+- recurring validation-v3 NLL ratios `0.997193 / 1.001472 / 0.982272` on C4, SQuAD and
   PyTorch code;
-- recurring validation-v4 ratios `0.997210 / 0.997784 / 0.983466` on C4, a different SQuAD
+- recurring validation-v4 ratios `0.997193 / 0.997775 / 0.983498` on C4, a different SQuAD
   slice and Transformers code;
-- paired 95% upper bounds still fail the narrow SQuAD guide (`1.007022` on
-  v3 and `1.003625` on v4), so future commits require a statistical gate and
-  new sealed suites;
+- a prospectively declared non-overlapping D10 step passed an incremental
+  paired upper-95 limit of `1.0002` (`1.000051` on v3 and `1.000107` on v4)
+  while also passing the cumulative point budget;
+- cumulative paired 95% bounds still fail the narrow SQuAD guide because of
+  uncertainty inherited from the earlier frontier, so this is recurring
+  validation rather than final sealed evidence;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
@@ -79,6 +82,12 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   of a frozen transform artifact without mutating the accepted frontier;
 - `experiments/rht_artifact_audit.py`: cumulative BF16 and incremental frontier
   paired audit for a fixed transform artifact;
+- `experiments/tail_initializer_ablation.py`: checkpoint-neutral sensitivity
+  decile stress test with absmean, threshold-LS and activation-WLS initializers;
+- `experiments/partial_initializer_proxy_recovery.py`: candidate-only
+  hard-forward proxy/scale recovery with norms and prior commits frozen;
+- `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
+  dual-gate commit that publishes a new checkpoint without mutating its parent;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
   frontier synchronization, and active-worker detection;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.

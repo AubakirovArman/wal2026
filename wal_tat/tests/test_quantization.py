@@ -9,6 +9,7 @@ from wal_tat import (
     hard_codes_scales,
     q2_g128_physical_bpw,
     select_group_mask,
+    sensitivity_decile_mask,
     transaction_schedule,
 )
 
@@ -58,3 +59,22 @@ def test_diagonal_search_never_worse_than_its_tested_zero_threshold():
     baseline_scale = (moment * weight.abs()).sum() / moment.sum()
     baseline_error = (moment * (weight - weight.sign() * baseline_scale).square()).sum()
     assert error.item() <= baseline_error.item() + 1e-6
+
+
+def test_sensitivity_decile_mask_covers_requested_rank_bucket():
+    scores = torch.arange(100, dtype=torch.float32).reshape(10, 10)
+    eligible = torch.ones_like(scores, dtype=torch.bool)
+    mask = sensitivity_decile_mask(scores, eligible, decile=9, count=5)
+    selected = scores[mask]
+    assert mask.sum().item() == 5
+    assert selected.min().item() >= 80
+    assert selected.max().item() <= 89
+    assert selected.tolist() == [80.0, 82.0, 84.0, 87.0, 89.0]
+
+
+def test_sensitivity_decile_mask_respects_sparse_eligibility():
+    scores = torch.arange(120, dtype=torch.float32).reshape(12, 10)
+    eligible = scores.remainder(2).eq(0)
+    mask = sensitivity_decile_mask(scores, eligible, decile=10, count=3)
+    assert torch.all(eligible[mask])
+    assert scores[mask].tolist() == [108.0, 112.0, 118.0]
