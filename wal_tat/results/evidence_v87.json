@@ -1,0 +1,63 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v87-block24-hard-code-recovery-v10-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v87_policy.json",
+    "sha256": "da9ec93183878d168c969f5daefeaa058aa5aadd307f2f121196a37d88058e77"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_hard_code_recovery_v10.json",
+    "sha256": "c8604be64b11afb53d6e33432b96866dbf8c2c4b7740c0a8f0f98b91e3121a8d",
+    "wal_sha256": "3bb7b6f56a5c3c10ba3b70984006624fa13a066e433343b519a84fa45114069b",
+    "passed": false,
+    "best_selection_step": 128,
+    "best_selection_ratios": {
+      "c4_train": 0.9978934289982863,
+      "squad_train": 1.0134670130746506,
+      "library_code_train": 0.9894769832359204
+    },
+    "best_deployed_state_was_identical_to_source": true,
+    "accepted_checkpoint": null
+  },
+  "diagnostic": {
+    "step_384": {
+      "code_churn_each_matrix": 0.0,
+      "minimum_boundary_distance": {
+        "gate_proj": 0.17490703,
+        "up_proj": 0.09666926,
+        "down_proj": 0.10737246
+      }
+    },
+    "step_576_code_churn": {
+      "gate_proj": 0.000006260016107262345,
+      "up_proj": 0.00003376859240233898,
+      "down_proj": 0.00013766184565611184
+    },
+    "step_768": {
+      "code_churn": {
+        "gate_proj": 0.00009515224519418553,
+        "up_proj": 0.0005395633634179831,
+        "down_proj": 0.0028612366877496243
+      },
+      "selection_ratios": {
+        "c4_train": 1.0047747686247162,
+        "squad_train": 1.0207278180220998,
+        "library_code_train": 0.9990898820991918
+      }
+    },
+    "interpretation": "Proxy optimization reaches discrete boundaries, but simultaneous MLP code changes become harmful; down_proj crosses first and dominates churn. A staged down-only code move followed by frozen-code scale polish is the next bounded falsification test."
+  },
+  "decision": {
+    "accepted": false,
+    "coverage_changed": false,
+    "source_checkpoint_preserved": true,
+    "rotating_validation_opened": false
+  },
+  "frontier_after_decision": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176
+  }
+}

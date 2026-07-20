@@ -631,6 +631,43 @@ Hard-forward recovery не сменил ни одного ternary-кода, но
 проверен по development suite, а artifact mask/codes/scales сверены побитно.
 Старый `s0047` удалён только после этих проверок.
 
+### Новые rotating validation и recovery v8--v11
+
+После `s0048` построены два новых набора v5/v6. Их C4, SQuAD и code token
+windows не пересекаются с v1--v4 и друг с другом. Они уже раскрыты в
+evidence v84, поэтому являются **rotating validation**, а не sealed final
+audit. На v5 сам parent `s0048` дал SQuAD ratio `1.005233579`; на v6 —
+`1.001054693`. Новая absmean D10-реплика была почти инкрементально нейтральна
+(upper-95 не хуже `1.000099`), но отклонена из-за cumulative v5 SQuAD point.
+Coverage не изменился.
+
+Для recovery создан ещё один train/development suite v2 с 98,304 calibration
+tokens, SQuAD-весом x4, interleaved domains и новыми локальными
+Accelerate/Datasets code sources. Точные token-window пересечения со всеми
+recovery-v1 и v5/v6 равны нулю. Этот suite воспроизвёл более крупный
+предсуществующий SQuAD gap `1.013493297`, то есть проблема v5 не является
+единичным случайным срезом.
+
+Четыре coverage-neutral recovery были заранее объявлены и безопасно
+отклонены:
+
+- v8: block-wide KD/proxy recovery; каждый trained snapshot хуже source,
+  выбран `step 0`;
+- v9: MLP scale-only recovery; каждый snapshot хуже source, выбран `step 0`;
+- v10: hard-code recovery со frozen scales; к шагу 576 появились первые
+  переключения, а к 768 churn достиг `0.2861%` в `down_proj` и ухудшил SQuAD
+  до `1.020728`;
+- v11: `down_proj`-only staged recovery (`proxy move -> code freeze -> scale
+  polish`); churn `0.01156%` уже ухудшил selection, а scale polish вернул лишь
+  малую часть SQuAD loss и дополнительно ухудшил C4/code.
+
+В proxy diagnostics теперь записываются расстояния до порогов `±0.5`, code
+entropy, zero fraction, proxy displacement, scale percentiles и доля scale на
+clamp. Они подтвердили, что прежний `code_churn = 0` не означал отсутствие
+обучения: proxy двигались к границам, но первые реальные переключения были
+вредными. Ни один recovery checkpoint не опубликован; frontier и coverage
+остались ровно `s0048`.
+
 ## Лучший воспроизводимый checkpoint
 
 ```text
@@ -648,14 +685,16 @@ wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt
 
 ## Следующий технический шаг
 
-1. построить новые непересекающиеся sealed v5/v6 и вести exposure accounting;
-2. повторить D10 stress-test на новых группах с заранее фиксированными
-   absmean/WLS-рецептами: одна успешная scale-recovery реплика не доказывает
-   универсальность WLS;
-3. добавить чистый matched-BF16 recovery control и отдельно учитывать drift
-   norm-параметров;
+1. добавить чистый matched-BF16 recovery control: те же tokens, steps,
+   optimizer и trainable region, но без нового ternary deployment edit;
+2. не продолжать tuning по раскрытым v5/v6; следующий block/final audit должен
+   использовать новые sealed suites и exposure accounting;
+3. только если matched BF16 control улучшает новый SQuAD suite, расширять
+   compensation capacity или distillation; если он тоже не помогает — менять
+   recovery corpus/objective, а не learning rate proxy;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. реализовать reference Q2-g128 packer и `true_artifact_bpw()` до массовой
    конвертации остальных блоков;
-6. затем завершить второй block и продолжить по карте чувствительности.
+6. затем вернуться к росту coverage, завершить второй block и продолжить по
+   карте чувствительности.

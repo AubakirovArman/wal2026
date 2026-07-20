@@ -48,10 +48,16 @@ def code_texts(directories):
     paths = []
     for directory in directories:
         paths.extend(sorted(directory.rglob("*.py")))
-    texts = [
-        f"# source: {path.relative_to(WORKSPACE)}\n{path.read_text(encoding='utf-8', errors='ignore')}"
-        for path in paths
-    ]
+    texts = []
+    for path in paths:
+        try:
+            source_name = path.relative_to(WORKSPACE)
+        except ValueError:
+            source_name = path
+        texts.append(
+            f"# source: {source_name}\n"
+            f"{path.read_text(encoding='utf-8', errors='ignore')}"
+        )
     return paths, texts
 
 
@@ -60,7 +66,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=WORKSPACE / "wal2/cache/wal-tat-diverse-recovery-v1-l256.pt",
+        default=WORKSPACE / "wal2/cache/wal-tat-diverse-recovery-v2-l256.pt",
     )
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--length", type=int, default=256)
@@ -69,6 +75,24 @@ def main() -> None:
     parser.add_argument("--squad-calibration-repeat", type=int, default=1)
     parser.add_argument("--code-calibration-repeat", type=int, default=1)
     parser.add_argument("--gates-per-domain", type=int, default=256)
+    parser.add_argument("--calibration-offset", type=int, default=10007)
+    parser.add_argument("--gate-offset", type=int, default=80003)
+    parser.add_argument(
+        "--code-directory",
+        type=Path,
+        action="append",
+        help="Python source directory; repeat to concatenate several disjoint corpora",
+    )
+    parser.add_argument("--code-domain", default="vendor_code_train")
+    parser.add_argument(
+        "--interleave-calibration",
+        action="store_true",
+        help="interleave weighted domain windows instead of concatenating domains",
+    )
+    parser.add_argument(
+        "--policy",
+        default="training calibration and development gates; never final audit",
+    )
     args = parser.parse_args()
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
@@ -83,47 +107,61 @@ def main() -> None:
         c4_texts.extend(arrow_column(path, "text")[:2500])
     squad_path = one_file("squad/plain_text/0.0.0/*/squad-train.arrow")
     squad_texts = arrow_column(squad_path, "context")
-    code_paths, code_values = code_texts(
-        (
-            WORKSPACE / "wal2/vendor/Hestia",
-            WORKSPACE / "wal2/vendor/TWLA",
-            WORKSPACE / "wal2/vendor/GSQ",
-        )
-    )
+    code_directories = args.code_directory or [
+        WORKSPACE / "wal2/vendor/Hestia",
+        WORKSPACE / "wal2/vendor/TWLA",
+        WORKSPACE / "wal2/vendor/GSQ",
+    ]
+    code_directories = [path.resolve() for path in code_directories]
+    if any(not path.is_dir() for path in code_directories):
+        raise RuntimeError(f"invalid code directories: {code_directories}")
+    code_paths, code_values = code_texts(code_directories)
 
     token_sources = {
         "c4_train": tokenize(tokenizer, c4_texts),
         "squad_train": tokenize(tokenizer, squad_texts),
-        "vendor_code_train": tokenize(tokenizer, code_values),
+        args.code_domain: tokenize(tokenizer, code_values),
     }
-    calibration = []
+    calibration_by_domain = {}
     gates = {}
+    repeats = {
+        "c4_train": args.c4_calibration_repeat,
+        "squad_train": args.squad_calibration_repeat,
+        args.code_domain: args.code_calibration_repeat,
+    }
     for domain, ids in token_sources.items():
-        repeats = {
-            "c4_train": args.c4_calibration_repeat,
-            "squad_train": args.squad_calibration_repeat,
-            "vendor_code_train": args.code_calibration_repeat,
-        }
         calibration_count = args.calibration_per_domain * repeats[domain]
-        calibration.extend(
-            windows(
-                ids,
-                count=calibration_count,
-                length=args.length,
-                offset=10007,
-            )
+        calibration_by_domain[domain] = windows(
+            ids,
+            count=calibration_count,
+            length=args.length,
+            offset=args.calibration_offset,
         )
         gates[domain] = windows(
             ids,
             count=args.gates_per_domain,
             length=args.length,
-            offset=80003,
+            offset=args.gate_offset,
         )
+
+    if args.interleave_calibration:
+        calibration = []
+        for index in range(args.calibration_per_domain):
+            for domain in token_sources:
+                for repeat in range(repeats[domain]):
+                    source_index = repeat * args.calibration_per_domain + index
+                    calibration.append(calibration_by_domain[domain][source_index])
+    else:
+        calibration = [
+            window
+            for domain in token_sources
+            for window in calibration_by_domain[domain]
+        ]
 
     source_paths = [*c4_paths, squad_path, *code_paths]
     payload = {
-        "format": "wal-tat-diverse-recovery-v1",
-        "policy": "training calibration and development gates; never final audit",
+        "format": "wal-tat-diverse-recovery-v2",
+        "policy": args.policy,
         "model_revision": model_path.name,
         "sequence_length": args.length,
         "calibration_per_domain": args.calibration_per_domain,
@@ -131,6 +169,28 @@ def main() -> None:
         "squad_calibration_repeat": args.squad_calibration_repeat,
         "code_calibration_repeat": args.code_calibration_repeat,
         "gates_per_domain": args.gates_per_domain,
+        "calibration_offset": args.calibration_offset,
+        "gate_offset": args.gate_offset,
+        "interleave_calibration": args.interleave_calibration,
+        "code_directories": [str(path) for path in code_directories],
+        "code_domain": args.code_domain,
+        "ranges": {
+            "calibration": {
+                domain: [
+                    args.calibration_offset,
+                    args.calibration_offset
+                    + args.calibration_per_domain * repeats[domain] * args.length,
+                ]
+                for domain in token_sources
+            },
+            "gates": {
+                domain: [
+                    args.gate_offset,
+                    args.gate_offset + args.gates_per_domain * args.length,
+                ]
+                for domain in token_sources
+            },
+        },
         "calibration": calibration,
         "gates": gates,
         "sources": [str(path) for path in source_paths],

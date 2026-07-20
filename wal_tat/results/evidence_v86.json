@@ -1,0 +1,37 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v86-block24-scale-only-recovery-v9-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v86_policy.json",
+    "sha256": "dd278db01030632a667aea6b971ffce6a2692ab39b7e8a0838f020720beeae1e"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_scale_only_recovery_v9.json",
+    "sha256": "f51b8857b850abc498fce430bb0a4dbf7f21b7ae264a664ae88d85165c7e1196",
+    "wal_sha256": "12d53dea13c3f094969d579eff1880d30f19da0865e6043734e43aa7a248567c",
+    "passed": false,
+    "best_selection_step": 0,
+    "source_frontier_ratios": {
+      "c4_train": 0.9978488271120265,
+      "squad_train": 1.0134932970709492,
+      "library_code_train": 0.9894682468283958
+    },
+    "code_churn_each_matrix": 0.0,
+    "accepted_checkpoint": null
+  },
+  "decision": {
+    "accepted": false,
+    "reason": "Every scale-only snapshot made the worst-domain selection objective worse; step 0 was restored and no checkpoint was created.",
+    "new_information": "The independent recovery-v2 suite reproduces a larger pre-existing SQuAD generalization gap (PPL ratio 1.0134933), while scale-only calibration cannot repair it.",
+    "coverage_changed": false,
+    "source_checkpoint_preserved": true,
+    "rotating_validation_opened": false
+  },
+  "frontier_after_decision": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176
+  }
+}

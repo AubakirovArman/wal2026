@@ -45,9 +45,11 @@ def validate_audits(
     checkpoint_hash: str,
     artifact_hash: str,
 ) -> dict:
-    configured = {
-        item["sha256"]: item["name"] for item in policy["recurring_validation"]
-    }
+    validation_policy = policy.get("rotating_validation") or policy.get(
+        "recurring_validation"
+    )
+    require(bool(validation_policy), "policy has no validation suites")
+    configured = {item["sha256"]: item["name"] for item in validation_policy}
     required_names = set(policy["acceptance"]["validation_suites_required"])
     observed_names = set()
     cumulative_limit = float(

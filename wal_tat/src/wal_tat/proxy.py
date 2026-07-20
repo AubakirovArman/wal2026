@@ -82,6 +82,59 @@ class ProxyTernaryMatrix(nn.Module):
         changed = self.hard_codes() != self.initial_codes
         return float(changed[self.committed_mask].float().mean().item())
 
+    @torch.no_grad()
+    def deployment_statistics(self, boundary_epsilon: float = 0.05) -> dict:
+        """Summarize hard-code stability and scale health on deployed groups."""
+        if boundary_epsilon < 0:
+            raise ValueError("boundary_epsilon must be non-negative")
+        active_proxy = self.proxy_code[self.committed_mask]
+        active_codes = self.hard_codes()[self.committed_mask]
+        active_initial = self.initial_codes[self.committed_mask]
+        active_scales = self.group_scale.detach().abs()[self.committed_mask]
+        if active_proxy.numel() == 0:
+            raise ValueError("deployment statistics require committed groups")
+        boundary_distance = torch.minimum(
+            (active_proxy - 0.5).abs(), (active_proxy + 0.5).abs()
+        )
+        counts = {
+            str(code): int((active_codes == code).sum().item())
+            for code in (-1, 0, 1)
+        }
+        probabilities = torch.tensor(
+            list(counts.values()), dtype=torch.float64, device=active_proxy.device
+        )
+        probabilities /= probabilities.sum().clamp_min(1)
+        nonzero = probabilities > 0
+        entropy = -(probabilities[nonzero] * probabilities[nonzero].log2()).sum()
+        scale_quantiles = torch.quantile(
+            active_scales.float(),
+            torch.tensor([0.0, 0.5, 0.95, 1.0], device=active_scales.device),
+        )
+        return {
+            "code_counts": counts,
+            "zero_fraction": float((active_codes == 0).float().mean().item()),
+            "code_entropy_bits": float(entropy.item()),
+            "code_churn": float((active_codes != active_initial).float().mean().item()),
+            "proxy_abs_displacement_mean": float(
+                (active_proxy - active_initial.float()).abs().mean().item()
+            ),
+            "boundary_epsilon": float(boundary_epsilon),
+            "near_boundary_fraction": float(
+                (boundary_distance <= boundary_epsilon).float().mean().item()
+            ),
+            "boundary_distance_min": float(boundary_distance.min().item()),
+            "boundary_distance_p01": float(
+                torch.quantile(boundary_distance.float(), 0.01).item()
+            ),
+            "scale_min": float(scale_quantiles[0].item()),
+            "scale_median": float(scale_quantiles[1].item()),
+            "scale_p95": float(scale_quantiles[2].item()),
+            "scale_max": float(scale_quantiles[3].item()),
+            "scale_at_clamp_fraction": float(
+                (active_scales <= 1.00001e-5).float().mean().item()
+            ),
+        }
+
     def proxy_anchor_loss(self) -> torch.Tensor:
         """Squared proxy displacement over deployed ternary groups only."""
         delta = (self.proxy_code - self.initial_codes.float()).square()

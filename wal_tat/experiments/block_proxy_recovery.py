@@ -16,6 +16,7 @@ from wal_tat import HashChainWAL, ProxyTernaryLinear, ProxyTernaryMatrix
 from compensation_window import (
     PROJECT,
     WORKSPACE,
+    bucket_kl,
     checkpoint_payload,
     default_model_path,
     ensure_candidate_matrix,
@@ -29,6 +30,7 @@ from compensation_window import (
     set_submodule,
     sha256_file,
     tensor_output,
+    teacher_bucket,
 )
 
 
@@ -60,6 +62,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--steps", type=int, default=1024)
     parser.add_argument("--proxy-lr", type=float, default=7.5e-4)
     parser.add_argument("--scale-lr", type=float, default=5e-7)
+    parser.add_argument("--proxy-start-step", type=int, default=1)
+    parser.add_argument(
+        "--proxy-freeze-step",
+        type=int,
+        default=0,
+        help="last step with proxy updates; zero keeps proxies trainable throughout",
+    )
+    parser.add_argument("--scale-start-step", type=int, default=1)
     parser.add_argument("--compensation-scale-lr", type=float, default=1e-6)
     parser.add_argument("--norm-lr", type=float, default=0.0)
     parser.add_argument(
@@ -70,6 +80,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--block-weight", type=float, default=0.02)
     parser.add_argument("--attention-weight", type=float, default=0.02)
     parser.add_argument("--proxy-anchor-weight", type=float, default=0.0)
+    parser.add_argument("--kd-weight", type=float, default=0.0)
+    parser.add_argument("--kd-topk", type=int, default=64)
+    parser.add_argument("--kd-stride", type=int, default=4)
+    parser.add_argument("--kd-temperature", type=float, default=2.0)
     parser.add_argument("--initial-temperature", type=float, default=0.35)
     parser.add_argument("--final-temperature", type=float, default=0.10)
     parser.add_argument("--gate-ratio", type=float, default=1.03)
@@ -87,7 +101,7 @@ def parse_args() -> argparse.Namespace:
 
 
 @torch.no_grad()
-def cache_hidden_teacher(model, calibration, layer_index, device):
+def cache_hidden_teacher(model, calibration, layer_index, device, args):
     captures = {}
     result = []
     handles = [
@@ -106,13 +120,14 @@ def cache_hidden_teacher(model, calibration, layer_index, device):
         for index, chunk in enumerate(calibration):
             captures.clear()
             batch = chunk.unsqueeze(0).to(device)
-            model(input_ids=batch[:, :-1], use_cache=False)
-            result.append(
-                {
-                    "block": captures["block"].squeeze(0).half().cpu(),
-                    "attention": captures["attention"].squeeze(0).half().cpu(),
-                }
-            )
+            output = model(input_ids=batch[:, :-1], use_cache=False)
+            entry = {
+                "block": captures["block"].squeeze(0).half().cpu(),
+                "attention": captures["attention"].squeeze(0).half().cpu(),
+            }
+            if args.kd_weight > 0:
+                entry.update(teacher_bucket(output.logits, args))
+            result.append(entry)
             if (index + 1) % 64 == 0 or index + 1 == len(calibration):
                 log(f"teacher hidden {index + 1}/{len(calibration)}")
     finally:
@@ -128,6 +143,16 @@ def normalized_mse(student, teacher):
 
 def main() -> None:
     args = parse_args()
+    if not 1 <= args.proxy_start_step <= args.steps + 1:
+        raise ValueError("proxy-start-step must be in [1, steps + 1]")
+    if args.proxy_freeze_step and not (
+        args.proxy_start_step <= args.proxy_freeze_step <= args.steps
+    ):
+        raise ValueError(
+            "proxy-freeze-step must be zero or in [proxy-start-step, steps]"
+        )
+    if not 1 <= args.scale_start_step <= args.steps + 1:
+        raise ValueError("scale-start-step must be in [1, steps + 1]")
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(args.source_checkpoint)
     suite_hash = sha256_file(args.suite)
@@ -165,7 +190,7 @@ def main() -> None:
     if any(not chunks for chunks in selection_gates.values()):
         raise ValueError("selection suite has an empty gate domain")
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
-    teacher = cache_hidden_teacher(model, calibration, layer_index, args.device)
+    teacher = cache_hidden_teacher(model, calibration, layer_index, args.device, args)
     matrices = install_checkpoint(model, source_payload, args.device)
     starting = evaluate_domains(model, gates, args.device)
     starting_ratios = ratios(starting, baseline)
@@ -261,10 +286,15 @@ def main() -> None:
             )
         ),
     ]
-    optimizer_groups = [
-            {"params": [proxy.proxy_code for proxy in proxies.values()], "lr": args.proxy_lr},
-            {"params": [proxy.group_scale for proxy in proxies.values()], "lr": args.scale_lr},
-    ]
+    proxy_optimizer_group = {
+        "params": [proxy.proxy_code for proxy in proxies.values()],
+        "lr": args.proxy_lr,
+    }
+    scale_optimizer_group = {
+        "params": [proxy.group_scale for proxy in proxies.values()],
+        "lr": args.scale_lr,
+    }
+    optimizer_groups = [proxy_optimizer_group, scale_optimizer_group]
     if compensation_proxies:
         optimizer_groups.append(
             {
@@ -327,11 +357,18 @@ def main() -> None:
             "scale_compensation_matrices": list(compensation_proxies),
             "proxy_lr": args.proxy_lr,
             "scale_lr": args.scale_lr,
+            "proxy_start_step": args.proxy_start_step,
+            "proxy_freeze_step": args.proxy_freeze_step,
+            "scale_start_step": args.scale_start_step,
             "compensation_scale_lr": args.compensation_scale_lr,
             "norm_lr": args.norm_lr,
             "block_weight": args.block_weight,
             "attention_weight": args.attention_weight,
             "proxy_anchor_weight": args.proxy_anchor_weight,
+            "kd_weight": args.kd_weight,
+            "kd_topk": args.kd_topk,
+            "kd_stride": args.kd_stride,
+            "kd_temperature": args.kd_temperature,
             "selection_gate_sequences": args.selection_gate_sequences,
             "selection_suite_sha256": selection_suite_hash,
             "initial_selection_ratios": best_selection_ratios,
@@ -344,6 +381,12 @@ def main() -> None:
     model.train()
     try:
         for step in range(1, args.steps + 1):
+            proxy_active = step >= args.proxy_start_step and (
+                args.proxy_freeze_step == 0 or step <= args.proxy_freeze_step
+            )
+            scale_active = step >= args.scale_start_step
+            optimizer.param_groups[0]["lr"] = args.proxy_lr if proxy_active else 0.0
+            optimizer.param_groups[1]["lr"] = args.scale_lr if scale_active else 0.0
             phase = step / max(args.steps, 1)
             cosine = 0.5 * (1 + math.cos(math.pi * phase))
             temperature = args.final_temperature + (
@@ -370,14 +413,24 @@ def main() -> None:
                     for proxy in proxies.values()
                 ]
             ).mean()
+            kd_loss = (
+                bucket_kl(logits, teacher[item], args)
+                if args.kd_weight > 0
+                else logits.new_zeros(())
+            )
             loss = (
                 ce
                 + args.block_weight * block_loss
                 + args.attention_weight * attention_loss
                 + args.proxy_anchor_weight * anchor_loss
+                + args.kd_weight * kd_loss
             )
             loss.backward()
-            parameters = [parameter for group in optimizer.param_groups for parameter in group["params"]]
+            parameters = [
+                parameter
+                for group in optimizer.param_groups
+                for parameter in group["params"]
+            ]
             gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
             optimizer.step()
             for proxy in proxies.values():
@@ -408,10 +461,17 @@ def main() -> None:
                     "block_loss": float(block_loss.item()),
                     "attention_loss": float(attention_loss.item()),
                     "anchor_loss": float(anchor_loss.item()),
+                    "kd_loss": float(kd_loss.item()),
                     "temperature": temperature,
+                    "proxy_active": proxy_active,
+                    "scale_active": scale_active,
                     "gradient_norm": float(gradient_norm),
                     "code_churn": {
                         name: proxy.code_churn() for name, proxy in proxies.items()
+                    },
+                    "deployment_statistics": {
+                        name: proxy.deployment_statistics()
+                        for name, proxy in proxies.items()
                     },
                     "selection_metrics": selection_metrics,
                     "selection_ratios": selection_ratios,
@@ -499,6 +559,14 @@ def main() -> None:
                 "added_target_layer": args.add_target_layer,
                 "steps": args.steps,
                 "proxy_lr": args.proxy_lr,
+                "scale_lr": args.scale_lr,
+                "proxy_start_step": args.proxy_start_step,
+                "proxy_freeze_step": args.proxy_freeze_step,
+                "scale_start_step": args.scale_start_step,
+                "kd_weight": args.kd_weight,
+                "kd_topk": args.kd_topk,
+                "kd_stride": args.kd_stride,
+                "kd_temperature": args.kd_temperature,
             },
         )
         torch.save(payload, checkpoint_path)
@@ -519,12 +587,19 @@ def main() -> None:
         "steps": args.steps,
         "proxy_lr": args.proxy_lr,
         "scale_lr": args.scale_lr,
+        "proxy_start_step": args.proxy_start_step,
+        "proxy_freeze_step": args.proxy_freeze_step,
+        "scale_start_step": args.scale_start_step,
         "compensation_scale_lr": args.compensation_scale_lr,
         "norm_lr": args.norm_lr,
         "block_weight": args.block_weight,
         "attention_weight": args.attention_weight,
         "allow_within_gate": args.allow_within_gate,
         "proxy_anchor_weight": args.proxy_anchor_weight,
+        "kd_weight": args.kd_weight,
+        "kd_topk": args.kd_topk,
+        "kd_stride": args.kd_stride,
+        "kd_temperature": args.kd_temperature,
         "selection_gate_sequences": args.selection_gate_sequences,
         "selection_baseline": selection_baseline,
         "initial_selection": initial_selection,
@@ -549,6 +624,9 @@ def main() -> None:
         "attempted": attempted,
         "attempted_ratios": attempted_ratios,
         "code_churn": churn,
+        "deployment_statistics": {
+            name: proxy.deployment_statistics() for name, proxy in proxies.items()
+        },
         "history": history,
         "passed": passed,
         "fresh_verify": fresh,

@@ -25,6 +25,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint", type=Path)
     parser.add_argument("suite", type=Path)
+    parser.add_argument("--parent-checkpoint", type=Path)
+    parser.add_argument("--incremental-gate-ratio", type=float, default=1.0)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
     parser.add_argument("--gate-ratio", type=float, required=True)
@@ -97,6 +99,10 @@ def main() -> None:
         domain: evaluate_window_sums(model, chunks, args.device, args.batch_size)
         for domain, chunks in gates.items()
     }
+    candidate_coverage = {
+        name: float(matrix.committed_mask.float().mean().item())
+        for name, matrix in matrices.items()
+    }
 
     domains = {}
     for domain in gates:
@@ -110,10 +116,46 @@ def main() -> None:
             confidence=args.confidence,
             seed=args.seed,
         )
+    parent = None
+    incremental_domains = None
+    parent_checkpoint = (
+        args.parent_checkpoint.resolve() if args.parent_checkpoint is not None else None
+    )
+    parent_checkpoint_hash = None
+    if parent_checkpoint is not None:
+        del model, matrices
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        model = load_model(model_path, args.device)
+        parent_payload = torch.load(
+            parent_checkpoint, map_location="cpu", weights_only=False
+        )
+        matrices = install_checkpoint(model, parent_payload, args.device)
+        parent = {
+            domain: evaluate_window_sums(model, chunks, args.device, args.batch_size)
+            for domain, chunks in gates.items()
+        }
+        parent_checkpoint_hash = sha256_file(parent_checkpoint)
+        incremental_domains = {
+            domain: paired_block_bootstrap_nll(
+                parent[domain]["nll_sums"],
+                candidate[domain]["nll_sums"],
+                parent[domain]["token_counts"],
+                gate_ratio=args.incremental_gate_ratio,
+                samples=args.bootstrap_samples,
+                block_size=args.bootstrap_block_size,
+                confidence=args.confidence,
+                seed=args.seed,
+            )
+            for domain in gates
+        }
     result = {
         "schema": "wal-tat-paired-checkpoint-audit-v1",
         "checkpoint": str(checkpoint),
         "checkpoint_sha256": sha256_file(checkpoint),
+        "parent_checkpoint": str(parent_checkpoint) if parent_checkpoint else None,
+        "parent_checkpoint_sha256": parent_checkpoint_hash,
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
         "suite_role": args.suite_role,
@@ -127,13 +169,35 @@ def main() -> None:
         ),
         "worst_observed_ratio": max(value["observed_ratio"] for value in domains.values()),
         "worst_upper_ratio": max(value["ratio_ci"]["upper"] for value in domains.values()),
-        "coverage": {
-            name: float(matrix.committed_mask.float().mean().item())
-            for name, matrix in matrices.items()
-        },
+        "incremental_gate_ratio": args.incremental_gate_ratio,
+        "incremental_domains": incremental_domains,
+        "incremental_point_passed": (
+            all(value["point_passed"] for value in incremental_domains.values())
+            if incremental_domains is not None
+            else None
+        ),
+        "incremental_confidence_passed": (
+            all(value["confidence_passed"] for value in incremental_domains.values())
+            if incremental_domains is not None
+            else None
+        ),
+        "worst_incremental_observed_ratio": (
+            max(value["observed_ratio"] for value in incremental_domains.values())
+            if incremental_domains is not None
+            else None
+        ),
+        "worst_incremental_upper_ratio": (
+            max(value["ratio_ci"]["upper"] for value in incremental_domains.values())
+            if incremental_domains is not None
+            else None
+        ),
+        "coverage": candidate_coverage,
         "raw_window_losses": {
             domain: {
                 "baseline_nll_sums": baseline[domain]["nll_sums"],
+                "parent_nll_sums": (
+                    parent[domain]["nll_sums"] if parent is not None else None
+                ),
                 "candidate_nll_sums": candidate[domain]["nll_sums"],
                 "token_counts": baseline[domain]["token_counts"],
             }

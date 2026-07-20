@@ -59,6 +59,11 @@ def main() -> None:
         choices=("vendor", "transformers", "torch"),
         default="vendor",
     )
+    parser.add_argument(
+        "--policy",
+        default="audit-only; never use for transaction selection or rollback",
+        help="Immutable role recorded in the suite; declare recurring validation explicitly.",
+    )
     args = parser.parse_args()
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
@@ -119,7 +124,7 @@ def main() -> None:
     source_paths = [c4_path, squad_path, *code_files]
     payload = {
         "format": "wal-tat-audit-holdout-v1",
-        "policy": "audit-only; never use for transaction selection or rollback",
+        "policy": args.policy,
         "model_revision": model_path.name,
         "sequence_length": args.length,
         "sequences_per_domain": args.sequences,

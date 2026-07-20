@@ -1,0 +1,77 @@
+{
+  "schema": "wal-tat-predeclared-recovery-policy-v1",
+  "policy_id": "evidence-v86-block24-scale-only-recovery-v9",
+  "date_utc": "2026-07-20",
+  "created_before_recovery_run": true,
+  "git_parent": "7acbb8e",
+  "purpose": "Coverage-neutral, scale-only recovery of the s0048 block-24 MLP using a new disjoint and interleaved SQuAD-heavy recovery suite.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176,
+    "coverage_must_not_change": true
+  },
+  "development": {
+    "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+    "sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+    "overlap_audit": "wal_tat/results/recovery_v2_overlap_v1.json",
+    "overlap_audit_sha256": "35523c35a3b7df8b0018a58d0afa4e7a43d558553341eda0f57d29cfb4580080",
+    "selection_suite": "same artifact, disjoint gate offsets",
+    "tag": "block24_scale_only_recovery_v9",
+    "target_layer": 24,
+    "target_projections": [
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "steps": 512,
+    "proxy_lr": 0.0,
+    "scale_lr": 1e-7,
+    "compensate_source_scales": false,
+    "norm_lr": 0.0,
+    "block_weight": 0.1,
+    "attention_weight": 0.02,
+    "proxy_anchor_weight": 0.0,
+    "kd_weight": 0.5,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "initial_temperature": 0.35,
+    "final_temperature": 0.1,
+    "selection_gate_sequences": 256,
+    "selection_every": 128,
+    "min_improvement": 0.00002,
+    "development_gate_ratio": 1.0021669777540759,
+    "seed": 127
+  },
+  "validation": [
+    {
+      "name": "recovery-v1-squadx2",
+      "role": "recurring validation; not used to tune v9"
+    },
+    {
+      "name": "v5",
+      "role": "rotating validation; already disclosed; candidate evaluated only if development passes"
+    },
+    {
+      "name": "v6",
+      "role": "rotating validation; already disclosed; candidate evaluated only if development passes"
+    }
+  ],
+  "acceptance": {
+    "all_conditions_required": true,
+    "development_must_improve_worst_point_ratio_by": 0.00002,
+    "cumulative_point_ratio_max_each_domain": 1.0021669777540759,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0005,
+    "confidence": 0.95,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "accepted_weight_count_must_equal": 74563584,
+    "committed_masks_must_be_bitwise_equal": true,
+    "uncommitted_master_weights_must_be_bitwise_equal": true,
+    "norm_parameters_must_be_bitwise_equal": true,
+    "committed_codes_must_be_bitwise_equal": true,
+    "failure_action": "delete recovery checkpoint and preserve s0048"
+  }
+}

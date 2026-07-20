@@ -1,0 +1,79 @@
+{
+  "schema": "wal-tat-predeclared-recovery-policy-v1",
+  "policy_id": "evidence-v85-block24-kd-proxy-recovery-v8",
+  "date_utc": "2026-07-20",
+  "created_before_recovery_run": true,
+  "git_parent": "7acbb8e",
+  "purpose": "Coverage-neutral recovery of the existing s0048 block-24 frontier after fresh v5 exposed a cumulative SQuAD gap.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176,
+    "coverage_must_not_change": true
+  },
+  "development": {
+    "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+    "sha256": "79655f83fbb6560d9391a7cc0400ee426648b401ae866385440d467c543daf0b",
+    "selection_suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+    "selection_suite_sha256": "79655f83fbb6560d9391a7cc0400ee426648b401ae866385440d467c543daf0b",
+    "tag": "block24_kd_proxy_recovery_v8",
+    "target_layer": 24,
+    "target_projections": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "steps": 1024,
+    "proxy_lr": 0.0005,
+    "scale_lr": 0.000001,
+    "compensate_source_scales": false,
+    "norm_lr": 0.0,
+    "block_weight": 0.2,
+    "attention_weight": 0.05,
+    "proxy_anchor_weight": 0.2,
+    "kd_weight": 0.5,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "initial_temperature": 0.35,
+    "final_temperature": 0.1,
+    "selection_gate_sequences": 256,
+    "selection_every": 256,
+    "min_improvement": 0.0001,
+    "development_gate_ratio": 1.0021669777540759,
+    "seed": 109
+  },
+  "validation": [
+    {
+      "name": "v5",
+      "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt",
+      "sha256": "c4866d3900d1bdfdf8b84c4c3026145c536351e999dc45a55cf8ca8ba82a7ecc",
+      "role": "rotating validation; already disclosed by evidence-v84"
+    },
+    {
+      "name": "v6",
+      "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt",
+      "sha256": "2c5823c7cdf6dcfaf5ff47a265e0819ebfee636f49e9fafa138e2881d52c064f",
+      "role": "rotating validation; already disclosed by evidence-v84"
+    }
+  ],
+  "acceptance": {
+    "all_conditions_required": true,
+    "cumulative_point_ratio_max_each_domain": 1.0021669777540759,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0005,
+    "confidence": 0.95,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "accepted_weight_count_must_equal": 74563584,
+    "committed_masks_must_be_bitwise_equal": true,
+    "uncommitted_master_weights_must_be_bitwise_equal": true,
+    "norm_parameters_must_be_bitwise_equal": true,
+    "maximum_code_churn_each_target_matrix": 0.0005,
+    "failure_action": "delete recovery checkpoint and preserve s0048"
+  }
+}

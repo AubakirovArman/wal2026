@@ -1,0 +1,82 @@
+{
+  "schema": "wal-tat-evidence-v84",
+  "date_utc": "2026-07-20",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "prospective_absmean_replicate_rejected_on_new_validation",
+  "policy": {
+    "result": "wal_tat/results/evidence_v84_policy.json",
+    "sha256": "fa051fae65354a19a8033c8d64b46a43f1af4c44d90215d47fd9f3464caff22a",
+    "created_before_candidate_run": true,
+    "cumulative_point_limit": 1.0021673348697242,
+    "incremental_upper_95_limit": 1.0002
+  },
+  "validation_suites": {
+    "v5_sha256": "c4866d3900d1bdfdf8b84c4c3026145c536351e999dc45a55cf8ca8ba82a7ecc",
+    "v6_sha256": "2c5823c7cdf6dcfaf5ff47a265e0819ebfee636f49e9fafa138e2881d52c064f",
+    "overlap_audit": "wal_tat/results/audit_v5_v6_overlap_v1.json",
+    "overlap_audit_sha256": "a4e46de75755a77c90d575fc2d147bee4ced7afddb62f707c99a749c80303bfe",
+    "exact_window_overlap": 0,
+    "range_overlap": false,
+    "first_model_exposure_after_candidate_freeze": true
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 10,
+    "groups": 96,
+    "weights": 12288,
+    "initializer": "absmean_round",
+    "initializer_result": "wal_tat/results/block24_down_tail_d10_absmean_replicate3_v1.json",
+    "initializer_result_sha256": "d3be63babd9c3387bd5c98f65b5c91a44c74c61e4a4a716cc71c9c7feaeabde6",
+    "development_worst_incremental": {
+      "absmean_round": 1.000095341227574,
+      "threshold_ls": 1.0000484880635232,
+      "activation_wls": 1.0001344857111336
+    },
+    "overlap_with_prior_artifact_or_committed_groups": 0
+  },
+  "recovery": {
+    "result": "wal_tat/results/block24_down_tail_d10_absmean_replicate3_proxy_v1.json",
+    "sha256": "1f4f165859b63808d1cf48b5cc906e0910ba7ca12f2c6853b49bb3f6d5dc0a84",
+    "artifact_sha256": "9ff71b3df4a28aedde0e8b3873b45e2011a2cd1524102d101dec7a13fdc3d561",
+    "best_step": 192,
+    "candidate_code_churn": 0.0,
+    "norm_parameters_trained": 0,
+    "previously_committed_groups_trainable": 0,
+    "development_worst_incremental_after_recovery": 1.0000734167645937
+  },
+  "rotating_validation": {
+    "v5": {
+      "result": "wal_tat/results/block24_down_tail_d10_absmean_replicate3_proxy_v1_paired_v5.json",
+      "sha256": "4372cd0f48bbfd338cab2db3f457ac63fc047135ae550bf545bcb3fbe2fe9f90",
+      "parent_frontier_worst_point_ratio": 1.0052335793549527,
+      "candidate_worst_point_ratio": 1.005254660769358,
+      "candidate_worst_incremental_upper_95": 1.0000983838623572,
+      "cumulative_point_passed": false,
+      "incremental_upper_passed": true
+    },
+    "v6": {
+      "result": "wal_tat/results/block24_down_tail_d10_absmean_replicate3_proxy_v1_paired_v6.json",
+      "sha256": "3afd34823e3a69cec3bbdb8b1c9bafbe76ef88e0e5937ccb2c2486448c6a8ee1",
+      "parent_frontier_worst_point_ratio": 1.0010546928014157,
+      "candidate_worst_point_ratio": 1.0010287614287259,
+      "candidate_worst_incremental_upper_95": 1.0000389610092026,
+      "cumulative_point_passed": true,
+      "incremental_upper_passed": true
+    }
+  },
+  "decision": {
+    "accepted": false,
+    "reason": "v5 cumulative SQuAD point ratio exceeds the predeclared coverage guide even though the candidate itself is incrementally near-neutral",
+    "checkpoint_written": false,
+    "accepted_coverage_changed": false,
+    "frontier_preserved": "s0048",
+    "next_required_action": "coverage-neutral block-24 recovery selected on development and audited on v5/v6 before any further coverage growth"
+  },
+  "frontier": {
+    "checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176,
+    "remaining_weights": 1645887488,
+    "checkpoint_files_remaining": 1
+  }
+}

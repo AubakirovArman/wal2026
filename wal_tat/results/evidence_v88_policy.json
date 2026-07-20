@@ -1,0 +1,72 @@
+{
+  "schema": "wal-tat-predeclared-recovery-policy-v1",
+  "policy_id": "evidence-v88-block24-staged-down-recovery-v11",
+  "date_utc": "2026-07-20",
+  "created_before_recovery_run": true,
+  "git_parent": "7acbb8e",
+  "purpose": "Down-projection-only staged recovery: bounded hard-code movement followed by a frozen-code scale polish, motivated by v10 boundary diagnostics.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176,
+    "coverage_must_not_change": true
+  },
+  "development": {
+    "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+    "tag": "block24_staged_down_recovery_v11",
+    "target_layer": 24,
+    "target_projections": [
+      "down_proj"
+    ],
+    "steps": 768,
+    "proxy_lr": 0.001,
+    "scale_lr": 2e-7,
+    "proxy_start_step": 1,
+    "proxy_freeze_step": 576,
+    "scale_start_step": 577,
+    "norm_lr": 0.0,
+    "block_weight": 0.1,
+    "attention_weight": 0.0,
+    "proxy_anchor_weight": 0.0,
+    "kd_weight": 0.5,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "initial_temperature": 0.35,
+    "final_temperature": 0.1,
+    "selection_gate_sequences": 256,
+    "selection_every": 64,
+    "min_improvement": 0.00002,
+    "source_worst_point_ratio": 1.0134932970709492,
+    "development_gate_ratio": 1.0134932970709492,
+    "seed": 137
+  },
+  "validation": [
+    {
+      "name": "recovery-v1-squadx2",
+      "role": "recurring validation; only if development passes"
+    },
+    {
+      "name": "v5",
+      "role": "rotating validation; only if development passes"
+    },
+    {
+      "name": "v6",
+      "role": "rotating validation; only if development passes"
+    }
+  ],
+  "acceptance": {
+    "all_conditions_required": true,
+    "development_must_improve_worst_point_ratio_by": 0.00002,
+    "recurring_and_rotating_cumulative_point_ratio_max_each_domain": 1.0021669777540759,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0005,
+    "confidence": 0.95,
+    "accepted_weight_count_must_equal": 74563584,
+    "committed_masks_must_be_bitwise_equal": true,
+    "uncommitted_master_weights_must_be_bitwise_equal": true,
+    "norm_parameters_must_be_bitwise_equal": true,
+    "maximum_down_code_churn": 0.0005,
+    "failure_action": "delete recovery checkpoint and preserve s0048"
+  }
+}

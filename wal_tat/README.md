@@ -45,6 +45,13 @@ The accepted frontier on `Qwen/Qwen3-1.7B` has:
   validation rather than final sealed evidence;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
+- fresh rotating validation v5/v6 exposed a pre-existing SQuAD generalization
+  gap; four coverage-neutral KD/scale/code/staged recovery attempts were
+  rejected without publishing a checkpoint, so the frontier remains `s0048`;
+- proxy recovery now reports distance to the `-0.5/+0.5` code boundaries,
+  code entropy/churn and scale health. These diagnostics show that proxies do
+  move before churn becomes nonzero, but the first broad MLP code changes were
+  harmful on the new development suite.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
 checkpoint**. One of 28 decoder blocks is complete; the next has four complete
@@ -86,6 +93,10 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   decile stress test with absmean, threshold-LS and activation-WLS initializers;
 - `experiments/partial_initializer_proxy_recovery.py`: candidate-only
   hard-forward proxy/scale recovery with norms and prior commits frozen;
+- `experiments/build_diverse_recovery_suite.py`: offset-declared, optionally
+  interleaved recovery/development suites with configurable code corpora;
+- `experiments/recovery_suite_overlap_audit.py`: exact-window and declared-range
+  leakage audit across recovery and validation artifacts;
 - `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
   dual-gate commit that publishes a new checkpoint without mutating its parent;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
