@@ -57,9 +57,27 @@ Q2-g128 упаковки их расчётный payload составит 18.888
 `gate_proj` и 10.44921875% `down_proj`. Остальные 24.21875% `up_proj`,
 93.65234375% `gate_proj` и 89.55078125% `down_proj` пока остаются BF16.
 
-## Текущая recurring validation
+## Текущая validation
 
-Текущий frontier `s0048r2` проверен двумя 131,072-token/domain suites. Audit-v3
+Текущий принятый frontier — `s0048r3`. Coverage не изменился относительно
+`s0048r2`, но геометрия уже принятых ternary-групп и ещё не принятый BF16 MLP
+fallback были совместно восстановлены target-local QAT. На независимом
+audit-v8 абсолютные NLL ratios равны:
+
+| Domain | Ratio к BF16 | Incremental upper-95 к `s0048r2` |
+|---|---:|---:|
+| C4 validation | 0.993307 | 0.998246 |
+| SQuAD context | 0.992380 | 0.996783 |
+| PyTorch code | 0.985639 | 0.994289 |
+
+Все cumulative point/confidence и incremental point/confidence проверки
+пройдены. Fresh-process standard verification дала `wiki=0.947025` и
+`code=0.959163` relative NLL. В accepted groups нет BF16 residual, а изменения
+BF16 master weight разрешены только в группах с false committed mask.
+
+### Историческая recurring validation parent `s0048r2`
+
+Parent frontier `s0048r2` проверен двумя 131,072-token/domain suites. Audit-v3
 использует C4 validation, SQuAD validation contexts и PyTorch code. Audit-v4
 заменяет SQuAD/code срезы и использует Transformers code. C4 в этих двух
 проверках одинаков. После многократного использования для принятия транзакций
@@ -141,8 +159,8 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 нелинейную компенсацию. Но она не позволяет потратить весь допустимый ущерб
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
-Текущий accepted frontier проходит условную `+5% NLL` guide: худший
-recurring-validation point ratio `1.001471992`, при guide `1.002166978`.
+Текущий accepted frontier проходит условную `+5% NLL` guide. На новом
+audit-v8 худший point ratio равен `0.993307015`, при guide `1.002166978`.
 
 ## Главный технический результат
 
@@ -760,6 +778,27 @@ cumulative guide `1.002167`. На v6 все point ratios проходят:
 результат запрещает немедленно принимать новый coverage atom по текущей
 строгой policy.
 
+### Joint MLP recovery и frontier `s0048r3`
+
+Для выхода из этого quality frontier создан matched development suite с
+непересекающимися selection/confirmation диапазонами. Joint initializer
+ablation выбрала `threshold_ls` для `gate_proj` и `activation_wls` для
+`down_proj`; кандидат улучшил оба development-среза, но был отклонён на
+audit-v7 из-за cumulative SQuAD ratio `1.004673 > 1.002167`.
+
+Следующий эксперимент оставил committed masks неизменными, выполнял уже
+принятые группы строго через ternary codes и FP16 g128 scales, а градиенты
+разрешил только ещё не принятым BF16-группам `up/gate/down`. Raw-BF16 teacher
+дал отрицательный control; target-local counterfactual teacher выбрал шаг 704
+и улучшил worst selection/confirmation на `0.001203 / 0.001223`.
+
+Замороженный artifact проверен на заранее построенном audit-v8. Все три
+incremental upper-95 ratios оказались ниже единицы, source восстановился
+побитно, а исходный checkpoint не мутировал. Atomic commit опубликовал
+`s0048r3`; aggregate relative fallback delta равна `0.00315059`, coverage
+остаётся `74,563,584` weights. После fresh-process verification parent и
+промежуточные бинарные artifacts удалены, а JSON evidence и hashes сохранены.
+
 ### Reference Q2-g128 packer и реальный bpw
 
 Добавлен versioned binary format без pickle overhead. Он хранит mapping
@@ -768,7 +807,7 @@ cumulative guide `1.002167`. На v6 все point ratios проходят:
 сразу отклоняет reserved code, проверяет длины payload и точно восстанавливает
 deployed weight.
 
-На настоящем `layer24.up_proj` из текущего `s0048r2`:
+На настоящем `layer24.up_proj` (mask coverage не изменилось в `s0048r3`):
 
 - shape: `6144 x 2048`, всего 12,582,912 weights;
 - committed: 74,496 из 98,304 групп, то есть 75.78125%;
@@ -790,11 +829,11 @@ runtime/KV-cache. Это storage projection, не текущая VRAM трени
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt
+wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt
 ```
 
-- размер: `304,662,470` bytes;
-- SHA-256: `2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a`;
+- размер: `304,665,504` bytes;
+- SHA-256: `50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
   `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -804,14 +843,13 @@ wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt
 
 ## Следующий технический шаг
 
-1. построить новый непересекающийся development-срез с SQuAD-геометрией v5 и
-   выполнить ещё один coverage-neutral recovery от `s0048r2`, не обучаясь на
-   самом раскрытом v5;
-2. не продолжать tuning по раскрытым v5/v6; следующий block/final audit должен
-   использовать новые sealed suites и exposure accounting;
-3. после прохождения point guide повторить малый prospective tail atom; затем
-   встроить boundary-gradient sparse recode как отдельный recovery arm в
-   campaign, с жёстким лимитом churn и отдельным commit path;
+1. до нового candidate построить audit-v9 с новыми непересекающимися token
+   ranges и записать его hash/policy;
+2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0048r3`, так
+   как fallback-QAT изменил их BF16 geometry;
+3. повторить малый prospective tail atom, начиная с наименее чувствительных
+   оставшихся групп; candidate проходит disjoint selection/confirmation,
+   frozen audit-v9 и fresh-process reload;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и

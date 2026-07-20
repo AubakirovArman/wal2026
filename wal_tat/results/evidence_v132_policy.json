@@ -1,0 +1,24 @@
+{
+  "schema": "wal-tat-suite-overlap-policy-v1",
+  "evidence_id": "v132",
+  "declared_before_execution": true,
+  "objective": "prove that audit-only v8 has neither exact windows nor declared token intervals in common with the active matched-development suite or audit holdouts v3 through v7",
+  "new_suite": "wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt",
+  "new_suite_sha256": "b6aba897e452c345ac50807ae9d660938eb68c43a25d9ddbbbc7c917d7e99984",
+  "script": "wal_tat/experiments/recovery_suite_overlap_audit.py",
+  "script_sha256": "1c1c199589462560c286cee5d985f4529e431b2a4f62b3e31e6152d724c10139",
+  "priors": [
+    "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+    "wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v7-l256-g512.pt"
+  ],
+  "acceptance": {
+    "exact_window_overlap_each_prior": 0,
+    "declared_range_overlaps_each_prior": 0
+  },
+  "tag": "audit_v8_overlap_v1",
+  "command": "PYTHONPATH=src:experiments python experiments/recovery_suite_overlap_audit.py --new ../wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt --prior ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --prior ../wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v7-l256-g512.pt --tag audit_v8_overlap_v1"
+}

@@ -66,3 +66,46 @@ passing artifact still needs `ternary_recode_artifact_audit.py` and may be
 published only by `commit_sparse_ternary_recode_artifact.py`, which enforces
 the predeclared exact code/scale-change counts and refuses changes outside the
 committed mask.
+
+`build_matched_validation_recovery_suite.py` builds development data from the
+same source families as rotating audit v5 (C4 validation, SQuAD validation and
+PyTorch source) while using separately declared token ranges. It records full
+source hashes, full token-stream hashes and calibration/gate intervals. This
+reduces the train/validation split mismatch without exposing the actual v5/v6
+windows to gradients.
+
+`counterfactual_scale_recovery.py` can reserve disjoint development gate
+slices with `--selection-gate-start/--selection-gate-sequences` and
+`--confirmation-gate-start/--confirmation-gate-sequences`. Candidate steps are
+selected only on the first slice; an artifact is emitted only when the frozen
+step also satisfies the predeclared improvement floor on the second slice.
+
+`counterfactual_proxy_recovery.py` is the corresponding discrete QAT path. It
+restores only the target matrix for a counterfactual teacher, executes strict
+hard ternary codes and FP16-rounded scales in every student forward, and uses a
+temperature-controlled soft staircase only for gradients. It writes a frozen
+recode artifact after disjoint selection/confirmation acceptance and never
+publishes a checkpoint directly.
+
+`committed_initializer_ablation.py` tests whether a damaged committed region
+has drifted away from the geometry of the original BF16 matrix. It rebuilds
+the same mask with absmean, per-group threshold/LS and activation-weighted WLS
+initializers, selects on one development slice and confirms on another. The
+physical representation remains strict Q2-g128 in every arm.
+
+`committed_mlp_initializer_ablation.py` extends that control to the three MLP
+matrices jointly. It can start from a frozen single-matrix artifact, enumerates
+predeclared initializer combinations on selection data, and evaluates only the
+winner on the disjoint confirmation slice. Passing development remains only an
+artifact candidate; it cannot bypass the independent artifact audit.
+
+`mlp_fallback_compensation_recovery.py` is a coverage-neutral QAT bridge. Its
+target-local counterfactual teacher restores only the committed MLP groups,
+the student keeps those groups strict ternary, and gradients update only BF16
+master values whose committed masks are false. The emitted artifact records
+per-matrix fallback deltas and cannot itself publish a checkpoint.
+
+`commit_fallback_compensation_artifact.py` publishes such an artifact only
+after verifying source/artifact/audit/policy hashes, exact masks, strict codes,
+and the absence of committed-master changes. The child is written atomically
+and must still pass a fresh-process verification before its parent is retired.

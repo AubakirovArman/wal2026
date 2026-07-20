@@ -1,0 +1,19 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v133",
+  "title": "Global-BF16-teacher fallback compensation is rejected",
+  "policy_sha256": "3586311e73329bc8b794e252d084f3db7cba20fee6ec9b19a1cc207091ed51fd",
+  "result": "wal_tat/results/block24_mlp_fallback_compensation_matchedval_v1.json",
+  "result_sha256": "1855c79bd7fd1534a64b871247124cf9aee5b19f3411341baf8eb6b0a569a670",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "starting_artifact_sha256": "19c165fd08dab5e463953b5652857b98558585879f925eccb17bbecb3ee70848",
+  "best_step": 0,
+  "selection_worst_ratio_improvement": 0.0,
+  "confirmation_worst_ratio_improvement": 0.0,
+  "development_passed": false,
+  "artifact_written": false,
+  "checkpoint_written": false,
+  "final_restoration_exact": true,
+  "peak_cuda_allocated_bytes": 5547777536,
+  "interpretation": "Training layer-24 fallbacks against the global raw-BF16 teacher reduces the cached KD objective but worsens held-out NLL because the layer is forced to absorb errors from every other changed checkpoint component. Model selection retains step zero and restores the exact starting overlay. The next predeclared run uses a target-local MLP counterfactual teacher instead."
+}

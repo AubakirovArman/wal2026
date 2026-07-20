@@ -1,0 +1,36 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v131",
+  "declared_before_execution": true,
+  "objective": "build a new audit-only v8 suite before any post-v7 MLP recovery work, outside every development, recurring-validation and v7 token interval",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "fa77c4949e336a1b6e1469ff736479644f803d3411ef3a6112f34eebd3fdee00",
+  "output": "wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt",
+  "sequence_length": 256,
+  "sequences_per_domain": 512,
+  "offsets": {
+    "c4_validation": 1500003,
+    "squad_context": 1500003,
+    "torch_code": 1500003
+  },
+  "declared_ranges": {
+    "c4_validation": [1500003, 1631075],
+    "squad_context": [1500003, 1631075],
+    "torch_code": [1500003, 1631075]
+  },
+  "code_source": "torch",
+  "role": "audit-only v8; never use for training, candidate selection, rollback selection or hyperparameter tuning",
+  "audit_firewall": {
+    "built_before_next_candidate": true,
+    "v7_results_must_not_be_used_to_select_next_candidate": true,
+    "v8_model_evaluation_forbidden_until_a_new_candidate_is_frozen": true
+  },
+  "required_metadata": {
+    "full_token_stream_sha256_each_domain": true,
+    "declared_gate_ranges": true,
+    "source_file_sha256": true,
+    "selected_window_sha256": true
+  },
+  "next_required_action": "prove zero exact-window and declared-range overlap before any post-v7 model development",
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt --length 256 --sequences 512 --c4-offset 1500003 --squad-offset 1500003 --code-offset 1500003 --code-source torch --policy 'audit-only v8; built before post-v7 MLP recovery; never use for training or model selection'"
+}

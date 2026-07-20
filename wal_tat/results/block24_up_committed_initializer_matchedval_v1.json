@@ -1,0 +1,207 @@
+{
+  "schema": "wal-tat-committed-initializer-ablation-v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "development selection and disjoint confirmation; not final audit",
+  "target_name": "model.layers.24.mlp.up_proj",
+  "moment_samples_per_domain": 8,
+  "moment_domain_offset": 0,
+  "selection_slice": [
+    0,
+    128
+  ],
+  "confirmation_slice": [
+    128,
+    128
+  ],
+  "threshold_multipliers": [
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0,
+    1.125,
+    1.25,
+    1.375,
+    1.5,
+    1.625,
+    1.75,
+    1.875,
+    2.0,
+    2.125,
+    2.25,
+    2.375,
+    2.5,
+    2.625,
+    2.75,
+    2.875,
+    3.0
+  ],
+  "source_selection_ratios": {
+    "c4_validation": 0.998817188902519,
+    "squad_context": 1.0103207389167377,
+    "torch_code": 0.9846739878477623
+  },
+  "source_confirmation_ratios": {
+    "c4_validation": 0.9966490151464837,
+    "squad_context": 1.0067195425884579,
+    "torch_code": 0.9888018624262788
+  },
+  "candidate_results": {
+    "absmean_round": {
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.376105384901166,
+          "ppl": 29.25660572407679,
+          "tokens": 32768
+        },
+        "squad_context": {
+          "nll": 2.1479814406484365,
+          "ppl": 8.567546829070386,
+          "tokens": 32768
+        },
+        "torch_code": {
+          "nll": 2.388829012401402,
+          "ppl": 10.900721856414258,
+          "tokens": 32768
+        }
+      },
+      "selection_ratios": {
+        "c4_validation": 0.9990362707010786,
+        "squad_context": 1.0104547551588898,
+        "torch_code": 0.9847214943037803
+      },
+      "selection_worst_ratio": 1.0104547551588898,
+      "representation": {
+        "changed_code_values": 61830,
+        "changed_scale_groups": 73855,
+        "code_churn": 0.006484198849648237,
+        "source_relative_weight_mse": 0.2626398503780365,
+        "candidate_relative_weight_mse": 0.26496657729148865,
+        "weight_mse_reduction_fraction": -0.008859001823611878,
+        "source_relative_activation_weighted_mse": 0.2585831880569458,
+        "candidate_relative_activation_weighted_mse": 0.2595658302307129,
+        "activation_weighted_mse_reduction_fraction": -0.003800100776662596,
+        "zero_fraction": 0.31151190400123596
+      }
+    },
+    "threshold_ls": {
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.372660984285176,
+          "ppl": 29.156007602871433,
+          "tokens": 32768
+        },
+        "squad_context": {
+          "nll": 2.1400633426383138,
+          "ppl": 8.499976022741183,
+          "tokens": 32768
+        },
+        "torch_code": {
+          "nll": 2.385578839108348,
+          "ppl": 10.865350134612093,
+          "tokens": 32768
+        }
+      },
+      "selection_ratios": {
+        "c4_validation": 0.9980170249270608,
+        "squad_context": 1.006729918605494,
+        "torch_code": 0.9833817100474492
+      },
+      "selection_worst_ratio": 1.006729918605494,
+      "representation": {
+        "changed_code_values": 1433699,
+        "changed_scale_groups": 74496,
+        "code_churn": 0.1503540277481079,
+        "source_relative_weight_mse": 0.2626398503780365,
+        "candidate_relative_weight_mse": 0.1896916776895523,
+        "weight_mse_reduction_fraction": 0.2777498257918005,
+        "source_relative_activation_weighted_mse": 0.2585831880569458,
+        "candidate_relative_activation_weighted_mse": 0.22004741430282593,
+        "activation_weighted_mse_reduction_fraction": 0.1490266016274555,
+        "zero_fraction": 0.4621400535106659
+      }
+    },
+    "activation_wls": {
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.372251097112894,
+          "ppl": 29.144059378239355,
+          "tokens": 32768
+        },
+        "squad_context": {
+          "nll": 2.139643605798483,
+          "ppl": 8.49640901832071,
+          "tokens": 32768
+        },
+        "torch_code": {
+          "nll": 2.3853246988728642,
+          "ppl": 10.862589162822141,
+          "tokens": 32768
+        }
+      },
+      "selection_ratios": {
+        "c4_validation": 0.9978957336445564,
+        "squad_context": 1.006532465742217,
+        "torch_code": 0.9832769485299236
+      },
+      "selection_worst_ratio": 1.006532465742217,
+      "representation": {
+        "changed_code_values": 1163329,
+        "changed_scale_groups": 74478,
+        "code_churn": 0.12199994176626205,
+        "source_relative_weight_mse": 0.2626398503780365,
+        "candidate_relative_weight_mse": 0.20260265469551086,
+        "weight_mse_reduction_fraction": 0.22859134132200332,
+        "source_relative_activation_weighted_mse": 0.2585831880569458,
+        "candidate_relative_activation_weighted_mse": 0.1987735778093338,
+        "activation_weighted_mse_reduction_fraction": 0.2312973658381866,
+        "zero_fraction": 0.4307835102081299
+      }
+    }
+  },
+  "chosen_candidate": "activation_wls",
+  "confirmation_metrics": {
+    "c4_validation": {
+      "nll": 3.3172032199800014,
+      "ppl": 27.583098721281157,
+      "tokens": 32768
+    },
+    "squad_context": {
+      "nll": 2.171430648304522,
+      "ppl": 8.770823032259035,
+      "tokens": 32768
+    },
+    "torch_code": {
+      "nll": 1.965251574292779,
+      "ppl": 7.136707776549255,
+      "tokens": 32768
+    }
+  },
+  "confirmation_ratios": {
+    "c4_validation": 0.9952773061071002,
+    "squad_context": 1.0061085932096625,
+    "torch_code": 0.987039849404648
+  },
+  "selection_worst_ratio_improvement": 0.0037882731745206843,
+  "confirmation_worst_ratio_improvement": 0.0006109493787953557,
+  "min_selection_improvement": 0.001,
+  "min_confirmation_improvement": 0.0,
+  "passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_up_committed_initializer_matchedval_v1.pt",
+  "artifact_sha256": "15983358b4fcdb5a7fdada03f7e151a8519e4084e40113b8304c68940e8ada05",
+  "codes_strict_ternary": true,
+  "committed_mask_unchanged": true,
+  "persistent_bf16_residual": false,
+  "coverage_changed": false,
+  "checkpoint_written": false,
+  "final_restoration_exact": true,
+  "elapsed_seconds": 104.7684268951416,
+  "peak_cuda_allocated_bytes": 4388762112
+}

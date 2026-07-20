@@ -26,6 +26,7 @@ class ProxyTernaryMatrix(nn.Module):
         temperature: float = 0.35,
         committed_mask: torch.Tensor | None = None,
         master_weight: torch.Tensor | None = None,
+        fake_fp16_scale: bool = False,
     ):
         super().__init__()
         if codes.ndim != 3 or scales.shape != codes.shape[:2]:
@@ -62,6 +63,7 @@ class ProxyTernaryMatrix(nn.Module):
         self._in_features = in_features
         self.compute_dtype = compute_dtype
         self.temperature = float(temperature)
+        self.fake_fp16_scale = bool(fake_fp16_scale)
 
     @property
     def out_features(self) -> int:
@@ -145,7 +147,11 @@ class ProxyTernaryMatrix(nn.Module):
         hard = self.proxy_code.round().clamp(-1, 1)
         # Exact hard forward with the smooth staircase supplying the gradient.
         code = hard.detach() + soft - soft.detach()
-        value = code * self.group_scale.abs().clamp_min(1e-5).unsqueeze(-1)
+        scale = self.group_scale.abs().clamp_min(1e-5)
+        if self.fake_fp16_scale:
+            rounded = scale.half().float()
+            scale = scale + (rounded - scale).detach()
+        value = code * scale.unsqueeze(-1)
         mixed = torch.where(self.committed_mask.unsqueeze(-1), value, self.base_weight)
         return mixed.reshape(self.out_features, -1)[:, : self.in_features].to(
             self.compute_dtype

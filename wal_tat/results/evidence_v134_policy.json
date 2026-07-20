@@ -1,0 +1,63 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-policy-v2",
+  "evidence_id": "v134",
+  "declared_before_execution": true,
+  "objective": "train only uncommitted layer-24 MLP groups against a target-local counterfactual teacher while freezing the successful strict-ternary bundle",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "starting_artifact": "wal2/artifacts/wal-tat-block24_mlp_joint_initializer_matchedval_v1.pt",
+  "starting_artifact_sha256": "19c165fd08dab5e463953b5652857b98558585879f925eccb17bbecb3ee70848",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "training and development selection/confirmation only; never audit",
+  "reserved_audit_v8_sha256": "b6aba897e452c345ac50807ae9d660938eb68c43a25d9ddbbbc7c917d7e99984",
+  "script": "wal_tat/experiments/mlp_fallback_compensation_recovery.py",
+  "script_sha256": "458bfac60bc7a56e3afce23e7947964d6737c52877b009444457f32f8d7777c0",
+  "tag": "block24_mlp_local_fallback_compensation_matchedval_v2",
+  "teacher": {
+    "mode": "target_counterfactual_mlp",
+    "restored_for_teacher_only": "committed groups of layer-24 up/gate/down",
+    "all_other_checkpoint_state_held_fixed": true,
+    "exact_source_restoration_required": true
+  },
+  "training": {
+    "steps": 768,
+    "learning_rate": 0.000002,
+    "ce_weight": 1.0,
+    "block_weight": 0.25,
+    "kd_weight": 0.5,
+    "delta_anchor_weight": 0.01,
+    "selection_every": 64,
+    "seed": 281
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.001,
+    "minimum_confirmation_worst_ratio_improvement": 0.001,
+    "maximum_weighted_relative_fallback_delta": 0.1,
+    "ternary_codes_unchanged": true,
+    "g128_fp16_scales_unchanged": true,
+    "committed_masks_unchanged": true,
+    "committed_master_values_unchanged": true,
+    "coverage_unchanged": true,
+    "persistent_bf16_residual_on_committed_groups": false
+  },
+  "audit_firewall": {
+    "v7_is_not_used_for_training_or_selection": true,
+    "v8_remains_unopened_until_a_new_artifact_is_frozen": true,
+    "passing_run_writes_only_an_artifact": true,
+    "checkpoint_publication_requires_a_separate_predeclared_v8_audit": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/mlp_fallback_compensation_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --starting-artifact ../wal2/artifacts/wal-tat-block24_mlp_joint_initializer_matchedval_v1.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_mlp_local_fallback_compensation_matchedval_v2 --target-layer 24 --steps 768 --lr 0.000002 --ce-weight 1 --block-weight 0.25 --kd-weight 0.5 --delta-anchor-weight 0.01 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 64 --min-selection-improvement 0.001 --min-confirmation-improvement 0.001 --max-relative-delta 0.1 --seed 281 --device cuda"
+}

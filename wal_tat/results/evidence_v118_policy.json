@@ -1,0 +1,41 @@
+{
+  "schema": "wal-tat-boundary-sparse-recode-policy-v1",
+  "evidence_id": "v118",
+  "declared_before_execution": true,
+  "objective": "coverage-neutral recovery on a validation-domain-matched development suite without using disclosed audit v3-v6 for selection",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "training and development selection only; never sealed audit",
+  "target": "model.layers.24.mlp.up_proj",
+  "script": "wal_tat/experiments/boundary_sparse_recode.py",
+  "script_sha256": "571e48780775a26ad06e52da819702c13ede85802955b8ead0b6bc8388bd4897",
+  "tag": "block24_up_matchedval_boundary_sparse_v1",
+  "search": {
+    "calibration_sequences": 384,
+    "selection_start": 0,
+    "selection_count": 128,
+    "confirmation_start": 128,
+    "confirmation_count": 128,
+    "group_budgets": [128, 256, 512, 1024, 2048, 4096],
+    "scale_modes": ["fixed", "counterfactual_ls"],
+    "ce_weight": 0.0,
+    "block_weight": 0.2,
+    "kd_weight": 1.0,
+    "seed": 223
+  },
+  "development_acceptance": {
+    "minimum_selection_improvement": 0.0001,
+    "minimum_confirmation_improvement": 0.0,
+    "maximum_code_churn": 0.0005,
+    "codes_remain_strict_ternary": true,
+    "committed_mask_unchanged": true,
+    "coverage_unchanged": true
+  },
+  "audit_firewall": {
+    "v3_v4_v5_v6_are_not_used_for_search_or_selection": true,
+    "frozen_candidate_only_may_be_audited_after_development_acceptance": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/boundary_sparse_recode.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_up_matchedval_boundary_sparse_v1 --calibration-sequences 384 --selection-start 0 --selection-count 128 --confirmation-start 128 --confirmation-count 128 --group-budgets 128,256,512,1024,2048,4096 --scale-modes fixed,counterfactual_ls --ce-weight 0 --block-weight 0.2 --kd-weight 1 --min-selection-improvement 0.0001 --min-confirmation-improvement 0 --max-code-churn 0.0005 --seed 223 --device cuda"
+}

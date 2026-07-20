@@ -1,0 +1,57 @@
+{
+  "schema": "wal-tat-counterfactual-proxy-recovery-policy-v1",
+  "evidence_id": "v122",
+  "declared_before_execution": true,
+  "objective": "recover the localized layer24 up_proj gap with strict hard-forward ternary QAT and a target-local counterfactual teacher",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "training and development selection/confirmation only; never sealed audit",
+  "target": "model.layers.24.mlp.up_proj",
+  "script": "wal_tat/experiments/counterfactual_proxy_recovery.py",
+  "script_sha256": "d183d1757fd90071ef70cbacbdeb6ef7699eec23a89d7aba9683009b10c883be",
+  "proxy_library": "wal_tat/src/wal_tat/proxy.py",
+  "proxy_library_sha256": "45b78024ca812e00fc7093b21433c1a87b1f680ee9d27a099a3d7c2aec028d37",
+  "tag": "block24_up_matchedval_counterfactual_proxy_v1",
+  "training": {
+    "steps": 1536,
+    "proxy_lr": 0.0015,
+    "scale_lr": 0.0000075,
+    "ce_weight": 0.0,
+    "block_weight": 1.0,
+    "kd_weight": 1.0,
+    "proxy_anchor_weight": 0.05,
+    "initial_temperature": 0.5,
+    "final_temperature": 0.08,
+    "selection_every": 256,
+    "seed": 233
+  },
+  "deployment_forward": {
+    "codes": "strict {-1,0,+1}",
+    "scale": "one FP16 value per committed g128 group",
+    "hard_codes_in_every_forward": true,
+    "soft_staircase_used_only_for_backward": true,
+    "persistent_bf16_residual": false
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.001,
+    "minimum_confirmation_worst_ratio_improvement": 0.0,
+    "maximum_code_churn": 0.01,
+    "committed_mask_unchanged": true,
+    "coverage_unchanged": true
+  },
+  "audit_firewall": {
+    "v3_v4_v5_v6_are_not_used_for_training_or_step_selection": true,
+    "passing_run_writes_only_a_frozen_artifact": true,
+    "checkpoint_publication_requires_separate_predeclared_audit_and_commit": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/counterfactual_proxy_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_up_matchedval_counterfactual_proxy_v1 --target-layer 24 --target-projection up_proj --steps 1536 --proxy-lr 0.0015 --scale-lr 0.0000075 --ce-weight 0 --block-weight 1 --kd-weight 1 --proxy-anchor-weight 0.05 --initial-temperature 0.5 --final-temperature 0.08 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 256 --min-selection-improvement 0.001 --min-confirmation-improvement 0 --max-code-churn 0.01 --seed 233 --device cuda"
+}

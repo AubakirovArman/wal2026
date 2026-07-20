@@ -20,6 +20,26 @@ def test_proxy_matrix_has_exact_hard_forward_and_soft_gradient():
     assert set(matrix.hard_codes().flatten().tolist()) <= {-1, 0, 1}
 
 
+def test_proxy_matrix_can_use_fp16_rounded_scales_with_ste_gradient():
+    codes = torch.tensor([[[1, -1]]], dtype=torch.int8)
+    scales = torch.tensor([[1.0003]])
+    matrix = ProxyTernaryMatrix(
+        codes,
+        scales,
+        compute_dtype=torch.float32,
+        fake_fp16_scale=True,
+    )
+
+    weight = matrix.effective_weight()
+    expected_scale = scales.half().float().item()
+    assert torch.equal(
+        weight.detach(), torch.tensor([[expected_scale, -expected_scale]])
+    )
+    weight[:, :1].sum().backward()
+    assert matrix.group_scale.grad is not None
+    assert matrix.group_scale.grad.item() != 0
+
+
 def test_proxy_churn_and_constraint():
     matrix = ProxyTernaryMatrix(
         torch.zeros((1, 1, 4), dtype=torch.int8),

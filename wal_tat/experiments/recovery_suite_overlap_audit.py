@@ -32,7 +32,12 @@ def window_digests(payload: dict) -> set[str]:
 
 def source_ranges(payload: dict) -> dict[str, list[dict]]:
     """Return ranges keyed by the tokenized source SHA rather than domain name."""
-    token_sha = payload.get("token_sha256", {})
+    # New recovery suites record both the full tokenized source identity and a
+    # digest of the selected gate windows.  Declared offsets are meaningful
+    # only relative to the full stream, so prefer that identity when present.
+    token_sha = payload.get("full_token_stream_sha256") or payload.get(
+        "token_sha256", {}
+    )
     declared = payload.get("ranges")
     result: dict[str, list[dict]] = {}
     if declared is not None:

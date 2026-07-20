@@ -23,8 +23,14 @@ def one_file(pattern: str) -> Path:
     return matches[0]
 
 
-def text_windows(tokenizer, texts, *, count: int, length: int, offset: int):
-    ids = tokenizer("\n\n".join(text for text in texts if text.strip()), return_tensors="pt").input_ids[0]
+def token_stream(tokenizer, texts):
+    return tokenizer(
+        "\n\n".join(text for text in texts if text.strip()),
+        return_tensors="pt",
+    ).input_ids[0]
+
+
+def text_windows(ids, *, count: int, length: int, offset: int):
     needed = offset + count * length + 1
     if ids.numel() < needed:
         raise RuntimeError(f"source has {ids.numel()} tokens, but {needed} are required")
@@ -98,24 +104,31 @@ def main() -> None:
         )
 
     code_domain = f"{args.code_source}_code"
+    token_sources = {
+        "c4_validation": token_stream(tokenizer, c4_texts[:4000]),
+        "squad_context": token_stream(tokenizer, squad_contexts),
+        code_domain: token_stream(tokenizer, code_texts),
+    }
+    offsets = {
+        "c4_validation": args.c4_offset,
+        "squad_context": args.squad_offset,
+        code_domain: args.code_offset,
+    }
     gates = {
         "c4_validation": text_windows(
-            tokenizer,
-            c4_texts[:4000],
+            token_sources["c4_validation"],
             count=args.sequences,
             length=args.length,
             offset=args.c4_offset,
         ),
         "squad_context": text_windows(
-            tokenizer,
-            squad_contexts,
+            token_sources["squad_context"],
             count=args.sequences,
             length=args.length,
             offset=args.squad_offset,
         ),
         code_domain: text_windows(
-            tokenizer,
-            code_texts,
+            token_sources[code_domain],
             count=args.sequences,
             length=args.length,
             offset=args.code_offset,
@@ -134,10 +147,20 @@ def main() -> None:
             "squad_context": args.squad_offset,
             "code": args.code_offset,
         },
+        "ranges": {
+            "gates": {
+                domain: [offsets[domain], offsets[domain] + args.sequences * args.length]
+                for domain in gates
+            }
+        },
         "code_source": args.code_source,
         "gates": gates,
         "sources": [str(path) for path in source_paths],
         "source_sha256": {str(path): sha256_file(path) for path in source_paths},
+        "full_token_stream_sha256": {
+            domain: hashlib.sha256(ids.contiguous().numpy().tobytes()).hexdigest()
+            for domain, ids in token_sources.items()
+        },
         "token_sha256": {
             name: hashlib.sha256(torch.stack(chunks).numpy().tobytes()).hexdigest()
             for name, chunks in gates.items()

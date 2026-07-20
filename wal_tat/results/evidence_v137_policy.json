@@ -1,0 +1,65 @@
+{
+  "schema": "wal-tat-fallback-compensation-commit-policy-v1",
+  "evidence_id": "v137",
+  "declared_before_execution": true,
+  "objective": "atomically publish the audited layer-24 strict-ternary recode and fallback-QAT state as coverage-neutral checkpoint s0048r3",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "artifact": "wal2/artifacts/wal-tat-block24_mlp_local_fallback_compensation_matchedval_v2.pt",
+  "artifact_sha256": "e0b89e6a44fce6d09ae355ba9b100c50768caae4126bf3b1e64bb9d31f3bd0b0",
+  "development_result": "wal_tat/results/block24_mlp_local_fallback_compensation_matchedval_v2.json",
+  "development_result_sha256": "7c8a8bf7a5d304367934759fa7a99119417d48f9b8dd222086f2899fe9f63c6a",
+  "audit_result": "wal_tat/results/block24_mlp_local_fallback_compensation_audit_v8_retry1.json",
+  "audit_result_sha256": "1ed3a6788424d3e614388f7b744232891cd1427c397fbd387af2b83b04b412fa",
+  "script": "wal_tat/experiments/commit_fallback_compensation_artifact.py",
+  "script_sha256": "f55a9ad8f982617411db6ad8ac30eb39b721a8bcc57f644d9edddba885575bbd",
+  "output_checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt",
+  "accepted_weights": 74563584,
+  "target_names": [
+    "model.layers.24.mlp.up_proj",
+    "model.layers.24.mlp.gate_proj",
+    "model.layers.24.mlp.down_proj"
+  ],
+  "expected_changes": {
+    "model.layers.24.mlp.up_proj": {
+      "changed_code_values": 1163329,
+      "changed_scale_groups": 74478,
+      "changed_fallback_weights": 1821376,
+      "max_code_churn": 0.122,
+      "max_fallback_relative_delta": 0.00331
+    },
+    "model.layers.24.mlp.gate_proj": {
+      "changed_code_values": 115770,
+      "changed_scale_groups": 6240,
+      "changed_fallback_weights": 6982493,
+      "max_code_churn": 0.145,
+      "max_fallback_relative_delta": 0.00323
+    },
+    "model.layers.24.mlp.down_proj": {
+      "changed_code_values": 129564,
+      "changed_scale_groups": 10267,
+      "changed_fallback_weights": 6543987,
+      "max_code_churn": 0.099,
+      "max_fallback_relative_delta": 0.00303
+    }
+  },
+  "publication_invariants": {
+    "coverage_before": 74563584,
+    "coverage_after": 74563584,
+    "committed_masks_unchanged": true,
+    "artifact_codes_strict_ternary": true,
+    "artifact_scales_positive_finite_fp16": true,
+    "compensated_master_bf16": true,
+    "compensated_master_changes_only_uncommitted_groups": true,
+    "persistent_bf16_residual_on_committed_groups": false,
+    "source_checkpoint_immutable": true,
+    "atomic_no_overwrite_save": true
+  },
+  "post_commit": {
+    "status_before_fresh_verification": "published_pending_fresh_verification",
+    "old_checkpoint_deletion_forbidden": true,
+    "artifact_deletion_forbidden": true,
+    "fresh_process_verification_required": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/commit_fallback_compensation_artifact.py ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt ../wal2/artifacts/wal-tat-block24_mlp_local_fallback_compensation_matchedval_v2.pt results/block24_mlp_local_fallback_compensation_matchedval_v2.json results/block24_mlp_local_fallback_compensation_audit_v8_retry1.json results/evidence_v137_policy.json ../wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt --tag block24_mlp_local_fallback_compensation_s0048r3"
+}

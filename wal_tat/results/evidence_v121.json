@@ -1,0 +1,27 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v121",
+  "title": "Matched-validation counterfactual restore localizes the gap to layer24 MLP",
+  "policy_sha256": "d4cbe255df790a6c028c3fd0f2b9428099a5fb7413f072e2a71c1f4ebbf83186",
+  "result": "wal_tat/results/s0048r2_matchedval_counterfactual_restore_v1.json",
+  "result_sha256": "ba7797231abce896d7eddcd4f3ede19d0cd469f8f4930a8a49ea59833689ebb9",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "source_selection_ratios": {
+    "c4_validation": 0.998817188902519,
+    "squad_context": 1.0103207389167377,
+    "torch_code": 0.9846739878477623
+  },
+  "counterfactual_squad_ratios": {
+    "layer24_up": 1.0008885819151385,
+    "layer24_down": 1.0076753229446576,
+    "layer24_gate": 1.00960467376788,
+    "layer24_mlp": 0.9978812304359366,
+    "layer24_attention": 1.0103026702463522,
+    "layer27_all": 1.02740506019182
+  },
+  "layer24_up_squad_gap_recovered_fraction": 0.9139032658119681,
+  "source_restoration_exact": true,
+  "checkpoint_mutated": false,
+  "coverage_changed": false,
+  "interpretation": "Restoring committed layer24 up_proj groups recovers 91.39% of the positive SQuAD gap and also improves C4/code. Layer24 attention is nearly neutral, while restoring layer27 is harmful. The next strict-Q2 recovery should therefore change layer24 up_proj codes, not layer27 or norms."
+}

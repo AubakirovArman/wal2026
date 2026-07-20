@@ -70,13 +70,43 @@ def parse_args() -> argparse.Namespace:
         help="Use FP16-rounded scales in forward with an STE gradient.",
     )
     parser.add_argument("--selection-gate-sequences", type=int, default=256)
+    parser.add_argument("--selection-gate-start", type=int, default=0)
+    parser.add_argument("--confirmation-gate-sequences", type=int)
+    parser.add_argument("--confirmation-gate-start", type=int)
     parser.add_argument("--selection-every", type=int, default=128)
     parser.add_argument("--min-improvement", type=float, default=1e-4)
+    parser.add_argument("--min-confirmation-improvement", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=197)
     parser.add_argument(
         "--device", default="cuda" if torch.cuda.is_available() else "cpu"
     )
     return parser.parse_args()
+
+
+def slice_domain_gates(
+    gates: dict[str, list[torch.Tensor]],
+    *,
+    start: int,
+    count: int,
+    role: str,
+) -> dict[str, list[torch.Tensor]]:
+    if start < 0:
+        raise ValueError(f"{role} gate start must be non-negative")
+    if count <= 0:
+        raise ValueError(f"{role} gate count must be positive")
+    stop = start + count
+    selected = {domain: chunks[start:stop] for domain, chunks in gates.items()}
+    missing = {
+        domain: len(chunks)
+        for domain, chunks in selected.items()
+        if len(chunks) != count
+    }
+    if missing:
+        raise ValueError(
+            f"suite lacks the requested {role} gate slice "
+            f"[{start}, {stop}): {missing}"
+        )
+    return selected
 
 
 class FixedCodeScaleLinear(nn.Module):
@@ -196,15 +226,41 @@ def main() -> None:
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
     calibration = suite["calibration"]
     gates = suite["gates"]
-    selection_gates = {
-        domain: chunks[: args.selection_gate_sequences]
-        for domain, chunks in gates.items()
-    }
-    if any(
-        len(chunks) != args.selection_gate_sequences
-        for chunks in selection_gates.values()
+    selection_gates = slice_domain_gates(
+        gates,
+        start=args.selection_gate_start,
+        count=args.selection_gate_sequences,
+        role="selection",
+    )
+    confirmation_gates = None
+    if (args.confirmation_gate_start is None) != (
+        args.confirmation_gate_sequences is None
     ):
-        raise ValueError("suite lacks the requested selection gate sequences")
+        raise ValueError(
+            "confirmation gate start and count must be provided together"
+        )
+    if args.confirmation_gate_start is not None:
+        confirmation_gates = slice_domain_gates(
+            gates,
+            start=args.confirmation_gate_start,
+            count=args.confirmation_gate_sequences,
+            role="confirmation",
+        )
+        selection_range = set(
+            range(
+                args.selection_gate_start,
+                args.selection_gate_start + args.selection_gate_sequences,
+            )
+        )
+        confirmation_range = set(
+            range(
+                args.confirmation_gate_start,
+                args.confirmation_gate_start
+                + args.confirmation_gate_sequences,
+            )
+        )
+        if selection_range & confirmation_range:
+            raise ValueError("selection and confirmation gate slices overlap")
     payload = torch.load(source_checkpoint, map_location="cpu", weights_only=False)
     target_name = (
         f"model.layers.{args.target_layer}."
@@ -217,13 +273,20 @@ def main() -> None:
     model = load_model(model_path, args.device)
     original_weight = model.get_submodule(target_name).weight.detach().cpu().clone()
     baseline = evaluate_domains(model, gates, args.device)
-    selection_baseline = (
-        baseline
-        if all(len(selection_gates[name]) == len(gates[name]) for name in gates)
-        else evaluate_domains(model, selection_gates, args.device)
+    selection_baseline = evaluate_domains(model, selection_gates, args.device)
+    confirmation_baseline = (
+        evaluate_domains(model, confirmation_gates, args.device)
+        if confirmation_gates is not None
+        else None
     )
     matrices = install_checkpoint(model, payload, args.device)
     source = evaluate_domains(model, gates, args.device)
+    source_selection = evaluate_domains(model, selection_gates, args.device)
+    source_confirmation = (
+        evaluate_domains(model, confirmation_gates, args.device)
+        if confirmation_gates is not None
+        else None
+    )
     restore_original_committed_groups(matrices[target_name], original_weight)
     teacher_metrics = evaluate_domains(model, gates, args.device)
     teacher = cache_teacher(model, calibration, args.target_layer, args.device, args)
@@ -335,10 +398,40 @@ def main() -> None:
     deploy_scales = scale_layer.effective_scales().half().float()
     scale_layer.set_scales_(deploy_scales)
     attempted = evaluate_domains(model, gates, args.device)
+    attempted_selection = evaluate_domains(model, selection_gates, args.device)
+    attempted_confirmation = (
+        evaluate_domains(model, confirmation_gates, args.device)
+        if confirmation_gates is not None
+        else None
+    )
     source_ratios = ratios(source, baseline)
     attempted_ratios = ratios(attempted, baseline)
     improvement = max(source_ratios.values()) - max(attempted_ratios.values())
-    passed = improvement >= args.min_improvement
+    source_selection_ratios = ratios(source_selection, selection_baseline)
+    attempted_selection_ratios = ratios(attempted_selection, selection_baseline)
+    selection_improvement = max(source_selection_ratios.values()) - max(
+        attempted_selection_ratios.values()
+    )
+    source_confirmation_ratios = (
+        ratios(source_confirmation, confirmation_baseline)
+        if source_confirmation is not None
+        else None
+    )
+    attempted_confirmation_ratios = (
+        ratios(attempted_confirmation, confirmation_baseline)
+        if attempted_confirmation is not None
+        else None
+    )
+    confirmation_improvement = (
+        max(source_confirmation_ratios.values())
+        - max(attempted_confirmation_ratios.values())
+        if source_confirmation_ratios is not None
+        else None
+    )
+    passed = selection_improvement >= args.min_improvement and (
+        confirmation_improvement is None
+        or confirmation_improvement >= args.min_confirmation_improvement
+    )
     statistics = scale_statistics(scale_layer, original_weight)
     codes_unchanged = torch.equal(
         matrices[target_name].committed_codes,
@@ -370,6 +463,10 @@ def main() -> None:
                 "best_step": best_step,
                 "metrics": attempted,
                 "ratios": attempted_ratios,
+                "selection_metrics": attempted_selection,
+                "selection_ratios": attempted_selection_ratios,
+                "confirmation_metrics": attempted_confirmation,
+                "confirmation_ratios": attempted_confirmation_ratios,
                 "statistics": statistics,
             },
             artifact_path,
@@ -396,17 +493,32 @@ def main() -> None:
         "max_abs_log_scale_delta": args.max_abs_log_scale_delta,
         "fake_fp16_scale": args.fake_fp16_scale,
         "selection_every": args.selection_every,
+        "selection_gate_start": args.selection_gate_start,
         "selection_gate_sequences": args.selection_gate_sequences,
+        "confirmation_gate_start": args.confirmation_gate_start,
+        "confirmation_gate_sequences": args.confirmation_gate_sequences,
         "baseline": baseline,
         "selection_baseline": selection_baseline,
+        "confirmation_baseline": confirmation_baseline,
         "source": source,
         "source_ratios": source_ratios,
+        "source_selection": source_selection,
+        "source_selection_ratios": source_selection_ratios,
+        "source_confirmation": source_confirmation,
+        "source_confirmation_ratios": source_confirmation_ratios,
         "best_step": best_step,
         "best_selection_ratios": best_ratios,
         "attempted": attempted,
         "attempted_ratios": attempted_ratios,
+        "attempted_selection": attempted_selection,
+        "attempted_selection_ratios": attempted_selection_ratios,
+        "attempted_confirmation": attempted_confirmation,
+        "attempted_confirmation_ratios": attempted_confirmation_ratios,
         "worst_ratio_improvement": improvement,
+        "selection_worst_ratio_improvement": selection_improvement,
+        "confirmation_worst_ratio_improvement": confirmation_improvement,
         "min_improvement": args.min_improvement,
+        "min_confirmation_improvement": args.min_confirmation_improvement,
         "passed": passed,
         "scale_statistics": statistics,
         "codes_unchanged": codes_unchanged,

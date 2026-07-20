@@ -25,7 +25,7 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0048r2` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0048r3` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
@@ -70,11 +70,24 @@ The accepted frontier `s0048r2` on `Qwen/Qwen3-1.7B` has:
 - `s0048r2` therefore changes exactly 128 committed ternary codes and 128 FP16
   group scales, keeps coverage unchanged, contains no BF16 residual, and
   fresh-verifies at `wiki=0.949896` and `code=0.961393` relative NLL;
-- on the already disclosed rotating suites, v6 still passes the cumulative
-  point guide (`worst=1.000922`) while v5 SQuAD improves from the earlier
-  `1.005234` to `1.005052` but remains above `1.002167`. Further coverage
-  growth is therefore paused until another coverage-neutral recovery is built
-  on non-overlapping development data;
+- on the already disclosed rotating suites, v6 still passed the cumulative
+  point guide (`worst=1.000922`) while v5 SQuAD improved from the earlier
+  `1.005234` to `1.005052` but remained above `1.002167`. Coverage growth was
+  paused while a new non-overlapping matched development path was built;
+- a joint strict-Q2 MLP initializer improved its matched selection and
+  confirmation slices, but was rejected because audit-v7 SQuAD exceeded the
+  cumulative guide. This left the accepted checkpoint unchanged;
+- target-local fallback-compensation QAT then kept every accepted group hard
+  ternary while adjusting only the still-uncommitted BF16 MLP weights. The
+  aggregate fallback update was `0.3151%` relative to the source weights;
+- the frozen compensation state passed the independent audit-v8 on C4,
+  SQuAD and PyTorch code. Absolute NLL ratios were
+  `0.993307 / 0.992380 / 0.985639`; paired incremental upper-95 ratios versus
+  the parent frontier were `0.998246 / 0.996783 / 0.994289`;
+- `s0048r3` atomically publishes that state. It changes no committed mask,
+  keeps coverage at 74,563,584 weights, contains no BF16 residual in committed
+  groups, and fresh-verifies at `wiki=0.947025` and `code=0.959163` relative
+  NLL. It is now the sole retained WAL-TAT checkpoint;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);
@@ -137,6 +150,11 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   continuous residual into ternary codes and FP16 g128 scales;
 - `experiments/counterfactual_scale_recovery.py`: deployment-faithful direct
   FP16-scale QAT against a target-local counterfactual teacher;
+- `experiments/committed_mlp_initializer_ablation.py`: matched joint
+  up/gate/down strict-Q2 initializer selection with disjoint confirmation;
+- `experiments/mlp_fallback_compensation_recovery.py`: target-local QAT that
+  freezes accepted ternary groups and trains only the uncommitted BF16 MLP
+  fallback as a coverage-neutral bridge to the next conversion;
 - `experiments/boundary_sparse_recode.py`: behavior-gradient ranking of sparse
   adjacent ternary-code moves with disjoint development confirmation;
 - `experiments/ternary_recode_artifact_audit.py`: fresh paired cumulative and
@@ -147,6 +165,9 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   publisher for an audited, policy-bounded sparse code-and-scale recode;
 - `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
   dual-gate commit that publishes a new checkpoint without mutating its parent;
+- `experiments/commit_fallback_compensation_artifact.py`: atomic publisher that
+  verifies the audit lineage and permits BF16 master changes only below false
+  committed masks;
 - `experiments/reference_pack_checkpoint_matrix.py`: write and independently
   reload the real versioned partial/full Q2-g binary representation;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic

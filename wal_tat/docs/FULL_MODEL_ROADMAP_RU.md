@@ -22,7 +22,7 @@ next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.34765625% gate + 1
 major matrices:       11 / 197 accepted, 186 remain
 major matrix weights: 74,563,584 / 1,720,451,072 = 4.333956%
 embedding/head:       0 / 1 tied matrix
-packed runtime:       0% implemented
+packed runtime:       reference matrix packer ready; full manifest/kernels remain
 ```
 
 ## Система quality budgets
@@ -108,6 +108,14 @@ upper-95 равен `1.006937` на v3 и `1.003597` на v4, но послед�
 принят уже по prospective dual gate: cumulative point плюс incremental
 upper-95 `<=1.0002`. Его incremental maxima равны `1.00005088` и
 `1.00010712`; это не заменяет будущий sealed block audit.
+
+Текущий lineage checkpoint — `s0048r3`. Он сохраняет то же coverage, но после
+target-local fallback-compensation QAT проходит новый audit-v8 с абсолютными
+C4/SQuAD/code ratios `0.993307 / 0.992380 / 0.985639`; incremental paired
+upper-95 относительно parent равны `0.998246 / 0.996783 / 0.994289`. Это
+создаёт quality headroom для следующего роста, но audit-v8 уже раскрыт и не
+будет использоваться для подбора следующего кандидата. До следующей
+тернаризации строится заранее зафиксированный audit-v9.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
