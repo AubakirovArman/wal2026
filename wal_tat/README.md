@@ -25,13 +25,13 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0049` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0050` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
-  6.4453125% `gate_proj`, and 10.44921875% `down_proj`;
-- 74,575,872 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.334670% of major matrix
+  8.528646% `gate_proj`, and 10.44921875% `down_proj`;
+- 74,838,016 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.349907% of major matrix
   weights accepted;
 - recurring validation-v3 NLL ratios `0.996756 / 1.001149 / 0.981170` on C4,
   SQuAD and PyTorch code;
@@ -96,7 +96,18 @@ The accepted frontier `s0049` on `Qwen/Qwen3-1.7B` has:
   paired upper-95 ratios were `1.000039 / 1.000028 / 1.000000` on
   C4/SQuAD/code, below the predeclared `1.0002` limit. `s0049` therefore raises
   coverage to 74,575,872 weights and fresh-verifies at `wiki=0.947054` and
-  `code=0.959188`; it is the sole retained WAL-TAT checkpoint;
+  `code=0.959188`;
+- before any further candidate work, audit-v10 was frozen on three new token
+  ranges and proved disjoint from all 19 retained suites. A prospective scan
+  then tested 2,048 D1 groups (262,144 weights) for each remaining layer-24
+  MLP matrix, 21.33x the previous atom. `gate_proj + activation_wls` won;
+  proxy recovery selected step 128 with zero code churn and a worst full
+  development ratio of `1.000095`;
+- that exact frozen artifact passed the one-shot audit-v10. Its incremental
+  paired upper-95 ratios were `1.000039 / 1.000336 / 1.000148`, below the
+  predeclared size-adjusted `1.000924` limit. `s0050` therefore raises coverage
+  to 74,838,016 weights and fresh-verifies at `wiki=0.947148` and
+  `code=0.959176`; it is the accepted WAL-TAT frontier;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);

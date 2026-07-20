@@ -1,0 +1,37 @@
+{
+  "schema": "wal-tat-suite-overlap-policy-v1",
+  "evidence_id": "v149",
+  "declared_before_execution": true,
+  "objective": "prove audit-v10 has neither exact windows nor token intervals in common with every retained suite, including disclosed audit-v9",
+  "new_suite": "wal2/cache/wal-tat-audit-holdout-v10-l256-g512.pt",
+  "new_suite_sha256": "1330cd078546ec86a3abd0e5408729843cbff94f6eec831401dbc5f669c20b0f",
+  "script": "wal_tat/experiments/recovery_suite_overlap_audit.py",
+  "script_sha256": "6c538a3fb777b7c10c90daa384a5bdadb85a4eea83521c666466f33b8b6ac5cd",
+  "priors": [
+    "wal2/cache/wal-tat-audit-holdout-v1-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v2-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v7-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v9-l256-g512.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v1-c4x2-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v1-c4x4-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v1-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v1-squadx4-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+    "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+    "wal2/cache/wal-tat-suite-v1-l128-wc4-cc4-g8.pt",
+    "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g64.pt",
+    "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt"
+  ],
+  "acceptance": {
+    "exact_window_overlap_each_prior": 0,
+    "declared_range_overlaps_each_prior": 0
+  },
+  "tag": "audit_v10_overlap_v1",
+  "command": "PYTHONPATH=src:experiments python experiments/recovery_suite_overlap_audit.py --new ../wal2/cache/wal-tat-audit-holdout-v10-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v1-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v2-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v7-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v9-l256-g512.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-c4x2-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-c4x4-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-squadx4-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt --prior ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --prior ../wal2/cache/wal-tat-suite-v1-l128-wc4-cc4-g8.pt --prior ../wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g64.pt --prior ../wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt --tag audit_v10_overlap_v1"
+}

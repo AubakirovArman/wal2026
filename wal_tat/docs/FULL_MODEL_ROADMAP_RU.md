@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.4453125% gate + 10.44921875% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 8.528646% gate + 10.44921875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,575,872 / 1,720,451,072 = 4.334670%
+major matrix weights: 74,838,016 / 1,720,451,072 = 4.349907%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       reference matrix packer ready; full manifest/kernels remain
 ```
@@ -101,8 +101,8 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
-75.78125% `up_proj`, 6.4453125% `gate_proj` и 10.44921875% `down_proj`.
-Текущее покрытие `4.334670%`, условная `+5% NLL` guide равна `1.00216733`,
+75.78125% `up_proj`, 8.528646% `gate_proj` и 10.44921875% `down_proj`.
+Текущее покрытие `4.349907%`, условная `+5% NLL` guide равна `1.00217495`,
 худший измеренный точечный ratio равен `1.001472`. Кумулятивный paired SQuAD
 upper-95 равен `1.006937` на v3 и `1.003597` на v4, но последний D10-шаг был
 принят уже по prospective dual gate: cumulative point плюс incremental
@@ -123,8 +123,18 @@ retained suites. Development-only scan выбрал 96 D1-групп `gate_proj`
 Один заранее объявленный audit-v9 дал incremental upper-95
 `1.000039 / 1.000028 / 1.000000`, кандидат принят как `s0049`. Добавлено
 12,288 strict-ternary weights, coverage `gate_proj` вырос до `6.4453125%`, а
-общий счётчик — до `74,575,872`. Перед следующей кандидатной настройкой должен
-быть построен новый audit-v10: раскрытый v9 повторно использовать нельзя.
+общий счётчик — до `74,575,872`.
+
+До следующего шага был построен audit-v10 на трёх новых диапазонах; overlap
+checker доказал нулевое пересечение со всеми 19 retained suites. Prospective
+scan увеличил атом до 2,048 g128-групп (262,144 weights), то есть в 21.33 раза.
+Победил `gate_proj + activation_wls`; recovery выбрал шаг 128 при нулевом
+churn кодов. One-shot audit-v10 дал incremental upper-95
+`1.000039 / 1.000336 / 1.000148`, все ниже заранее масштабированного по
+`sqrt(2048/96)` лимита `1.000924`. Кандидат принят как `s0050`, coverage
+`gate_proj` вырос до `8.528646%`, а общий счётчик — до `74,838,016`. Перед
+следующей кандидатной настройкой нужен новый audit-v11: v10 раскрыт ровно один
+раз и повторно использоваться не будет.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
