@@ -1,0 +1,26 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v103-fp16-ste-counterfactual-scale-v3-plateau",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v103_policy.json",
+    "sha256": "ab761705bac2027a6f9945f68aa0605fa360552345d23628f5e87eeeebe698ea"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_fp16_ste_counterfactual_scale_v3.json",
+    "sha256": "5ca7895dc28fbbc33dfa9e882f29568bc880ff7317168e0198f3e841756af664",
+    "passed": false,
+    "best_step": 512,
+    "artifact_created": false,
+    "coverage_changed": false
+  },
+  "ratios": {
+    "source_worst": 1.0134387858196596,
+    "candidate_worst": 1.0133581487580967,
+    "improvement": 0.00008063706156291595,
+    "required_improvement": 0.0001
+  },
+  "conclusion": "The 768-step deterministic extension reproduced the v102 trajectory exactly through step 512 and selected the same checkpoint; later steps did not improve the worst domain. Direct fixed-code scale QAT is useful but plateaued below the acceptance threshold.",
+  "next_step": "Stop tuning this scale-only arm; implement the packed Q2-g128 contract, then test boundary-aware sparse code edits or a new prospective tail transaction.",
+  "frontier_changed": false
+}

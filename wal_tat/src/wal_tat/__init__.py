@@ -24,6 +24,18 @@ from .compensation import (
 )
 from .evaluation import LossMetrics, evaluate_causal_lm
 from .moments import CausalMomentCollector
+from .packing import (
+    PackedQ2Matrix,
+    pack_bool_mask,
+    pack_partial_matrix,
+    pack_ternary_codes,
+    read_packed_matrix,
+    true_artifact_bpw,
+    unpack_bool_mask,
+    unpack_partial_matrix,
+    unpack_ternary_codes,
+    write_packed_matrix,
+)
 from .quantization import (
     hard_codes_scales,
     hestia_quantize,
@@ -75,6 +87,7 @@ __all__ = [
     "GateDecision",
     "HashChainWAL",
     "LossMetrics",
+    "PackedQ2Matrix",
     "RatioGate",
     "TransactionController",
     "TransactionSizeDecision",
@@ -98,6 +111,9 @@ __all__ = [
     "linked_output_group_mask",
     "q2_g128_physical_bpw",
     "paired_block_bootstrap_nll",
+    "pack_bool_mask",
+    "pack_partial_matrix",
+    "pack_ternary_codes",
     "ProxyTernaryLinear",
     "ProxyTernaryMatrix",
     "soft_ternary_proxy",
@@ -111,6 +127,12 @@ __all__ = [
     "structured_channel_candidate_mask",
     "structured_down_candidate_mask",
     "transaction_schedule",
+    "true_artifact_bpw",
+    "read_packed_matrix",
+    "unpack_bool_mask",
+    "unpack_partial_matrix",
+    "unpack_ternary_codes",
     "validate_checkpoint_deletion_target",
+    "write_packed_matrix",
     "worst_ratio",
 ]

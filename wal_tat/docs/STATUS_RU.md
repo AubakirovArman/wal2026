@@ -703,6 +703,54 @@ selection-порога. Амплитуда `8x` прошла selection и про
 gate. Parent `s0048` удалён только после проверки. Coverage поэтому не вырос,
 но качество принятого strict-Q2 состояния стало лучше.
 
+### Прямой strict-scale QAT после matched control
+
+После публикации `s0048r1` проверен более прямой путь: обучались только
+положительные g128 scales уже принятых групп `layer24.up_proj`, а ternary
+codes, masks, BF16 fallback и norms оставались замороженными. Teacher был тем
+же target-local counterfactual состоянием. Первый FP32-вариант оказался
+невалидным для deployment: небольшое улучшение до сериализации превращалось в
+ухудшение после обязательного округления scales в FP16.
+
+Поэтому forward был изменён на deployment-faithful FP16 fake quant с STE.
+Лучший snapshot на шаге 512 улучшил worst selection ratio на `0.000080637`,
+но заранее объявленный порог публикации был `0.0001`. Детерминированное
+продление до 768 шагов не улучшило step 512; более поздние шаги начали
+ухудшать SQuAD. Артефакт и новый checkpoint не публиковались, coverage и
+frontier остались неизменными.
+
+Вывод: общий scale-only градиент полезен, но на этой границе уже упёрся в
+дискретную геометрию. Дальше нужен boundary-aware выбор небольшого числа
+ternary-code переходов либо новый prospective tail, а не очередной перебор
+только LR/steps.
+
+### Reference Q2-g128 packer и реальный bpw
+
+Добавлен versioned binary format без pickle overhead. Он хранит mapping
+`00=-1`, `01=0`, `10=+1`, `11=reserved`, FP16 scale на группу, а для частичной
+матрицы — bit-packed committed mask и только BF16 fallback-группы. Loader
+сразу отклоняет reserved code, проверяет длины payload и точно восстанавливает
+deployed weight.
+
+На настоящем `layer24.up_proj` из `s0048r1`:
+
+- shape: `6144 x 2048`, всего 12,582,912 weights;
+- committed: 74,496 из 98,304 групп, то есть 75.78125%;
+- фактический файл: `8,640,072` bytes;
+- payload: `8,640,000` bytes, versioned header: 72 bytes;
+- true file bpw: `5.493209839`;
+- codes, scales, mask и итоговая deployed-матрица после read-back совпали
+  побитно/точно.
+
+Почему здесь не 2.125 bpw: четверть этой конкретной матрицы всё ещё хранится
+как BF16 fallback. Полностью committed g128-матрица имеет ровно `2.125` payload
+bpw плюс исчезающе малый header. Для всего текущего frontier только 4.333956%
+major weights уже Q2, поэтому честная проекция major-weight storage пока
+`15.398835 bpw`, или около `3.084 GiB` вместо `3.205 GiB` BF16. При 100%
+Q2-g128 те же 1,720,451,072 major weights занимали бы около `0.426 GiB` без
+runtime/KV-cache. Это storage projection, не текущая VRAM тренировки и не
+готовый `llama.cpp` kernel.
+
 ## Лучший воспроизводимый checkpoint
 
 ```text
@@ -720,15 +768,16 @@ wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt
 
 ## Следующий технический шаг
 
-1. использовать подтверждённый target-local counterfactual teacher для прямого
-   strict-scale QAT и проверить, можно ли восстановить больше без code churn;
+1. использовать target-local teacher для boundary-aware sparse code edits:
+   менять только заранее выбранные committed groups около полезных границ,
+   затем делать code-freeze и FP16 scale polish;
 2. не продолжать tuning по раскрытым v5/v6; следующий block/final audit должен
    использовать новые sealed suites и exposure accounting;
-3. после более сильного coverage-neutral recovery повторить prospective tail
-   step; не принимать новый coverage только из-за улучшения development;
+3. параллельно подготовить новый prospective tail step уже от `s0048r1`; не
+   принимать новый coverage только из-за улучшения development;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
-5. реализовать reference Q2-g128 packer и `true_artifact_bpw()` до массовой
-   конвертации остальных блоков;
-6. затем вернуться к росту coverage, завершить второй block и продолжить по
+5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и
+   проверить logit/NLL equality после загрузки нескольких связанных матриц;
+6. затем продолжить рост coverage, завершить второй block и идти по
    карте чувствительности.

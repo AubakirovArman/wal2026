@@ -50,3 +50,9 @@ passing direction back into strict ternary codes and shared FP16 scales.
 only `commit_ternary_recode_artifact.py` may publish it as a lineage-linked
 checkpoint. The parent checkpoint remains on disk until a separate fresh-load
 verification succeeds.
+
+`reference_pack_checkpoint_matrix.py` writes the deployment representation
+without pickle/container inflation: two-bit code slots for committed groups,
+one FP16 scale per group, a bit-packed partial-coverage mask and exact BF16
+fallback groups. Its reported `true_bpw_file` includes the versioned binary
+header and every payload byte.

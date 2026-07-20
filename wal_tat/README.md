@@ -56,6 +56,14 @@ The accepted frontier `s0048r1` on `Qwen/Qwen3-1.7B` has:
   Its paired incremental upper-95 ratios were `1.000032 / 0.999990 / 1.000039`,
   all below the predeclared `1.0001` limit. The resulting lineage checkpoint
   `s0048r1` was fresh-loaded before its parent was deleted;
+- direct target-local scale QAT with deployment-faithful FP16 scale rounding
+  moved the same strict-Q2 state in the right direction, but its best frozen
+  improvement was only `0.000080637`, below the predeclared `0.0001`
+  publication threshold. Extending the deterministic run to 768 steps did not
+  beat step 512, so no checkpoint was published;
+- the reference binary packer exactly round-tripped the real partial
+  `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
+  `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);
 - proxy recovery now reports distance to the `-0.5/+0.5` code boundaries,
   code entropy/churn and scale health. These diagnostics show that proxies do
   move before churn becomes nonzero, but the first broad MLP code changes were
@@ -74,6 +82,8 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
 ## Package contents
 
 - `quantization.py`: soft-to-hard and hard groupwise ternarization;
+- `packing.py`: versioned reference binary Q2-g pack/unpack, partial BF16
+  fallback, reserved-code validation and exact `true_artifact_bpw()` accounting;
 - `transforms.py`: deterministic g128 randomized-Hadamard transforms and a
   hard-code `FixedTernaryLinear` evaluation path;
 - `scoring.py`: reconstruction and activation/Fisher causal ranking;
@@ -111,12 +121,16 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   with raw or target-local counterfactual teachers;
 - `experiments/distill_residual_to_ternary.py`: strict projection of a useful
   continuous residual into ternary codes and FP16 g128 scales;
+- `experiments/counterfactual_scale_recovery.py`: deployment-faithful direct
+  FP16-scale QAT against a target-local counterfactual teacher;
 - `experiments/ternary_recode_artifact_audit.py`: fresh paired cumulative and
   incremental audit of a frozen coverage-neutral Q2 artifact;
 - `experiments/commit_ternary_recode_artifact.py`: atomic, hash-checked
   publication of an audited coverage-neutral child checkpoint;
 - `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
   dual-gate commit that publishes a new checkpoint without mutating its parent;
+- `experiments/reference_pack_checkpoint_matrix.py`: write and independently
+  reload the real versioned partial/full Q2-g binary representation;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
   frontier synchronization, and active-worker detection;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.

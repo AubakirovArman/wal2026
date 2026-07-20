@@ -1,0 +1,43 @@
+{
+  "schema": "wal-tat-predeclared-counterfactual-scale-policy-v1",
+  "policy_id": "evidence-v103-fp16-ste-counterfactual-scale-recovery-v3-longer",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "a4cb8cb",
+  "source_checkpoint_sha256": "c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "runner": {
+    "path": "wal_tat/experiments/counterfactual_scale_recovery.py",
+    "sha256": "04c75a3f200e885b56d95492c48948d1c4536cef78938a016dcad06c3655d52c",
+    "tag": "block24_up_fp16_ste_counterfactual_scale_v3",
+    "physical_gpu": 2,
+    "only_change_from_v102": "Increase the deterministic trajectory from 512 to 768 steps; keep source, seed, objective, LR, scale clamp, selection cadence and acceptance threshold unchanged."
+  },
+  "training": {
+    "trainable": "log-scale deltas of committed layer24 up_proj groups only",
+    "steps": 768,
+    "lr": 0.00025,
+    "ce_weight": 0.0,
+    "block_weight": 0.2,
+    "kd_weight": 1.0,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "scale_anchor_weight": 0.0,
+    "maximum_absolute_log_scale_delta": 0.25,
+    "fake_fp16_scale": true,
+    "selection_gate_sequences": 256,
+    "selection_every": 128,
+    "seed": 199
+  },
+  "acceptance": {
+    "minimum_worst_nll_ratio_improvement": 0.0001,
+    "codes_must_be_bitwise_unchanged": true,
+    "committed_masks_must_be_bitwise_unchanged": true,
+    "persistent_bf16_residual": false,
+    "coverage_must_not_change": true,
+    "checkpoint_written": false,
+    "passing_artifact_requires_frozen_paired_audit": true,
+    "v5_v6_must_not_be_opened": true
+  }
+}
