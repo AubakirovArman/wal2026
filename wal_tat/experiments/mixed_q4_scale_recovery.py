@@ -29,6 +29,7 @@ from compensation_window import (
 )
 from wal_tat import (
     install_mixed_q2_q4_artifact,
+    valid_group_weight_count,
     weighted_symmetric_odd_level_project,
 )
 
@@ -54,6 +55,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
         max_abs_log_scale_delta: float,
         bias: torch.Tensor | None,
         train_codes: bool = False,
+        progressive_mask: torch.Tensor | None = None,
     ):
         super().__init__()
         if max_abs_log_scale_delta <= 0:
@@ -71,6 +73,14 @@ class FixedCodeMixedScaleLinear(nn.Module):
         self.code_upper = 7
         self.register_buffer("base_q4_scales", entry["q4_scales_fp16"].float())
         self.register_buffer("q4_mask", entry["q4_mask"].bool())
+        if progressive_mask is None:
+            progressive_mask = self.q4_mask.clone()
+        progressive_mask = progressive_mask.bool()
+        if progressive_mask.shape != self.q4_mask.shape:
+            raise ValueError("progressive mask shape does not match Q4 mask")
+        if torch.logical_and(progressive_mask, ~self.q4_mask).any():
+            raise ValueError("progressive mask must be a subset of Q4 groups")
+        self.register_buffer("progressive_mask", progressive_mask)
         self.register_buffer(
             "q8_codes",
             entry.get(
@@ -109,7 +119,11 @@ class FixedCodeMixedScaleLinear(nn.Module):
         q2 = self.q2_codes * self.q2_scales.unsqueeze(-1)
         hard = self.proxy_code.round().clamp(self.code_lower, self.code_upper)
         codes = hard.detach() + self.proxy_code - self.proxy_code.detach()
-        q4 = codes * self.effective_q4_scales().unsqueeze(-1)
+        progressive_q4 = codes * self.effective_q4_scales().unsqueeze(-1)
+        fallback_q4 = self.base_q4_codes * self.base_q4_scales.unsqueeze(-1)
+        q4 = torch.where(
+            self.progressive_mask.unsqueeze(-1), progressive_q4, fallback_q4
+        )
         grouped = torch.where(self.q4_mask.unsqueeze(-1), q4, q2)
         q8 = self.q8_codes * self.q8_scales.unsqueeze(-1)
         grouped = torch.where(self.q8_mask.unsqueeze(-1), q8, grouped)
@@ -123,13 +137,12 @@ class FixedCodeMixedScaleLinear(nn.Module):
         self.log_scale_delta.clamp_(
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
-        self.log_scale_delta.masked_fill_(~self.q4_mask, 0)
-        self.proxy_code.clamp_(self.code_lower, self.code_upper)
-        self.proxy_code[~self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)] = (
-            self.base_q4_codes[
-                ~self.q4_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
-            ]
+        self.log_scale_delta.masked_fill_(~self.progressive_mask, 0)
+        active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        self.proxy_code[active] = self.proxy_code[active].clamp(
+            self.code_lower, self.code_upper
         )
+        self.proxy_code[~active] = self.base_q4_codes[~active]
 
     @torch.no_grad()
     def deploy_scales(self) -> torch.Tensor:
@@ -137,12 +150,12 @@ class FixedCodeMixedScaleLinear(nn.Module):
 
     @torch.no_grad()
     def deploy_codes(self) -> torch.Tensor:
-        return (
-            self.proxy_code.round()
-            .clamp(self.code_lower, self.code_upper)
-            .to(torch.int8)
-            .cpu()
+        active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        result = self.base_q4_codes.clone()
+        result[active] = self.proxy_code[active].round().clamp(
+            self.code_lower, self.code_upper
         )
+        return result.to(torch.int8).cpu()
 
     @torch.no_grad()
     def reset_codebook_(
@@ -159,19 +172,25 @@ class FixedCodeMixedScaleLinear(nn.Module):
         if scales.shape != self.base_q4_scales.shape:
             raise ValueError("codebook scale shape mismatch")
         radius = levels // 2
-        if int(codes.min()) < -radius or int(codes.max()) > radius:
+        active = self.progressive_mask.unsqueeze(-1).expand_as(codes)
+        if active.any() and (
+            int(codes[active].min()) < -radius
+            or int(codes[active].max()) > radius
+        ):
             raise ValueError("codes fall outside requested codebook")
         self.code_lower = -radius
         self.code_upper = radius
-        self.base_q4_codes.copy_(codes.to(self.base_q4_codes))
-        self.proxy_code.copy_(codes.to(self.proxy_code))
-        self.base_q4_scales.copy_(scales.to(self.base_q4_scales))
+        self.base_q4_codes[active] = codes.to(self.base_q4_codes)[active]
+        self.proxy_code[active] = codes.to(self.proxy_code)[active]
+        self.base_q4_scales[self.progressive_mask] = scales.to(
+            self.base_q4_scales
+        )[self.progressive_mask]
         self.log_scale_delta.zero_()
         self.constrain_()
 
     @torch.no_grad()
     def code_churn(self) -> float:
-        active = self.q4_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
+        active = self.progressive_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
         if not active.any():
             return 0.0
         changed = self.deploy_codes().to(self.base_q4_codes.device).ne(
@@ -180,14 +199,14 @@ class FixedCodeMixedScaleLinear(nn.Module):
         return float(changed[active].float().mean())
 
     def code_anchor_loss(self) -> torch.Tensor:
-        active = self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
         if not active.any():
             return self.proxy_code.sum() * 0
         return (self.proxy_code[active] - self.base_q4_codes[active]).float().square().mean()
 
     @torch.no_grad()
     def proxy_statistics(self) -> dict[str, float]:
-        active = self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
         if not active.any():
             return {
                 "mean_abs_displacement": 0.0,
@@ -244,6 +263,12 @@ def parse_args() -> argparse.Namespace:
         help="optional odd hard codebook schedule, for example 7,5,3",
     )
     parser.add_argument(
+        "--progressive-fraction",
+        type=float,
+        default=1.0,
+        help="lowest-damage fraction of Q4 groups allowed to collapse",
+    )
+    parser.add_argument(
         "--moment-sequences",
         type=int,
         default=64,
@@ -271,6 +296,41 @@ def parse_progressive_levels(value: str) -> tuple[int, ...]:
     if any(right >= left for left, right in zip(levels, levels[1:])):
         raise ValueError("progressive levels must be strictly decreasing")
     return levels
+
+
+def lowest_damage_progressive_masks(
+    damage: dict[str, torch.Tensor],
+    eligible: dict[str, torch.Tensor],
+    fraction: float,
+) -> tuple[dict[str, torch.Tensor], int, int]:
+    """Select one global lowest-damage subset without touching Q4 fallback."""
+    if not 0 < fraction <= 1:
+        raise ValueError("progressive fraction must be in (0, 1]")
+    if not damage or set(damage) != set(eligible):
+        raise ValueError("damage and eligible maps must have the same keys")
+    names = tuple(damage)
+    values = []
+    locations = []
+    total = 0
+    for matrix_index, name in enumerate(names):
+        if damage[name].shape != eligible[name].shape:
+            raise ValueError(f"shape mismatch for {name}")
+        flat_indices = torch.where(eligible[name].reshape(-1))[0]
+        total += int(flat_indices.numel())
+        values.append(damage[name].reshape(-1).index_select(0, flat_indices))
+        locations.extend(
+            (matrix_index, int(flat_index)) for flat_index in flat_indices.tolist()
+        )
+    if total == 0:
+        raise ValueError("target contains no eligible Q4 groups")
+    selected = max(1, min(total, round(total * fraction)))
+    joined = torch.cat(values)
+    chosen = torch.topk(joined, selected, largest=False, sorted=False).indices
+    masks = {name: torch.zeros_like(eligible[name]) for name in names}
+    for joined_index in chosen.tolist():
+        matrix_index, flat_index = locations[joined_index]
+        masks[names[matrix_index]].view(-1)[flat_index] = True
+    return masks, selected, total
 
 
 @torch.no_grad()
@@ -315,6 +375,10 @@ def main() -> None:
         raise ValueError("moment sequences must be within train sequences")
     if progressive_levels and args.proxy_lr <= 0:
         raise ValueError("progressive collapse requires a positive proxy lr")
+    if not 0 < args.progressive_fraction <= 1:
+        raise ValueError("progressive fraction must be in (0, 1]")
+    if not progressive_levels and args.progressive_fraction != 1.0:
+        raise ValueError("progressive fraction requires progressive levels")
     source_path = args.source_checkpoint.resolve()
     parent_path = args.parent_artifact.resolve()
     candidate_path = args.candidate_artifact.resolve()
@@ -400,6 +464,10 @@ def main() -> None:
     candidate_selection = evaluate_domains(model, selection_gates, args.device)
     moments = None
     progressive_weights = None
+    progressive_masks = None
+    progressive_selected_groups = 0
+    progressive_eligible_groups = 0
+    progressive_selected_weights = 0
     if progressive_levels:
         moments = collect_input_second_moments(
             model,
@@ -412,6 +480,40 @@ def main() -> None:
             name: model.get_submodule(name).weight.detach().float().clone()
             for name in names
         }
+        final_damage = {}
+        eligible = {}
+        for name in names:
+            _codes, _scales, error = weighted_symmetric_odd_level_project(
+                progressive_weights[name],
+                moments[name],
+                levels=progressive_levels[-1],
+                group_size=128,
+            )
+            final_damage[name] = error.cpu()
+            eligible[name] = candidate_artifact["matrices"][name][
+                "q4_mask"
+            ].bool().cpu()
+        (
+            progressive_masks,
+            progressive_selected_groups,
+            progressive_eligible_groups,
+        ) = lowest_damage_progressive_masks(
+            final_damage, eligible, args.progressive_fraction
+        )
+        progressive_selected_weights = sum(
+            valid_group_weight_count(
+                progressive_masks[name],
+                int(candidate_artifact["matrices"][name]["shape"][1]),
+                128,
+            )
+            for name in names
+        )
+        print(
+            "progressive selection "
+            f"groups={progressive_selected_groups}/{progressive_eligible_groups} "
+            f"weights={progressive_selected_weights}",
+            flush=True,
+        )
 
     layers = {}
     for name in names:
@@ -421,6 +523,9 @@ def main() -> None:
             max_abs_log_scale_delta=args.max_abs_log_scale_delta,
             bias=target.bias,
             train_codes=args.proxy_lr > 0,
+            progressive_mask=(
+                progressive_masks[name] if progressive_masks is not None else None
+            ),
         ).to(args.device)
         if progressive_levels:
             codes, scales, _error = weighted_symmetric_odd_level_project(
@@ -625,8 +730,9 @@ def main() -> None:
             deployed_scales = layer.deploy_scales()
             deployed_codes = layer.deploy_codes()
             if progressive_levels and progressive_levels[-1] == 3:
-                q4_mask = matrix_entry["q4_mask"].bool().clone()
-                if int(deployed_codes.abs().max()) > 1:
+                collapse_mask = layer.progressive_mask.detach().cpu().bool()
+                active = collapse_mask.unsqueeze(-1).expand_as(deployed_codes)
+                if active.any() and int(deployed_codes[active].abs().max()) > 1:
                     raise RuntimeError("final three-level stage is not ternary")
                 matrix_entry["q2_codes_int8"] = matrix_entry[
                     "q2_codes_int8"
@@ -634,9 +740,14 @@ def main() -> None:
                 matrix_entry["q2_scales_fp16"] = matrix_entry[
                     "q2_scales_fp16"
                 ].clone()
-                matrix_entry["q2_codes_int8"][q4_mask] = deployed_codes[q4_mask]
-                matrix_entry["q2_scales_fp16"][q4_mask] = deployed_scales[q4_mask]
-                matrix_entry["q4_mask"] = torch.zeros_like(q4_mask)
+                matrix_entry["q2_codes_int8"][collapse_mask] = deployed_codes[
+                    collapse_mask
+                ]
+                matrix_entry["q2_scales_fp16"][collapse_mask] = deployed_scales[
+                    collapse_mask
+                ]
+                matrix_entry["q4_mask"] = matrix_entry["q4_mask"].bool().clone()
+                matrix_entry["q4_mask"][collapse_mask] = False
             else:
                 matrix_entry["q4_scales_fp16"] = deployed_scales
                 matrix_entry["q4_codes_int8"] = deployed_codes
@@ -646,6 +757,9 @@ def main() -> None:
             "best_step": best_step,
             "proxy_lr": args.proxy_lr,
             "progressive_levels": progressive_levels,
+            "progressive_fraction": args.progressive_fraction,
+            "progressive_selected_groups": progressive_selected_groups,
+            "progressive_selected_weights": progressive_selected_weights,
             "development_ratios": attempted_ratios,
             "development_incremental_ratios_vs_parent": attempted_incremental,
         }
@@ -680,6 +794,10 @@ def main() -> None:
         "lr": args.lr,
         "proxy_lr": args.proxy_lr,
         "progressive_levels": progressive_levels,
+        "progressive_fraction": args.progressive_fraction,
+        "progressive_selected_groups": progressive_selected_groups,
+        "progressive_eligible_groups": progressive_eligible_groups,
+        "progressive_selected_weights": progressive_selected_weights,
         "moment_sequences": args.moment_sequences,
         "weights": {
             "ce": args.ce_weight,

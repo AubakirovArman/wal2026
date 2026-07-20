@@ -16,6 +16,13 @@ Large checkpoints, datasets, caches, generated WAL files, and GGUF artifacts are
 deliberately ignored. Store their SHA-256 and reproduction command in a small
 result JSON instead of committing the binaries.
 
+`mixed_q4_scale_recovery.py` supports a hard codebook schedule such as
+`--progressive-levels 7,5,3`. With `--progressive-fraction < 1`, it ranks all
+eligible Q4 groups by their final activation-weighted ternary projection error
+and applies the schedule only to the global lowest-damage subset. Existing Q2,
+Q8 and non-selected Q4 groups remain immutable; a successful three-level stage
+moves only the selected mask from Q4 into strict Q2.
+
 For a statistically paired audit of an accepted frontier, run
 `paired_checkpoint_audit.py` on a frozen suite and declare its role with
 `--suite-role`. Repeatedly exposed v3/v4 suites are recurring validation, not

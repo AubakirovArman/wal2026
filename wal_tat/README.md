@@ -32,7 +32,7 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `b4938a3...`: 81,054,720 ternary, 71,279,104
+- sealed-audited mixed artifact `01a3176...`: 81,142,144 ternary, 71,191,680
   signed-Q4 and 99,324,416 signed-Q8 weights, for 251,658,240 low-bit weights
   (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
@@ -43,6 +43,12 @@ block is `55.171712%` Q2 and `44.828288%` Q4 at `3.021566 bpw`. Its new
 227,968-weight Q4→Q2 step passed sealed audit-v35 at
 `0.992240 / 0.944613 / 0.966782`, with incremental worst `1.004161` versus
 the immutable strict source and `1.000162` versus the accepted parent.
+The next layer-25 experiment kept the difficult Q4 fallback immutable and
+applied a progressive `7→5→3` collapse only to the lowest-damage 1% of its
+remaining Q4 groups. It converted another 683 groups (87,424 weights) to
+strict Q2 and passed sealed audit-v36 at
+`0.992109 / 0.943986 / 0.957007`; incremental worst was `1.003765` versus
+the strict source and `1.000022` versus its accepted mixed parent.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are
@@ -56,12 +62,13 @@ Q8 at `7.287003 bpw`. Sealed audit-v29 ratios are
 `0.991622 / 0.989226 / 0.973866`, with incremental worst `1.004860`. The
 high Q8 share remains explicitly scheduled for reverse Q8→Q4→Q2 distillation.
 
-Layer 25 is now fully low-bit at `2.782186%` Q2, `17.377981%` Q4 and
-`79.839834%` Q8 (`7.262950 bpw`). After two Q8→Q4 steps, its first Q4→Q2
-step converted 1,400,320 weights into strict ternary. Sealed audit-v34 ratios
-are `0.993359 / 0.943748 / 0.961192`; incremental worst is `1.004102` versus
-the immutable `s0053` and `1.000934` versus the accepted parent, both below
-the prospectively declared `1.005` limit.
+Layer 25 is now fully low-bit at `2.955882%` Q2, `17.204285%` Q4 and
+`79.839834%` Q8 (`7.259476 bpw`). Its two accepted Q4→Q2 stages have
+converted 1,487,744 weights into strict ternary. The latest masked progressive
+stage passed sealed audit-v36 at `0.992109 / 0.943986 / 0.957007`;
+incremental worst is `1.003765` versus immutable `s0053` and `1.000022`
+versus the accepted parent, both below the prospectively declared `1.005`
+limit.
 
 The strict historical lineage has:
 

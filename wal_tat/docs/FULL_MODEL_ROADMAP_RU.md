@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
-strict ternary weights: 81,054,720 / 1,720,451,072 = 4.711248% in mixed artifact
-Q4 rescue weights:      71,279,104 / 1,720,451,072 = 4.143047%
+strict ternary weights: 81,142,144 / 1,720,451,072 = 4.716330% in mixed artifact
+Q4 rescue weights:      71,191,680 / 1,720,451,072 = 4.137966%
 Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
@@ -195,6 +195,18 @@ Q4-весов также отклонён: все стадии завершил�
 source и `1.000162` против parent. Весь layer 24 теперь содержит
 `55.171712%` Q2 и `44.828288%` Q4 при `3.021566 bpw`. Accepted artifact:
 `b4938a3417fa59bc89075dc1af4edd509c2e44c1bfe6ff9135729222a5a6746d`.
+
+После этого progressive collapse был изменён с full-tail на masked
+rate--distortion режим. Из 68,333 оставшихся Q4-групп layer 25 заранее
+выбраны 683 группы с минимальной конечной ternary distortion; только они
+прошли hard codebooks `7→5→3`, а прочие Q4, все Q8 и прежние Q2 остались
+побитно неизменными. Новый шаг перевёл `87,424` веса в strict Q2. Layer 25
+теперь содержит `2.955882%` Q2, `17.204285%` Q4 и `79.839834%` Q8 при
+`7.259476 bpw`. Fresh reload дал `0.995253 / 1.001842 / 1.019936`, а
+one-shot audit-v36 — `0.992109 / 0.943986 / 0.957007`; incremental worst
+равен `1.003765` против strict source и `1.000022` против accepted parent.
+Новый accepted artifact SHA-256:
+`01a3176b1971c76868bcd55de068ba5a3058278ad849df4ee7e496a9b98780f4`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

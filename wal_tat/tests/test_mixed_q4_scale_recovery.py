@@ -10,6 +10,7 @@ sys.path.insert(0, str(EXPERIMENTS))
 
 from mixed_q4_scale_recovery import (  # noqa: E402
     FixedCodeMixedScaleLinear,
+    lowest_damage_progressive_masks,
     parse_progressive_levels,
 )
 
@@ -145,3 +146,93 @@ def test_empty_q4_mask_has_finite_zero_diagnostics():
         "max_abs_displacement": 0.0,
         "near_boundary_fraction": 0.0,
     }
+
+
+def test_masked_progressive_collapse_preserves_q4_fallback_q2_and_q8():
+    entry = {
+        "shape": (1, 8),
+        "q2_codes_int8": torch.tensor(
+            [[[1, -1], [0, 0], [0, 0], [0, 0]]], dtype=torch.int8
+        ),
+        "q2_scales_fp16": torch.tensor(
+            [[0.5, 1.0, 1.0, 1.0]], dtype=torch.float16
+        ),
+        "q4_codes_int8": torch.tensor(
+            [[[0, 0], [3, -3], [7, -8], [0, 0]]], dtype=torch.int8
+        ),
+        "q4_scales_fp16": torch.tensor(
+            [[1.0, 0.25, 0.125, 1.0]], dtype=torch.float16
+        ),
+        "q4_mask": torch.tensor([[False, True, True, False]]),
+        "q8_codes_int8": torch.tensor(
+            [[[0, 0], [0, 0], [0, 0], [100, -100]]], dtype=torch.int8
+        ),
+        "q8_scales_fp16": torch.tensor(
+            [[1.0, 1.0, 1.0, 0.01]], dtype=torch.float16
+        ),
+        "q8_mask": torch.tensor([[False, False, False, True]]),
+    }
+    layer = FixedCodeMixedScaleLinear(
+        entry,
+        max_abs_log_scale_delta=0.5,
+        bias=None,
+        train_codes=True,
+        progressive_mask=torch.tensor([[False, True, False, False]]),
+    )
+    baseline = layer.effective_weight().detach().clone()
+    codes = torch.tensor(
+        [[[0, 0], [1, -1], [0, 0], [0, 0]]], dtype=torch.int8
+    )
+    scales = torch.tensor([[1.0, 0.5, 1.0, 1.0]])
+    layer.reset_codebook_(codes, scales, levels=3)
+    collapsed = layer.effective_weight().detach()
+
+    assert torch.equal(collapsed[:, :2], baseline[:, :2])
+    assert not torch.equal(collapsed[:, 2:4], baseline[:, 2:4])
+    assert torch.equal(collapsed[:, 4:6], baseline[:, 4:6])
+    assert torch.equal(collapsed[:, 6:], baseline[:, 6:])
+    deployed = layer.deploy_codes()
+    assert set(deployed[0, 1].tolist()) <= {-1, 0, 1}
+    assert deployed[0, 2].tolist() == [7, -8]
+
+    with torch.no_grad():
+        layer.proxy_code[0, 2] = torch.tensor([0.0, 0.0])
+        layer.log_scale_delta[0, 2] = 0.4
+        layer.constrain_()
+    assert layer.deploy_codes()[0, 2].tolist() == [7, -8]
+    assert layer.log_scale_delta[0, 2].item() == 0.0
+
+
+def test_progressive_mask_must_be_q4_subset():
+    entry = {
+        "shape": (1, 2),
+        "q2_codes_int8": torch.tensor([[[1, -1]]], dtype=torch.int8),
+        "q2_scales_fp16": torch.tensor([[0.5]], dtype=torch.float16),
+        "q4_codes_int8": torch.zeros((1, 1, 2), dtype=torch.int8),
+        "q4_scales_fp16": torch.ones((1, 1), dtype=torch.float16),
+        "q4_mask": torch.tensor([[False]]),
+    }
+    with pytest.raises(ValueError, match="subset"):
+        FixedCodeMixedScaleLinear(
+            entry,
+            max_abs_log_scale_delta=0.5,
+            bias=None,
+            progressive_mask=torch.tensor([[True]]),
+        )
+
+
+def test_lowest_damage_progressive_masks_select_globally():
+    damage = {
+        "a": torch.tensor([[4.0, 1.0, 9.0]]),
+        "b": torch.tensor([[0.5, 2.0]]),
+    }
+    eligible = {
+        "a": torch.tensor([[True, True, False]]),
+        "b": torch.tensor([[True, True]]),
+    }
+    masks, selected, total = lowest_damage_progressive_masks(
+        damage, eligible, 0.5
+    )
+    assert (selected, total) == (2, 4)
+    assert masks["a"].tolist() == [[False, True, False]]
+    assert masks["b"].tolist() == [[True, False]]
