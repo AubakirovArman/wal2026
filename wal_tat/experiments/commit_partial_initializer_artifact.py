@@ -38,6 +38,38 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def configured_validation_suites(policy: dict) -> list[dict[str, str]]:
+    """Normalize recurring and one-shot validation policy schemas.
+
+    Older prospective policies list multiple recurring suites, while newer
+    policies seal one audit-only suite in ``one_shot_audit``.  Both schemas
+    bind the suite by SHA-256 before the candidate is evaluated.
+    """
+    validation_policy = policy.get("rotating_validation") or policy.get(
+        "recurring_validation"
+    )
+    if not validation_policy:
+        one_shot = policy.get("one_shot_audit")
+        if isinstance(one_shot, dict) and one_shot.get("sha256"):
+            validation_policy = [
+                {"name": "one_shot_audit", "sha256": one_shot["sha256"]}
+            ]
+    require(bool(validation_policy), "policy has no validation suites")
+    normalized = [
+        {"name": str(item["name"]), "sha256": str(item["sha256"])}
+        for item in validation_policy
+    ]
+    require(
+        len({item["name"] for item in normalized}) == len(normalized),
+        "policy contains duplicate validation suite names",
+    )
+    require(
+        len({item["sha256"] for item in normalized}) == len(normalized),
+        "policy contains duplicate validation suite hashes",
+    )
+    return normalized
+
+
 def validate_audits(
     audits: list[dict],
     policy: dict,
@@ -45,12 +77,13 @@ def validate_audits(
     checkpoint_hash: str,
     artifact_hash: str,
 ) -> dict:
-    validation_policy = policy.get("rotating_validation") or policy.get(
-        "recurring_validation"
-    )
-    require(bool(validation_policy), "policy has no validation suites")
+    validation_policy = configured_validation_suites(policy)
     configured = {item["sha256"]: item["name"] for item in validation_policy}
-    required_names = set(policy["acceptance"]["validation_suites_required"])
+    required_names = set(
+        policy["acceptance"].get(
+            "validation_suites_required", configured.values()
+        )
+    )
     observed_names = set()
     cumulative_limit = float(
         policy["acceptance"]["cumulative_point_ratio_max_each_domain"]
@@ -214,7 +247,11 @@ def main() -> None:
     payload["gate_ratios"] = recovery["final_full_ratios_to_bf16"]
     payload["metadata"] = {
         "experiment": args.tag,
-        "mode": "prospective D10 activation-WLS hard-forward scale recovery",
+        "mode": (
+            f"prospective D{policy['candidate'].get('sensitivity_decile', 'unknown')} "
+            f"{policy['candidate']['initializer'].replace('_', '-')} "
+            "hard-forward scale recovery"
+        ),
         "target_name": target_name,
         "candidate_new_groups": int(indices.numel()),
         "candidate_new_weights": int(indices.numel() * group_size),

@@ -23,6 +23,19 @@ def one_file(pattern: str) -> Path:
     return matches[0]
 
 
+def c4_arrow_pattern(split: str, train_shard: int = 0) -> str:
+    if split == "validation":
+        return "allenai___c4/default-c*/0.0.0/*/c4-validation.arrow"
+    if split != "train":
+        raise ValueError(f"unsupported C4 split: {split}")
+    if train_shard < 0:
+        raise ValueError("C4 train shard must be non-negative")
+    return (
+        "allenai___c4/default-b*/0.0.0/*/"
+        f"c4-train-{train_shard:05d}-of-*.arrow"
+    )
+
+
 def token_stream(tokenizer, texts):
     return tokenizer(
         "\n\n".join(text for text in texts if text.strip()),
@@ -69,6 +82,12 @@ def main() -> None:
         default="validation",
         help="Use a fresh raw Arrow source after the validation stream is exhausted.",
     )
+    parser.add_argument(
+        "--c4-train-shard",
+        type=int,
+        default=0,
+        help="Zero-based cached C4 train Arrow shard; ignored for validation.",
+    )
     parser.add_argument("--c4-offset", type=int, default=17011)
     parser.add_argument("--squad-offset", type=int, default=9011)
     parser.add_argument("--code-offset", type=int, default=4001)
@@ -86,12 +105,7 @@ def main() -> None:
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
-    if args.c4_split == "validation":
-        c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
-    else:
-        c4_path = one_file(
-            "allenai___c4/default-b*/0.0.0/*/c4-train-00000-of-*.arrow"
-        )
+    c4_path = one_file(c4_arrow_pattern(args.c4_split, args.c4_train_shard))
     squad_path = one_file(
         f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
     )
@@ -182,6 +196,9 @@ def main() -> None:
             "c4": args.c4_split,
             "squad": args.squad_split,
         },
+        "c4_train_shard": (
+            args.c4_train_shard if args.c4_split == "train" else None
+        ),
         "code_source": args.code_source,
         "gates": gates,
         "sources": [str(path) for path in source_paths],

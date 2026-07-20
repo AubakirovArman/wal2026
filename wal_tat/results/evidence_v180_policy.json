@@ -1,0 +1,28 @@
+{
+  "schema": "wal-tat-fresh-verification-policy-v1",
+  "evidence_id": "v180",
+  "declared_before_execution": true,
+  "objective": "verify s0051 in a new process before treating it as the retained frontier or deleting any source/artifact",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+  "checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "commit_result": "wal_tat/results/block24_gate_d1_activationwls_s0051_commit.json",
+  "commit_result_sha256": "a0202b294f12890a9788982bed429135eb63229c69fe2d7aeabd98bf10624469",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "script": "wal_tat/experiments/verify_checkpoint.py",
+  "script_sha256": "0d11b56ffc3f73db4187794c206f458d9f16b3f9312df0d2453637b39877e8cb",
+  "acceptance": {
+    "wiki_relative_nll_max": 1.02,
+    "code_relative_nll_max": 1.02,
+    "strict_ternary_codes_only": true,
+    "accepted_weights": 75100160,
+    "fresh_process_required": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "preserve both s0050r1 and s0051 plus the frozen candidate artifact for diagnosis",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/verify_checkpoint.py ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt ../wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt --tag block24_gate_d1_activationwls_s0051_fresh_verify --gate-ratio 1.02 --seed 109 --device cuda"
+}

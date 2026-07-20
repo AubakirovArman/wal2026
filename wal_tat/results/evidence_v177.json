@@ -1,0 +1,35 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v177",
+  "title": "Post-recovery 2048-group scan selects gate_proj activation-WLS",
+  "policy_sha256": "fb052622387cf52fe6cb9aaa5fd8c43fb0ceb7a26d3464640300175a8fbb8eae",
+  "source_checkpoint_sha256": "6210881e8df6dcef396494cb700fec6635077f017c644a4a6f25bf990e3e37fd",
+  "development_suite_sha256": "a12d9dc3063c6d093ac28ba41f4f239e6e992a4217c0f1bdf8e9cfc313570bca",
+  "arms": {
+    "up_proj_activation_wls": {
+      "worst_incremental_ratio": 1.0000786699681683,
+      "result_sha256": "c1db7e77e2c795fb53715b246ee65e546190a5f982c42865d4eedbdafbcfd9f1",
+      "artifact_sha256": "9aa0df5f87e1f93edb29200b5b0210dce5604ab021510b0162c28ada941646c5"
+    },
+    "down_proj_absmean_round": {
+      "worst_incremental_ratio": 1.0000286523861646,
+      "result_sha256": "82cc47dbad0eb704e0343934c503c130940d76044e1deccb638b7d2c3de26943",
+      "artifact_sha256": "7d27918d172157ee34aa3b8e44659613b1bb985030e9818d9b3cd1166c3b3ef0"
+    },
+    "gate_proj_activation_wls": {
+      "worst_incremental_ratio": 1.0000212370340564,
+      "result_sha256": "6bac8e43810d1ea956bc5a26c39ee71d68bb9575c8048d998f4b2b6e31f626d4",
+      "artifact_sha256": "08bbd84cc13fc15aa11aba309b3b30b7e876f06240ddac68709c1f65c06fe1ef",
+      "mask_sha256": "60f19f3037d261b122cc7c9fceb0c3b96c2645bd7d8c55f55f7252413a6090e6"
+    }
+  },
+  "selected_target": "model.layers.24.mlp.gate_proj",
+  "selected_initializer": "activation_wls",
+  "selected_groups": 2048,
+  "selected_weights": 262144,
+  "selection_limit": 1.0009237604307033,
+  "selected_passed": true,
+  "checkpoint_mutated": false,
+  "audit_v13_opened": false,
+  "next_required_action": "run development-only proxy recovery of the exact frozen gate artifact before one-shot audit-v13"
+}

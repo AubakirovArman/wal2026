@@ -1,0 +1,37 @@
+{
+  "schema": "wal-tat-audit-execution-policy-v1",
+  "policy_id": "evidence-v179-audit-v13-execution-and-validator-compatibility",
+  "date_utc": "2026-07-20",
+  "created_before_audit_run": true,
+  "candidate_policy": "wal_tat/results/evidence_v178_policy.json",
+  "candidate_policy_sha256": "3ba00d8c0ebe8236ce9da66bf1d3918be48f44020a2625c4da124b5956d6f19f",
+  "development_evidence": "wal_tat/results/evidence_v178.json",
+  "source_checkpoint_sha256": "6210881e8df6dcef396494cb700fec6635077f017c644a4a6f25bf990e3e37fd",
+  "frozen_artifact_sha256": "d50573d6f3bc2c5759acdebed0219e8e835b389a75c45af348d619c6773796e5",
+  "audit_suite_sha256": "011c3b6fffce9c2cc69f6f55a400c703c8fbf805a61b3a4aed3acb58aa7d4488",
+  "audit_script_sha256": "81b1f842fe5a6c9e87cf3ea71444aba4f27eefadb73849c84fda08ce26154dd3",
+  "audit_seed": 343,
+  "acceptance": {
+    "cumulative_point_ratio_max_each_domain": 1.0021825718040531,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0009237604307033,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "confidence": 0.95,
+    "all_domains_must_pass": true,
+    "no_retuning_after_audit": true
+  },
+  "validator_compatibility_change": {
+    "reason": "the immutable v178 policy seals its suite under one_shot_audit, while the prior commit validator only normalized recurring_validation and rotating_validation",
+    "scope": "normalize the already sealed one_shot_audit SHA as one required validation suite and derive descriptive D1/initializer metadata from the immutable policy",
+    "changes_metrics_or_thresholds": false,
+    "commit_validator_sha256_after_change": "3664211adc1f32380b6e11fe86dcaea5b473908c67ba62c48a8267bf6cf585f8",
+    "targeted_tests_passed": 6
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "failure_action": "close audit-v13, do not commit the candidate, and preserve s0050r1",
+  "success_action": "commit the exact frozen artifact into s0051 and require fresh-process verification",
+  "audit_command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/partial_initializer_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0050r1.pt ../wal2/artifacts/wal-tat-block24_gate_s0050r1_d1g2048_activationwls_proxy_v1.pt ../wal2/cache/wal-tat-audit-holdout-v13-l256-g512.pt --tag block24_gate_s0050r1_d1g2048_activationwls_proxy_v1_audit_v13 --gate-ratio 1.0021825718040531 --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 343 --entry-decile 1 --suite-role 'one-shot audit-only v13; frozen artifact; no gradient updates or retuning' --device cuda"
+}

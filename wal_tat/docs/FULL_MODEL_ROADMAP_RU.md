@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 8.528646% gate + 10.44921875% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 10.611979% gate + 10.44921875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,838,016 / 1,720,451,072 = 4.349907%
+major matrix weights: 75,100,160 / 1,720,451,072 = 4.365144%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       reference matrix packer ready; full manifest/kernels remain
 ```
@@ -101,8 +101,8 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
-75.78125% `up_proj`, 8.528646% `gate_proj` и 10.44921875% `down_proj`.
-Текущее покрытие `4.349907%`, условная `+5% NLL` guide равна `1.00217495`,
+75.78125% `up_proj`, 10.611979% `gate_proj` и 10.44921875% `down_proj`.
+Текущее покрытие `4.365144%`, условная `+5% NLL` guide равна `1.00218257`,
 худший измеренный точечный ratio равен `1.001472`. Кумулятивный paired SQuAD
 upper-95 равен `1.006937` на v3 и `1.003597` на v4, но последний D10-шаг был
 принят уже по prospective dual gate: cumulative point плюс incremental
@@ -142,6 +142,16 @@ upper-95 `0.998983 / 0.998855 / 0.997520`. Опубликованный `s0050r1
 fresh-verifies at `wiki=0.946518`, `code=0.957625`; coverage остаётся
 `74,838,016`. Перед новым coverage candidate нужен audit-v13, поскольку v12
 теперь закрыт после одного использования.
+
+Audit-v13 был заморожен на новых диапазонах до выбора кандидата и показал
+нулевое пересечение с 24 retained suites. Новый scan снова выбрал атом из
+2,048 D1-групп `gate_proj + activation_wls`; proxy recovery сохранил code
+churn равным нулю. На единственном audit-v13 худший cumulative point ratio
+равен `1.000515`, а худший incremental upper-95 — `1.000245`, ниже заранее
+заданного лимита `1.000924`. Atomic checkpoint `s0051` добавил 262,144 веса,
+поднял общий счётчик до `75,100,160` (`4.365144%`) и fresh-verifies at
+`wiki=0.946587`, `code=0.957546`. Audit-v13 закрыт; следующий кандидат требует
+нового audit-v14.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и

@@ -1,0 +1,49 @@
+{
+  "schema": "wal-tat-cleanup-policy-v1",
+  "evidence_id": "v181",
+  "declared_before_deletion": true,
+  "objective": "make fresh-verified s0051 the sole retained checkpoint and remove only its superseded parent plus fully integrated or rejected s0050r1 scan artifacts",
+  "verification_evidence": "wal_tat/results/evidence_v180.json",
+  "verification_evidence_sha256": "220b3841e2522e59d733653491aaf246691bd0c1f874f3ced03dbf896465bf4a",
+  "retained": {
+    "path": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+    "sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+    "bytes": 304658894,
+    "fresh_verified": true
+  },
+  "delete_after_exact_hash_check": [
+    {
+      "path": "wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0050r1.pt",
+      "sha256": "6210881e8df6dcef396494cb700fec6635077f017c644a4a6f25bf990e3e37fd",
+      "bytes": 304660797,
+      "reason": "fully superseded by fresh-verified child s0051"
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_up_s0050r1_d1g2048_initializers_v1.pt",
+      "sha256": "9aa0df5f87e1f93edb29200b5b0210dce5604ab021510b0162c28ada941646c5",
+      "bytes": 286308,
+      "reason": "development arm not selected"
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_down_s0050r1_d1g2048_initializers_v1.pt",
+      "sha256": "7d27918d172157ee34aa3b8e44659613b1bb985030e9818d9b3cd1166c3b3ef0",
+      "bytes": 286326,
+      "reason": "development arm not selected"
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_gate_s0050r1_d1g2048_initializers_v1.pt",
+      "sha256": "08bbd84cc13fc15aa11aba309b3b30b7e876f06240ddac68709c1f65c06fe1ef",
+      "bytes": 286326,
+      "reason": "selected initializer is fully superseded by its recovered artifact and s0051"
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_gate_s0050r1_d1g2048_activationwls_proxy_v1.pt",
+      "sha256": "d50573d6f3bc2c5759acdebed0219e8e835b389a75c45af348d619c6773796e5",
+      "bytes": 287029,
+      "reason": "exact artifact is fully integrated into fresh-verified s0051"
+    }
+  ],
+  "expected_deleted_bytes": 305806786,
+  "preserve_json_and_sha_evidence": true,
+  "recoverability": "deleted binaries are not directly recoverable; their hashes, commands, development result, sealed audit and atomic commit evidence remain, while s0051 contains the accepted state"
+}
