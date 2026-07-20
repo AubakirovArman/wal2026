@@ -50,10 +50,22 @@ from .transaction import (
     TransactionalTernaryLinear,
     TransactionalTernaryMatrix,
 )
+from .transforms import (
+    FixedTernaryLinear,
+    blockwise_randomized_hadamard,
+    inverse_blockwise_randomized_hadamard,
+    normalized_hadamard,
+    rademacher_signs,
+)
 from .uncertainty import paired_block_bootstrap_nll
 from .wal import HashChainWAL, WALIntegrityError, WALRecord
 
 __all__ = [
+    "FixedTernaryLinear",
+    "blockwise_randomized_hadamard",
+    "inverse_blockwise_randomized_hadamard",
+    "normalized_hadamard",
+    "rademacher_signs",
     "CausalMomentCollector",
     "AdaptiveTransactionSizer",
     "AtomicTernaryTransaction",

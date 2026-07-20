@@ -1,0 +1,84 @@
+{
+  "schema": "wal-tat-evidence-v79",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "round_robin_cycles_34_36_complete_and_paired_audited",
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0044-candidate_only.pt",
+    "sha256": "e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1",
+    "bytes": 304658813
+  },
+  "progress": {
+    "major_weights_accepted": 74440704,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1646010368,
+    "weight_coverage_fraction": 0.04326813195185129,
+    "decoder_blocks_complete": 1,
+    "major_full_matrices_accepted": 11,
+    "layer24": {
+      "up_proj_fraction": 0.7548828125,
+      "down_proj_fraction": 0.1005859375,
+      "gate_proj_fraction": 0.060546875
+    }
+  },
+  "campaign": {
+    "result": "wal_tat/results/block24_round_robin_cycles_34_36.json",
+    "transactions_attempted": 9,
+    "transactions_accepted": 9,
+    "maximum_concurrent_campaigns": 1,
+    "orchestrated_checkpoints_deleted": 17,
+    "orchestrated_bytes_deleted": 5179207448,
+    "superseded_s0041_bytes_deleted_after_reference_audit": 304658813,
+    "total_bytes_deleted_this_phase": 5483866261
+  },
+  "method": {
+    "paired_unit": "frozen contiguous 256-token window",
+    "windows_per_domain": 512,
+    "tokens_per_domain": 131072,
+    "bootstrap": "deterministic circular moving-block bootstrap",
+    "bootstrap_samples": 4096,
+    "block_size_windows": 8,
+    "confidence": 0.95,
+    "seed": 109,
+    "gate_ratio": 1.0021634065975926
+  },
+  "audit_v3": {
+    "result": "wal_tat/results/block24_up_s0044_paired_audit_v3.json",
+    "observed_ratios": {
+      "c4_validation": 0.9970716962833472,
+      "squad_context": 1.0013464330473263,
+      "torch_code": 0.9818509989584927
+    },
+    "upper_95_ratio_bounds": {
+      "c4_validation": 0.9994559531727966,
+      "squad_context": 1.0068215090837629,
+      "torch_code": 0.9853398814439794
+    }
+  },
+  "audit_v4": {
+    "result": "wal_tat/results/block24_up_s0044_paired_audit_v4.json",
+    "observed_ratios": {
+      "c4_validation": 0.9970716962833472,
+      "squad_context": 0.9976489873128703,
+      "transformers_code": 0.982828563578791
+    },
+    "upper_95_ratio_bounds": {
+      "c4_validation": 0.9994559531727966,
+      "squad_context": 1.0034775183851363,
+      "transformers_code": 0.9873531497359749
+    }
+  },
+  "interpretation": {
+    "all_point_gates_passed": true,
+    "c4_and_code_confidence_passed": true,
+    "squad_confidence_passed": false,
+    "retroactive_rollback": false,
+    "reason": "confidence bounds were introduced after the predeclared acceptance policy",
+    "next_action": "checkpoint-neutral transform ablation before changing the accepted frontier"
+  },
+  "verification": {
+    "active_wal_tat_processes_after_audit": 0,
+    "campaign_and_audit_processes_were_sequential": true,
+    "remaining_checkpoint_files": 1
+  }
+}

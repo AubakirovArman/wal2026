@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.1953125% up + 5.76171875% gate + 9.765625% down
+next block:           layer 24 has Q/K/V/O + 75.48828125% up + 6.0546875% gate + 10.05859375% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,330,112 / 1,720,451,072 = 4.320385%
+major matrix weights: 74,440,704 / 1,720,451,072 = 4.326813%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -100,10 +100,10 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 ## Текущая фаза 4 — закончить block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 75.1953125% `up_proj`, первые
-5.76171875% `gate_proj` и 9.765625% `down_proj`. Текущее покрытие
-`4.320385%`, условная `+5% NLL` guide равна `1.00216019`, худший измеренный
-ratio равен `1.001488`.
+sensitivity-ranked транзакции также приняты 75.48828125% `up_proj`, первые
+6.0546875% `gate_proj` и 10.05859375% `down_proj`. Текущее покрытие
+`4.326813%`, условная `+5% NLL` guide равна `1.00216341`, худший измеренный
+точечный ratio равен `1.001346`.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -431,6 +431,24 @@ audit-v4, тогда как C4 и оба code-домена уверенно ни
 после чего те же frozen suites проверяются повторно. Старый frontier не
 откатывается задним числом: confidence-policy не входила в его predeclared
 acceptance gate.
+
+После coverage-neutral recovery круги 34–36 приняли ещё девять транзакций.
+Новый SHA —
+`e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1`,
+coverage `75.48828125% up / 10.05859375% down / 6.0546875% gate`, общий
+coverage модели `4.326813195%`. Точечные audit-v3/v4 проходят guide
+`1.002163407`; paired CI уверенно пропускает C4/code, но всё ещё не SQuAD.
+Основной checkpoint не откатывается, поскольку confidence gate не входил в
+его predeclared policy.
+
+Параллельно открыт безопасный `transform slot`: на нетронутой
+`layer23.q_proj` fixed g128 RHT seed 307 уменьшил worst-domain ущерб обычной
+тернаризации примерно на 90% на двух независимых holdout. Однако v4 ratio
+`1.002547` пока чуть выше guide. Поэтому transform ещё не является commit и
+не меняет coverage. Следующий этап — RHT + короткий proxy/scale recovery +
+paired CI; только после успешной приёмки transform войдёт в artifact contract.
+Это также означает, что будущий `llama.cpp` путь должен уметь исполнять RHT
+рядом с packed codes, а не деквантизировать полную BF16-матрицу.
 
 Остались три MLP-матрицы. Component ablation показал:
 

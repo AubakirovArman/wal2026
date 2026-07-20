@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 75.1953125% up + 5.76171875% gate + 9.765625% down | 24.8046875% up + 94.23828125% gate + 90.234375% down |
+| Матрицы в `layer 24` | Q/K/V/O + 75.48828125% up + 6.0546875% gate + 10.05859375% down | 24.51171875% up + 93.9453125% gate + 89.94140625% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 74,330,112 / 1,720,451,072 | 1,646,120,960 |
+| Крупные matrix weights | 74,440,704 / 1,720,451,072 | 1,646,010,368 |
 
-Покрытие крупных matrix weights равно `4.320385%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.326813%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 74,330,112 weights занимают 141.7734 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 18.8293 MiB, экономия —
-122.9442 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 74,440,704 weights занимают 141.9844 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 18.8573 MiB, экономия —
+123.1271 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -53,9 +53,9 @@ Q2-g128 упаковки их расчётный payload составит 18.829
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 75.1953125% g128-групп `up_proj`, 5.76171875%
-`gate_proj` и 9.765625% `down_proj`. Остальные 24.8046875% `up_proj`,
-94.23828125% `gate_proj` и 90.234375% `down_proj` пока остаются BF16.
+В `layer 24` приняты 75.48828125% g128-групп `up_proj`, 6.0546875%
+`gate_proj` и 10.05859375% `down_proj`. Остальные 24.51171875% `up_proj`,
+93.9453125% `gate_proj` и 89.94140625% `down_proj` пока остаются BF16.
 
 ## Текущий независимый аудит
 
@@ -66,8 +66,8 @@ Q2-g128 упаковки их расчётный payload составит 18.829
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997140 | 1.001488 | 0.981760 (PyTorch) |
-| v4 | 0.997140 | 0.997836 | 0.982711 (Transformers) |
+| v3 | 0.997072 | 1.001346 | 0.981851 (PyTorch) |
+| v4 | 0.997072 | 0.997649 | 0.982829 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -77,21 +77,21 @@ task-benchmarks.
 
 ### Paired block-bootstrap audit
 
-Для frontier `s0041` дополнительно сохранены NLL каждого из 512 frozen-окон и
+Для frontier `s0044` дополнительно сохранены NLL каждого из 512 frozen-окон и
 посчитан детерминированный 95% CI. Поскольку окна последовательные, bootstrap
 пересэмплирует блоки по 8 соседних окон (2,048 токенов), сохраняя BF16 и
 candidate строго парными. Использовано 4,096 bootstrap samples.
 
 | Audit/domain | Point ratio | Верхняя 95% граница | Confidence gate |
 |---|---:|---:|---|
-| v3 C4 | 0.997140 | 0.999516 | pass |
-| v3 SQuAD | 1.001488 | 1.006936 | fail |
-| v3 PyTorch code | 0.981760 | 0.985260 | pass |
-| v4 C4 | 0.997140 | 0.999516 | pass |
-| v4 SQuAD | 0.997836 | 1.003670 | fail |
-| v4 Transformers code | 0.982711 | 0.987231 | pass |
+| v3 C4 | 0.997072 | 0.999456 | pass |
+| v3 SQuAD | 1.001346 | 1.006822 | fail |
+| v3 PyTorch code | 0.981851 | 0.985340 | pass |
+| v4 C4 | 0.997072 | 0.999456 | pass |
+| v4 SQuAD | 0.997649 | 1.003478 | fail |
+| v4 Transformers code | 0.982829 | 0.987353 | pass |
 
-Обе точечные suite проходят исходный guide `1.002160`. Новый более строгий
+Обе точечные suite проходят текущий guide `1.002163`. Новый более строгий
 confidence-критерий не проходит только на SQuAD: знак среднего эффекта между
 двумя срезами различается, а интервал широк. Это не ретроактивный rollback —
 CI не входил в заранее объявленную политику. Перед следующим ростом coverage
@@ -552,16 +552,44 @@ hard-ternary weights. Увеличенный `gate`-атом `1/512` прошё�
 `4.320385114%`. За серию автоматически удалено 4,265,229,656 bytes
 промежуточных checkpoint; WAL, команды и метрики сохранены.
 
+Круги 34–36 добавили ещё девять принятых транзакций и 110,592
+hard-ternary weights. Они довели `layer 24` до `75.48828125% up`,
+`10.05859375% down` и `6.0546875% gate`; общий coverage стал
+`4.326813195%`. Все кампании шли строго последовательно, максимум одна за
+раз. Новый frontier `s0044` прошёл оба точечных holdout; paired bootstrap
+снова уверенно пропускает C4/code, а SQuAD остаётся статистически
+неопределённым. Orchestrator удалил 17 промежуточных checkpoint на
+5,179,207,448 bytes; после проверки ссылок также удалён superseded `s0041`
+на 304,658,813 bytes. В `wal2/checkpoints` оставлен один текущий frontier.
+
+### Проверка transform-space из нового обзора
+
+На ещё нетронутой BF16-матрице `layer 23 q_proj` выполнен
+checkpoint-neutral тест обычной g128-тернаризации против blockwise randomized
+Hadamard transform. На development identity дал worst ratio `1.028783`, а
+лучший заранее выбранный RHT seed 307 — `1.002092`. Фиксированный seed затем
+без перенастройки проверен на двух holdout: v3 `1.001779` против `1.017127`
+у identity, v4 `1.002547` против `1.025458`. Это уменьшение наблюдаемого
+worst-domain ущерба примерно на 90% в обеих независимых репликациях.
+
+Результат сильный, но в accepted coverage не включён. На v4 он превышает
+строгую guide `1.002163` на `0.000384` ratio, а transform пока существует
+только в исследовательском PyTorch path. Следующая проверка — короткий
+hard-forward proxy/scale recovery поверх фиксированного RHT, после чего
+paired holdout CI. При deploy RHT должен исполняться вместе с packed ternary
+codes; обратное восстановление полной BF16-матрицы уничтожило бы смысл
+сжатия.
+
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0041-candidate_only.pt
+wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0044-candidate_only.pt
 ```
 
 - размер: `304,658,813` bytes;
-- SHA-256: `bea838d433c1d61ec51e8d40664250fefd32b6a2261e4a33478bb7f3f8286435`;
-- содержание: полный ternary block 27, Q/K/V/O block 24, 75.1953125%
-  `up_proj`, 5.76171875% `gate_proj` и 9.765625% `down_proj`;
+- SHA-256: `e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1`;
+- содержание: полный ternary block 27, Q/K/V/O block 24, 75.48828125%
+  `up_proj`, 6.0546875% `gate_proj` и 10.05859375% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
 Промежуточные и провалившие audit checkpoints удалены; их метрики и команды
@@ -569,9 +597,11 @@ wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0041-candidate_only.pt
 
 ## Следующий технический шаг
 
-1. выполнить coverage-neutral proxy recovery из-за неуверенного SQuAD CI;
-2. повторить paired audit-v3/v4 без изменения frozen suites;
-3. при улучшении продолжить `down_proj s0034`, `gate_proj s0033`, `up_proj s0042`;
+1. добавить короткий hard-forward proxy/scale recovery к фиксированному RHT
+   seed 307 на `layer 23 q_proj`, не меняя основной frontier;
+2. проверить восстановленный RHT-кандидат paired audit-v3/v4 и только затем
+   решать, включать ли transform slot в checkpoint/artifact contract;
+3. параллельно продолжать `layer 24` с `down s0037`, `gate s0036`, `up s0045`;
 4. запускать следующий coverage-neutral recovery при tight headroom;
 5. чередовать up/gate/down по holdout headroom, а не доводить одну матрицу
    вслепую до 100%;

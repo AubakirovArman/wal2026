@@ -1,0 +1,236 @@
+{
+  "schema": "wal-tat-fixed-transform-ablation-v1",
+  "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0044-candidate_only.pt",
+  "checkpoint_sha256": "e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+  "suite_sha256": "be51ba13b438ca9635ba7b36276ed64ca29365526f74c1b8931d4df16c7cda0e",
+  "suite_role": "independent holdout v3 replication; seed 307 fixed by development ablation; no hyperparameter selection",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "target_name": "model.layers.23.self_attn.q_proj",
+  "target_shape": [
+    2048,
+    2048
+  ],
+  "group_size": 128,
+  "sequences_per_domain": 512,
+  "batch_size": 8,
+  "baseline": {
+    "c4_validation": {
+      "nll": 3.389449067413807,
+      "ppl": 29.64961283194048,
+      "tokens": 131072
+    },
+    "squad_context": {
+      "nll": 2.0929173417389393,
+      "ppl": 8.108536063133814,
+      "tokens": 131072
+    },
+    "torch_code": {
+      "nll": 2.2601777967065573,
+      "ppl": 9.584793159934572,
+      "tokens": 131072
+    }
+  },
+  "candidates": [
+    {
+      "transform": "identity",
+      "transform_seed": null,
+      "metrics": {
+        "c4_validation": {
+          "nll": 3.426820293068886,
+          "ppl": 30.778619999114575,
+          "tokens": 131072
+        },
+        "squad_context": {
+          "nll": 2.128762835636735,
+          "ppl": 8.404462675239689,
+          "tokens": 131072
+        },
+        "torch_code": {
+          "nll": 2.2930954061448574,
+          "ppl": 9.905551981353682,
+          "tokens": 131072
+        }
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.0110257522422645,
+        "squad_context": 1.0171270471045037,
+        "torch_code": 1.0145641681314923
+      },
+      "worst_ratio": 1.0171270471045037,
+      "mean_ratio": 1.0142389891594201,
+      "weight_mse": 0.00034292187774553895,
+      "relative_weight_mse": 0.28199363826773327,
+      "code_histogram": {
+        "-1": 1418263,
+        "0": 1359518,
+        "1": 1416523
+      },
+      "zero_fraction": 0.32413434982299805
+    },
+    {
+      "transform": "rht",
+      "transform_seed": 307,
+      "metrics": {
+        "c4_validation": {
+          "nll": 3.3919182308018208,
+          "ppl": 29.72291302825324,
+          "tokens": 131072
+        },
+        "squad_context": {
+          "nll": 2.096640659496188,
+          "ppl": 8.138782993967311,
+          "tokens": 131072
+        },
+        "torch_code": {
+          "nll": 2.262891359627247,
+          "ppl": 9.610837419643328,
+          "tokens": 131072
+        }
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.0007284851723404,
+        "squad_context": 1.0017790085078828,
+        "torch_code": 1.0012005971055213
+      },
+      "worst_ratio": 1.0017790085078828,
+      "mean_ratio": 1.001236030261915,
+      "weight_mse": 0.0003173549775965512,
+      "relative_weight_mse": 0.26096930689628667,
+      "code_histogram": {
+        "-1": 1450230,
+        "0": 1294782,
+        "1": 1449292
+      },
+      "zero_fraction": 0.3087000846862793
+    }
+  ],
+  "ranking": [
+    {
+      "transform": "rht",
+      "transform_seed": 307,
+      "worst_ratio": 1.0017790085078828,
+      "mean_ratio": 1.001236030261915,
+      "relative_weight_mse": 0.26096930689628667
+    },
+    {
+      "transform": "identity",
+      "transform_seed": null,
+      "worst_ratio": 1.0171270471045037,
+      "mean_ratio": 1.0142389891594201,
+      "relative_weight_mse": 0.28199363826773327
+    }
+  ],
+  "best": {
+    "transform": "rht",
+    "transform_seed": 307,
+    "metrics": {
+      "c4_validation": {
+        "nll": 3.3919182308018208,
+        "ppl": 29.72291302825324,
+        "tokens": 131072
+      },
+      "squad_context": {
+        "nll": 2.096640659496188,
+        "ppl": 8.138782993967311,
+        "tokens": 131072
+      },
+      "torch_code": {
+        "nll": 2.262891359627247,
+        "ppl": 9.610837419643328,
+        "tokens": 131072
+      }
+    },
+    "ratios_to_frontier": {
+      "c4_validation": 1.0007284851723404,
+      "squad_context": 1.0017790085078828,
+      "torch_code": 1.0012005971055213
+    },
+    "worst_ratio": 1.0017790085078828,
+    "mean_ratio": 1.001236030261915,
+    "weight_mse": 0.0003173549775965512,
+    "relative_weight_mse": 0.26096930689628667,
+    "code_histogram": {
+      "-1": 1450230,
+      "0": 1294782,
+      "1": 1449292
+    },
+    "zero_fraction": 0.3087000846862793
+  },
+  "best_rht": {
+    "transform": "rht",
+    "transform_seed": 307,
+    "metrics": {
+      "c4_validation": {
+        "nll": 3.3919182308018208,
+        "ppl": 29.72291302825324,
+        "tokens": 131072
+      },
+      "squad_context": {
+        "nll": 2.096640659496188,
+        "ppl": 8.138782993967311,
+        "tokens": 131072
+      },
+      "torch_code": {
+        "nll": 2.262891359627247,
+        "ppl": 9.610837419643328,
+        "tokens": 131072
+      }
+    },
+    "ratios_to_frontier": {
+      "c4_validation": 1.0007284851723404,
+      "squad_context": 1.0017790085078828,
+      "torch_code": 1.0012005971055213
+    },
+    "worst_ratio": 1.0017790085078828,
+    "mean_ratio": 1.001236030261915,
+    "weight_mse": 0.0003173549775965512,
+    "relative_weight_mse": 0.26096930689628667,
+    "code_histogram": {
+      "-1": 1450230,
+      "0": 1294782,
+      "1": 1449292
+    },
+    "zero_fraction": 0.3087000846862793
+  },
+  "identity": {
+    "transform": "identity",
+    "transform_seed": null,
+    "metrics": {
+      "c4_validation": {
+        "nll": 3.426820293068886,
+        "ppl": 30.778619999114575,
+        "tokens": 131072
+      },
+      "squad_context": {
+        "nll": 2.128762835636735,
+        "ppl": 8.404462675239689,
+        "tokens": 131072
+      },
+      "torch_code": {
+        "nll": 2.2930954061448574,
+        "ppl": 9.905551981353682,
+        "tokens": 131072
+      }
+    },
+    "ratios_to_frontier": {
+      "c4_validation": 1.0110257522422645,
+      "squad_context": 1.0171270471045037,
+      "torch_code": 1.0145641681314923
+    },
+    "worst_ratio": 1.0171270471045037,
+    "mean_ratio": 1.0142389891594201,
+    "weight_mse": 0.00034292187774553895,
+    "relative_weight_mse": 0.28199363826773327,
+    "code_histogram": {
+      "-1": 1418263,
+      "0": 1359518,
+      "1": 1416523
+    },
+    "zero_fraction": 0.32413434982299805
+  },
+  "rht_beats_identity": true,
+  "checkpoint_mutated": false,
+  "elapsed_seconds": 21.48328662291169,
+  "peak_cuda_allocated_bytes": 7019596288
+}

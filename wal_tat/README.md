@@ -28,21 +28,21 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 75.1953125% `up_proj`,
-  5.76171875% `gate_proj`, and 9.765625% `down_proj`;
-- 74,330,112 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.320385% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 75.48828125% `up_proj`,
+  6.0546875% `gate_proj`, and 10.05859375% `down_proj`;
+- 74,440,704 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.326813% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997140 / 1.001488 / 0.981760` on C4, SQuAD and
+- audit-v3 NLL ratios `0.997072 / 1.001346 / 0.981851` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997140 / 0.997836 / 0.982711` on C4, a different SQuAD
+- audit-v4 ratios `0.997072 / 0.997649 / 0.982829` on C4, a different SQuAD
   slice and Transformers code;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
 checkpoint**. One of 28 decoder blocks is complete; the next has four complete
-attention matrices and two partial MLP matrices accepted. The old `1.02` limit
+attention matrices and three partial MLP matrices accepted. The old `1.02` limit
 is explicitly a local diagnostic gate,
 not a safe per-block full-model budget. It was manually chosen in the first
 WAL-TAT commit and is not a BitNet/Prism standard. See
@@ -53,6 +53,8 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
 ## Package contents
 
 - `quantization.py`: soft-to-hard and hard groupwise ternarization;
+- `transforms.py`: deterministic g128 randomized-Hadamard transforms and a
+  hard-code `FixedTernaryLinear` evaluation path;
 - `scoring.py`: reconstruction and activation/Fisher causal ranking;
 - `moments.py`: hooks for the required causal moments;
 - `transaction.py`: exact candidate snapshots, commit, and rollback;
@@ -68,6 +70,8 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   runs recovery, independent audits, adaptive resizing and exact opt-in cleanup;
 - `experiments/round_robin_campaign.py`: single-session sequential orchestrator
   that synchronizes several campaign frontiers before crash-safe cleanup;
+- `experiments/fixed_transform_ablation.py`: checkpoint-neutral identity/RHT
+  comparison on untouched BF16 matrices with fixed-seed holdout replication;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
   frontier synchronization, and active-worker detection;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.
