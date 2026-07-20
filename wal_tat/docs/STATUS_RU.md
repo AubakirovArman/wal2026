@@ -59,7 +59,7 @@ Q2-g128 упаковки их расчётный payload составит 18.888
 
 ## Текущая recurring validation
 
-Frontier `s0048` проверен двумя 131,072-token/domain suites. Audit-v3
+Текущий frontier `s0048r2` проверен двумя 131,072-token/domain suites. Audit-v3
 использует C4 validation, SQuAD validation contexts и PyTorch code. Audit-v4
 заменяет SQuAD/code срезы и использует Transformers code. C4 в этих двух
 проверках одинаков. После многократного использования для принятия транзакций
@@ -68,8 +68,8 @@ Frontier `s0048` проверен двумя 131,072-token/domain suites. Audit-
 
 | Audit | C4 NLL ratio | SQuAD NLL ratio | Code NLL ratio |
 |---|---:|---:|---:|
-| v3 | 0.997193 | 1.001472 | 0.982272 (PyTorch) |
-| v4 | 0.997193 | 0.997775 | 0.983498 (Transformers) |
+| v3 | 0.996756 | 1.001149 | 0.981170 (PyTorch) |
+| v4 | 0.996756 | 0.997175 | 0.982353 (Transformers) |
 
 `ratio < 1` означает, что измеренный candidate NLL ниже teacher на этом
 наборе. Это хороший результат, но не доказательство, что тернарная модель
@@ -79,19 +79,19 @@ task-benchmarks.
 
 ### Paired block-bootstrap audit
 
-Для frontier `s0048` дополнительно сохранены NLL каждого из 512 frozen-окон и
+Для frontier `s0048r2` дополнительно сохранены NLL каждого из 512 frozen-окон и
 посчитан детерминированный 95% CI. Поскольку окна последовательные, bootstrap
 пересэмплирует блоки по 8 соседних окон (2,048 токенов), сохраняя BF16 и
 candidate строго парными. Использовано 4,096 bootstrap samples.
 
 | Audit/domain | Point ratio | Верхняя 95% граница | Confidence gate |
 |---|---:|---:|---|
-| v3 C4 | 0.997193 | 0.999571 | pass |
-| v3 SQuAD | 1.001472 | 1.006937 | fail |
-| v3 PyTorch code | 0.982272 | 0.985770 | pass |
-| v4 C4 | 0.997193 | 0.999571 | pass |
-| v4 SQuAD | 0.997775 | 1.003597 | fail |
-| v4 Transformers code | 0.983498 | 0.988013 | pass |
+| v3 C4 | 0.996756 | 0.999155 | pass |
+| v3 SQuAD | 1.001149 | 1.006656 | fail |
+| v3 PyTorch code | 0.981170 | 0.984688 | pass |
+| v4 C4 | 0.996756 | 0.999155 | pass |
+| v4 SQuAD | 0.997175 | 1.003054 | fail |
+| v4 Transformers code | 0.982353 | 0.986874 | pass |
 
 Обе точечные suite проходят текущий guide `1.00216698`. Кумулятивный
 confidence-критерий не проходит только на SQuAD: неопределённость в основном
@@ -724,6 +724,42 @@ frontier остались неизменными.
 ternary-code переходов либо новый prospective tail, а не очередной перебор
 только LR/steps.
 
+### Boundary-aware sparse recode и frontier `s0048r2`
+
+Следующий эксперимент измерил градиент target-local KD/block loss по уже
+принятым весам `layer24.up_proj`, но не сохранял непрерывный residual. Для
+каждой g128-группы разрешался максимум один соседний переход
+`-1 <-> 0 <-> +1`; кандидаты ранжировались first-order score. Все остальные
+codes, masks, BF16 fallback и нормы оставались замороженными.
+
+Первый search выбрал 512 code edits без изменения scales. На development и
+отдельном confirmation он улучшил worst ratio на `0.000171719` и
+`0.000348307`. Однако frozen paired audit честно отклонил его: все point
+ratios улучшились, но верхняя 95% граница SQuAD была `1.000152929` при заранее
+объявленном incremental limit `1.0001`.
+
+После этого до повторного запуска был фиксирован более консервативный вариант:
+128 групп и counterfactual-LS scale только в этих группах. Он прошёл
+development (`+0.000149923`) и confirmation (`+0.000295983`). На 512 frozen
+окнах каждого audit-v3 домена incremental point ratios относительно `s0048r1`
+равны `0.999573014 / 0.999745906 / 0.998906676`, а верхние paired 95% границы
+— `0.999669949 / 0.999923784 / 0.999032864`. Все ниже `1.0001`.
+
+Отдельный sparse-recode commit проверил точные hashes, разрешил ровно 128
+code changes и 128 scale changes только внутри committed mask и опубликовал
+`s0048r2`. Fresh-load дал `wiki=0.949896401`, `code=0.961393079`; во всех
+матрицах codes остаются строго `{-1,0,+1}`. Coverage не изменился: это
+улучшение геометрии уже принятого Q2, а не рост числа тернарных весов.
+
+После публикации текущий checkpoint повторно измерен на уже раскрытых v5/v6.
+На v5 C4/code остаются лучше BF16 (`0.995501 / 0.988905`), а SQuAD ratio
+снизился с прежних `1.005234` примерно до `1.005052`, но всё ещё выше
+cumulative guide `1.002167`. На v6 все point ratios проходят:
+`0.998432 / 1.000922 / 0.997408`. Confidence intervals на SQuAD остаются
+широкими. Поэтому v5/v6 используются только как recurring diagnostics, но их
+результат запрещает немедленно принимать новый coverage atom по текущей
+строгой policy.
+
 ### Reference Q2-g128 packer и реальный bpw
 
 Добавлен versioned binary format без pickle overhead. Он хранит mapping
@@ -732,7 +768,7 @@ ternary-code переходов либо новый prospective tail, а не о
 сразу отклоняет reserved code, проверяет длины payload и точно восстанавливает
 deployed weight.
 
-На настоящем `layer24.up_proj` из `s0048r1`:
+На настоящем `layer24.up_proj` из текущего `s0048r2`:
 
 - shape: `6144 x 2048`, всего 12,582,912 weights;
 - committed: 74,496 из 98,304 групп, то есть 75.78125%;
@@ -754,11 +790,11 @@ runtime/KV-cache. Это storage projection, не текущая VRAM трени
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt
+wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt
 ```
 
-- размер: `304,662,799` bytes;
-- SHA-256: `c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d`;
+- размер: `304,662,470` bytes;
+- SHA-256: `2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
   `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -768,16 +804,17 @@ wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt
 
 ## Следующий технический шаг
 
-1. использовать target-local teacher для boundary-aware sparse code edits:
-   менять только заранее выбранные committed groups около полезных границ,
-   затем делать code-freeze и FP16 scale polish;
+1. построить новый непересекающийся development-срез с SQuAD-геометрией v5 и
+   выполнить ещё один coverage-neutral recovery от `s0048r2`, не обучаясь на
+   самом раскрытом v5;
 2. не продолжать tuning по раскрытым v5/v6; следующий block/final audit должен
    использовать новые sealed suites и exposure accounting;
-3. параллельно подготовить новый prospective tail step уже от `s0048r1`; не
-   принимать новый coverage только из-за улучшения development;
+3. после прохождения point guide повторить малый prospective tail atom; затем
+   встроить boundary-gradient sparse recode как отдельный recovery arm в
+   campaign, с жёстким лимитом churn и отдельным commit path;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и
    проверить logit/NLL equality после загрузки нескольких связанных матриц;
-6. затем продолжить рост coverage, завершить второй block и идти по
-   карте чувствительности.
+6. завершить второй block и затем проверить ранний чувствительный block, а не
+   идти только по easy-first карте.

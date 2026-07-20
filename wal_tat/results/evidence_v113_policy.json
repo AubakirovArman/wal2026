@@ -1,0 +1,23 @@
+{
+  "schema": "wal-tat-audit-policy-v1",
+  "evidence_id": "v113",
+  "declared_before_execution": true,
+  "experiment": "current s0048r2 cumulative paired audit on recurring validation v4",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+  "suite_sha256": "ee9b48e9bd02d3ea2b9af54ea7f30dd385c8a8d96fed773084e6b0497a4b8347",
+  "suite_role": "recurring validation v4; current-frontier reporting only; no selection or mutation",
+  "acceptance": {
+    "cumulative_gate_ratio": 1.002166978,
+    "bootstrap_samples": 4096,
+    "moving_block_size": 8,
+    "confidence": 0.95,
+    "expected_interpretation": "point and confidence are reported separately; inherited cumulative uncertainty does not retroactively reverse the already paired incremental acceptance"
+  },
+  "mutation_policy": {
+    "checkpoint_written": false,
+    "artifact_written": false
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/paired_checkpoint_audit.py ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt ../wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt --tag block24_s0048r2_paired_audit_v4 --gate-ratio 1.002166978 --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 109 --suite-role 'recurring validation v4; current-frontier reporting only; no selection or mutation' --device cuda"
+}

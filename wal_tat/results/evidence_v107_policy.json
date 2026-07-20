@@ -1,0 +1,34 @@
+{
+  "schema": "wal-tat-experiment-policy-v1",
+  "evidence_id": "v107",
+  "declared_before_execution": true,
+  "experiment": "fixed 128-group boundary-aware adjacent-code candidate",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt",
+  "source_checkpoint_sha256": "c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d",
+  "suite": "wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "suite_role": "development plus non-overlapping confirmation; candidate fixed before this rerun",
+  "script": "wal_tat/experiments/boundary_sparse_recode.py",
+  "script_sha256": "571e48780775a26ad06e52da819702c13ede85802955b8ead0b6bc8388bd4897",
+  "target_name": "model.layers.24.mlp.up_proj",
+  "candidate_policy": {
+    "group_budget": 128,
+    "scale_mode": "counterfactual_ls",
+    "move_constraint": "one gradient-ranked adjacent ternary move per selected group"
+  },
+  "calibration_sequences": 96,
+  "selection_slice": [0, 64],
+  "confirmation_slice": [64, 64],
+  "acceptance": {
+    "min_selection_worst_ratio_improvement": 0.00005,
+    "min_confirmation_worst_ratio_improvement": 0.0,
+    "max_code_churn": 0.0002,
+    "requires_exact_source_restoration": true
+  },
+  "mutation_policy": {
+    "source_checkpoint_written": false,
+    "coverage_changed": false,
+    "checkpoint_publication_requires_later_fresh_paired_audit": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/boundary_sparse_recode.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt --suite ../wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt --tag block24_up_boundary_sparse_recode_128ls_v2 --calibration-sequences 96 --selection-start 0 --selection-count 64 --confirmation-start 64 --confirmation-count 64 --group-budgets 128 --scale-modes counterfactual_ls --ce-weight 0 --block-weight 0.2 --kd-weight 1 --min-selection-improvement 0.00005 --min-confirmation-improvement 0 --max-code-churn 0.0002 --seed 211 --device cuda"
+}

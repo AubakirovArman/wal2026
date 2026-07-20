@@ -1,0 +1,150 @@
+{
+  "schema": "wal-tat-boundary-sparse-recode-v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt",
+  "source_checkpoint_sha256": "c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "suite_role": "development/model selection; disjoint confirmation slice; not final audit",
+  "target_name": "model.layers.24.mlp.up_proj",
+  "teacher_source": "target_counterfactual",
+  "calibration_sequences": 96,
+  "selection_slice": [
+    0,
+    64
+  ],
+  "confirmation_slice": [
+    64,
+    64
+  ],
+  "group_budgets": [
+    128
+  ],
+  "scale_modes": [
+    "counterfactual_ls"
+  ],
+  "loss_weights": {
+    "ce": 0.0,
+    "block": 0.2,
+    "kd": 1.0
+  },
+  "source_selection_ratios": {
+    "c4_train": 0.9966158202485059,
+    "squad_train": 1.005214403489011,
+    "library_code_train": 0.9918322027427936
+  },
+  "source_confirmation_ratios": {
+    "c4_train": 1.0033424289195088,
+    "squad_train": 1.0137475432306495,
+    "library_code_train": 0.9907039580514581
+  },
+  "candidate_results": {
+    "groups128_counterfactual_ls": {
+      "group_budget": 128,
+      "selected_groups": 128,
+      "scale_mode": "counterfactual_ls",
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.460980949923396,
+          "ppl": 31.84820268849488,
+          "tokens": 16384
+        },
+        "squad_train": {
+          "nll": 2.4831935428082943,
+          "ppl": 11.979460314605944,
+          "tokens": 16384
+        },
+        "library_code_train": {
+          "nll": 2.223936002701521,
+          "ppl": 9.243642359233643,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9959578775350008,
+        "squad_train": 1.0050644800101916,
+        "library_code_train": 0.9907830784568855
+      },
+      "selection_worst_ratio": 1.0050644800101916,
+      "representation": {
+        "changed_code_values": 128,
+        "changed_scale_groups": 128,
+        "code_churn": 1.3423539712675847e-05,
+        "selected_first_order_score_sum": 0.0052671246230602264,
+        "selected_first_order_score_min": 1.940929541888181e-05,
+        "selected_first_order_score_max": 0.0001895680179586634
+      }
+    }
+  },
+  "chosen_candidate": "groups128_counterfactual_ls",
+  "confirmation_metrics": {
+    "c4_train": {
+      "nll": 3.469336299225688,
+      "ppl": 32.115420340439975,
+      "tokens": 16384
+    },
+    "squad_train": {
+      "nll": 2.4628123473376036,
+      "ppl": 11.737775867394637,
+      "tokens": 16384
+    },
+    "library_code_train": {
+      "nll": 1.9029781948775053,
+      "ppl": 6.7058360190701745,
+      "tokens": 16384
+    }
+  },
+  "confirmation_ratios": {
+    "c4_train": 1.0026494058677844,
+    "squad_train": 1.0134515601844156,
+    "library_code_train": 0.9899620003327768
+  },
+  "selection_worst_ratio_improvement": 0.0001499234788193693,
+  "confirmation_worst_ratio_improvement": 0.00029598304623390526,
+  "min_selection_improvement": 5e-05,
+  "min_confirmation_improvement": 0.0,
+  "max_code_churn": 0.0002,
+  "passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_up_boundary_sparse_recode_128ls_v2.pt",
+  "artifact_sha256": "3c1d64eda485c111bb520473fbdf4fa6ee8a120a3e888ba34cd21d893b167531",
+  "coverage_changed": false,
+  "checkpoint_written": false,
+  "source_restoration_exact": true,
+  "final_restoration_exact": true,
+  "gradient": {
+    "mean_abs": 4.886385795543902e-06,
+    "max_abs": 0.006711793597787619,
+    "l2": 0.04797017201781273,
+    "history": [
+      {
+        "sequence": 1,
+        "ce": 3.15423846244812,
+        "block_loss": 0.007902408950030804,
+        "kd_loss": 0.009881420060992241,
+        "gradient_norm": 0.15928921103477478
+      },
+      {
+        "sequence": 32,
+        "ce": 2.7106454372406006,
+        "block_loss": 0.0050302655436098576,
+        "kd_loss": 0.005474173463881016,
+        "gradient_norm": 0.10170751810073853
+      },
+      {
+        "sequence": 64,
+        "ce": 2.0972955226898193,
+        "block_loss": 0.007708330638706684,
+        "kd_loss": 0.012239035218954086,
+        "gradient_norm": 0.21248768270015717
+      },
+      {
+        "sequence": 96,
+        "ce": 2.208890676498413,
+        "block_loss": 0.0048701879568398,
+        "kd_loss": 0.00665879063308239,
+        "gradient_norm": 0.09272538870573044
+      }
+    ]
+  },
+  "elapsed_seconds": 56.10937738418579,
+  "peak_cuda_allocated_bytes": 4857205248
+}

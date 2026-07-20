@@ -56,3 +56,13 @@ without pickle/container inflation: two-bit code slots for committed groups,
 one FP16 scale per group, a bit-packed partial-coverage mask and exact BF16
 fallback groups. Its reported `true_bpw_file` includes the versioned binary
 header and every payload byte.
+
+`boundary_sparse_recode.py` is a coverage-neutral discrete recovery path. It
+uses a target-local counterfactual teacher to accumulate a behavior gradient,
+ranks only adjacent ternary-code moves, changes at most one value in each
+selected g128 group and evaluates all search candidates on development data.
+Only the frozen winner is evaluated on a disjoint confirmation slice. A
+passing artifact still needs `ternary_recode_artifact_audit.py` and may be
+published only by `commit_sparse_ternary_recode_artifact.py`, which enforces
+the predeclared exact code/scale-change counts and refuses changes outside the
+committed mask.

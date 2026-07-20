@@ -1,0 +1,19 @@
+{
+  "schema": "wal-tat-reference-pack-policy-v1",
+  "evidence_id": "v112",
+  "declared_before_execution": true,
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "matrix": "model.layers.24.mlp.up_proj",
+  "packer_script": "wal_tat/experiments/reference_pack_checkpoint_matrix.py",
+  "packer_script_sha256": "42d6fb1306c182a15092c77cd3539faff68a6e486b8faa2fde901e9f242a7185",
+  "output": "wal2/artifacts/wal-tat-layer24-up-s0048r2.q2g",
+  "required_invariants": {
+    "packed_fields_exact": true,
+    "roundtrip_exact": true,
+    "committed_mask_exact": true,
+    "checkpoint_mutated": false
+  },
+  "cleanup_after_pass": "delete only superseded wal2/artifacts/wal-tat-layer24-up-s0048r1.q2g",
+  "command": "PYTHONPATH=src python experiments/reference_pack_checkpoint_matrix.py ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt model.layers.24.mlp.up_proj ../wal2/artifacts/wal-tat-layer24-up-s0048r2.q2g --tag reference_pack_layer24_up_s0048r2"
+}

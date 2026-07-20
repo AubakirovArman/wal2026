@@ -25,7 +25,7 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0048r1` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0048r2` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
@@ -33,10 +33,10 @@ The accepted frontier `s0048r1` on `Qwen/Qwen3-1.7B` has:
 - 74,563,584 weights in `{-scale, 0, +scale}`;
 - 11 full major matrices plus three partial matrices and 4.333956% of major matrix
   weights accepted;
-- recurring validation-v3 NLL ratios `0.997193 / 1.001472 / 0.982272` on C4, SQuAD and
-  PyTorch code;
-- recurring validation-v4 ratios `0.997193 / 0.997775 / 0.983498` on C4, a different SQuAD
-  slice and Transformers code;
+- recurring validation-v3 NLL ratios `0.996756 / 1.001149 / 0.981170` on C4,
+  SQuAD and PyTorch code;
+- recurring validation-v4 ratios `0.996756 / 0.997175 / 0.982353` on C4, a
+  different SQuAD slice and Transformers code;
 - a prospectively declared non-overlapping D10 step passed an incremental
   paired upper-95 limit of `1.0002` (`1.000051` on v3 and `1.000107` on v4)
   while also passing the cumulative point budget;
@@ -61,6 +61,20 @@ The accepted frontier `s0048r1` on `Qwen/Qwen3-1.7B` has:
   improvement was only `0.000080637`, below the predeclared `0.0001`
   publication threshold. Extending the deterministic run to 768 steps did not
   beat step 512, so no checkpoint was published;
+- a behavior-gradient boundary search then tested only adjacent
+  `-1 <-> 0 <-> +1` edits. A broad 512-code candidate improved every point
+  estimate but failed the predeclared SQuAD upper-95 gate (`1.000153 >
+  1.0001`) and was rejected. A fixed 128-group candidate passed with paired
+  incremental upper-95 ratios `0.999670 / 0.999924 / 0.999033` on
+  C4/SQuAD/code;
+- `s0048r2` therefore changes exactly 128 committed ternary codes and 128 FP16
+  group scales, keeps coverage unchanged, contains no BF16 residual, and
+  fresh-verifies at `wiki=0.949896` and `code=0.961393` relative NLL;
+- on the already disclosed rotating suites, v6 still passes the cumulative
+  point guide (`worst=1.000922`) while v5 SQuAD improves from the earlier
+  `1.005234` to `1.005052` but remains above `1.002167`. Further coverage
+  growth is therefore paused until another coverage-neutral recovery is built
+  on non-overlapping development data;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);
@@ -123,10 +137,14 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   continuous residual into ternary codes and FP16 g128 scales;
 - `experiments/counterfactual_scale_recovery.py`: deployment-faithful direct
   FP16-scale QAT against a target-local counterfactual teacher;
+- `experiments/boundary_sparse_recode.py`: behavior-gradient ranking of sparse
+  adjacent ternary-code moves with disjoint development confirmation;
 - `experiments/ternary_recode_artifact_audit.py`: fresh paired cumulative and
   incremental audit of a frozen coverage-neutral Q2 artifact;
 - `experiments/commit_ternary_recode_artifact.py`: atomic, hash-checked
   publication of an audited coverage-neutral child checkpoint;
+- `experiments/commit_sparse_ternary_recode_artifact.py`: separate atomic
+  publisher for an audited, policy-bounded sparse code-and-scale recode;
 - `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
   dual-gate commit that publishes a new checkpoint without mutating its parent;
 - `experiments/reference_pack_checkpoint_matrix.py`: write and independently
