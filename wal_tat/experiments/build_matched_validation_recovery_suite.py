@@ -14,6 +14,7 @@ import torch
 from transformers import AutoTokenizer
 
 from build_audit_holdout import (
+    OPTIONAL_CODE_SOURCES,
     arrow_column,
     c4_arrow_pattern,
     code_source_directories,
@@ -143,7 +144,7 @@ def main() -> None:
         )
     parser.add_argument(
         "--code-source",
-        choices=("torch", "transformers", "numpy", "datasets"),
+        choices=("torch", "transformers", "numpy", "datasets", *OPTIONAL_CODE_SOURCES),
         default="torch",
     )
     parser.add_argument("--interleave-calibration", action="store_true")

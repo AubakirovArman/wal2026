@@ -1,0 +1,78 @@
+{
+  "schema": "wal-tat-block24-macro-completion-policy-v1",
+  "evidence_id": "v244",
+  "declared_before_execution": true,
+  "objective": "replace micro-atom growth with one joint hard-forward QAT transaction over every remaining layer-24 MLP group",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+    "accepted_weights": 76673024,
+    "accepted_coverage_fraction": 0.04456565214078927
+  },
+  "development_suite": {
+    "path": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+    "role": "training and model selection only"
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v26-l256-g512.pt",
+    "sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+    "overlap_result": "wal_tat/results/audit_v26_overlap_v1.json",
+    "overlap_result_sha256": "d970273b09e6aa38aed4f1b6814d23cf1c4c337e119794634a380892ac7898fa",
+    "opened_during_training_or_selection": false
+  },
+  "candidate": {
+    "target_layer": 24,
+    "target_projections": [
+      "up_proj",
+      "gate_proj",
+      "down_proj"
+    ],
+    "initializer": "per-group diagonal threshold least-squares",
+    "new_weights": 23990272,
+    "new_coverage_fraction": 0.01394417568185281,
+    "previously_committed_groups_trainable": 0,
+    "norm_parameters_trainable": 0,
+    "hard_forward_codes": [
+      -1,
+      0,
+      1
+    ]
+  },
+  "prospective_if_accepted": {
+    "accepted_weights": 100663296,
+    "accepted_coverage_fraction": 0.05850982782264209,
+    "remaining_weights": 1619787776,
+    "fully_completed_decoder_blocks": 2,
+    "fully_completed_major_matrices": 14
+  },
+  "training": {
+    "script": "wal_tat/experiments/block_proxy_recovery.py",
+    "script_sha256": "74fbd7ab30e75e8be511193c3dd41501577bd5d16689ee7ef3817ea9e71e947b",
+    "steps": 1024,
+    "proxy_lr": 0.0001,
+    "scale_lr": 0.000005,
+    "initial_temperature": 0.25,
+    "final_temperature": 0.08,
+    "block_weight": 0.1,
+    "attention_weight": 0.0,
+    "proxy_anchor_weight": 0.001,
+    "kd_weight": 1.0,
+    "selection_gate_sequences": 64,
+    "selection_every": 128
+  },
+  "acceptance": {
+    "development_cumulative_nll_ratio_limit": 1.02,
+    "audit_cumulative_observed_nll_ratio_limit": 1.02,
+    "audit_incremental_upper95_nll_ratio_limit": 1.02,
+    "strict_ternary_codes_only": true,
+    "source_checkpoint_must_remain_immutable": true,
+    "fresh_process_verification_after_publication": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/block_proxy_recovery.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --selection-suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_complete_s0053_v1 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --complete-target-projections --steps 1024 --proxy-lr 1e-4 --scale-lr 5e-6 --initial-temperature 0.25 --final-temperature 0.08 --block-weight 0.1 --attention-weight 0 --proxy-anchor-weight 0.001 --kd-weight 1 --selection-gate-sequences 64 --selection-every 128 --gate-ratio 1.02 --allow-within-gate --seed 601 --device cuda"
+}

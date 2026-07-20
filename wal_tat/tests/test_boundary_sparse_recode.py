@@ -9,6 +9,7 @@ sys.path.insert(0, str(EXPERIMENTS))
 
 from boundary_sparse_recode import (  # noqa: E402
     adjacent_move_proposals,
+    apply_global_top_group_moves,
     apply_top_group_moves,
     refit_selected_scales,
 )
@@ -39,6 +40,27 @@ def test_top_group_moves_changes_at_most_one_code_per_group():
     assert positions.tolist() == [0, 1]
     assert chosen.tolist() == [9.0, 6.0]
     assert int((candidate != source).sum()) == 2
+
+
+def test_global_top_group_moves_ranks_across_matrices():
+    source = {
+        "a": torch.zeros((1, 2, 2), dtype=torch.int8),
+        "b": torch.zeros((1, 2, 2), dtype=torch.int8),
+    }
+    proposed = {name: torch.ones_like(value) for name, value in source.items()}
+    scores = {
+        "a": torch.tensor([[[7.0, 1.0], [2.0, 1.0]]]),
+        "b": torch.tensor([[[9.0, 1.0], [6.0, 1.0]]]),
+    }
+    candidates, groups, positions, chosen = apply_global_top_group_moves(
+        source, proposed, scores, budget=3
+    )
+    assert chosen.tolist() == [9.0, 7.0, 6.0]
+    assert groups["a"].tolist() == [0]
+    assert groups["b"].tolist() == [0, 1]
+    assert positions["a"].tolist() == [0]
+    assert int((candidates["a"] != source["a"]).sum()) == 1
+    assert int((candidates["b"] != source["b"]).sum()) == 2
 
 
 def test_refit_selected_scales_only_changes_selected_groups_and_rounds_fp16():

@@ -117,3 +117,47 @@ def q2_g128_physical_bpw(group_size: int = 128, scale_bits: int = 16) -> float:
     """Physical bpw for two-bit slots plus one group scale."""
     return 2.0 + scale_bits / group_size
 
+
+@torch.no_grad()
+def weighted_symmetric_q4_project(
+    weight: torch.Tensor,
+    input_second_moment: torch.Tensor,
+    *,
+    group_size: int = 128,
+    iterations: int = 4,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Activation-weighted symmetric signed-INT4 projection per input group.
+
+    Codes use the deployable signed range ``[-8, 7]``.  Alternating rounding
+    and weighted least-squares scale updates make this a strong Q4-g128 rescue
+    baseline without introducing per-value metadata.
+    """
+    if input_second_moment.ndim != 1 or input_second_moment.numel() != weight.shape[1]:
+        raise ValueError("input_second_moment must match weight input features")
+    if iterations < 1:
+        raise ValueError("iterations must be positive")
+    grouped, padding, size = padded_grouped(weight.detach(), group_size)
+    moment = input_second_moment.detach().float().clamp_min(0)
+    if padding:
+        moment = F.pad(moment, (0, padding))
+    moment = moment.view(1, -1, size).expand_as(grouped)
+    scale = grouped.abs().amax(-1).div(7.0).clamp_min(1e-5)
+    for _ in range(iterations):
+        codes = (grouped / scale.unsqueeze(-1)).round().clamp(-8, 7)
+        denominator = (moment * codes.square()).sum(-1)
+        fitted = (moment * codes * grouped).sum(-1).div(
+            denominator.clamp_min(1e-12)
+        )
+        scale = torch.where(
+            denominator > 0, fitted.abs().clamp_min(1e-5), scale
+        )
+    codes = (grouped / scale.unsqueeze(-1)).round().clamp(-8, 7).to(torch.int8)
+    error = (
+        moment * (grouped - codes.float() * scale.unsqueeze(-1)).square()
+    ).sum(-1)
+    return codes, scale, error
+
+
+def q4_g128_physical_bpw(group_size: int = 128, scale_bits: int = 16) -> float:
+    """Physical bpw for four-bit codes plus one group scale."""
+    return 4.0 + scale_bits / group_size

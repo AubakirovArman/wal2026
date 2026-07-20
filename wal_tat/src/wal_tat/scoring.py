@@ -95,6 +95,58 @@ def diagonal_ternary_search(
     return best_codes, best_scale, best_error
 
 
+@torch.no_grad()
+def exact_diagonal_ternary_project(
+    weight: torch.Tensor,
+    input_second_moment: torch.Tensor,
+    *,
+    group_size: int,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Globally solve diagonal-weighted symmetric ternary projection.
+
+    For a fixed positive scale, a coordinate is non-zero exactly when
+    ``abs(weight) > scale / 2``; the diagonal sensitivity cancels from this
+    comparison.  Therefore every optimum support is a prefix after sorting a
+    group by absolute magnitude.  Evaluating all prefix lengths gives the
+    exact solution in ``O(group_size log group_size)`` rather than relying on
+    a fixed threshold grid.
+    """
+    grouped, padding, size = padded_grouped(weight.detach(), group_size)
+    moment = input_second_moment.detach().float().clamp_min(0)
+    if moment.numel() != weight.shape[1]:
+        raise ValueError("input moment does not match in_features")
+    if padding:
+        moment = F.pad(moment, (0, padding))
+    moment = moment.view(1, -1, size).expand_as(grouped)
+
+    magnitude, order = grouped.abs().sort(dim=-1, descending=True)
+    sorted_weight = grouped.gather(-1, order)
+    sorted_moment = moment.gather(-1, order)
+    weighted_abs_prefix = (sorted_moment * magnitude).cumsum(-1)
+    weight_prefix = sorted_moment.cumsum(-1)
+    gain = weighted_abs_prefix.square() / weight_prefix.clamp_min(1e-12)
+    best_gain, best_index = gain.max(-1)
+    best_scale = (
+        weighted_abs_prefix.gather(-1, best_index.unsqueeze(-1)).squeeze(-1)
+        / weight_prefix.gather(-1, best_index.unsqueeze(-1))
+        .squeeze(-1)
+        .clamp_min(1e-12)
+    ).abs().clamp_min(1e-5)
+    best_size = best_index + 1
+    active_sorted = (
+        torch.arange(size, device=grouped.device).view(1, 1, -1)
+        < best_size.unsqueeze(-1)
+    )
+    sorted_codes = torch.where(
+        active_sorted, sorted_weight.sign(), torch.zeros_like(sorted_weight)
+    ).to(torch.int8)
+    best_codes = torch.zeros_like(sorted_codes)
+    best_codes.scatter_(-1, order, sorted_codes)
+    total_error = (moment * grouped.square()).sum(-1)
+    best_error = (total_error - best_gain).clamp_min(0)
+    return best_codes, best_scale, best_error
+
+
 def select_group_mask(
     scores: torch.Tensor,
     count: int,

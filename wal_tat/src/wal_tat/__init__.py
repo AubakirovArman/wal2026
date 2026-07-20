@@ -40,10 +40,17 @@ from .quantization import (
     hard_codes_scales,
     hestia_quantize,
     initial_group_scales,
+    q4_g128_physical_bpw,
     q2_g128_physical_bpw,
     transaction_schedule,
+    weighted_symmetric_q4_project,
 )
-from .proxy import ProxyTernaryLinear, ProxyTernaryMatrix, soft_ternary_proxy
+from .proxy import (
+    ProxyTernaryLinear,
+    ProxyTernaryMatrix,
+    soft_ternary_proxy,
+    soft_ternary_proxy_derivative,
+)
 from .orchestration import (
     active_campaign_workers,
     common_campaign_frontier,
@@ -110,6 +117,8 @@ __all__ = [
     "linked_gqa_query_group_mask",
     "linked_output_group_mask",
     "q2_g128_physical_bpw",
+    "q4_g128_physical_bpw",
+    "weighted_symmetric_q4_project",
     "paired_block_bootstrap_nll",
     "pack_bool_mask",
     "pack_partial_matrix",
@@ -117,6 +126,7 @@ __all__ = [
     "ProxyTernaryLinear",
     "ProxyTernaryMatrix",
     "soft_ternary_proxy",
+    "soft_ternary_proxy_derivative",
     "active_campaign_workers",
     "common_campaign_frontier",
     "load_campaign_state",

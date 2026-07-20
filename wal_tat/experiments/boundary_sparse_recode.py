@@ -183,6 +183,66 @@ def apply_top_group_moves(
 
 
 @torch.no_grad()
+def apply_global_top_group_moves(
+    source_codes: dict[str, torch.Tensor],
+    proposed_codes: dict[str, torch.Tensor],
+    scores: dict[str, torch.Tensor],
+    budget: int,
+) -> tuple[
+    dict[str, torch.Tensor],
+    dict[str, torch.Tensor],
+    dict[str, torch.Tensor],
+    torch.Tensor,
+]:
+    """Select at most one adjacent code move per group across several matrices."""
+    if budget < 1:
+        raise ValueError("budget must be positive")
+    names = tuple(source_codes)
+    if not names or set(proposed_codes) != set(names) or set(scores) != set(names):
+        raise ValueError("source, proposal and score maps must have the same keys")
+    group_scores = []
+    group_positions = {}
+    group_offsets = {}
+    offset = 0
+    for name in names:
+        if proposed_codes[name].shape != source_codes[name].shape:
+            raise ValueError(f"proposal shape mismatch for {name}")
+        if scores[name].shape != source_codes[name].shape:
+            raise ValueError(f"score shape mismatch for {name}")
+        best, positions = scores[name].max(dim=-1)
+        flat = best.reshape(-1)
+        group_scores.append(flat)
+        group_positions[name] = positions.reshape(-1)
+        group_offsets[name] = (offset, offset + flat.numel())
+        offset += flat.numel()
+    concatenated = torch.cat(group_scores)
+    finite = torch.isfinite(concatenated) & (concatenated > 0)
+    count = min(int(budget), int(finite.sum().item()))
+    if count == 0:
+        raise ValueError("no positive first-order adjacent moves")
+    masked = torch.where(
+        finite, concatenated, torch.full_like(concatenated, -torch.inf)
+    )
+    chosen_scores, chosen_global = torch.topk(masked, count, sorted=True)
+    candidates = {name: value.clone() for name, value in source_codes.items()}
+    selected_groups = {}
+    selected_positions = {}
+    for name in names:
+        start, stop = group_offsets[name]
+        belongs = (chosen_global >= start) & (chosen_global < stop)
+        groups = chosen_global[belongs] - start
+        positions = group_positions[name].index_select(0, groups)
+        selected_groups[name] = groups
+        selected_positions[name] = positions
+        if groups.numel() == 0:
+            continue
+        flat_candidate = candidates[name].reshape(-1, candidates[name].shape[-1])
+        flat_proposed = proposed_codes[name].reshape_as(flat_candidate)
+        flat_candidate[groups, positions] = flat_proposed[groups, positions]
+    return candidates, selected_groups, selected_positions, chosen_scores
+
+
+@torch.no_grad()
 def refit_selected_scales(
     target: torch.Tensor,
     codes: torch.Tensor,

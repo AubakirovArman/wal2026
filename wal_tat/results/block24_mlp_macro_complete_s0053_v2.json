@@ -1,0 +1,724 @@
+{
+  "schema": "wal-tat-block-proxy-recovery-v1",
+  "tag": "block24_mlp_macro_complete_s0053_v2",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "source_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "selection_suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "selection_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "steps": 2048,
+  "proxy_lr": 0.001,
+  "scale_lr": 1e-06,
+  "proxy_start_step": 1,
+  "proxy_freeze_step": 0,
+  "scale_start_step": 1,
+  "compensation_scale_lr": 1e-06,
+  "norm_lr": 0.0,
+  "block_weight": 0.5,
+  "attention_weight": 0.0,
+  "allow_within_gate": false,
+  "proxy_anchor_weight": 0.0001,
+  "kd_weight": 2.0,
+  "kd_topk": 64,
+  "kd_stride": 4,
+  "kd_temperature": 2.0,
+  "selection_gate_sequences": 64,
+  "selection_baseline": {
+    "c4_train": {
+      "nll": 3.389905206859112,
+      "ppl": 29.66314027485675,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.518509680405259,
+      "ppl": 12.410087877863443,
+      "tokens": 16384
+    },
+    "scipy_code": {
+      "nll": 1.6624865904450417,
+      "ppl": 5.272404869532196,
+      "tokens": 16384
+    }
+  },
+  "initial_selection": {
+    "c4_train": {
+      "nll": 3.389594431966543,
+      "ppl": 29.653923147924587,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.578834768384695,
+      "ppl": 13.181769392868583,
+      "tokens": 16384
+    },
+    "scipy_code": {
+      "nll": 1.7482461165636778,
+      "ppl": 5.74451861940456,
+      "tokens": 16384
+    }
+  },
+  "best_selection_step": 0,
+  "best_selection_ratios": {
+    "c4_train": 0.9999083234268794,
+    "squad_train_context": 1.0239526925184297,
+    "scipy_code": 1.0515850934446807
+  },
+  "target_layer": 24,
+  "target_projections": [
+    "up_proj",
+    "gate_proj",
+    "down_proj"
+  ],
+  "target_committed_coverage": {
+    "model.layers.24.mlp.up_proj": 1.0,
+    "model.layers.24.mlp.gate_proj": 1.0,
+    "model.layers.24.mlp.down_proj": 1.0
+  },
+  "partial_proxy": false,
+  "added_target_layer": false,
+  "completed_target_projections": true,
+  "new_groups": {
+    "model.layers.24.mlp.up_proj": 23808,
+    "model.layers.24.mlp.gate_proj": 87872,
+    "model.layers.24.mlp.down_proj": 75744
+  },
+  "new_weights": {
+    "model.layers.24.mlp.up_proj": 3047424,
+    "model.layers.24.mlp.gate_proj": 11247616,
+    "model.layers.24.mlp.down_proj": 9695232
+  },
+  "compensate_source_scales": false,
+  "scale_compensation_matrices": [],
+  "source_frontier": {
+    "c4_train": {
+      "nll": 3.507002878934145,
+      "ppl": 33.348169354438944,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.195141370408237,
+      "ppl": 8.98127065297429,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7165385917760432,
+      "ppl": 5.565231548042079,
+      "tokens": 65536
+    }
+  },
+  "source_frontier_ratios": {
+    "c4_train": 0.9932647827788891,
+    "squad_train_context": 0.9977025886273156,
+    "scipy_code": 1.0158224736492956
+  },
+  "initial_hard_target": {
+    "c4_train": {
+      "nll": 3.5466901981271803,
+      "ppl": 34.69828278024247,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.24471048777923,
+      "ppl": 9.437682836384626,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.773610534146428,
+      "ppl": 5.892088590103292,
+      "tokens": 65536
+    }
+  },
+  "initial_hard_target_ratios": {
+    "c4_train": 1.00450515464004,
+    "squad_train_context": 1.0202319971582174,
+    "scipy_code": 1.049596815777351
+  },
+  "attempted": {
+    "c4_train": {
+      "nll": 3.5466901981271803,
+      "ppl": 34.69828278024247,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.24471048777923,
+      "ppl": 9.437682836384626,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.773610534146428,
+      "ppl": 5.892088590103292,
+      "tokens": 65536
+    }
+  },
+  "attempted_ratios": {
+    "c4_train": 1.00450515464004,
+    "squad_train_context": 1.0202319971582174,
+    "scipy_code": 1.049596815777351
+  },
+  "code_churn": {
+    "model.layers.24.mlp.up_proj": 0.0,
+    "model.layers.24.mlp.gate_proj": 0.0,
+    "model.layers.24.mlp.down_proj": 0.0
+  },
+  "deployment_statistics": {
+    "model.layers.24.mlp.up_proj": {
+      "code_counts": {
+        "-1": 3529743,
+        "0": 5522807,
+        "1": 3530362
+      },
+      "zero_fraction": 0.4389132857322693,
+      "code_entropy_bits": 1.5502926940967594,
+      "code_churn": 0.0,
+      "proxy_abs_displacement_mean": 0.0,
+      "boundary_epsilon": 0.05,
+      "near_boundary_fraction": 0.0,
+      "boundary_distance_min": 0.5,
+      "boundary_distance_p01": 0.5,
+      "scale_min": 0.01413726806640625,
+      "scale_median": 0.04527972638607025,
+      "scale_p95": 0.056640625,
+      "scale_max": 0.320068359375,
+      "scale_at_clamp_fraction": 0.0
+    },
+    "model.layers.24.mlp.gate_proj": {
+      "code_counts": {
+        "-1": 3419318,
+        "0": 5743452,
+        "1": 3420142
+      },
+      "zero_fraction": 0.4564485549926758,
+      "code_entropy_bits": 1.5380716967466723,
+      "code_churn": 0.0,
+      "proxy_abs_displacement_mean": 0.0,
+      "boundary_epsilon": 0.05,
+      "near_boundary_fraction": 0.0,
+      "boundary_distance_min": 0.5,
+      "boundary_distance_p01": 0.5,
+      "scale_min": 0.016653751954436302,
+      "scale_median": 0.04338700696825981,
+      "scale_p95": 0.0535888671875,
+      "scale_max": 0.3460693359375,
+      "scale_at_clamp_fraction": 0.0
+    },
+    "model.layers.24.mlp.down_proj": {
+      "code_counts": {
+        "-1": 3464778,
+        "0": 5653904,
+        "1": 3464230
+      },
+      "zero_fraction": 0.44933193922042847,
+      "code_entropy_bits": 1.543247817415497,
+      "code_churn": 0.0,
+      "proxy_abs_displacement_mean": 0.0,
+      "boundary_epsilon": 0.05,
+      "near_boundary_fraction": 0.0,
+      "boundary_distance_min": 0.5,
+      "boundary_distance_p01": 0.5,
+      "scale_min": 0.006565093994140625,
+      "scale_median": 0.047760009765625,
+      "scale_p95": 0.057241085916757584,
+      "scale_max": 0.8671875,
+      "scale_at_clamp_fraction": 0.0
+    }
+  },
+  "history": [
+    {
+      "step": 1,
+      "ce": 3.53474760055542,
+      "block_loss": 0.02456492744386196,
+      "attention_loss": 0.5275096893310547,
+      "anchor_loss": 0.0,
+      "kd_loss": 0.43771904706954956,
+      "temperature": 0.4999998235177553,
+      "proxy_active": true,
+      "scale_active": true,
+      "gradient_norm": 1.0508016347885132,
+      "code_churn": {
+        "model.layers.24.mlp.up_proj": 0.0,
+        "model.layers.24.mlp.gate_proj": 0.0,
+        "model.layers.24.mlp.down_proj": 0.0
+      },
+      "deployment_statistics": {
+        "model.layers.24.mlp.up_proj": {
+          "code_counts": {
+            "-1": 3529743,
+            "0": 5522807,
+            "1": 3530362
+          },
+          "zero_fraction": 0.4389132857322693,
+          "code_entropy_bits": 1.5502926940967594,
+          "code_churn": 0.0,
+          "proxy_abs_displacement_mean": 0.00023242247698362917,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0,
+          "boundary_distance_min": 0.49900001287460327,
+          "boundary_distance_p01": 0.49900105595588684,
+          "scale_min": 0.01413726806640625,
+          "scale_median": 0.045279208570718765,
+          "scale_p95": 0.056640625,
+          "scale_max": 0.320068359375,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.gate_proj": {
+          "code_counts": {
+            "-1": 3419318,
+            "0": 5743452,
+            "1": 3420142
+          },
+          "zero_fraction": 0.4564485549926758,
+          "code_entropy_bits": 1.5380716967466723,
+          "code_churn": 0.0,
+          "proxy_abs_displacement_mean": 0.000852706260047853,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0,
+          "boundary_distance_min": 0.49900001287460327,
+          "boundary_distance_p01": 0.4990009665489197,
+          "scale_min": 0.01665475219488144,
+          "scale_median": 0.04338722303509712,
+          "scale_p95": 0.05358786880970001,
+          "scale_max": 0.3460703492164612,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.down_proj": {
+          "code_counts": {
+            "-1": 3464778,
+            "0": 5653904,
+            "1": 3464230
+          },
+          "zero_fraction": 0.44933193922042847,
+          "code_entropy_bits": 1.543247817415497,
+          "code_churn": 0.0,
+          "proxy_abs_displacement_mean": 0.0007357503054663539,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0,
+          "boundary_distance_min": 0.49900001287460327,
+          "boundary_distance_p01": 0.499000608921051,
+          "scale_min": 0.006565093994140625,
+          "scale_median": 0.047760009765625,
+          "scale_p95": 0.05724130570888519,
+          "scale_max": 0.8671875,
+          "scale_at_clamp_fraction": 0.0
+        }
+      },
+      "selection_metrics": null,
+      "selection_ratios": null,
+      "best_selection_step": 0
+    },
+    {
+      "step": 512,
+      "ce": 3.090449571609497,
+      "block_loss": 0.03664562106132507,
+      "attention_loss": 0.575829267501831,
+      "anchor_loss": 0.002628120593726635,
+      "kd_loss": 1.2940770387649536,
+      "temperature": 0.4560660171779821,
+      "proxy_active": true,
+      "scale_active": true,
+      "gradient_norm": 2.4844460487365723,
+      "code_churn": {
+        "model.layers.24.mlp.up_proj": 1.6689300537109375e-06,
+        "model.layers.24.mlp.gate_proj": 6.35782896551973e-07,
+        "model.layers.24.mlp.down_proj": 5.086263172415784e-06
+      },
+      "deployment_statistics": {
+        "model.layers.24.mlp.up_proj": {
+          "code_counts": {
+            "-1": 3529730,
+            "0": 5522828,
+            "1": 3530354
+          },
+          "zero_fraction": 0.438914954662323,
+          "code_entropy_bits": 1.5502916163898433,
+          "code_churn": 1.6689300537109375e-06,
+          "proxy_abs_displacement_mean": 0.01274837739765644,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 2.2967657059780322e-05,
+          "boundary_distance_min": 0.00010275840759277344,
+          "boundary_distance_p01": 0.35007426142692566,
+          "scale_min": 0.01413726806640625,
+          "scale_median": 0.04527977108955383,
+          "scale_p95": 0.056640625,
+          "scale_max": 0.320068359375,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.gate_proj": {
+          "code_counts": {
+            "-1": 3419316,
+            "0": 5743460,
+            "1": 3420136
+          },
+          "zero_fraction": 0.4564492106437683,
+          "code_entropy_bits": 1.5380712212123329,
+          "code_churn": 6.35782896551973e-07,
+          "proxy_abs_displacement_mean": 0.03454461693763733,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 7.947286576381885e-06,
+          "boundary_distance_min": 0.002052605152130127,
+          "boundary_distance_p01": 0.3575253188610077,
+          "scale_min": 0.016866616904735565,
+          "scale_median": 0.04339539259672165,
+          "scale_p95": 0.05359372869133949,
+          "scale_max": 0.34600117802619934,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.down_proj": {
+          "code_counts": {
+            "-1": 3464751,
+            "0": 5653968,
+            "1": 3464193
+          },
+          "zero_fraction": 0.4493370056152344,
+          "code_entropy_bits": 1.5432442233023944,
+          "code_churn": 5.086263172415784e-06,
+          "proxy_abs_displacement_mean": 0.04044833779335022,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.00011134147644042969,
+          "boundary_distance_min": 0.00011497735977172852,
+          "boundary_distance_p01": 0.2698368430137634,
+          "scale_min": 0.006565093994140625,
+          "scale_median": 0.04776957631111145,
+          "scale_p95": 0.05725070834159851,
+          "scale_max": 0.8671875,
+          "scale_at_clamp_fraction": 0.0
+        }
+      },
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3903108797967434,
+          "ppl": 29.67517624928092,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5798632111400366,
+          "ppl": 13.195333061636184,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.7515000980347395,
+          "ppl": 5.763241622183791,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 1.000119670879531,
+        "squad_train_context": 1.0243610462219486,
+        "scipy_code": 1.0535423913199018
+      },
+      "best_selection_step": 0
+    },
+    {
+      "step": 1024,
+      "ce": 3.328199863433838,
+      "block_loss": 0.050196561962366104,
+      "attention_loss": 0.575829267501831,
+      "anchor_loss": 0.005597245879471302,
+      "kd_loss": 0.5236082077026367,
+      "temperature": 0.35,
+      "proxy_active": true,
+      "scale_active": true,
+      "gradient_norm": 4.421220779418945,
+      "code_churn": {
+        "model.layers.24.mlp.up_proj": 9.576480078976601e-05,
+        "model.layers.24.mlp.gate_proj": 7.05718994140625e-05,
+        "model.layers.24.mlp.down_proj": 0.0003821849822998047
+      },
+      "deployment_statistics": {
+        "model.layers.24.mlp.up_proj": {
+          "code_counts": {
+            "-1": 3529837,
+            "0": 5522642,
+            "1": 3530433
+          },
+          "zero_fraction": 0.4389001727104187,
+          "code_entropy_bits": 1.550301161056582,
+          "code_churn": 9.576480078976601e-05,
+          "proxy_abs_displacement_mean": 0.018920397385954857,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.00018469493079464883,
+          "boundary_distance_min": 4.887580871582031e-06,
+          "boundary_distance_p01": 0.2955710291862488,
+          "scale_min": 0.01413726806640625,
+          "scale_median": 0.04528627172112465,
+          "scale_p95": 0.05664726719260216,
+          "scale_max": 0.320068359375,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.gate_proj": {
+          "code_counts": {
+            "-1": 3419332,
+            "0": 5743414,
+            "1": 3420166
+          },
+          "zero_fraction": 0.4564455449581146,
+          "code_entropy_bits": 1.538073955625534,
+          "code_churn": 7.05718994140625e-05,
+          "proxy_abs_displacement_mean": 0.05808166787028313,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0001083215101971291,
+          "boundary_distance_min": 3.0338764190673828e-05,
+          "boundary_distance_p01": 0.2869969606399536,
+          "scale_min": 0.016882598400115967,
+          "scale_median": 0.04339599609375,
+          "scale_p95": 0.05360289663076401,
+          "scale_max": 0.34597495198249817,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.down_proj": {
+          "code_counts": {
+            "-1": 3465481,
+            "0": 5652561,
+            "1": 3464870
+          },
+          "zero_fraction": 0.44922518730163574,
+          "code_entropy_bits": 1.543323200314687,
+          "code_churn": 0.0003821849822998047,
+          "proxy_abs_displacement_mean": 0.059786759316921234,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0009924571495503187,
+          "boundary_distance_min": 2.4437904357910156e-06,
+          "boundary_distance_p01": 0.21537521481513977,
+          "scale_min": 0.006565093994140625,
+          "scale_median": 0.04777757078409195,
+          "scale_p95": 0.0572548508644104,
+          "scale_max": 0.8671875,
+          "scale_at_clamp_fraction": 0.0
+        }
+      },
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.4948992766439915,
+          "ppl": 32.94696925655846,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.6625204905867577,
+          "ppl": 14.33236821020638,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.8223178144544363,
+          "ppl": 6.186180263851429,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 1.0309725680743036,
+        "squad_train_context": 1.0571809635285283,
+        "scipy_code": 1.096139857565172
+      },
+      "best_selection_step": 0
+    },
+    {
+      "step": 1536,
+      "ce": 3.3063316345214844,
+      "block_loss": 0.050733257085084915,
+      "attention_loss": 0.575829267501831,
+      "anchor_loss": 0.00942174717783928,
+      "kd_loss": 0.4370359182357788,
+      "temperature": 0.2439339828220179,
+      "proxy_active": true,
+      "scale_active": true,
+      "gradient_norm": 2.529113531112671,
+      "code_churn": {
+        "model.layers.24.mlp.up_proj": 0.0001976490020751953,
+        "model.layers.24.mlp.gate_proj": 0.00017126402235589921,
+        "model.layers.24.mlp.down_proj": 0.000758012174628675
+      },
+      "deployment_statistics": {
+        "model.layers.24.mlp.up_proj": {
+          "code_counts": {
+            "-1": 3529845,
+            "0": 5522616,
+            "1": 3530451
+          },
+          "zero_fraction": 0.43889808654785156,
+          "code_entropy_bits": 1.5503024950189643,
+          "code_churn": 0.0001976490020751953,
+          "proxy_abs_displacement_mean": 0.024433618411421776,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.00035174688673578203,
+          "boundary_distance_min": 3.075599670410156e-05,
+          "boundary_distance_p01": 0.24238421022891998,
+          "scale_min": 0.01413726806640625,
+          "scale_median": 0.0452880859375,
+          "scale_p95": 0.056647010147571564,
+          "scale_max": 0.320068359375,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.gate_proj": {
+          "code_counts": {
+            "-1": 3419369,
+            "0": 5743354,
+            "1": 3420189
+          },
+          "zero_fraction": 0.4564407765865326,
+          "code_entropy_bits": 1.5380775225819088,
+          "code_churn": 0.00017126402235589921,
+          "proxy_abs_displacement_mean": 0.0811261460185051,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0002787908015307039,
+          "boundary_distance_min": 3.1441450119018555e-05,
+          "boundary_distance_p01": 0.20667734742164612,
+          "scale_min": 0.016843734309077263,
+          "scale_median": 0.04340030625462532,
+          "scale_p95": 0.05360786244273186,
+          "scale_max": 0.3459504544734955,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.down_proj": {
+          "code_counts": {
+            "-1": 3466200,
+            "0": 5650992,
+            "1": 3465720
+          },
+          "zero_fraction": 0.4491004943847656,
+          "code_entropy_bits": 1.5434111864019888,
+          "code_churn": 0.000758012174628675,
+          "proxy_abs_displacement_mean": 0.07692503184080124,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0014291604747995734,
+          "boundary_distance_min": 2.1457672119140625e-06,
+          "boundary_distance_p01": 0.16660304367542267,
+          "scale_min": 0.006565093994140625,
+          "scale_median": 0.047788865864276886,
+          "scale_p95": 0.05726565793156624,
+          "scale_max": 0.8671875,
+          "scale_at_clamp_fraction": 0.0
+        }
+      },
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.4799927696585655,
+          "ppl": 32.459487381838784,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.652138153091073,
+          "ppl": 14.184334523927799,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.7912821285426617,
+          "ppl": 5.997136639341279,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 1.026575245413108,
+        "squad_train_context": 1.0530585503504244,
+        "scipy_code": 1.077471625237676
+      },
+      "best_selection_step": 0
+    },
+    {
+      "step": 2048,
+      "ce": 3.2827744483947754,
+      "block_loss": 0.053108155727386475,
+      "attention_loss": 0.575829267501831,
+      "anchor_loss": 0.01353499200195074,
+      "kd_loss": 0.339153528213501,
+      "temperature": 0.2,
+      "proxy_active": true,
+      "scale_active": true,
+      "gradient_norm": 2.1505274772644043,
+      "code_churn": {
+        "model.layers.24.mlp.up_proj": 0.0006743272533640265,
+        "model.layers.24.mlp.gate_proj": 0.0008739630575291812,
+        "model.layers.24.mlp.down_proj": 0.0021424293518066406
+      },
+      "deployment_statistics": {
+        "model.layers.24.mlp.up_proj": {
+          "code_counts": {
+            "-1": 3529895,
+            "0": 5522530,
+            "1": 3530487
+          },
+          "zero_fraction": 0.4388912618160248,
+          "code_entropy_bits": 1.55030690763689,
+          "code_churn": 0.0006743272533640265,
+          "proxy_abs_displacement_mean": 0.02919752709567547,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0011637210845947266,
+          "boundary_distance_min": 2.980232238769531e-07,
+          "boundary_distance_p01": 0.18860426545143127,
+          "scale_min": 0.01413726806640625,
+          "scale_median": 0.0452880859375,
+          "scale_p95": 0.05665924772620201,
+          "scale_max": 0.320068359375,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.gate_proj": {
+          "code_counts": {
+            "-1": 3418839,
+            "0": 5744317,
+            "1": 3419756
+          },
+          "zero_fraction": 0.4565173089504242,
+          "code_entropy_bits": 1.5380202586664216,
+          "code_churn": 0.0008739630575291812,
+          "proxy_abs_displacement_mean": 0.09892237186431885,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.0019387404900044203,
+          "boundary_distance_min": 3.8743019104003906e-07,
+          "boundary_distance_p01": 0.13338883221149445,
+          "scale_min": 0.01682482659816742,
+          "scale_median": 0.043403320014476776,
+          "scale_p95": 0.05361373350024223,
+          "scale_max": 0.3459382653236389,
+          "scale_at_clamp_fraction": 0.0
+        },
+        "model.layers.24.mlp.down_proj": {
+          "code_counts": {
+            "-1": 3467132,
+            "0": 5649048,
+            "1": 3466732
+          },
+          "zero_fraction": 0.4489459991455078,
+          "code_entropy_bits": 1.5435200750261173,
+          "code_churn": 0.0021424293518066406,
+          "proxy_abs_displacement_mean": 0.09110581874847412,
+          "boundary_epsilon": 0.05,
+          "near_boundary_fraction": 0.003607034683227539,
+          "boundary_distance_min": 5.960464477539063e-08,
+          "boundary_distance_p01": 0.107426218688488,
+          "scale_min": 0.006565093994140625,
+          "scale_median": 0.04779134690761566,
+          "scale_p95": 0.05726928636431694,
+          "scale_max": 0.8671875,
+          "scale_at_clamp_fraction": 0.0
+        }
+      },
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.471317958086729,
+          "ppl": 32.17912524758325,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.6446290630847216,
+          "ppl": 14.078221982229142,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.7715110443532467,
+          "ppl": 5.879731186907927,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 1.0240162323898871,
+        "squad_train_context": 1.050076989443681,
+        "scipy_code": 1.0655791478468524
+      },
+      "best_selection_step": 0
+    }
+  ],
+  "passed": false,
+  "fresh_verify": null,
+  "accepted_checkpoint": null,
+  "elapsed_seconds": 199.86729884147644,
+  "peak_cuda_allocated_bytes": 6024787968,
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_mlp_macro_complete_s0053_v2.wal.jsonl"
+}

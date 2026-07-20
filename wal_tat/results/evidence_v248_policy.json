@@ -1,0 +1,39 @@
+{
+  "schema": "wal-tat-activation-exact-scale-polish-policy-v1",
+  "evidence_id": "v248",
+  "declared_before_execution": true,
+  "objective": "polish only g128 scales after activation-aware exact support while all old and new ternary codes remain frozen",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "development_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened": false,
+  "candidate_new_weights": 23990272,
+  "runner_sha256": "1bc7e11e47e5eb587bc32a6c5418b817bdc149b8c9cd1aff3f5224c39503b416",
+  "initializer_result_sha256": "07ce0d54959a52c548518d3e2a4a3a88dab9c073738de91ec8df6dfd53b59b06",
+  "training": {
+    "steps": 1024,
+    "proxy_start_step": 1025,
+    "scale_start_step": 1,
+    "scale_lr": 0.00001,
+    "ce_weight": 0.0,
+    "block_weight": 1.0,
+    "attention_weight": 0.0,
+    "kd_weight": 0.0,
+    "proxy_anchor_weight": 0.0,
+    "previously_committed_groups_trainable": 0,
+    "new_codes_trainable": 0,
+    "norm_parameters_trainable": 0
+  },
+  "acceptance": {
+    "development_cumulative_nll_ratio_limit": 1.02,
+    "must_improve_over_initializer_worst_ratio": 1.0398484203807128,
+    "strict_ternary_codes_only": true,
+    "audit_is_run_only_after_a_development_pass": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/block_proxy_recovery.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --selection-suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_activation_exact_scale_polish_s0053_v1 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --complete-target-projections --completion-initializer exact_support --completion-moment-sequences 128 --steps 1024 --proxy-lr 1e-12 --proxy-start-step 1025 --scale-lr 1e-5 --scale-start-step 1 --ce-weight 0 --block-weight 1 --attention-weight 0 --proxy-anchor-weight 0 --kd-weight 0 --selection-gate-sequences 64 --selection-every 128 --gate-ratio 1.02 --seed 619 --device cuda"
+}

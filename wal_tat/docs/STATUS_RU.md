@@ -7,18 +7,26 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 результат только после проверки на отложенных данных. Это рабочий
 исследовательский процесс, но ещё не готовая полностью 1.58-bit модель.
 
-Текущий prospective dual-gated frontier:
+Теперь отдельно ведутся strict-ternary и mixed low-bit frontier:
 
-| Единица | Принято | Осталось |
+| Единица | Strict ternary | Mixed low-bit |
 |---|---:|---:|
-| Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 75.78125% up + 10.611979% gate + 14.615885% down | 24.21875% up + 89.388021% gate + 85.384115% down |
-| Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 75,624,448 / 1,720,451,072 | 1,644,826,624 |
+| Полные decoder blocks | 1 / 28 (`layer 27`) | 2 / 28 (`27` и `24`) |
+| Полные крупные матрицы | 11 / 197 | 14 / 197 |
+| Ternary weights | 76,673,024 (`4.456565%`) | 77,872,512 (`4.526285%`) |
+| Q4-g128 weights | 0 | 22,790,784 (`1.324698%`) |
+| Все low-bit weights | 76,673,024 | 100,663,296 (`5.850983%`) |
+| Осталось high precision | 1,643,778,048 | 1,619,787,776 (`94.149017%`) |
 
-Покрытие крупных matrix weights равно `4.395617%`. Нельзя округлять частично
-готовый `layer 24` до второго законченного блока: честный счётчик остаётся
-`1 полный block + 4/7 матриц следующего`.
+Strict-ветка по-прежнему не называет `layer 24` полным ternary-блоком. Mixed
+artifact честно завершает его как Q2/Q4-блок: attention полностью Q2, а три
+MLP-матрицы вместе содержат `39.625041%` Q2 и `60.374959%` Q4 при среднем
+`3.332499 bpw`.
+
+Mixed artifact прошёл fresh development и одноразовый sealed audit-v26.
+Абсолютные C4/SQuAD/pandas-code ratios равны
+`0.992737 / 1.002540 / 0.955660`, incremental ratios против `s0053` —
+`1.001073 / 1.002089 / 1.002177 <= 1.005`. Audit-v26 после этого раскрыт.
 
 ## Какой это quant
 
@@ -36,10 +44,10 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 75,624,448 weights занимают 144.2422 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 19.1572 MiB, экономия —
-125.0850 MiB. Экономия VRAM появится только после packed runtime; fake-quant
-обучение её не даёт.
+Strict `s0053` содержит 76,673,024 ternary weights. Mixed frontier содержит
+77,872,512 Q2-весов и 22,790,784 Q4-весов. Текущий 77,275,469-byte `.pt`
+хранит удобные int8 training arrays и не является packed deploy-файлом;
+экономия VRAM появится только после настоящей 2/4-bit упаковки и runtime.
 
 ## Что именно преобразовано
 
@@ -53,13 +61,24 @@ Q2-g128 упаковки их расчётный payload составит 19.157
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 75.78125% g128-групп `up_proj`, 10.611979%
-`gate_proj` и 14.615885% `down_proj`. Остальные 24.21875% `up_proj`,
-89.388021% `gate_proj` и 85.384115% `down_proj` пока остаются BF16.
+В strict `s0053` приняты 75.78125% g128-групп `up_proj`, 10.611979%
+`gate_proj` и 22.94921875% `down_proj`. В mixed artifact из оставшихся групп
+ещё 9,371 групп (1,199,488 weights) остаются ternary, а 178,053 групп
+(22,790,784 weights) используют signed Q4-g128. BF16 в этих трёх MLP-матрицах
+больше нет.
 
 ## Текущая validation
 
-Текущий принятый frontier — `s0052r1`. Coverage-атом `s0052` добавил к
+Актуальный strict parent — `s0053`, SHA-256
+`70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce`.
+Актуальный accepted mixed artifact имеет SHA-256
+`dd49a9f5969683bf410a951f818e6118acee56b3e197f56d688770bc39da92fb`.
+Ни Q4-веса, ни prospective mixed coverage не прибавляются к strict ternary
+счётчику.
+
+Ниже сохранена историческая validation lineage.
+
+Исторический frontier `s0052r1`: coverage-атом `s0052` добавил к
 восстановленному `s0051r2` ровно 4,096 g128-групп `layer24.down_proj`, то есть
 524,288 strict-ternary weights. На запечатанном one-shot audit-v19 его
 cumulative worst ratio равен `0.995173`, а incremental upper-95 worst —

@@ -10,19 +10,24 @@
 4. codes реально упакованы, а runtime не материализует всю матрицу в BF16;
 5. измерены file size, peak RAM/VRAM, prefill и decode speed.
 
-Основная ветка: ternary `{-1,0,+1}`, logical 1.585 bit и physical Q2-g128
-2.125 bpw. Binary Q1-g128 1.125 bpw начинается только после устойчивого
-полного ternary recipe.
+Основная исследовательская ветка: ternary `{-1,0,+1}`, logical 1.585 bit и
+physical Q2-g128 2.125 bpw. Практическая rate--distortion ветка разрешает
+signed Q4-g128 4.125 bpw для групп, которые не проходят sealed generalization.
+Форматы считаются раздельно; Q4 никогда не записывается в ternary coverage.
 
 ## Текущий счётчик
 
 ```text
-decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 10.611979% gate + 14.615885% down
-major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 75,624,448 / 1,720,451,072 = 4.395617%
+strict decoder blocks: 1 / 28 complete
+mixed low-bit blocks:  2 / 28 complete, 26 remain
+strict major matrices: 11 / 197 complete
+mixed major matrices:  14 / 197 complete, 183 remain
+strict ternary weights: 77,872,512 / 1,720,451,072 = 4.526285% in mixed artifact
+Q4 rescue weights:      22,790,784 / 1,720,451,072 = 1.324698%
+all low-bit weights:     100,663,296 / 1,720,451,072 = 5.850983%
+remaining high precision: 1,619,787,776 = 94.149017%
 embedding/head:       0 / 1 tied matrix
-packed runtime:       reference matrix packer ready; full manifest/kernels remain
+packed runtime:       Q2 reference packer ready; mixed Q2/Q4 packer and kernels remain
 ```
 
 ## Система quality budgets
@@ -97,7 +102,31 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
   (Spearman `1.0`);
 - следующим выбран наименее чувствительный remaining `layer 24`.
 
-## Текущая фаза 4 — закончить block 24
+## Фаза 4 — block 24: strict frontier и принятый mixed fallback
+
+Strict checkpoint `s0053` достиг 76,673,024 ternary weights (`4.456565%`).
+Попытка одномоментно перевести оставшиеся 23,990,272 MLP-веса показала, что
+compute не является узким местом: полный macro-run занимает минуты, но
+activation-aware hard ternary даёт code ratio около `1.03985`. Scale-only,
+logit-KD, global proxy flips и first-order hard repair (включая один flip и
+code-only gradient) не прошли development и были откатаны.
+
+Rate--distortion ablation затем оставил ранее принятые группы Q2, а самые
+трудные группы представил signed Q4-g128. Минимальный проверенный passing
+вариант использует 178,053 Q4-группы и 9,371 новых ternary-групп. Он даёт
+77,872,512 strict-ternary и 22,790,784 Q4 weights, полностью закрывает второй
+decoder block и имеет `3.332499 bpw` по трём MLP-матрицам.
+
+Fresh reload воспроизвёл development ratios
+`0.994024 / 0.999487 / 1.018691`. Sealed audit-v26 прошёл absolute gate
+`0.992737 / 1.002540 / 0.955660` и incremental gate против `s0053`
+`1.001073 / 1.002089 / 1.002177 <= 1.005`. Audit-v26 теперь раскрыт.
+
+Следующий этап — versioned packed Q2/Q4 layout и перенос mixed compiler на
+следующие блоки. Параллельно strict research продолжает progressive
+`Q4 -> 7 -> 5 -> 3`, transform-space и joint codebook recovery.
+
+### Историческая strict lineage block 24
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты

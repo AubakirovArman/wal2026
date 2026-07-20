@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 from pathlib import Path
 
 import datasets
@@ -16,6 +17,7 @@ from compensation_window import WORKSPACE, default_model_path, sha256_file
 
 
 DATASET_CACHE = Path("/home/arman/.cache/huggingface/datasets")
+OPTIONAL_CODE_SOURCES = ("scipy", "pandas", "sklearn")
 
 
 def one_file(pattern: str) -> Path:
@@ -75,6 +77,11 @@ def code_source_directories(source: str) -> tuple[Path, ...]:
         "numpy": Path(numpy.__file__).resolve().parent,
         "datasets": Path(datasets.__file__).resolve().parent,
     }
+    if source in OPTIONAL_CODE_SOURCES:
+        spec = importlib.util.find_spec(source)
+        if spec is None or spec.origin is None:
+            raise RuntimeError(f"optional code source {source!r} is not installed")
+        return (Path(spec.origin).resolve().parent,)
     if source not in roots:
         raise ValueError(f"unsupported code source: {source}")
     return (roots[source],)
@@ -115,7 +122,14 @@ def main() -> None:
     parser.add_argument("--code-offset", type=int, default=4001)
     parser.add_argument(
         "--code-source",
-        choices=("vendor", "transformers", "torch", "numpy", "datasets"),
+        choices=(
+            "vendor",
+            "transformers",
+            "torch",
+            "numpy",
+            "datasets",
+            *OPTIONAL_CODE_SOURCES,
+        ),
         default="vendor",
     )
     parser.add_argument(

@@ -1,11 +1,22 @@
 import torch
 
-from wal_tat import ProxyTernaryMatrix, soft_ternary_proxy
+from wal_tat import (
+    ProxyTernaryMatrix,
+    soft_ternary_proxy,
+    soft_ternary_proxy_derivative,
+)
 
 
 def test_soft_proxy_is_ternary_like_at_low_temperature():
     values = soft_ternary_proxy(torch.tensor([-1.0, 0.0, 1.0]), 0.05)
     assert torch.allclose(values, torch.tensor([-1.0, 0.0, 1.0]), atol=1e-4)
+
+
+def test_soft_proxy_derivative_matches_autograd():
+    proxy = torch.tensor([-1.0, -0.2, 0.0, 0.7, 1.0], requires_grad=True)
+    soft_ternary_proxy(proxy, 0.35).sum().backward()
+    expected = soft_ternary_proxy_derivative(proxy.detach(), 0.35)
+    assert torch.allclose(proxy.grad, expected, atol=1e-6, rtol=1e-5)
 
 
 def test_proxy_matrix_has_exact_hard_forward_and_soft_gradient():

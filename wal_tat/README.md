@@ -21,18 +21,34 @@ physical bpw = 2 + 16/128 = 2.125
 ```
 
 So the precise description is **ternary / logical 1.58-bit / physical
-Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
+Q2-g128 2.125 bpw**.  The strict branch remains BF16 + Q2-g128.  A separate
+rate--distortion branch may use signed Q4-g128 (`4.125 bpw`) as an explicitly
+counted rescue format for groups that do not generalize in ternary.
 
 ## Current evidence
 
-The accepted frontier `s0052r1` on `Qwen/Qwen3-1.7B` has:
+There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
+
+- strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
+  complete ternary decoder block, and 11 complete ternary major matrices;
+- sealed-audited mixed artifact `dd49a9f...`: 77,872,512 ternary weights plus
+  22,790,784 signed-Q4 weights, for 100,663,296 low-bit weights (`5.850983%`),
+  two complete low-bit decoder blocks and 14 complete low-bit major matrices.
+
+The mixed block-24 MLP is `39.625041%` ternary and `60.374959%` Q4 at an
+average `3.332499 bpw`.  On the previously sealed audit-v26 its cumulative
+C4/SQuAD/pandas-code NLL ratios are `0.992737 / 1.002540 / 0.955660`; its
+incremental ratios versus `s0053` are `1.001073 / 1.002089 / 1.002177`, below
+the prospectively declared `1.005` limit.  Audit-v26 is now disclosed.
+
+The strict historical lineage has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
   10.611979% `gate_proj`, and 14.615885% `down_proj`;
-- 75,624,448 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.395617% of major matrix
-  weights accepted;
+- 76,673,024 weights in `{-scale, 0, +scale}` at `s0053`;
+- 11 full major matrices plus three partial matrices and 4.456565% of major
+  matrix weights accepted;
 - recurring validation-v3 NLL ratios `0.996756 / 1.001149 / 0.981170` on C4,
   SQuAD and PyTorch code;
 - recurring validation-v4 ratios `0.996756 / 0.997175 / 0.982353` on C4, a

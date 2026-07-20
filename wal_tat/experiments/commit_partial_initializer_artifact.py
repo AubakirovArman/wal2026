@@ -1,8 +1,8 @@
 """Prospectively validate and commit one frozen partial ternary artifact.
 
 The source checkpoint is immutable.  A new checkpoint is published only when
-the policy, recovery result, artifact, and every recurring-validation audit
-agree by hash and satisfy the policy declared before the candidate was run.
+the policy, recovery result, artifact, and every validation audit agree by hash
+and satisfy limits declared before the relevant one-shot audit was opened.
 """
 from __future__ import annotations
 
@@ -54,6 +54,12 @@ def configured_validation_suites(policy: dict) -> list[dict[str, str]]:
             validation_policy = [
                 {"name": "one_shot_audit", "sha256": one_shot["sha256"]}
             ]
+    if not validation_policy:
+        sealed = policy.get("sealed_audit")
+        if isinstance(sealed, dict) and sealed.get("sha256"):
+            validation_policy = [
+                {"name": "sealed_audit", "sha256": sealed["sha256"]}
+            ]
     require(bool(validation_policy), "policy has no validation suites")
     normalized = [
         {"name": str(item["name"]), "sha256": str(item["sha256"])}
@@ -78,6 +84,8 @@ def validate_audits(
     artifact_hash: str,
 ) -> dict:
     validation_policy = configured_validation_suites(policy)
+    candidate_policy = policy.get("candidate") or policy.get("frozen_candidate")
+    require(isinstance(candidate_policy, dict), "policy has no candidate")
     configured = {item["sha256"]: item["name"] for item in validation_policy}
     required_names = set(
         policy["acceptance"].get(
@@ -105,7 +113,7 @@ def validate_audits(
         require(name not in observed_names, "duplicate recurring-validation audit")
         observed_names.add(name)
         require(
-            int(audit["candidate_groups"]) == int(policy["candidate"]["groups"]),
+            int(audit["candidate_groups"]) == int(candidate_policy["groups"]),
             "audit candidate group count mismatch",
         )
         cumulative = audit["cumulative_candidate_vs_bf16"]
@@ -168,23 +176,50 @@ def main() -> None:
     recovery = load_json(recovery_result_path)
     audits = [load_json(path) for path in audit_paths]
 
+    policy_schema = policy.get("schema")
     require(
-        policy.get("schema") == "wal-tat-predeclared-candidate-policy-v1",
+        policy_schema
+        in {
+            "wal-tat-predeclared-candidate-policy-v1",
+            "wal-tat-predeclared-one-shot-audit-policy-v1",
+        },
         "unsupported policy schema",
     )
-    require(policy.get("created_before_candidate_run") is True, "policy is not prospective")
+    if policy_schema == "wal-tat-predeclared-candidate-policy-v1":
+        require(
+            policy.get("created_before_candidate_run") is True,
+            "candidate policy is not prospective",
+        )
+    else:
+        require(
+            policy.get("declared_before_execution") is True
+            or policy.get("created_before_audit_run") is True,
+            "audit policy is not prospective",
+        )
+    candidate_policy = policy.get("candidate") or policy.get("frozen_candidate")
+    require(isinstance(candidate_policy, dict), "policy has no candidate")
     require(policy["source_frontier"]["sha256"] == checkpoint_hash, "policy frontier mismatch")
     require(recovery["checkpoint_sha256"] == checkpoint_hash, "recovery checkpoint mismatch")
     require(recovery["output_artifact_sha256"] == artifact_hash, "recovery artifact mismatch")
     require(recovery["checkpoint_mutated"] is False, "recovery mutated source checkpoint")
     require(
         int(recovery["norm_parameters_trained"])
-        == int(policy["acceptance"]["norm_parameters_trained_must_equal"]),
+        == int(
+            policy["acceptance"].get(
+                "norm_parameters_trained_must_equal",
+                candidate_policy.get("norm_parameters_trained", 0),
+            )
+        ),
         "recovery trained forbidden norm parameters",
     )
     require(
         int(recovery["previously_committed_groups_trainable"])
-        == int(policy["acceptance"]["previously_committed_groups_trainable_must_equal"]),
+        == int(
+            policy["acceptance"].get(
+                "previously_committed_groups_trainable_must_equal",
+                candidate_policy.get("previously_committed_groups_trainable", 0),
+            )
+        ),
         "recovery trained previously committed groups",
     )
     validation = validate_audits(
@@ -200,11 +235,11 @@ def main() -> None:
         "unsupported artifact schema",
     )
     require(artifact["source_checkpoint_sha256"] == checkpoint_hash, "artifact source mismatch")
-    target_name = policy["candidate"]["target_name"]
+    target_name = candidate_policy["target_name"]
     require(artifact["target_name"] == target_name, "artifact target mismatch")
-    require(int(artifact["group_size"]) == int(policy["candidate"]["group_size"]), "group size mismatch")
+    require(int(artifact["group_size"]) == int(candidate_policy["group_size"]), "group size mismatch")
     require(
-        all(entry["initializer"] == policy["candidate"]["initializer"] for entry in artifact["entries"]),
+        all(entry["initializer"] == candidate_policy["initializer"] for entry in artifact["entries"]),
         "artifact initializer differs from policy",
     )
 
@@ -237,7 +272,7 @@ def main() -> None:
         flat_scales[indices] = new_scales
     indices = torch.cat(all_indices)
     require(indices.unique().numel() == indices.numel(), "artifact entries overlap")
-    require(indices.numel() == int(policy["candidate"]["groups"]), "candidate group count mismatch")
+    require(indices.numel() == int(candidate_policy["groups"]), "candidate group count mismatch")
 
     entry["committed_mask"] = mask
     entry["ternary_codes_int8"] = grouped_codes.reshape_as(codes)
@@ -248,8 +283,8 @@ def main() -> None:
     payload["metadata"] = {
         "experiment": args.tag,
         "mode": (
-            f"prospective D{policy['candidate'].get('sensitivity_decile', 'unknown')} "
-            f"{policy['candidate']['initializer'].replace('_', '-')} "
+            f"prospective D{candidate_policy.get('sensitivity_decile', 'unknown')} "
+            f"{candidate_policy['initializer'].replace('_', '-')} "
             "hard-forward scale recovery"
         ),
         "target_name": target_name,
@@ -266,7 +301,7 @@ def main() -> None:
     }
     after_counts = accepted_weight_counts(payload)
     added = sum(after_counts.values()) - sum(before_counts.values())
-    require(added == int(policy["candidate"]["weights"]), "accepted weight delta mismatch")
+    require(added == int(candidate_policy["weights"]), "accepted weight delta mismatch")
     require(
         sum(after_counts.values()) == int(policy["prospective_if_accepted"]["accepted_weights"]),
         "prospective accepted weight total mismatch",

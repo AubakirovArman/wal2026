@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -8,6 +9,7 @@ import torch
 EXPERIMENTS = Path(__file__).resolve().parents[1] / "experiments"
 sys.path.insert(0, str(EXPERIMENTS))
 
+import build_audit_holdout as audit_builder  # noqa: E402
 from build_audit_holdout import c4_arrow_pattern, text_windows  # noqa: E402
 
 
@@ -30,3 +32,12 @@ def test_c4_train_shard_pattern_is_explicit_and_zero_padded() -> None:
     assert c4_arrow_pattern("validation", 999).endswith("c4-validation.arrow")
     with pytest.raises(ValueError, match="non-negative"):
         c4_arrow_pattern("train", -1)
+
+
+def test_optional_code_source_is_resolved_without_a_hard_import(monkeypatch) -> None:
+    monkeypatch.setattr(
+        audit_builder.importlib.util,
+        "find_spec",
+        lambda name: SimpleNamespace(origin=f"/tmp/{name}/__init__.py"),
+    )
+    assert audit_builder.code_source_directories("scipy") == (Path("/tmp/scipy"),)

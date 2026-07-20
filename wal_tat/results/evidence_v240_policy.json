@@ -1,0 +1,45 @@
+{
+  "schema": "wal-tat-fixed-candidate-development-policy-v1",
+  "evidence_id": "v240",
+  "declared_before_execution": true,
+  "objective": "select one strict ternary initializer for the next 8192 lowest-sensitivity uncommitted down_proj groups from recovered frontier s0052r1",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt",
+    "sha256": "9a7fb038694f2b850eb95b83fd96204aa882c064fbe89df30e8f1f7f9ed67411",
+    "accepted_weights": 75624448
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 1,
+    "groups": 8192,
+    "group_size": 128,
+    "weights": 1048576,
+    "initializers": ["absmean_round", "threshold_ls", "activation_wls"],
+    "selection_rule": "minimize lexicographically (worst development ratio to frontier, sum of development ratios to frontier)"
+  },
+  "development": {
+    "suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+    "script": "wal_tat/experiments/tail_initializer_ablation.py",
+    "script_sha256": "e06474839a440cb5fe8a95c457711fbcc1d76a5b609d701d317d8b1bc50f80d2",
+    "samples_per_domain": 8,
+    "domain_offset": 0,
+    "sequences_per_domain": 64,
+    "threshold_step": 0.125,
+    "threshold_max": 3.0,
+    "seed": 563,
+    "maximum_worst_incremental_ratio_before_recovery": 1.0013063945294842
+  },
+  "audit_firewall": {
+    "reserved_audit": "wal2/cache/wal-tat-audit-holdout-v24-l256-g512.pt",
+    "reserved_audit_sha256": "1a33c555760c80aa5659d969ffa495d307ce4181a2f2af867686bb56b994ce12",
+    "audit_remains_unopened": true
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "do not recover or audit the 8192-group artifact; predeclare a smaller candidate while audit-v24 stays unopened",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/tail_initializer_ablation.py --source-checkpoint wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --candidate-name model.layers.24.mlp.down_proj --tag block24_down_s0052r1_d1g8192_initializer_v1 --deciles 1 --groups-per-decile 8192 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --threshold-step 0.125 --threshold-max 3.0 --seed 563 --device cuda"
+}

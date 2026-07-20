@@ -14,6 +14,18 @@ def soft_ternary_proxy(proxy: torch.Tensor, temperature: float) -> torch.Tensor:
     )
 
 
+def soft_ternary_proxy_derivative(
+    proxy: torch.Tensor, temperature: float
+) -> torch.Tensor:
+    """Analytic derivative of :func:`soft_ternary_proxy` with respect to proxy."""
+    tau = max(float(temperature), 1e-4)
+    positive = torch.sigmoid((proxy - 0.5) / tau)
+    negative = torch.sigmoid((-proxy - 0.5) / tau)
+    return (
+        positive * (1.0 - positive) + negative * (1.0 - negative)
+    ) / tau
+
+
 class ProxyTernaryMatrix(nn.Module):
     """Optimize a scalar proxy per weight while always executing hard codes."""
 

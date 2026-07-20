@@ -1,0 +1,33 @@
+{
+  "schema": "wal-tat-macro-discrete-repair-policy-v1",
+  "evidence_id": "v251",
+  "declared_before_execution": true,
+  "objective": "determine whether first-order adjacent hard-code repair is locally valid at single-digit and tens-of-group budgets",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "development_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened": false,
+  "candidate_new_weights": 23990272,
+  "repair": {
+    "rounds": 1,
+    "gradient_sequences": 128,
+    "loss": {"ce_weight": 0.0, "block_weight": 0.2, "kd_weight": 1.0},
+    "global_group_budgets": [1, 4, 16, 64],
+    "maximum_moves_per_group": 1,
+    "allowed_moves": "adjacent ternary only",
+    "scale_modes": ["fixed", "original_ls"],
+    "norm_parameters_trainable": 0
+  },
+  "acceptance": {
+    "development_cumulative_nll_ratio_limit": 1.02,
+    "strict_ternary_codes_only": true,
+    "must_improve_selection_worst_ratio": true,
+    "audit_is_run_only_after_a_development_pass": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/block_proxy_recovery.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --selection-suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_activation_exact_discrete_micro_s0053_v1 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --complete-target-projections --completion-initializer exact_support --completion-moment-sequences 128 --steps 1 --proxy-lr 1e-12 --proxy-start-step 2 --scale-lr 1e-12 --scale-start-step 2 --ce-weight 0 --block-weight 0 --attention-weight 0 --proxy-anchor-weight 0 --kd-weight 0 --selection-gate-sequences 64 --selection-every 1 --discrete-repair-rounds 1 --discrete-repair-sequences 128 --discrete-repair-group-budgets 1,4,16,64 --discrete-repair-scale-modes fixed,original_ls --discrete-repair-ce-weight 0 --discrete-repair-block-weight 0.2 --discrete-repair-kd-weight 1 --discrete-repair-min-improvement 0.000001 --gate-ratio 1.02 --seed 631 --device cuda"
+}

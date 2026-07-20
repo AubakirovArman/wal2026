@@ -1,0 +1,36 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v238",
+  "declared_before_execution": true,
+  "objective": "seal audit-v23 before selecting the next coverage-growth candidate from s0052r1",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "f2a824535a528ffb887f3884c041a97636a0a99f0a6687c7285de88704cabe1f",
+  "output": "wal2/cache/wal-tat-audit-holdout-v23-l256-g512.pt",
+  "role": "one-shot audit-only; never training, selection, confirmation, or retuning",
+  "configuration": {
+    "sequence_length": 256,
+    "sequences_per_domain": 512,
+    "c4_split": "train",
+    "c4_train_shard": 1,
+    "c4_text_start": 32000,
+    "c4_text_count": 4000,
+    "c4_offset": 100003,
+    "squad_split": "train",
+    "squad_offset": 12400003,
+    "code_source": "pandas",
+    "code_offset": 100003
+  },
+  "ranges": {
+    "c4_train": [100003, 231075],
+    "squad_train_context": [12400003, 12531075],
+    "pandas_code": [100003, 231075]
+  },
+  "requirements": {
+    "output_must_not_exist_before_build": true,
+    "exact_window_overlap_with_every_retained_suite": 0,
+    "declared_range_overlap_on_identical_stream_views": 0,
+    "model_evaluations_before_candidate_freeze": 0,
+    "one_shot_only": true
+  },
+  "command": "PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/build_audit_holdout.py --output wal2/cache/wal-tat-audit-holdout-v23-l256-g512.pt --length 256 --sequences 512 --c4-split train --c4-train-shard 1 --c4-text-start 32000 --c4-text-count 4000 --c4-offset 100003 --squad-split train --squad-offset 12400003 --code-source pandas --code-offset 100003 --policy 'audit-only v23; sealed before next s0052r1 coverage growth; never use for training or model selection'"
+}

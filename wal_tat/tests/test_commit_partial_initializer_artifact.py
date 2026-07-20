@@ -67,6 +67,27 @@ def test_validates_predeclared_one_shot_audit_without_required_name_list() -> No
     assert set(result) == {"one_shot_audit"}
 
 
+def test_validates_split_one_shot_audit_policy() -> None:
+    policy = {
+        "sealed_audit": {"sha256": "suite-v24"},
+        "frozen_candidate": {"groups": 8},
+        "acceptance": acceptance(),
+    }
+    result = validate_audits(
+        [
+            audit(
+                suite_hash="suite-v24",
+                checkpoint_hash="frontier",
+                artifact_hash="candidate",
+            )
+        ],
+        policy,
+        checkpoint_hash="frontier",
+        artifact_hash="candidate",
+    )
+    assert set(result) == {"sealed_audit"}
+
+
 def test_rejects_policy_without_any_validation_suite() -> None:
     with pytest.raises(ValueError, match="no validation suites"):
         configured_validation_suites({})
