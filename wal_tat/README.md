@@ -32,17 +32,18 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `b16392f...`: 78,828,800 ternary, 63,358,080
+- sealed-audited mixed artifact `f7394ff...`: 79,426,432 ternary, 62,760,448
   signed-Q4 and 59,139,712 signed-Q8 weights, for 201,326,592 low-bit weights
   (`11.701966%`), four complete low-bit decoder blocks and 28 complete low-bit
   major matrices.
 
 The mixed block-24 MLP is `39.625041%` ternary and `60.374959%` Q4 at an
-average `3.332499 bpw`. Layer 23 is `62.5%` Q4 and `37.5%` Q8 at `5.625 bpw`.
-On sealed audit-v27 the cumulative C4/SQuAD/datasets-code NLL ratios are
-`0.991963 / 1.005302 / 0.959639`; incremental ratios versus immutable `s0053`
-are `1.001843 / 1.003018 / 1.002363`, below the prospectively declared
-`1.005` limit. Audit-v27 is now disclosed.
+average `3.332499 bpw`. After its first accepted reverse-compression step,
+layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
+`5.601252 bpw`. Sealed audit-v30 ratios are
+`0.992754 / 0.992227 / 0.961534`; incremental ratios versus immutable `s0053`
+are `1.001822 / 1.003343 / 1.003856`, below the prospectively declared
+`1.005` limit. Audit-v30 is now disclosed.
 
 Layer 22 is a conservative deployable upper bound after its first accepted
 reverse-compression step: `1.899974%` Q2, `18.099976%` Q4 and `80.000051%`

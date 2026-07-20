@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  4 / 28 complete, 24 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  28 / 197 complete, 169 remain
-strict ternary weights: 78,828,800 / 1,720,451,072 = 4.581868% in mixed artifact
-Q4 rescue weights:      63,358,080 / 1,720,451,072 = 3.682644%
+strict ternary weights: 79,426,432 / 1,720,451,072 = 4.616605% in mixed artifact
+Q4 rescue weights:      62,760,448 / 1,720,451,072 = 3.647907%
 Q8 rescue weights:      59,139,712 / 1,720,451,072 = 3.437454%
 all low-bit weights:    201,326,592 / 1,720,451,072 = 11.701966%
 remaining high precision: 1,519,124,480 = 88.298034%
@@ -137,6 +137,14 @@ absolute `1.02`. Fixed-code Q4 scale-QAT ухудшил code до `1.021982` и 
 Fresh reload дал `0.994688 / 1.000512 / 1.019039`; one-shot audit-v27 —
 `0.991963 / 1.005302 / 0.959639`, incremental worst `1.003018 <= 1.005`.
 Это завершило третий low-bit decoder block без BF16 в его крупных матрицах.
+
+Первый rate--distortion reverse-compression шаг layer 23 затем перевёл ещё
+`597,632` Q4-веса в строгий Q2. Теперь блок содержит `1.187388%` Q2,
+`61.312612%` Q4 и `37.5%` Q8 при `5.601252 bpw`. Fresh reload дал
+`0.994884 / 1.001022 / 1.019857`; prospectively объявленный audit-v30 —
+`0.992754 / 0.992227 / 0.961534`, incremental worst против immutable strict
+source `1.003856 <= 1.005`. Новый accepted artifact имеет SHA-256
+`f7394ff69e348c89ba424369c004c719df05c55e8d23315687758f3b7d573eeb`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
