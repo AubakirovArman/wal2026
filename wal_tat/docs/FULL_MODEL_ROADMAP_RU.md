@@ -153,6 +153,16 @@ churn равным нулю. На единственном audit-v13 худши�
 `wiki=0.946587`, `code=0.957546`. Audit-v13 закрыт; следующий кандидат требует
 нового audit-v14.
 
+Попытка ускорить следующий шаг до 8,192 D1-групп `down_proj` прошла
+development, но audit-v14 отклонил её по code incremental upper-95:
+`1.001969 > 1.001848`. Новый audit-v15 был заморожен до уменьшения атома.
+Фиксированный 4,096-group retry уже прошёл incremental gate с максимумом
+`1.001094 <= 1.001306`, но выявил pre-existing SQuAD ratio `1.004861` у
+frontier `s0051`; cumulative candidate ratio `1.005260` выше guide
+`1.002198`. Оба кандидата отклонены без изменения coverage. Перед дальнейшим
+ростом требуется coverage-neutral generalization recovery на свежих данных и
+новый sealed audit-v16.
+
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
 uncommitted master weights, сменил только два уже принятых ternary-кода и

@@ -869,6 +869,16 @@ fresh-verifies at `wiki=0.946587`, `code=0.957546`. После fresh reload pare
 и четыре интегрированных/rejected scan artifacts удалены с сохранением их
 SHA-256 и полного JSON lineage.
 
+После этого был проверен ускоренный атом из 8,192 групп `down_proj`. Он прошёл
+development и cumulative point gates audit-v14, но code incremental upper-95
+оказался `1.001969` при пределе `1.001848`; кандидат отклонён. Заранее
+уменьшенный вдвое атом из 4,096 групп прошёл incremental audit-v15 с максимумом
+`1.001094 <= 1.001306`, однако audit-v15 показал pre-existing SQuAD ratio
+`1.004861` у самого `s0051`; candidate ratio `1.005260` нарушил cumulative
+предел `1.002198`. Поэтому coverage остаётся `4.365144%`, а следующий шаг —
+coverage-neutral generalization recovery на свежем development-наборе и новом
+sealed audit.
+
 ### Reference Q2-g128 packer и реальный bpw
 
 Добавлен versioned binary format без pickle overhead. Он хранит mapping
@@ -913,12 +923,12 @@ wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt
 
 ## Следующий технический шаг
 
-1. до нового candidate построить audit-v14 с новыми непересекающимися token
-   ranges и записать его hash/policy;
-2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0051`;
-3. повторить prospective atom по 2,048 групп, уменьшая его только если
-   development gate не проходит; candidate проходит development recovery,
-   frozen audit-v14 и fresh-process reload;
+1. построить свежий development suite, который не пересекается с закрытыми
+   audit-v14/v15, и новый sealed audit-v16;
+2. провести coverage-neutral fallback recovery `s0051`, не меняя ни одного
+   принятого ternary code/scale/mask;
+3. только после успешного audit и fresh reload вернуться к заранее
+   зафиксированному 4,096-group `down_proj` атому;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и

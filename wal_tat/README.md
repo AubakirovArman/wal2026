@@ -124,6 +124,14 @@ The accepted frontier `s0051` on `Qwen/Qwen3-1.7B` has:
   worst incremental upper-95 ratio was `1.000245`, below the prospectively
   declared `1.000924` limit. Atomic checkpoint `s0051` raises coverage to
   75,100,160 weights and fresh-verifies at `wiki=0.946587` and `code=0.957546`;
+- an accelerated 8,192-group `down_proj` candidate passed development and all
+  cumulative point gates on audit-v14, but missed the code incremental
+  upper-95 limit by `0.000121`; it was rejected without changing `s0051`;
+- the predeclared 4,096-group retry passed its incremental audit-v15 gate, but
+  audit-v15 exposed a pre-existing `s0051` SQuAD ratio of `1.004861`. The
+  candidate reached `1.005260`, above the cumulative `1.002198` guide, so it
+  too was rejected. Coverage-neutral generalization recovery is required
+  before the next coverage transaction;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);

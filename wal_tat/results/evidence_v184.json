@@ -1,0 +1,17 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v184",
+  "title": "Common 8192-group three-target scan is infeasible because up_proj D1 is smaller",
+  "policy": "wal_tat/results/evidence_v184_policy.json",
+  "policy_sha256": "b15acebe17e59cc0d5647a4c5b527415298a1772e6d4b1e5427a9314841b0a8a",
+  "attempted_target": "model.layers.24.mlp.up_proj",
+  "requested_groups": 8192,
+  "available_groups_in_decile": 2380,
+  "failure": "count 8192 exceeds decile size 2380",
+  "failed_before_artifact_creation": true,
+  "checkpoint_sha256_after_failure": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "checkpoint_mutated": false,
+  "audit_v14_opened": false,
+  "status": "rejected as infeasible",
+  "next_required_action": "predeclare an 8192-group scan restricted to down_proj and gate_proj; handle up_proj with a separate smaller atom"
+}

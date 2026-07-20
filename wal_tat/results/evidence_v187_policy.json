@@ -1,0 +1,35 @@
+{
+  "schema": "wal-tat-audit-execution-policy-v1",
+  "policy_id": "evidence-v187-audit-v14-execution",
+  "date_utc": "2026-07-20",
+  "created_before_audit_run": true,
+  "candidate_policy": "wal_tat/results/evidence_v186_policy.json",
+  "candidate_policy_sha256": "2949c2b98428d13ba628fd30260ddd496c9eed42ac2094d22fff30759ae0eb77",
+  "development_evidence": "wal_tat/results/evidence_v186.json",
+  "development_evidence_sha256": "b43a85accfdf9bd1a9de5a7cf8aab7a9980936db092aebd77545d089ff0a1f87",
+  "source_checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "frozen_artifact_sha256": "82be588871c2d14ea2cd177d623947cde0363c322fcba199118b6f0c2d9f88dc",
+  "audit_suite_sha256": "16e6243acf080e898e4ec374b66a30374146a3bd2a7e481f1b599d50b8db330f",
+  "audit_script_sha256": "81b1f842fe5a6c9e87cf3ea71444aba4f27eefadb73849c84fda08ce26154dd3",
+  "audit_seed": 359,
+  "acceptance": {
+    "cumulative_point_ratio_max_each_domain": 1.0022130456727107,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0018475208614066,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "confidence": 0.95,
+    "all_domains_must_pass": true,
+    "no_retuning_after_audit": true
+  },
+  "commit_validator": {
+    "path": "wal_tat/experiments/commit_partial_initializer_artifact.py",
+    "sha256": "3664211adc1f32380b6e11fe86dcaea5b473908c67ba62c48a8267bf6cf585f8"
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "failure_action": "close audit-v14, do not commit the candidate, and preserve s0051",
+  "success_action": "commit the exact frozen artifact into s0052 and require fresh-process verification",
+  "audit_command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/partial_initializer_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt ../wal2/artifacts/wal-tat-block24_down_s0051_d1g8192_absmean_proxy_v1.pt ../wal2/cache/wal-tat-audit-holdout-v14-l256-g512.pt --tag block24_down_s0051_d1g8192_absmean_proxy_v1_audit_v14 --gate-ratio 1.0022130456727107 --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 359 --entry-decile 1 --suite-role 'one-shot audit-only v14; frozen 8192-group artifact; no gradient updates or retuning' --device cuda"
+}
