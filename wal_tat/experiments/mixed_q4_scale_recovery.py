@@ -1,4 +1,4 @@
-"""Recover a mixed frontier by training only fixed-code Q4 group scales."""
+"""Recover a mixed frontier with hard-forward Q4 scales and code proxies."""
 from __future__ import annotations
 
 import argparse
@@ -41,7 +41,7 @@ PROJECTION_MAP = {
 
 
 class FixedCodeMixedScaleLinear(nn.Module):
-    """Keep Q2/Q4 codes fixed and train positive Q4 scales only."""
+    """Keep Q2 fixed while training positive Q4 scales and optional code proxies."""
 
     def __init__(
         self,
@@ -49,6 +49,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
         *,
         max_abs_log_scale_delta: float,
         bias: torch.Tensor | None,
+        train_codes: bool = False,
     ):
         super().__init__()
         if max_abs_log_scale_delta <= 0:
@@ -58,7 +59,10 @@ class FixedCodeMixedScaleLinear(nn.Module):
         self.columns = columns
         self.register_buffer("q2_codes", entry["q2_codes_int8"].float())
         self.register_buffer("q2_scales", entry["q2_scales_fp16"].float())
-        self.register_buffer("q4_codes", entry["q4_codes_int8"].float())
+        self.register_buffer("base_q4_codes", entry["q4_codes_int8"].float())
+        self.proxy_code = nn.Parameter(
+            self.base_q4_codes.clone(), requires_grad=bool(train_codes)
+        )
         self.register_buffer("base_q4_scales", entry["q4_scales_fp16"].float())
         self.register_buffer("q4_mask", entry["q4_mask"].bool())
         self.log_scale_delta = nn.Parameter(torch.zeros_like(self.base_q4_scales))
@@ -79,7 +83,9 @@ class FixedCodeMixedScaleLinear(nn.Module):
 
     def effective_weight(self) -> torch.Tensor:
         q2 = self.q2_codes * self.q2_scales.unsqueeze(-1)
-        q4 = self.q4_codes * self.effective_q4_scales().unsqueeze(-1)
+        hard = self.proxy_code.round().clamp(-8, 7)
+        codes = hard.detach() + self.proxy_code - self.proxy_code.detach()
+        q4 = codes * self.effective_q4_scales().unsqueeze(-1)
         grouped = torch.where(self.q4_mask.unsqueeze(-1), q4, q2)
         return grouped.reshape(self.rows, -1)[:, : self.columns]
 
@@ -92,10 +98,38 @@ class FixedCodeMixedScaleLinear(nn.Module):
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
         self.log_scale_delta.masked_fill_(~self.q4_mask, 0)
+        self.proxy_code.clamp_(-8, 7)
+        self.proxy_code[~self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)] = (
+            self.base_q4_codes[
+                ~self.q4_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
+            ]
+        )
 
     @torch.no_grad()
     def deploy_scales(self) -> torch.Tensor:
         return self.effective_q4_scales().half().cpu()
+
+    @torch.no_grad()
+    def deploy_codes(self) -> torch.Tensor:
+        return self.proxy_code.round().clamp(-8, 7).to(torch.int8).cpu()
+
+    @torch.no_grad()
+    def code_churn(self) -> float:
+        changed = self.deploy_codes().to(self.base_q4_codes.device).ne(
+            self.base_q4_codes.to(torch.int8)
+        )
+        return float(changed[self.q4_mask.unsqueeze(-1).expand_as(changed)].float().mean())
+
+    @torch.no_grad()
+    def proxy_statistics(self) -> dict[str, float]:
+        active = self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        displacement = (self.proxy_code - self.base_q4_codes).abs()[active]
+        boundary_distance = (self.proxy_code - self.proxy_code.round()).abs()[active]
+        return {
+            "mean_abs_displacement": float(displacement.mean()),
+            "max_abs_displacement": float(displacement.max()),
+            "near_boundary_fraction": float((boundary_distance >= 0.45).float().mean()),
+        }
 
 
 def parse_args() -> argparse.Namespace:
@@ -103,6 +137,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-checkpoint", type=Path, required=True)
     parser.add_argument("--parent-artifact", type=Path, required=True)
     parser.add_argument("--candidate-artifact", type=Path, required=True)
+    parser.add_argument(
+        "--teacher-artifact",
+        type=Path,
+        help="optional accepted mixed artifact used instead of raw BF16 as teacher",
+    )
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
@@ -114,6 +153,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--steps", type=int, default=256)
     parser.add_argument("--train-sequences", type=int, default=256)
     parser.add_argument("--lr", type=float, default=2e-4)
+    parser.add_argument(
+        "--proxy-lr",
+        type=float,
+        default=0.0,
+        help="positive value enables hard-forward Q4 code proxy updates",
+    )
     parser.add_argument("--ce-weight", type=float, default=0.0)
     parser.add_argument("--block-weight", type=float, default=0.1)
     parser.add_argument("--kd-weight", type=float, default=1.0)
@@ -121,6 +166,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--kd-stride", type=int, default=4)
     parser.add_argument("--kd-temperature", type=float, default=2.0)
     parser.add_argument("--max-abs-log-scale-delta", type=float, default=0.2)
+    parser.add_argument("--code-anchor-weight", type=float, default=0.0)
     parser.add_argument("--selection-gate-sequences", type=int, default=64)
     parser.add_argument("--selection-every", type=int, default=64)
     parser.add_argument("--gate-ratio", type=float, default=1.02)
@@ -174,6 +220,7 @@ def main() -> None:
     source_path = args.source_checkpoint.resolve()
     parent_path = args.parent_artifact.resolve()
     candidate_path = args.candidate_artifact.resolve()
+    teacher_path = args.teacher_artifact.resolve() if args.teacher_artifact else None
     suite_path = args.suite.resolve()
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(source_path)
@@ -213,9 +260,27 @@ def main() -> None:
     model = load_model(model_path, args.device)
     baseline = evaluate_domains(model, gates, args.device)
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
+    if teacher_path is not None:
+        teacher_artifact = torch.load(
+            teacher_path, map_location="cpu", weights_only=False
+        )
+        install_checkpoint(model, source_payload, args.device)
+        install_mixed_q2_q4_artifact(
+            model,
+            teacher_artifact,
+            source_payload,
+            device=args.device,
+            expected_source_sha256=source_hash,
+        )
     teacher = cache_teacher(
         model, calibration, args.target_layer, args.device, args
     )
+    if teacher_path is not None:
+        del model
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        model = load_model(model_path, args.device)
     install_checkpoint(model, source_payload, args.device)
     install_mixed_q2_q4_artifact(
         model,
@@ -243,12 +308,20 @@ def main() -> None:
             candidate_artifact["matrices"][name],
             max_abs_log_scale_delta=args.max_abs_log_scale_delta,
             bias=target.bias,
+            train_codes=args.proxy_lr > 0,
         ).to(args.device)
         set_submodule(model, name, layer)
         layers[name] = layer
 
-    parameters = [layer.log_scale_delta for layer in layers.values()]
-    optimizer = torch.optim.AdamW(parameters, lr=args.lr, weight_decay=0.0)
+    scale_parameters = [layer.log_scale_delta for layer in layers.values()]
+    proxy_parameters = (
+        [layer.proxy_code for layer in layers.values()] if args.proxy_lr > 0 else []
+    )
+    parameters = scale_parameters + proxy_parameters
+    parameter_groups = [{"params": scale_parameters, "lr": args.lr}]
+    if proxy_parameters:
+        parameter_groups.append({"params": proxy_parameters, "lr": args.proxy_lr})
+    optimizer = torch.optim.AdamW(parameter_groups, weight_decay=0.0)
     capture = {}
     handle = model.model.layers[args.target_layer].register_forward_hook(
         lambda _module, _inputs, output: capture.__setitem__(
@@ -260,6 +333,10 @@ def main() -> None:
     best_step = 0
     best_deltas = {
         name: layer.log_scale_delta.detach().cpu().clone()
+        for name, layer in layers.items()
+    }
+    best_proxies = {
+        name: layer.proxy_code.detach().cpu().clone()
         for name, layer in layers.items()
     }
     history = []
@@ -279,7 +356,30 @@ def main() -> None:
             )
             kd = bucket_kl(logits, teacher[item], args)
             block = normalized_mse(capture["block"], teacher[item]["block"])
-            loss = args.ce_weight * ce + args.kd_weight * kd + args.block_weight * block
+            code_anchor = torch.stack(
+                [
+                    (
+                        layer.proxy_code[
+                            layer.q4_mask.unsqueeze(-1).expand_as(layer.proxy_code)
+                        ]
+                        - layer.base_q4_codes[
+                            layer.q4_mask.unsqueeze(-1).expand_as(
+                                layer.base_q4_codes
+                            )
+                        ]
+                    )
+                    .float()
+                    .square()
+                    .mean()
+                    for layer in layers.values()
+                ]
+            ).mean()
+            loss = (
+                args.ce_weight * ce
+                + args.kd_weight * kd
+                + args.block_weight * block
+                + args.code_anchor_weight * code_anchor
+            )
             loss.backward()
             gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
             optimizer.step()
@@ -299,6 +399,10 @@ def main() -> None:
                         name: layer.log_scale_delta.detach().cpu().clone()
                         for name, layer in layers.items()
                     }
+                    best_proxies = {
+                        name: layer.proxy_code.detach().cpu().clone()
+                        for name, layer in layers.items()
+                    }
                 model.train()
             if step == 1 or step % args.selection_every == 0 or step == args.steps:
                 entry = {
@@ -307,6 +411,14 @@ def main() -> None:
                     "kd": float(kd.item()),
                     "block": float(block.item()),
                     "gradient_norm": float(gradient_norm),
+                    "code_anchor": float(code_anchor.item()),
+                    "code_churn": {
+                        name: layer.code_churn() for name, layer in layers.items()
+                    },
+                    "proxy_statistics": {
+                        name: layer.proxy_statistics()
+                        for name, layer in layers.items()
+                    },
                     "selection_ratios": selection_ratios,
                     "best_step": best_step,
                 }
@@ -324,6 +436,7 @@ def main() -> None:
     with torch.no_grad():
         for name, layer in layers.items():
             layer.log_scale_delta.copy_(best_deltas[name].to(args.device))
+            layer.proxy_code.copy_(best_proxies[name].to(args.device))
     attempted = evaluate_domains(model, gates, args.device)
     attempted_selection = evaluate_domains(model, selection_gates, args.device)
     attempted_ratios = ratios(attempted, baseline)
@@ -346,18 +459,21 @@ def main() -> None:
         recovered = copy.deepcopy(candidate_artifact)
         for name, layer in layers.items():
             recovered["matrices"][name]["q4_scales_fp16"] = layer.deploy_scales()
+            recovered["matrices"][name]["q4_codes_int8"] = layer.deploy_codes()
         recovered["parent_artifact_sha256"] = sha256_file(parent_path)
         recovered["scale_recovery"] = {
             "source_candidate_sha256": sha256_file(candidate_path),
             "best_step": best_step,
+            "proxy_lr": args.proxy_lr,
             "development_ratios": attempted_ratios,
             "development_incremental_ratios_vs_parent": attempted_incremental,
         }
-        artifact_path = (
-            source_path.parents[1]
-            / "artifacts"
-            / f"wal-tat-{args.tag}-mixed-q2-q4.pt"
+        suffix = (
+            "mixed-q2-q4-q8.pt"
+            if recovered.get("format") == "wal-tat-mixed-q2-q4-q8-v1"
+            else "mixed-q2-q4.pt"
         )
+        artifact_path = source_path.parents[1] / "artifacts" / f"wal-tat-{args.tag}-{suffix}"
         torch.save(recovered, artifact_path)
         artifact_sha256 = sha256_file(artifact_path)
 
@@ -370,6 +486,10 @@ def main() -> None:
         "parent_artifact_sha256": sha256_file(parent_path),
         "candidate_artifact": str(candidate_path),
         "candidate_artifact_sha256": sha256_file(candidate_path),
+        "teacher_artifact": str(teacher_path) if teacher_path is not None else None,
+        "teacher_artifact_sha256": (
+            sha256_file(teacher_path) if teacher_path is not None else None
+        ),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
         "target_layer": args.target_layer,
@@ -377,10 +497,12 @@ def main() -> None:
         "steps": args.steps,
         "train_sequences": args.train_sequences,
         "lr": args.lr,
+        "proxy_lr": args.proxy_lr,
         "weights": {
             "ce": args.ce_weight,
             "kd": args.kd_weight,
             "block": args.block_weight,
+            "code_anchor": args.code_anchor_weight,
         },
         "baseline": baseline,
         "parent": parent,

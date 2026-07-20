@@ -146,9 +146,25 @@ reload дал `0.994716 / 1.000847 / 1.019173`; audit-v28 —
 полный low-bit block, но одновременно сигнал остановить слепое накопление Q8 и
 добавить reverse-distillation Q8→Q4→Q2.
 
+Первый reverse-distillation audit показал границу прямого Q8-teacher→Q4
+восстановления. Scale-only recovery не улучшил full-Q4 candidate. При
+hard-forward Q4 proxy с `lr=0.005` codes практически не пересекали ячейки; с
+`lr=0.02` на лучшем шаге 64 изменилось около `0.05–0.19%` codes, но code ratio
+остался `1.021875 > 1.02`. При `4–5.5%` churn на шаге 128 качество резко
+ухудшилось. Оба кандидата отклонены, accepted artifact не изменён. Это
+обосновывает staged collapse с отдельным восстановлением и freeze на каждой
+ступени, а не дальнейший brute-force подбор proxy learning rate.
+
 Следующий этап — versioned packed Q2/Q4/Q8 layout и перенос composable compiler
 на следующие блоки. Параллельно strict research продолжает progressive
-`Q4 -> 7 -> 5 -> 3`, transform-space и joint codebook recovery.
+`Q4 -> 7 -> 5 -> 3`, transform-space и joint codebook recovery. Для этой ветки
+добавлен общий activation-weighted projector нечётных symmetric codebooks;
+первый end-to-end staged run остаётся checkpoint-neutral до прохождения gate.
+
+Отдельная family-transfer гипотеза: сравнить одинаковый ternary recipe на
+обычном BF16, Q4-QAT-unquantized master checkpoint и деквантизированном Q4.
+Она проверит, является ли Q4-QAT basin более удобным low-bit manifold. Этот
+Gemma-эксперимент не заменяет и не задерживает текущую Qwen campaign.
 
 ### Историческая strict lineage block 24
 

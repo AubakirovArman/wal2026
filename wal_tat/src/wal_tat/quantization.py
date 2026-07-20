@@ -119,19 +119,18 @@ def q2_g128_physical_bpw(group_size: int = 128, scale_bits: int = 16) -> float:
 
 
 @torch.no_grad()
-def weighted_symmetric_integer_project(
+def weighted_symmetric_bounded_project(
     weight: torch.Tensor,
     input_second_moment: torch.Tensor,
     *,
-    bits: int,
+    lower: int,
+    upper: int,
     group_size: int = 128,
     iterations: int = 4,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    """Activation-weighted symmetric signed-integer projection per group."""
-    if bits not in {4, 8}:
-        raise ValueError("only signed INT4 and INT8 projections are supported")
-    lower = -(1 << (bits - 1))
-    upper = (1 << (bits - 1)) - 1
+    """Activation-weighted bounded-integer projection per input group."""
+    if lower >= 0 or upper <= 0 or lower >= upper:
+        raise ValueError("code bounds must span zero")
     if input_second_moment.ndim != 1 or input_second_moment.numel() != weight.shape[1]:
         raise ValueError("input_second_moment must match weight input features")
     if iterations < 1:
@@ -156,6 +155,51 @@ def weighted_symmetric_integer_project(
         moment * (grouped - codes.float() * scale.unsqueeze(-1)).square()
     ).sum(-1)
     return codes, scale, error
+
+
+@torch.no_grad()
+def weighted_symmetric_integer_project(
+    weight: torch.Tensor,
+    input_second_moment: torch.Tensor,
+    *,
+    bits: int,
+    group_size: int = 128,
+    iterations: int = 4,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Activation-weighted symmetric signed-integer projection per group."""
+    if bits not in {4, 8}:
+        raise ValueError("only signed INT4 and INT8 projections are supported")
+    return weighted_symmetric_bounded_project(
+        weight,
+        input_second_moment,
+        lower=-(1 << (bits - 1)),
+        upper=(1 << (bits - 1)) - 1,
+        group_size=group_size,
+        iterations=iterations,
+    )
+
+
+@torch.no_grad()
+def weighted_symmetric_odd_level_project(
+    weight: torch.Tensor,
+    input_second_moment: torch.Tensor,
+    *,
+    levels: int,
+    group_size: int = 128,
+    iterations: int = 4,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Project to an odd symmetric codebook such as 7, 5, or 3 levels."""
+    if levels < 3 or levels > 255 or levels % 2 == 0:
+        raise ValueError("levels must be an odd integer in [3, 255]")
+    radius = levels // 2
+    return weighted_symmetric_bounded_project(
+        weight,
+        input_second_moment,
+        lower=-radius,
+        upper=radius,
+        group_size=group_size,
+        iterations=iterations,
+    )
 
 
 @torch.no_grad()

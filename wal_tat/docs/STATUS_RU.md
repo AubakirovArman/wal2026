@@ -94,6 +94,13 @@ packed deploy-файлом. Расчётный packed payload этих low-bit �
 Он прошёл fresh development и sealed audit-v28. Ни Q4/Q8-веса, ни mixed
 coverage не прибавляются к strict ternary счётчику.
 
+Две checkpoint-neutral попытки обратно заменить полный Q4 `layer 22` вместо
+принятого Q8 fallback отклонены. Малый proxy learning rate почти не менял
+hard codes; более высокий дал полезные flips только в очень узкой области и
+затем быстро ухудшил все домены. Лучший full-Q4 code ratio равен `1.021875`,
+что выше неизменённого development gate `1.02`. Поэтому следующий reverse
+шаг — staged hard codebook collapse `Q4→7→5→3`, а не ослабление порога.
+
 Ниже сохранена историческая validation lineage.
 
 Исторический frontier `s0052r1`: coverage-атом `s0052` добавил к

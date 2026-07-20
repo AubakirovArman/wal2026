@@ -50,6 +50,7 @@ from .quantization import (
     q8_g128_physical_bpw,
     q2_g128_physical_bpw,
     transaction_schedule,
+    weighted_symmetric_odd_level_project,
     weighted_symmetric_q4_project,
     weighted_symmetric_q8_project,
 )
@@ -130,6 +131,7 @@ __all__ = [
     "q2_g128_physical_bpw",
     "q4_g128_physical_bpw",
     "q8_g128_physical_bpw",
+    "weighted_symmetric_odd_level_project",
     "weighted_symmetric_q4_project",
     "weighted_symmetric_q8_project",
     "paired_block_bootstrap_nll",

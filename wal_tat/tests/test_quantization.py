@@ -16,6 +16,7 @@ from wal_tat import (
     select_group_mask,
     sensitivity_decile_mask,
     transaction_schedule,
+    weighted_symmetric_odd_level_project,
     weighted_symmetric_q4_project,
     weighted_symmetric_q8_project,
 )
@@ -67,6 +68,30 @@ def test_weighted_q8_project_uses_full_signed_int8_range():
     reconstructed = codes.float() * scales.unsqueeze(-1)
     assert torch.allclose(reconstructed.reshape_as(weight), weight, atol=1e-4)
     assert error.item() == pytest.approx(0.0, abs=1e-6)
+
+
+def test_weighted_odd_level_projection_supports_progressive_collapse():
+    weight = torch.tensor([[4.0, 2.0, 0.2, -3.0]])
+    moment = torch.ones(4)
+    previous_error = None
+    for levels in (7, 5, 3):
+        codes, scales, error = weighted_symmetric_odd_level_project(
+            weight, moment, levels=levels, group_size=4
+        )
+        radius = levels // 2
+        assert int(codes.min()) >= -radius
+        assert int(codes.max()) <= radius
+        assert scales.shape == error.shape == (1, 1)
+        if previous_error is not None:
+            assert float(error) >= previous_error - 1e-6
+        previous_error = float(error)
+
+
+def test_weighted_odd_level_projection_rejects_even_codebooks():
+    with pytest.raises(ValueError, match="odd integer"):
+        weighted_symmetric_odd_level_project(
+            torch.ones(1, 4), torch.ones(4), levels=4, group_size=4
+        )
 
 
 def test_fisher_score_uses_causal_moments():
