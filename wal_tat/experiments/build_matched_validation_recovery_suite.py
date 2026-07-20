@@ -11,10 +11,14 @@ import hashlib
 from pathlib import Path
 
 import torch
-import transformers
 from transformers import AutoTokenizer
 
-from build_audit_holdout import arrow_column, one_file
+from build_audit_holdout import (
+    arrow_column,
+    c4_arrow_pattern,
+    code_source_directories,
+    one_file,
+)
 from compensation_window import WORKSPACE, default_model_path, sha256_file
 
 
@@ -37,19 +41,17 @@ def windows(ids: torch.Tensor, *, count: int, length: int, offset: int):
 
 
 def code_corpus(source: str) -> tuple[list[Path], list[str]]:
-    if source == "torch":
-        root = Path(torch.__file__).resolve().parent
-    elif source == "transformers":
-        root = Path(transformers.__file__).resolve().parent
-    else:
-        raise ValueError(f"unsupported code source: {source}")
-    paths = sorted(root.rglob("*.py"))[:400]
+    roots = code_source_directories(source)
+    paths = []
+    for root in roots:
+        paths.extend(sorted(root.rglob("*.py")))
+    paths = paths[:400]
     texts = [
         f"# source: {path}\n{path.read_text(encoding='utf-8', errors='ignore')}"
         for path in paths
     ]
     if not texts:
-        raise RuntimeError(f"no Python files found under {root}")
+        raise RuntimeError(f"no Python files found for {source}")
     return paths, texts
 
 
@@ -60,6 +62,34 @@ def interleave(calibration_by_domain: dict[str, list[torch.Tensor]], repeats: di
             for repeat in range(repeats[domain]):
                 result.append(calibration_by_domain[domain][repeat * base_count + index])
     return result
+
+
+def resolved_domain_offsets(args, domains: dict[str, str]) -> tuple[dict, dict]:
+    """Resolve optional per-source offsets while preserving the old CLI."""
+    calibration = {
+        domains[family]: (
+            getattr(args, f"{family}_calibration_offset")
+            if getattr(args, f"{family}_calibration_offset") is not None
+            else args.calibration_offset
+        )
+        for family in domains
+    }
+    gates = {
+        domains[family]: (
+            getattr(args, f"{family}_gate_offset")
+            if getattr(args, f"{family}_gate_offset") is not None
+            else args.gate_offset
+        )
+        for family in domains
+    }
+    return calibration, gates
+
+
+def resolved_calibration_strides(args, domains: dict[str, str]) -> dict:
+    return {
+        domains[family]: getattr(args, f"{family}_calibration_stride")
+        for family in domains
+    }
 
 
 def main() -> None:
@@ -75,6 +105,14 @@ def main() -> None:
         "--c4-split", choices=("validation", "train"), default="validation"
     )
     parser.add_argument(
+        "--c4-train-shard",
+        type=int,
+        default=0,
+        help="Zero-based cached C4 train Arrow shard; ignored for validation.",
+    )
+    parser.add_argument("--c4-text-start", type=int, default=0)
+    parser.add_argument("--c4-text-count", type=int, default=4000)
+    parser.add_argument(
         "--squad-split", choices=("validation", "train"), default="validation"
     )
     parser.add_argument("--calibration-per-domain", type=int, default=64)
@@ -84,8 +122,29 @@ def main() -> None:
     parser.add_argument("--gates-per-domain", type=int, default=256)
     parser.add_argument("--calibration-offset", type=int, default=1_100_003)
     parser.add_argument("--gate-offset", type=int, default=1_200_003)
+    for family in ("c4", "squad", "code"):
+        parser.add_argument(
+            f"--{family}-calibration-offset",
+            type=int,
+            help="Override --calibration-offset for this source only.",
+        )
+        parser.add_argument(
+            f"--{family}-gate-offset",
+            type=int,
+            help="Override --gate-offset for this source only.",
+        )
+        parser.add_argument(
+            f"--{family}-calibration-stride",
+            type=int,
+            help=(
+                "Separate repeated calibration segments by this many tokens; "
+                "the default keeps them contiguous."
+            ),
+        )
     parser.add_argument(
-        "--code-source", choices=("torch", "transformers"), default="torch"
+        "--code-source",
+        choices=("torch", "transformers", "numpy", "datasets"),
+        default="torch",
     )
     parser.add_argument("--interleave-calibration", action="store_true")
     parser.add_argument(
@@ -98,21 +157,22 @@ def main() -> None:
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(args.output)
-    if args.calibration_offset == args.gate_offset:
-        raise ValueError("calibration and gate offsets must differ")
+    if args.c4_text_start < 0 or args.c4_text_count < 1:
+        raise ValueError("C4 text start/count must be non-negative/positive")
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
     if args.c4_split == "validation":
         c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
     else:
-        c4_path = one_file(
-            "allenai___c4/default-b*/0.0.0/*/c4-train-00000-of-*.arrow"
-        )
+        c4_path = one_file(c4_arrow_pattern("train", args.c4_train_shard))
     squad_path = one_file(
         f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
     )
-    c4_texts = arrow_column(c4_path, "text")[:4000]
+    all_c4_texts = arrow_column(c4_path, "text")
+    c4_texts = all_c4_texts[
+        args.c4_text_start : args.c4_text_start + args.c4_text_count
+    ]
     squad_texts = arrow_column(squad_path, "context")
     code_paths, code_texts = code_corpus(args.code_source)
     c4_domain = f"c4_{args.c4_split}"
@@ -122,6 +182,13 @@ def main() -> None:
         else "squad_train_context"
     )
     code_domain = f"{args.code_source}_code"
+    domains = {
+        "c4": c4_domain,
+        "squad": squad_domain,
+        "code": code_domain,
+    }
+    calibration_offsets, gate_offsets = resolved_domain_offsets(args, domains)
+    calibration_strides = resolved_calibration_strides(args, domains)
     token_sources = {
         c4_domain: tokenize(tokenizer, c4_texts),
         squad_domain: tokenize(tokenizer, squad_texts),
@@ -133,19 +200,45 @@ def main() -> None:
         code_domain: args.code_calibration_repeat,
     }
     calibration_by_domain = {}
+    calibration_ranges = {}
     gates = {}
     for domain, ids in token_sources.items():
-        calibration_by_domain[domain] = windows(
-            ids,
-            count=args.calibration_per_domain * repeats[domain],
-            length=args.length,
-            offset=args.calibration_offset,
+        segment_span = args.calibration_per_domain * args.length
+        requested_stride = calibration_strides[domain]
+        stride = requested_stride if requested_stride is not None else segment_span
+        if stride < segment_span:
+            raise ValueError(f"calibration segments overlap for {domain}")
+        segments = [
+            [
+                calibration_offsets[domain] + repeat * stride,
+                calibration_offsets[domain] + repeat * stride + segment_span,
+            ]
+            for repeat in range(repeats[domain])
+        ]
+        gate_end = gate_offsets[domain] + args.gates_per_domain * args.length
+        for start, end in segments:
+            if max(start, gate_offsets[domain]) < min(end, gate_end):
+                raise ValueError(f"calibration and gate ranges overlap for {domain}")
+        calibration_by_domain[domain] = []
+        for start, _ in segments:
+            calibration_by_domain[domain].extend(
+                windows(
+                    ids,
+                    count=args.calibration_per_domain,
+                    length=args.length,
+                    offset=start,
+                )
+            )
+        calibration_ranges[domain] = (
+            segments
+            if requested_stride is not None
+            else [segments[0][0], segments[-1][1]]
         )
         gates[domain] = windows(
             ids,
             count=args.gates_per_domain,
             length=args.length,
-            offset=args.gate_offset,
+            offset=gate_offsets[domain],
         )
     if args.interleave_calibration:
         calibration = interleave(
@@ -161,17 +254,13 @@ def main() -> None:
     sources = [c4_path, squad_path, *code_paths]
     ranges = {
         "calibration": {
-            domain: [
-                args.calibration_offset,
-                args.calibration_offset
-                + args.calibration_per_domain * repeats[domain] * args.length,
-            ]
+            domain: calibration_ranges[domain]
             for domain in token_sources
         },
         "gates": {
             domain: [
-                args.gate_offset,
-                args.gate_offset + args.gates_per_domain * args.length,
+                gate_offsets[domain],
+                gate_offsets[domain] + args.gates_per_domain * args.length,
             ]
             for domain in token_sources
         },
@@ -188,6 +277,9 @@ def main() -> None:
         "gates_per_domain": args.gates_per_domain,
         "calibration_offset": args.calibration_offset,
         "gate_offset": args.gate_offset,
+        "domain_calibration_offsets": calibration_offsets,
+        "domain_gate_offsets": gate_offsets,
+        "domain_calibration_strides": calibration_strides,
         "interleave_calibration": args.interleave_calibration,
         "source_splits": {
             c4_domain: f"c4 {args.c4_split}",
@@ -198,6 +290,11 @@ def main() -> None:
             "c4": args.c4_split,
             "squad": args.squad_split,
         },
+        "c4_train_shard": (
+            args.c4_train_shard if args.c4_split == "train" else None
+        ),
+        "c4_text_start": args.c4_text_start,
+        "c4_text_count": args.c4_text_count,
         "code_source": args.code_source,
         "ranges": ranges,
         "calibration": calibration,

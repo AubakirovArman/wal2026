@@ -71,3 +71,26 @@ def test_train_and_validation_arrow_sources_have_distinct_identities():
         train, "squad_train_context"
     )
     assert source_ranges(validation).keys() != source_ranges(train).keys()
+
+
+def test_c4_text_slices_have_distinct_stream_identities():
+    common = {
+        "model_revision": "revision",
+        "sources": ["/cache/c4-train-00001-of-00002.arrow"],
+        "source_sha256": {"/cache/c4-train-00001-of-00002.arrow": "c4-sha"},
+    }
+    first = {**common, "c4_text_start": 0, "c4_text_count": 4000}
+    second = {**common, "c4_text_start": 4000, "c4_text_count": 4000}
+    assert stream_identity(first, "c4_train") != stream_identity(second, "c4_train")
+
+
+def test_segmented_ranges_are_expanded_for_overlap_checks():
+    payload = {
+        "full_token_stream_sha256": {"squad": "full"},
+        "ranges": {"calibration": {"squad": [[100, 200], [500, 600]]}},
+    }
+    ranges = source_ranges(payload)["full"]
+    assert [(item["start"], item["end"]) for item in ranges] == [
+        (100, 200),
+        (500, 600),
+    ]

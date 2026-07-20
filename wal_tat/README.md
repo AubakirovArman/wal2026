@@ -25,13 +25,13 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0051` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0052r1` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
-  10.611979% `gate_proj`, and 10.44921875% `down_proj`;
-- 75,100,160 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.365144% of major matrix
+  10.611979% `gate_proj`, and 14.615885% `down_proj`;
+- 75,624,448 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.395617% of major matrix
   weights accepted;
 - recurring validation-v3 NLL ratios `0.996756 / 1.001149 / 0.981170` on C4,
   SQuAD and PyTorch code;
@@ -130,8 +130,24 @@ The accepted frontier `s0051` on `Qwen/Qwen3-1.7B` has:
 - the predeclared 4,096-group retry passed its incremental audit-v15 gate, but
   audit-v15 exposed a pre-existing `s0051` SQuAD ratio of `1.004861`. The
   candidate reached `1.005260`, above the cumulative `1.002198` guide, so it
-  too was rejected. Coverage-neutral generalization recovery is required
-  before the next coverage transaction;
+  too was rejected;
+- two coverage-neutral recoveries and fresh disjoint development/audit pairs
+  restored enough cross-domain margin to retry the same frozen 4,096-group
+  `down_proj` atom from `s0051r2`. It passed audit-v19 with cumulative worst
+  ratio `0.995173` and incremental upper-95 worst `1.000710`, below the
+  predeclared `1.001306` limit. Atomic checkpoint `s0052` therefore added
+  524,288 strict-ternary weights and raised coverage to 75,624,448 weights;
+- a later 8,192-group attempt passed its incremental audit-v20 gate but failed
+  the cumulative SQuAD point budget inherited by that new slice, so it was
+  rejected without changing coverage;
+- a two-stage low-rate fallback recovery then changed only the uncommitted
+  layer-24 MLP weights. Its accepted second stage kept ternary code churn at
+  zero and passed audit-v22 with cumulative C4/SQuAD/NumPy-code point ratios
+  `0.991022 / 1.001470 / 0.972487`; its worst incremental upper-95 ratio was
+  `0.998832`, below `1.0005`;
+- `s0052r1` preserves all 75,624,448 accepted ternary weights. Fresh-process
+  verification gives Wiki/Code relative NLL `0.943734 / 0.953158`, and all
+  committed codes remain exactly in `{-1,0,+1}`;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);

@@ -187,6 +187,24 @@ def apply_strict_recode_artifact(
             raise ValueError("starting artifact changes uncommitted codes")
         if not torch.equal(scales[~mask], matrix.group_scale[~mask]):
             raise ValueError("starting artifact changes uncommitted scales")
+        compensated_master = entry.get("fp_master_bf16")
+        if compensated_master is not None:
+            if not isinstance(compensated_master, torch.Tensor):
+                raise ValueError("starting artifact master is not a tensor")
+            if compensated_master.dtype != torch.bfloat16:
+                raise ValueError("starting artifact master must be BF16")
+            if compensated_master.shape != matrix.master_weight.shape:
+                raise ValueError("starting artifact master shape mismatch")
+            if not torch.isfinite(compensated_master).all():
+                raise ValueError("starting artifact master contains non-finite values")
+            candidate_master = compensated_master.to(device).float()
+            candidate_grouped, _, _ = padded_grouped(
+                candidate_master, matrix.group_size
+            )
+            current_grouped = grouped_master(matrix)
+            if not torch.equal(candidate_grouped[mask], current_grouped[mask]):
+                raise ValueError("starting artifact master changes committed groups")
+            matrix.master_weight.copy_(candidate_master)
         matrix.committed_codes.copy_(codes)
         matrix.group_scale.copy_(scales)
     return tuple(entries)

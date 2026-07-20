@@ -1,0 +1,36 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v204",
+  "title": "Audit-v17 rejects coverage growth because the s0051r1 frontier has a new SQuAD generalization gap",
+  "policy_sha256": "b7882f7116876a633939fa449ad6d3ced545813f18fb4147eb51b439f7cc4ce5",
+  "result": "wal_tat/results/block24_down_s0051r1_d1g4096_absmean_proxy_v1_audit_v17.json",
+  "result_sha256": "7fb1286c16021190bed17280c0a3d9ef10332fd56779a20d29d816187ed25fd8",
+  "source_checkpoint_sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+  "artifact_sha256": "e279382ae51de70426b6413f5a68b48a68bafa154e1ba55980774cc6dff9a9e2",
+  "frontier_ratios_to_bf16": {
+    "c4_train": 0.993150666111652,
+    "squad_train_context": 1.007670866817086,
+    "transformers_code": 0.9741585556269691
+  },
+  "candidate_ratios_to_bf16": {
+    "c4_train": 0.9933213818297442,
+    "squad_train_context": 1.0082195996670404,
+    "transformers_code": 0.974369854494492
+  },
+  "incremental_upper95_to_s0051r1": {
+    "c4_train": 1.0002740265063963,
+    "squad_train_context": 1.000724513816575,
+    "transformers_code": 1.000456207032921
+  },
+  "incremental_predeclared_gate": 1.0013063945294842,
+  "incremental_gate_passed": true,
+  "cumulative_predeclared_gate": 1.0021978087383818,
+  "cumulative_gate_passed": false,
+  "candidate_committed": false,
+  "source_checkpoint_mutated": false,
+  "accepted_coverage_changed": false,
+  "accepted_weights_retained": 75100160,
+  "audit_v17_closed_after_one_use": true,
+  "diagnosis": "the 4096-group atom itself is within the incremental confidence budget, but the parent frontier is not stable across unseen SQuAD ranges",
+  "next_required_action": "perform broader multi-range coverage-neutral recovery and reserve a new audit-v18 before retrying coverage"
+}

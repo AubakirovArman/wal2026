@@ -1,3 +1,4 @@
+import pytest
 import torch
 
 from mlp_fallback_compensation_recovery import (
@@ -42,6 +43,53 @@ def test_apply_bundle_preserves_masks_and_updates_strict_codes():
     assert names == ("mlp.up_proj",)
     assert torch.equal(matrix.committed_codes, codes)
     assert set(matrix.committed_codes.unique().tolist()) <= {-1, 0, 1}
+
+
+def test_apply_bundle_restores_only_uncommitted_compensated_master_values():
+    matrix = committed_matrix()
+    source = matrix.master_weight.detach().bfloat16().clone()
+    compensated = source.clone()
+    grouped = compensated.view(2, 2, 2)
+    grouped[~matrix.committed_mask.cpu()] += 0.5
+    artifact = {
+        "format": "wal-tat-ternary-fallback-compensation-v1",
+        "source_checkpoint_sha256": "abc",
+        "target_names": ["mlp.up_proj"],
+        "matrices": {
+            "mlp.up_proj": {
+                "committed_mask": matrix.committed_mask.clone(),
+                "ternary_codes_int8": matrix.committed_codes.clone(),
+                "scales_fp16": matrix.group_scale.detach().half().clone(),
+                "fp_master_bf16": compensated,
+            }
+        },
+    }
+    apply_strict_recode_artifact(artifact, {"mlp.up_proj": matrix}, "abc", "cpu")
+    assert torch.equal(matrix.master_weight, compensated.float())
+
+
+def test_apply_bundle_rejects_compensated_changes_to_committed_groups():
+    matrix = committed_matrix()
+    compensated = matrix.master_weight.detach().bfloat16().clone()
+    grouped = compensated.view(2, 2, 2)
+    grouped[matrix.committed_mask.cpu()] += 0.5
+    artifact = {
+        "format": "wal-tat-ternary-fallback-compensation-v1",
+        "source_checkpoint_sha256": "abc",
+        "target_names": ["mlp.up_proj"],
+        "matrices": {
+            "mlp.up_proj": {
+                "committed_mask": matrix.committed_mask.clone(),
+                "ternary_codes_int8": matrix.committed_codes.clone(),
+                "scales_fp16": matrix.group_scale.detach().half().clone(),
+                "fp_master_bf16": compensated,
+            }
+        },
+    }
+    with pytest.raises(ValueError, match="changes committed groups"):
+        apply_strict_recode_artifact(
+            artifact, {"mlp.up_proj": matrix}, "abc", "cpu"
+        )
 
 
 def test_fallback_statistics_ignore_committed_master_values():

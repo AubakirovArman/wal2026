@@ -52,10 +52,17 @@ def stream_identity(payload: dict, domain: str) -> str | None:
         family = "code"
         selected = [path for path in sources if path.endswith(".py")]
     if selected and all(path in source_sha for path in selected):
+        stream_view = None
+        if family == "c4":
+            stream_view = {
+                "text_start": int(payload.get("c4_text_start", 0)),
+                "text_count": int(payload.get("c4_text_count", 4000)),
+            }
         material = {
             "model_revision": payload.get("model_revision"),
             "family": family,
             "sources": [(path, source_sha[path]) for path in selected],
+            "stream_view": stream_view,
         }
         encoded = json.dumps(material, sort_keys=True, separators=(",", ":")).encode()
         return f"sources:{hashlib.sha256(encoded).hexdigest()}"
@@ -76,14 +83,21 @@ def source_ranges(payload: dict) -> dict[str, list[dict]]:
                 source_id = stream_identity(payload, domain)
                 if source_id is None:
                     continue
-                result.setdefault(source_id, []).append(
-                    {
-                        "split": split,
-                        "domain": domain,
-                        "start": int(bounds[0]),
-                        "end": int(bounds[1]),
-                    }
+                intervals = (
+                    bounds
+                    if bounds and isinstance(bounds[0], (list, tuple))
+                    else [bounds]
                 )
+                for segment, interval in enumerate(intervals):
+                    result.setdefault(source_id, []).append(
+                        {
+                            "split": split,
+                            "domain": domain,
+                            "segment": segment,
+                            "start": int(interval[0]),
+                            "end": int(interval[1]),
+                        }
+                    )
         return result
 
     if payload.get("format") == "wal-tat-audit-holdout-v1" and payload.get(

@@ -5,6 +5,8 @@ import argparse
 import hashlib
 from pathlib import Path
 
+import datasets
+import numpy
 import pyarrow as pa
 import torch
 import transformers
@@ -60,6 +62,24 @@ def arrow_column(path: Path, name: str):
     return table[name].to_pylist()
 
 
+def code_source_directories(source: str) -> tuple[Path, ...]:
+    if source == "vendor":
+        return (
+            WORKSPACE / "wal2/vendor/Hestia",
+            WORKSPACE / "wal2/vendor/TWLA",
+            WORKSPACE / "wal2/vendor/GSQ",
+        )
+    roots = {
+        "transformers": Path(transformers.__file__).resolve().parent,
+        "torch": Path(torch.__file__).resolve().parent,
+        "numpy": Path(numpy.__file__).resolve().parent,
+        "datasets": Path(datasets.__file__).resolve().parent,
+    }
+    if source not in roots:
+        raise ValueError(f"unsupported code source: {source}")
+    return (roots[source],)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -88,12 +108,14 @@ def main() -> None:
         default=0,
         help="Zero-based cached C4 train Arrow shard; ignored for validation.",
     )
+    parser.add_argument("--c4-text-start", type=int, default=0)
+    parser.add_argument("--c4-text-count", type=int, default=4000)
     parser.add_argument("--c4-offset", type=int, default=17011)
     parser.add_argument("--squad-offset", type=int, default=9011)
     parser.add_argument("--code-offset", type=int, default=4001)
     parser.add_argument(
         "--code-source",
-        choices=("vendor", "transformers", "torch"),
+        choices=("vendor", "transformers", "torch", "numpy", "datasets"),
         default="vendor",
     )
     parser.add_argument(
@@ -102,6 +124,8 @@ def main() -> None:
         help="Immutable role recorded in the suite; declare recurring validation explicitly.",
     )
     args = parser.parse_args()
+    if args.c4_text_start < 0 or args.c4_text_count < 1:
+        raise ValueError("C4 text start/count must be non-negative/positive")
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
@@ -113,19 +137,10 @@ def main() -> None:
     squad_contexts = arrow_column(squad_path, "context")
 
     code_files = []
-    if args.code_source == "vendor":
-        directories = (
-            WORKSPACE / "wal2/vendor/Hestia",
-            WORKSPACE / "wal2/vendor/TWLA",
-            WORKSPACE / "wal2/vendor/GSQ",
-        )
-    elif args.code_source == "transformers":
-        directories = (Path(transformers.__file__).resolve().parent,)
-    else:
-        directories = (Path(torch.__file__).resolve().parent,)
+    directories = code_source_directories(args.code_source)
     for directory in directories:
         code_files.extend(sorted(directory.rglob("*.py")))
-    if args.code_source in {"transformers", "torch"}:
+    if args.code_source != "vendor":
         code_files = code_files[:400]
     if not code_files:
         raise RuntimeError("no vendor Python sources found")
@@ -144,7 +159,12 @@ def main() -> None:
     )
     code_domain = f"{args.code_source}_code"
     token_sources = {
-        c4_domain: token_stream(tokenizer, c4_texts[:4000]),
+        c4_domain: token_stream(
+            tokenizer,
+            c4_texts[
+                args.c4_text_start : args.c4_text_start + args.c4_text_count
+            ],
+        ),
         squad_domain: token_stream(tokenizer, squad_contexts),
         code_domain: token_stream(tokenizer, code_texts),
     }
@@ -199,6 +219,8 @@ def main() -> None:
         "c4_train_shard": (
             args.c4_train_shard if args.c4_split == "train" else None
         ),
+        "c4_text_start": args.c4_text_start,
+        "c4_text_count": args.c4_text_count,
         "code_source": args.code_source,
         "gates": gates,
         "sources": [str(path) for path in source_paths],

@@ -1,0 +1,224 @@
+{
+  "schema": "wal-tat-tail-initializer-ablation-v1",
+  "status": "checkpoint_neutral_development_ablation",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt",
+  "source_checkpoint_sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt",
+  "suite_sha256": "3f17ac29a69144181536b2b8588bad58c36859f4c5cea6251bf7715ecc11a8ca",
+  "suite_role": "development-only initializer and tail selection",
+  "candidate_name": "model.layers.24.mlp.down_proj",
+  "group_size": 128,
+  "deciles": [
+    1
+  ],
+  "groups_per_decile": 4096,
+  "samples_per_domain": 8,
+  "domain_offset": 0,
+  "sequences_per_domain": 64,
+  "threshold_multipliers": [
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0,
+    1.125,
+    1.25,
+    1.375,
+    1.5,
+    1.625,
+    1.75,
+    1.875,
+    2.0,
+    2.125,
+    2.25,
+    2.375,
+    2.5,
+    2.625,
+    2.75,
+    2.875,
+    3.0
+  ],
+  "forced_initializer": "absmean_round",
+  "excluded_artifacts": [],
+  "excluded_groups": 0,
+  "baseline_raw_bf16": {
+    "c4_train": {
+      "nll": 3.444945976138115,
+      "ppl": 31.341590207191516,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.2789905704557896,
+      "ppl": 9.766816518768167,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.529887903481722,
+      "ppl": 12.552099011206534,
+      "tokens": 16384
+    }
+  },
+  "frontier": {
+    "c4_train": {
+      "nll": 3.4051708541810513,
+      "ppl": 30.11944131681213,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.2514964509755373,
+      "ppl": 9.501944396461786,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.4377284217625856,
+      "ppl": 11.447008411559132,
+      "tokens": 16384
+    }
+  },
+  "frontier_ratios_to_raw_bf16": {
+    "c4_train": 0.9884540651050636,
+    "squad_train_context": 0.9879358344713319,
+    "torch_code": 0.9635717133584049
+  },
+  "experiments": {
+    "D1": {
+      "mask_sha256": "5c50ed32c6b2f6a1013bfd5bc8186b834a0762d677c60c1c5bdac6a7e81d815c",
+      "groups": 4096,
+      "weights": 524288,
+      "score_min": 6.650073880101878e-15,
+      "score_mean": 1.3972672438565883e-14,
+      "score_max": 1.591639451801411e-14,
+      "initializers": {
+        "absmean_round": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.405506446957588,
+              "ppl": 30.12955088000469,
+              "tokens": 16384
+            },
+            "squad_train_context": {
+              "nll": 2.251908973790705,
+              "ppl": 9.505864973922009,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.4377755895256996,
+              "ppl": 11.447548354074094,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9885514810816454,
+            "squad_train_context": 0.9881168456701126,
+            "torch_code": 0.9635903575691026
+          },
+          "ratios_to_frontier": {
+            "c4_train": 1.0000985538731852,
+            "squad_train_context": 1.0001832216146684,
+            "torch_code": 1.0000193490639453
+          },
+          "relative_weight_mse": 0.259693443775177,
+          "relative_activation_weighted_mse": 0.21209006011486053,
+          "code_histogram": {
+            "-1": 181718,
+            "0": 160848,
+            "1": 181722
+          },
+          "zero_fraction": 0.306793212890625,
+          "scale_mean": 0.031587839126586914,
+          "scale_p95": 0.03604870289564133
+        },
+        "threshold_ls": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.405300337821245,
+              "ppl": 30.12334154421681,
+              "tokens": 16384
+            },
+            "squad_train_context": {
+              "nll": 2.2516338555142283,
+              "ppl": 9.503250096450747,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.4383898694068193,
+              "ppl": 11.454582512966102,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9884916516568095,
+            "squad_train_context": 0.9879961263130238,
+            "torch_code": 0.9638331666992124
+          },
+          "ratios_to_frontier": {
+            "c4_train": 1.0000380255927643,
+            "squad_train_context": 1.0000610280947284,
+            "torch_code": 1.0002713377086343
+          },
+          "relative_weight_mse": 0.18758206069469452,
+          "relative_activation_weighted_mse": 0.21854858100414276,
+          "code_histogram": {
+            "-1": 143885,
+            "0": 236737,
+            "1": 143666
+          },
+          "zero_fraction": 0.4515399932861328,
+          "scale_mean": 0.04818780720233917,
+          "scale_p95": 0.055770475417375565
+        },
+        "activation_wls": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.4053560718894005,
+              "ppl": 30.125020487374233,
+              "tokens": 16384
+            },
+            "squad_train_context": {
+              "nll": 2.251991219818592,
+              "ppl": 9.506646825709405,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.4381676614284515,
+              "ppl": 11.452037496114844,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9885078301596195,
+            "squad_train_context": 0.9881529344670357,
+            "torch_code": 0.9637453335671349
+          },
+          "ratios_to_frontier": {
+            "c4_train": 1.0000543930734407,
+            "squad_train_context": 1.0002197511094635,
+            "torch_code": 1.0001801840032485
+          },
+          "relative_weight_mse": 0.20992478728294373,
+          "relative_activation_weighted_mse": 0.17960423231124878,
+          "code_histogram": {
+            "-1": 162516,
+            "0": 199130,
+            "1": 162642
+          },
+          "zero_fraction": 0.3798103332519531,
+          "scale_mean": 0.04003369063138962,
+          "scale_p95": 0.04915063828229904
+        }
+      },
+      "chosen_initializer": "absmean_round"
+    }
+  },
+  "frozen_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_down_s0051r1_d1g4096_absmean_fixed_v1.pt",
+  "frozen_artifact_sha256": "96ee7de090c88ec57435b927a4cb044d42ccc509c4507896a5fd92ee4aa9f372",
+  "checkpoint_mutated": false,
+  "checkpoint_files_written": 0,
+  "elapsed_seconds": 32.358392994850874,
+  "peak_cuda_allocated_bytes": 5057357312
+}

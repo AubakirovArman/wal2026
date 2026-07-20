@@ -1,7 +1,10 @@
 import pytest
 import torch
 
-from commit_fallback_compensation_artifact import matrix_change_statistics
+from commit_fallback_compensation_artifact import (
+    aggregate_relative_delta_to_source,
+    matrix_change_statistics,
+)
 
 
 def test_matrix_changes_are_limited_to_declared_regions():
@@ -51,3 +54,11 @@ def test_committed_master_delta_is_rejected():
             artifact_scales=scales,
             artifact_master=candidate,
         )
+
+
+def test_aggregate_relative_delta_is_weighted_by_fallback_weights():
+    statistics = {
+        "small": {"fallback_relative_delta": 0.25, "fallback_weights": 1},
+        "large": {"fallback_relative_delta": 0.5, "fallback_weights": 3},
+    }
+    assert aggregate_relative_delta_to_source(statistics) == pytest.approx(0.4375)

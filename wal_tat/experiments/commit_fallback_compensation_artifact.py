@@ -64,6 +64,25 @@ def matrix_change_statistics(
     }
 
 
+def aggregate_relative_delta_to_source(statistics: dict[str, dict]) -> float:
+    """Aggregate matrix-normalized fallback deltas against the checkpoint.
+
+    A continuation artifact reports its delta relative to the artifact from
+    which that continuation started.  Publication, however, compares the
+    final artifact directly with the immutable source checkpoint.  Keep those
+    two quantities separate so an incremental number is never presented as a
+    cumulative checkpoint delta.
+    """
+    fallback_weights = sum(
+        int(item["fallback_weights"]) for item in statistics.values()
+    )
+    return sum(
+        float(item["fallback_relative_delta"])
+        * int(item["fallback_weights"])
+        for item in statistics.values()
+    ) / max(fallback_weights, 1)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint", type=Path)
@@ -228,6 +247,7 @@ def main() -> None:
         for matrix in payload["matrices"].values()
     )
     require(coverage_after == coverage_before, "accepted coverage changed")
+    cumulative_relative_delta = aggregate_relative_delta_to_source(statistics)
     require(sha256_file(checkpoint) == source_hash, "source changed before publish")
     previous_metadata = payload.get("metadata", {})
     payload["parent_sha256"] = source_hash
@@ -246,7 +266,10 @@ def main() -> None:
         "target_names": list(target_names),
         "recipe": artifact["recipe"],
         "matrix_changes": statistics,
-        "aggregate_relative_fallback_delta": artifact["aggregate_relative_delta"],
+        "artifact_reported_incremental_relative_fallback_delta": artifact[
+            "aggregate_relative_delta"
+        ],
+        "aggregate_relative_fallback_delta_to_source": cumulative_relative_delta,
         "accepted_weights_before": coverage_before,
         "accepted_weights_after": coverage_after,
         "persistent_bf16_residual_on_committed_groups": False,
@@ -273,6 +296,10 @@ def main() -> None:
         "output_checkpoint_bytes": output.stat().st_size,
         "target_names": list(target_names),
         "matrix_changes": statistics,
+        "artifact_reported_incremental_relative_fallback_delta": artifact[
+            "aggregate_relative_delta"
+        ],
+        "aggregate_relative_fallback_delta_to_source": cumulative_relative_delta,
         "accepted_weights_before": coverage_before,
         "accepted_weights_after": coverage_after,
         "coverage_changed": False,

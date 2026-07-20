@@ -1,0 +1,56 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-policy-v4",
+  "evidence_id": "v210",
+  "declared_before_execution": true,
+  "objective": "make one final low-rate multi-range continuation from v3 before opening audit-v18",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt",
+  "source_checkpoint_sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+  "starting_artifact": "wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v3.pt",
+  "starting_artifact_sha256": "fba5fac4d5fca80db9bd91ede17c9594f547d5952e9c293fb44e2c77b5f25604",
+  "suite": "wal2/cache/wal-tat-matched-train-recovery-v5-multirange-l256.pt",
+  "suite_sha256": "2143df8b33c2713cd3aa05a461e3d2188c8573a4da11d6b32b7c6201fd2e29d3",
+  "reserved_unopened_audit_v18_sha256": "c8979ca086c753c031aa26c334898888eda40eb5c2f812f9fdff4101c766aceb",
+  "script": "wal_tat/experiments/mlp_fallback_compensation_recovery.py",
+  "script_sha256": "162c09811948422b8c16bb92194e12b62ecf979a5b5f28cdfd49dfc050fc9463",
+  "tag": "block24_mlp_s0051r1_multirange_fallback_recovery_v4",
+  "starting_artifact_invariants": {
+    "fp_master_bf16_must_be_loaded": true,
+    "committed_master_values_must_match_source": true,
+    "source_selection_ratios_must_equal_v3_candidate_ratios": true,
+    "source_confirmation_ratios_must_equal_v3_candidate_ratios": true
+  },
+  "training": {
+    "steps": 2048,
+    "learning_rate": 0.0000005,
+    "ce_weight": 1.0,
+    "block_weight": 0.25,
+    "kd_weight": 0.5,
+    "delta_anchor_weight": 0.02,
+    "selection_every": 128,
+    "seed": 449
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement_over_v3": 0.00025,
+    "minimum_confirmation_worst_ratio_improvement_over_v3": 0.00015,
+    "maximum_weighted_relative_fallback_delta_over_v3": 0.05,
+    "desired_absolute_selection_worst_ratio": 1.0021978087383818,
+    "ternary_codes_unchanged": true,
+    "scales_unchanged": true,
+    "committed_masks_unchanged": true,
+    "committed_master_values_unchanged": true,
+    "coverage_unchanged": true,
+    "accepted_weights": 75100160
+  },
+  "audit_firewall": {
+    "audit_v18_is_not_used_for_training_or_selection": true,
+    "audit_v18_remains_unopened_until_artifact_is_frozen": true,
+    "no_further_v5_suite_retuning_after_this_run": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "keep v3, do not open audit-v18, and preserve s0051r1",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/mlp_fallback_compensation_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt --starting-artifact ../wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v3.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v5-multirange-l256.pt --tag block24_mlp_s0051r1_multirange_fallback_recovery_v4 --target-layer 24 --steps 2048 --lr 0.0000005 --ce-weight 1 --block-weight 0.25 --kd-weight 0.5 --delta-anchor-weight 0.02 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 128 --min-selection-improvement 0.00025 --min-confirmation-improvement 0.00015 --max-relative-delta 0.05 --seed 449 --device cuda"
+}

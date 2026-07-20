@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 75.78125% up + 10.611979% gate + 10.44921875% down | 24.21875% up + 89.388021% gate + 89.55078125% down |
+| Матрицы в `layer 24` | Q/K/V/O + 75.78125% up + 10.611979% gate + 14.615885% down | 24.21875% up + 89.388021% gate + 85.384115% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 75,100,160 / 1,720,451,072 | 1,645,350,912 |
+| Крупные matrix weights | 75,624,448 / 1,720,451,072 | 1,644,826,624 |
 
-Покрытие крупных matrix weights равно `4.365144%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.395617%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 75,100,160 weights занимают 143.2422 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 19.0244 MiB, экономия —
-124.2178 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 75,624,448 weights занимают 144.2422 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 19.1572 MiB, экономия —
+125.0850 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -54,25 +54,33 @@ Q2-g128 упаковки их расчётный payload составит 19.024
 - `self_attn.q_proj` и `k_proj`.
 
 В `layer 24` приняты 75.78125% g128-групп `up_proj`, 10.611979%
-`gate_proj` и 10.44921875% `down_proj`. Остальные 24.21875% `up_proj`,
-89.388021% `gate_proj` и 89.55078125% `down_proj` пока остаются BF16.
+`gate_proj` и 14.615885% `down_proj`. Остальные 24.21875% `up_proj`,
+89.388021% `gate_proj` и 85.384115% `down_proj` пока остаются BF16.
 
 ## Текущая validation
 
-Текущий принятый frontier — `s0051`. Он добавил к восстановленному `s0050r1`
-ровно 2,048 g128-групп `layer24.gate_proj`, то есть 262,144 strict-ternary
-weights. На запечатанном one-shot audit-v13 получены:
+Текущий принятый frontier — `s0052r1`. Coverage-атом `s0052` добавил к
+восстановленному `s0051r2` ровно 4,096 g128-групп `layer24.down_proj`, то есть
+524,288 strict-ternary weights. На запечатанном one-shot audit-v19 его
+cumulative worst ratio равен `0.995173`, а incremental upper-95 worst —
+`1.000710` при заранее заданном пределе `1.001306`.
 
-| Domain | Ratio к BF16 | Incremental upper-95 к `s0050r1` |
+После отклонённой 8,192-group попытки coverage-neutral low-rate recovery
+изменил только непринятые BF16-группы layer-24 MLP и сохранил все ternary
+codes/scales/masks. На audit-v22 получены:
+
+| Domain | Ratio к BF16 | Incremental upper-95 к `s0052` |
 |---|---:|---:|
-| C4 train | 0.994310 | 1.000033 |
-| SQuAD train context | 1.000515 | 1.000209 |
-| Transformers code | 0.990114 | 1.000245 |
+| C4 train | 0.991022 | 0.998800 |
+| SQuAD train context | 1.001470 | 0.998832 |
+| NumPy code | 0.972487 | 0.997051 |
 
-Все cumulative point проверки прошли предел `1.002183`, а incremental
-upper-95 — заранее зафиксированный предел `1.000924`. Fresh-process standard
-verification дала `wiki=0.946587` и `code=0.957546` relative NLL. В accepted
-groups нет BF16 residual, а все codes принадлежат `{-1,0,+1}`.
+Все cumulative point проверки прошли предел `1.002198`, а incremental
+upper-95 — заранее зафиксированный предел `1.0005`. Fresh-process standard
+verification `s0052r1` дала `wiki=0.943734` и `code=0.953158` relative NLL.
+В accepted groups нет BF16 residual, а все codes принадлежат
+`{-1,0,+1}`. Recovery не увеличил coverage: он создал запас качества перед
+следующей транзакцией.
 
 ### Историческая recurring validation parent `s0048r2`
 
@@ -875,9 +883,23 @@ development и cumulative point gates audit-v14, но code incremental upper-95
 уменьшенный вдвое атом из 4,096 групп прошёл incremental audit-v15 с максимумом
 `1.001094 <= 1.001306`, однако audit-v15 показал pre-existing SQuAD ratio
 `1.004861` у самого `s0051`; candidate ratio `1.005260` нарушил cumulative
-предел `1.002198`. Поэтому coverage остаётся `4.365144%`, а следующий шаг —
-coverage-neutral generalization recovery на свежем development-наборе и новом
-sealed audit.
+предел `1.002198`. Этот кандидат был отклонён.
+
+Две coverage-neutral recovery стадии на непересекающихся development/audit
+наборах сформировали `s0051r2`. Из него тот же заранее зафиксированный
+4,096-group `down_proj` атом прошёл audit-v19: cumulative worst observed ratio
+`0.995173`, incremental upper-95 worst `1.000710 <= 1.001306`. Checkpoint
+`s0052` добавил 524,288 strict-ternary weights, подняв `down_proj` до
+`14.615885%`, а общий coverage — до `75,624,448` (`4.395617%`).
+
+Следующая 8,192-group попытка прошла incremental gate audit-v20, но была
+отклонена из-за cumulative SQuAD `1.005280 > 1.002198`. Двухстадийный
+coverage-neutral recovery затем был проверен на новых audit-v21/v22. Первая
+скорость обучения всё ещё не прошла cumulative SQuAD; продолжение с половинным
+LR прошло audit-v22 с C4/SQuAD/NumPy-code point ratios
+`0.991022 / 1.001470 / 0.972487` и incremental upper-95 worst `0.998832`.
+Опубликованный `s0052r1` не изменил coverage или ternary codes и fresh-verifies
+at `wiki=0.943734`, `code=0.953158`.
 
 ### Reference Q2-g128 packer и реальный bpw
 
@@ -899,9 +921,9 @@ deployed weight.
 
 Почему здесь не 2.125 bpw: четверть этой конкретной матрицы всё ещё хранится
 как BF16 fallback. Полностью committed g128-матрица имеет ровно `2.125` payload
-bpw плюс исчезающе малый header. Для всего текущего frontier только 4.365144%
+bpw плюс исчезающе малый header. Для всего текущего frontier только 4.395617%
 major weights уже Q2, поэтому честная проекция major-weight storage пока
-`15.394336 bpw`, или около `3.083 GiB` вместо `3.205 GiB` BF16. При 100%
+`15.390108 bpw`, или около `3.082 GiB` вместо `3.205 GiB` BF16. При 100%
 Q2-g128 те же 1,720,451,072 major weights занимали бы около `0.426 GiB` без
 runtime/KV-cache. Это storage projection, не текущая VRAM тренировки и не
 готовый `llama.cpp` kernel.
@@ -909,13 +931,13 @@ runtime/KV-cache. Это storage projection, не текущая VRAM трени
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt
+wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt
 ```
 
-- размер: `304,658,894` bytes;
-- SHA-256: `287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8`;
+- размер: `304,659,922` bytes;
+- SHA-256: `9a7fb038694f2b850eb95b83fd96204aa882c064fbe89df30e8f1f7f9ed67411`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
-  `up_proj`, 10.611979% `gate_proj` и 10.44921875% `down_proj`;
+  `up_proj`, 10.611979% `gate_proj` и 14.615885% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
 Промежуточные и провалившие audit checkpoints удалены; их метрики и команды
@@ -923,12 +945,12 @@ wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt
 
 ## Следующий технический шаг
 
-1. построить свежий development suite, который не пересекается с закрытыми
-   audit-v14/v15, и новый sealed audit-v16;
-2. провести coverage-neutral fallback recovery `s0051`, не меняя ни одного
-   принятого ternary code/scale/mask;
-3. только после успешного audit и fresh reload вернуться к заранее
-   зафиксированному 4,096-group `down_proj` атому;
+1. построить свежие development-v8 и sealed audit-v23, доказав их нулевое
+   пересечение со всеми ранее использованными suites;
+2. повторить 8,192-group `down_proj` atom из восстановленного `s0052r1`, не
+   раскрывая audit-v23 до заморозки кандидата;
+3. при отказе уменьшить атом или выполнить ещё один coverage-neutral recovery,
+   не меняя принятые ternary code/scale/mask;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и

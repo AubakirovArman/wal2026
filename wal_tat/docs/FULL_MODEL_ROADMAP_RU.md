@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 10.611979% gate + 10.44921875% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 10.611979% gate + 14.615885% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 75,100,160 / 1,720,451,072 = 4.365144%
+major matrix weights: 75,624,448 / 1,720,451,072 = 4.395617%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       reference matrix packer ready; full manifest/kernels remain
 ```
@@ -101,8 +101,8 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
-75.78125% `up_proj`, 10.611979% `gate_proj` и 10.44921875% `down_proj`.
-Текущее покрытие `4.365144%`, условная `+5% NLL` guide равна `1.00218257`,
+75.78125% `up_proj`, 10.611979% `gate_proj` и 14.615885% `down_proj`.
+Текущее покрытие `4.395617%`, условная `+5% NLL` guide равна `1.00219781`,
 худший измеренный точечный ratio равен `1.001472`. Кумулятивный paired SQuAD
 upper-95 равен `1.006937` на v3 и `1.003597` на v4, но последний D10-шаг был
 принят уже по prospective dual gate: cumulative point плюс incremental
@@ -162,6 +162,23 @@ frontier `s0051`; cumulative candidate ratio `1.005260` выше guide
 `1.002198`. Оба кандидата отклонены без изменения coverage. Перед дальнейшим
 ростом требуется coverage-neutral generalization recovery на свежих данных и
 новый sealed audit-v16.
+
+Две последовательные coverage-neutral recovery стадии на новых
+непересекающихся suites сформировали `s0051r2`. После этого ранее отклонённый
+4,096-group `down_proj` atom прошёл one-shot audit-v19: cumulative worst point
+ratio `0.995173`, incremental upper-95 worst `1.000710 <= 1.001306`.
+Опубликованный `s0052` добавил 524,288 strict-ternary weights, поднял
+`down_proj` до `14.615885%`, а общий coverage — до `75,624,448`
+(`4.395617%`).
+
+Новая 8,192-group попытка прошла incremental audit-v20, но cumulative SQuAD
+ratio `1.005280` превысил guide `1.002198`; coverage не изменился. После
+двухступенчатого late-range recovery второй, half-rate этап прошёл новый
+audit-v22: C4/SQuAD/NumPy-code point ratios равны
+`0.991022 / 1.001470 / 0.972487`, incremental upper-95 worst равен
+`0.998832 <= 1.0005`. Текущий `s0052r1` сохранил все ternary codes и coverage,
+а fresh reload дал Wiki/Code relative NLL `0.943734 / 0.953158`. Следующая
+транзакция использует заранее построенные development-v8 и audit-v23.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и

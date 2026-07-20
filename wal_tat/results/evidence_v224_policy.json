@@ -1,0 +1,44 @@
+{
+  "schema": "wal-tat-recovery-suite-build-policy-v2",
+  "evidence_id": "v224",
+  "declared_before_execution": true,
+  "objective": "rebuild v7 development data with bounded non-overlapping datasets-code ranges after the torch overlap audit rejected v223",
+  "builder": "wal_tat/experiments/build_matched_validation_recovery_suite.py",
+  "builder_sha256": "5dc4377617521291953017e99943ad4a636729c45feba186ad67004623ecf5fb",
+  "output": "wal2/cache/wal-tat-matched-train-recovery-v7-coverage-l256.pt",
+  "role": "candidate initialization and proxy-recovery development only; never final audit",
+  "selection_change_from_v223": "code_source torch -> datasets with exact free ranges above retained v6 and below the measured 386457-token bound",
+  "configuration": {
+    "sequence_length": 256,
+    "calibration_per_domain": 64,
+    "c4_calibration_repeat": 2,
+    "squad_calibration_repeat": 4,
+    "code_calibration_repeat": 2,
+    "gates_per_domain": 256,
+    "c4_split": "train",
+    "c4_train_shard": 1,
+    "c4_text_start": 20000,
+    "c4_text_count": 4000,
+    "squad_split": "train",
+    "code_source": "datasets",
+    "ranges": {
+      "calibration": {
+        "c4_train": [[100003, 116387], [200003, 216387]],
+        "squad_train_context": [[9200003, 9216387], [9400003, 9416387], [9600003, 9616387], [9800003, 9816387]],
+        "datasets_code": [[180003, 196387], [210003, 226387]]
+      },
+      "gates": {
+        "c4_train": [400003, 465539],
+        "squad_train_context": [10100003, 10165539],
+        "datasets_code": [260003, 325539]
+      }
+    }
+  },
+  "requirements": {
+    "output_must_not_exist_before_build": true,
+    "exact_window_overlap_with_every_retained_suite": 0,
+    "declared_range_overlap_on_identical_stream_views": 0,
+    "audit_data_use": false
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_matched_validation_recovery_suite.py --output ../wal2/cache/wal-tat-matched-train-recovery-v7-coverage-l256.pt --length 256 --calibration-per-domain 64 --c4-calibration-repeat 2 --squad-calibration-repeat 4 --code-calibration-repeat 2 --gates-per-domain 256 --c4-split train --c4-train-shard 1 --c4-text-start 20000 --c4-text-count 4000 --squad-split train --code-source datasets --c4-calibration-offset 100003 --c4-calibration-stride 100000 --c4-gate-offset 400003 --squad-calibration-offset 9200003 --squad-calibration-stride 200000 --squad-gate-offset 10100003 --code-calibration-offset 180003 --code-calibration-stride 30000 --code-gate-offset 260003 --interleave-calibration --policy 'fresh s0052 coverage development v7; segmented C4/SQuAD/datasets-code free ranges; never final audit'"
+}

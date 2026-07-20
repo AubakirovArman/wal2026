@@ -1,0 +1,46 @@
+{
+  "schema": "wal-tat-fixed-candidate-development-policy-v1",
+  "evidence_id": "v202",
+  "declared_before_execution": true,
+  "objective": "retry the fixed first 4096 D1 down_proj groups with absmean-round from recovered s0051r1",
+  "source_frontier": {
+    "path": "wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt",
+    "sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+    "accepted_weights": 75100160
+  },
+  "selection_source": {
+    "evidence": "wal_tat/results/evidence_v191.json",
+    "rule": "preserve the already selected down_proj, sensitivity decile, absmean-round initializer, group count, and group size; only recompute codes and scales from the audited recovered frontier"
+  },
+  "development_suite": {
+    "path": "wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt",
+    "sha256": "3f17ac29a69144181536b2b8588bad58c36859f4c5cea6251bf7715ecc11a8ca"
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v17-l256-g512.pt",
+    "sha256": "8b2ee27566c8e550ad98371b90a20cb90c6738ce3dc38a8529943e0c335ec8b9",
+    "must_remain_unopened": true
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 1,
+    "initializer": "absmean_round",
+    "groups": 4096,
+    "group_size": 128,
+    "weights": 524288
+  },
+  "development": {
+    "script": "wal_tat/experiments/tail_initializer_ablation.py",
+    "script_sha256": "e06474839a440cb5fe8a95c457711fbcc1d76a5b609d701d317d8b1bc50f80d2",
+    "samples_per_domain": 8,
+    "sequences_per_domain": 64,
+    "seed": 401,
+    "maximum_worst_incremental_ratio": 1.0013063945294842,
+    "failure_action": "do not run proxy recovery or audit-v17; preserve s0051r1"
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt --candidate-name model.layers.24.mlp.down_proj --tag block24_down_s0051r1_d1g4096_absmean_fixed_v1 --deciles 1 --groups-per-decile 4096 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --force-initializer absmean_round --seed 401 --device cuda"
+}
