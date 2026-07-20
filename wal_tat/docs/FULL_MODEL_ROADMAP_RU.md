@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  4 / 28 complete, 24 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  28 / 197 complete, 169 remain
-strict ternary weights: 77,872,512 / 1,720,451,072 = 4.526285% in mixed artifact
-Q4 rescue weights:      64,314,368 / 1,720,451,072 = 3.738227%
+strict ternary weights: 78,828,800 / 1,720,451,072 = 4.581868% in mixed artifact
+Q4 rescue weights:      63,358,080 / 1,720,451,072 = 3.682644%
 Q8 rescue weights:      59,139,712 / 1,720,451,072 = 3.437454%
 all low-bit weights:    201,326,592 / 1,720,451,072 = 11.701966%
 remaining high precision: 1,519,124,480 = 88.298034%
@@ -154,6 +154,24 @@ hard-forward Q4 proxy с `lr=0.005` codes практически не перес
 ухудшилось. Оба кандидата отклонены, accepted artifact не изменён. Это
 обосновывает staged collapse с отдельным восстановлением и freeze на каждой
 ступени, а не дальнейший brute-force подбор proxy learning rate.
+
+Полный staged collapse `Q4→7→5→3` также не прошёл: на финальном ternary
+уровне development ratios достигли `1.010909 / 1.025808 / 1.065499`.
+Однако этот отрицательный результат подтвердил более сильную
+rate--distortion постановку: не схлопывать все Q4-группы одновременно, а
+ранжировать их по activation-weighted ternary error и переводить только
+безопасную долю. Первый такой reverse-compression шаг заменил `956,288`
+весов Q4 на строгий Q2. Теперь layer 22 содержит `1.899974%` Q2,
+`18.099976%` Q4 и `80.000051%` Q8 при `7.287003 bpw`.
+
+Fresh reload нового artifact дал `0.994856 / 1.000954 / 1.019816`.
+Prospectively объявленный one-shot audit-v29 прошёл с absolute ratios
+`0.991622 / 0.989226 / 0.973866` и incremental ratios против immutable
+strict source `1.001776 / 1.002720 / 1.004860 <= 1.005`. Accepted artifact:
+`wal-tat-block22_reverse_q4_to_q2_fraction_refine_v2-mixed-q2-q4-q8.pt`,
+SHA-256 `b16392f87c84d5facbbef3dec195c142a45187ffdb7ef652090fac4c5bf433db`.
+Общий low-bit coverage не изменился (`11.701966%`), но strict ternary coverage
+выросла до `4.581868%`, а projected payload уменьшился на `0.228 MiB`.
 
 Следующий этап — versioned packed Q2/Q4/Q8 layout и перенос composable compiler
 на следующие блоки. Параллельно strict research продолжает progressive

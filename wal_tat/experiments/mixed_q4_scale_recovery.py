@@ -12,6 +12,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from block_proxy_recovery import collect_input_second_moments
 from compensation_window import (
     PROJECT,
     bucket_kl,
@@ -26,7 +27,10 @@ from compensation_window import (
     teacher_bucket,
     tensor_output,
 )
-from wal_tat import install_mixed_q2_q4_artifact
+from wal_tat import (
+    install_mixed_q2_q4_artifact,
+    weighted_symmetric_odd_level_project,
+)
 
 
 PROJECTION_MAP = {
@@ -63,8 +67,28 @@ class FixedCodeMixedScaleLinear(nn.Module):
         self.proxy_code = nn.Parameter(
             self.base_q4_codes.clone(), requires_grad=bool(train_codes)
         )
+        self.code_lower = -8
+        self.code_upper = 7
         self.register_buffer("base_q4_scales", entry["q4_scales_fp16"].float())
         self.register_buffer("q4_mask", entry["q4_mask"].bool())
+        self.register_buffer(
+            "q8_codes",
+            entry.get(
+                "q8_codes_int8", torch.zeros_like(entry["q4_codes_int8"])
+            ).float(),
+        )
+        self.register_buffer(
+            "q8_scales",
+            entry.get(
+                "q8_scales_fp16", torch.ones_like(entry["q4_scales_fp16"])
+            ).float(),
+        )
+        self.register_buffer(
+            "q8_mask",
+            entry.get("q8_mask", torch.zeros_like(entry["q4_mask"])).bool(),
+        )
+        if torch.logical_and(self.q4_mask, self.q8_mask).any():
+            raise ValueError("Q4 and Q8 masks overlap")
         self.log_scale_delta = nn.Parameter(torch.zeros_like(self.base_q4_scales))
         self.max_abs_log_scale_delta = float(max_abs_log_scale_delta)
         self.bias = None if bias is None else nn.Parameter(
@@ -83,10 +107,12 @@ class FixedCodeMixedScaleLinear(nn.Module):
 
     def effective_weight(self) -> torch.Tensor:
         q2 = self.q2_codes * self.q2_scales.unsqueeze(-1)
-        hard = self.proxy_code.round().clamp(-8, 7)
+        hard = self.proxy_code.round().clamp(self.code_lower, self.code_upper)
         codes = hard.detach() + self.proxy_code - self.proxy_code.detach()
         q4 = codes * self.effective_q4_scales().unsqueeze(-1)
         grouped = torch.where(self.q4_mask.unsqueeze(-1), q4, q2)
+        q8 = self.q8_codes * self.q8_scales.unsqueeze(-1)
+        grouped = torch.where(self.q8_mask.unsqueeze(-1), q8, grouped)
         return grouped.reshape(self.rows, -1)[:, : self.columns]
 
     def forward(self, value: torch.Tensor) -> torch.Tensor:
@@ -98,7 +124,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
         self.log_scale_delta.masked_fill_(~self.q4_mask, 0)
-        self.proxy_code.clamp_(-8, 7)
+        self.proxy_code.clamp_(self.code_lower, self.code_upper)
         self.proxy_code[~self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)] = (
             self.base_q4_codes[
                 ~self.q4_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
@@ -111,18 +137,63 @@ class FixedCodeMixedScaleLinear(nn.Module):
 
     @torch.no_grad()
     def deploy_codes(self) -> torch.Tensor:
-        return self.proxy_code.round().clamp(-8, 7).to(torch.int8).cpu()
+        return (
+            self.proxy_code.round()
+            .clamp(self.code_lower, self.code_upper)
+            .to(torch.int8)
+            .cpu()
+        )
+
+    @torch.no_grad()
+    def reset_codebook_(
+        self,
+        codes: torch.Tensor,
+        scales: torch.Tensor,
+        *,
+        levels: int,
+    ) -> None:
+        if levels < 3 or levels % 2 == 0:
+            raise ValueError("levels must be an odd integer of at least three")
+        if codes.shape != self.base_q4_codes.shape:
+            raise ValueError("codebook code shape mismatch")
+        if scales.shape != self.base_q4_scales.shape:
+            raise ValueError("codebook scale shape mismatch")
+        radius = levels // 2
+        if int(codes.min()) < -radius or int(codes.max()) > radius:
+            raise ValueError("codes fall outside requested codebook")
+        self.code_lower = -radius
+        self.code_upper = radius
+        self.base_q4_codes.copy_(codes.to(self.base_q4_codes))
+        self.proxy_code.copy_(codes.to(self.proxy_code))
+        self.base_q4_scales.copy_(scales.to(self.base_q4_scales))
+        self.log_scale_delta.zero_()
+        self.constrain_()
 
     @torch.no_grad()
     def code_churn(self) -> float:
+        active = self.q4_mask.unsqueeze(-1).expand_as(self.base_q4_codes)
+        if not active.any():
+            return 0.0
         changed = self.deploy_codes().to(self.base_q4_codes.device).ne(
             self.base_q4_codes.to(torch.int8)
         )
-        return float(changed[self.q4_mask.unsqueeze(-1).expand_as(changed)].float().mean())
+        return float(changed[active].float().mean())
+
+    def code_anchor_loss(self) -> torch.Tensor:
+        active = self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        if not active.any():
+            return self.proxy_code.sum() * 0
+        return (self.proxy_code[active] - self.base_q4_codes[active]).float().square().mean()
 
     @torch.no_grad()
     def proxy_statistics(self) -> dict[str, float]:
         active = self.q4_mask.unsqueeze(-1).expand_as(self.proxy_code)
+        if not active.any():
+            return {
+                "mean_abs_displacement": 0.0,
+                "max_abs_displacement": 0.0,
+                "near_boundary_fraction": 0.0,
+            }
         displacement = (self.proxy_code - self.base_q4_codes).abs()[active]
         boundary_distance = (self.proxy_code - self.proxy_code.round()).abs()[active]
         return {
@@ -167,6 +238,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--kd-temperature", type=float, default=2.0)
     parser.add_argument("--max-abs-log-scale-delta", type=float, default=0.2)
     parser.add_argument("--code-anchor-weight", type=float, default=0.0)
+    parser.add_argument(
+        "--progressive-levels",
+        default="",
+        help="optional odd hard codebook schedule, for example 7,5,3",
+    )
+    parser.add_argument(
+        "--moment-sequences",
+        type=int,
+        default=64,
+        help="calibration sequences for activation-weighted stage projection",
+    )
     parser.add_argument("--selection-gate-sequences", type=int, default=64)
     parser.add_argument("--selection-every", type=int, default=64)
     parser.add_argument("--gate-ratio", type=float, default=1.02)
@@ -178,6 +260,17 @@ def parse_args() -> argparse.Namespace:
         "--device", default="cuda" if torch.cuda.is_available() else "cpu"
     )
     return parser.parse_args()
+
+
+def parse_progressive_levels(value: str) -> tuple[int, ...]:
+    levels = tuple(int(item.strip()) for item in value.split(",") if item.strip())
+    if not levels:
+        return ()
+    if any(item < 3 or item > 15 or item % 2 == 0 for item in levels):
+        raise ValueError("progressive levels must be odd integers in [3, 15]")
+    if any(right >= left for left, right in zip(levels, levels[1:])):
+        raise ValueError("progressive levels must be strictly decreasing")
+    return levels
 
 
 @torch.no_grad()
@@ -215,8 +308,13 @@ def normalized_mse(student: torch.Tensor, teacher: torch.Tensor) -> torch.Tensor
 
 def main() -> None:
     args = parse_args()
+    progressive_levels = parse_progressive_levels(args.progressive_levels)
     if args.steps < 1 or args.train_sequences < 1:
         raise ValueError("steps and train sequences must be positive")
+    if not 1 <= args.moment_sequences <= args.train_sequences:
+        raise ValueError("moment sequences must be within train sequences")
+    if progressive_levels and args.proxy_lr <= 0:
+        raise ValueError("progressive collapse requires a positive proxy lr")
     source_path = args.source_checkpoint.resolve()
     parent_path = args.parent_artifact.resolve()
     candidate_path = args.candidate_artifact.resolve()
@@ -300,6 +398,20 @@ def main() -> None:
     )
     candidate = evaluate_domains(model, gates, args.device)
     candidate_selection = evaluate_domains(model, selection_gates, args.device)
+    moments = None
+    progressive_weights = None
+    if progressive_levels:
+        moments = collect_input_second_moments(
+            model,
+            names,
+            calibration,
+            args.device,
+            args.moment_sequences,
+        )
+        progressive_weights = {
+            name: model.get_submodule(name).weight.detach().float().clone()
+            for name in names
+        }
 
     layers = {}
     for name in names:
@@ -310,18 +422,21 @@ def main() -> None:
             bias=target.bias,
             train_codes=args.proxy_lr > 0,
         ).to(args.device)
+        if progressive_levels:
+            codes, scales, _error = weighted_symmetric_odd_level_project(
+                progressive_weights[name],
+                moments[name],
+                levels=progressive_levels[0],
+                group_size=128,
+            )
+            layer.reset_codebook_(
+                codes,
+                scales,
+                levels=progressive_levels[0],
+            )
         set_submodule(model, name, layer)
         layers[name] = layer
 
-    scale_parameters = [layer.log_scale_delta for layer in layers.values()]
-    proxy_parameters = (
-        [layer.proxy_code for layer in layers.values()] if args.proxy_lr > 0 else []
-    )
-    parameters = scale_parameters + proxy_parameters
-    parameter_groups = [{"params": scale_parameters, "lr": args.lr}]
-    if proxy_parameters:
-        parameter_groups.append({"params": proxy_parameters, "lr": args.proxy_lr})
-    optimizer = torch.optim.AdamW(parameter_groups, weight_decay=0.0)
     capture = {}
     handle = model.model.layers[args.target_layer].register_forward_hook(
         lambda _module, _inputs, output: capture.__setitem__(
@@ -329,114 +444,162 @@ def main() -> None:
         )
     )
     candidate_selection_ratios = ratios(candidate_selection, selection_baseline)
-    best_objective = max(candidate_selection_ratios.values())
     best_step = 0
-    best_deltas = {
-        name: layer.log_scale_delta.detach().cpu().clone()
-        for name, layer in layers.items()
-    }
-    best_proxies = {
-        name: layer.proxy_code.detach().cpu().clone()
-        for name, layer in layers.items()
-    }
     history = []
+    stage_summaries = []
+    stage_levels = progressive_levels or (None,)
     if torch.cuda.is_available() and str(args.device).startswith("cuda"):
         torch.cuda.reset_peak_memory_stats()
-    model.train()
     try:
-        for step in range(1, args.steps + 1):
-            item = (step - 1) % len(calibration)
-            batch = calibration[item].unsqueeze(0).to(args.device)
-            optimizer.zero_grad(set_to_none=True)
-            capture.clear()
-            logits = model(input_ids=batch[:, :-1], use_cache=False).logits
-            ce = F.cross_entropy(
-                logits.reshape(-1, logits.shape[-1]).float(),
-                batch[:, 1:].reshape(-1),
-            )
-            kd = bucket_kl(logits, teacher[item], args)
-            block = normalized_mse(capture["block"], teacher[item]["block"])
-            code_anchor = torch.stack(
-                [
-                    (
-                        layer.proxy_code[
-                            layer.q4_mask.unsqueeze(-1).expand_as(layer.proxy_code)
-                        ]
-                        - layer.base_q4_codes[
-                            layer.q4_mask.unsqueeze(-1).expand_as(
-                                layer.base_q4_codes
-                            )
-                        ]
+        for stage_index, levels in enumerate(stage_levels):
+            if stage_index > 0:
+                for name, layer in layers.items():
+                    codes, scales, _error = weighted_symmetric_odd_level_project(
+                        layer.effective_weight().detach().float(),
+                        moments[name],
+                        levels=levels,
+                        group_size=128,
                     )
-                    .float()
-                    .square()
-                    .mean()
-                    for layer in layers.values()
-                ]
-            ).mean()
-            loss = (
-                args.ce_weight * ce
-                + args.kd_weight * kd
-                + args.block_weight * block
-                + args.code_anchor_weight * code_anchor
-            )
-            loss.backward()
-            gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
-            optimizer.step()
-            for layer in layers.values():
-                layer.constrain_()
+                    layer.reset_codebook_(codes, scales, levels=levels)
 
-            selection_ratios = None
-            if step % args.selection_every == 0 or step == args.steps:
-                model.eval()
-                selection = evaluate_domains(model, selection_gates, args.device)
-                selection_ratios = ratios(selection, selection_baseline)
-                objective = max(selection_ratios.values())
-                if objective < best_objective:
-                    best_objective = objective
-                    best_step = step
-                    best_deltas = {
-                        name: layer.log_scale_delta.detach().cpu().clone()
-                        for name, layer in layers.items()
-                    }
-                    best_proxies = {
-                        name: layer.proxy_code.detach().cpu().clone()
-                        for name, layer in layers.items()
-                    }
-                model.train()
-            if step == 1 or step % args.selection_every == 0 or step == args.steps:
-                entry = {
-                    "step": step,
-                    "ce": float(ce.item()),
-                    "kd": float(kd.item()),
-                    "block": float(block.item()),
-                    "gradient_norm": float(gradient_norm),
-                    "code_anchor": float(code_anchor.item()),
-                    "code_churn": {
-                        name: layer.code_churn() for name, layer in layers.items()
-                    },
-                    "proxy_statistics": {
-                        name: layer.proxy_statistics()
-                        for name, layer in layers.items()
-                    },
-                    "selection_ratios": selection_ratios,
-                    "best_step": best_step,
-                }
-                history.append(entry)
-                print(
-                    f"step={step}/{args.steps} kd={entry['kd']:.6f} "
-                    f"block={entry['block']:.6f} best={best_step} "
-                    f"ratios={selection_ratios}",
-                    flush=True,
+            model.eval()
+            stage_initial = evaluate_domains(model, selection_gates, args.device)
+            stage_initial_ratios = ratios(stage_initial, selection_baseline)
+            stage_best_objective = max(stage_initial_ratios.values())
+            stage_best_step = 0
+            stage_best_deltas = {
+                name: layer.log_scale_delta.detach().cpu().clone()
+                for name, layer in layers.items()
+            }
+            stage_best_proxies = {
+                name: layer.proxy_code.detach().cpu().clone()
+                for name, layer in layers.items()
+            }
+
+            scale_parameters = [layer.log_scale_delta for layer in layers.values()]
+            proxy_parameters = (
+                [layer.proxy_code for layer in layers.values()]
+                if args.proxy_lr > 0
+                else []
+            )
+            parameters = scale_parameters + proxy_parameters
+            parameter_groups = [{"params": scale_parameters, "lr": args.lr}]
+            if proxy_parameters:
+                parameter_groups.append(
+                    {"params": proxy_parameters, "lr": args.proxy_lr}
                 )
+            optimizer = torch.optim.AdamW(parameter_groups, weight_decay=0.0)
+            model.train()
+
+            for stage_step in range(1, args.steps + 1):
+                global_step = stage_index * args.steps + stage_step
+                item = (global_step - 1) % len(calibration)
+                batch = calibration[item].unsqueeze(0).to(args.device)
+                optimizer.zero_grad(set_to_none=True)
+                capture.clear()
+                logits = model(input_ids=batch[:, :-1], use_cache=False).logits
+                ce = F.cross_entropy(
+                    logits.reshape(-1, logits.shape[-1]).float(),
+                    batch[:, 1:].reshape(-1),
+                )
+                kd = bucket_kl(logits, teacher[item], args)
+                block = normalized_mse(capture["block"], teacher[item]["block"])
+                code_anchor = torch.stack(
+                    [layer.code_anchor_loss() for layer in layers.values()]
+                ).mean()
+                loss = (
+                    args.ce_weight * ce
+                    + args.kd_weight * kd
+                    + args.block_weight * block
+                    + args.code_anchor_weight * code_anchor
+                )
+                loss.backward()
+                gradient_norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
+                optimizer.step()
+                for layer in layers.values():
+                    layer.constrain_()
+
+                selection_ratios = None
+                if (
+                    stage_step % args.selection_every == 0
+                    or stage_step == args.steps
+                ):
+                    model.eval()
+                    selection = evaluate_domains(
+                        model, selection_gates, args.device
+                    )
+                    selection_ratios = ratios(selection, selection_baseline)
+                    objective = max(selection_ratios.values())
+                    if objective < stage_best_objective:
+                        stage_best_objective = objective
+                        stage_best_step = stage_step
+                        stage_best_deltas = {
+                            name: layer.log_scale_delta.detach().cpu().clone()
+                            for name, layer in layers.items()
+                        }
+                        stage_best_proxies = {
+                            name: layer.proxy_code.detach().cpu().clone()
+                            for name, layer in layers.items()
+                        }
+                    model.train()
+                if (
+                    stage_step == 1
+                    or stage_step % args.selection_every == 0
+                    or stage_step == args.steps
+                ):
+                    entry = {
+                        "step": global_step,
+                        "stage": stage_index,
+                        "levels": levels,
+                        "stage_step": stage_step,
+                        "ce": float(ce.item()),
+                        "kd": float(kd.item()),
+                        "block": float(block.item()),
+                        "gradient_norm": float(gradient_norm),
+                        "code_anchor": float(code_anchor.item()),
+                        "code_churn": {
+                            name: layer.code_churn()
+                            for name, layer in layers.items()
+                        },
+                        "proxy_statistics": {
+                            name: layer.proxy_statistics()
+                            for name, layer in layers.items()
+                        },
+                        "selection_ratios": selection_ratios,
+                        "stage_best_step": stage_best_step,
+                    }
+                    history.append(entry)
+                    print(
+                        f"stage={stage_index} levels={levels} "
+                        f"step={stage_step}/{args.steps} kd={entry['kd']:.6f} "
+                        f"block={entry['block']:.6f} best={stage_best_step} "
+                        f"ratios={selection_ratios}",
+                        flush=True,
+                    )
+
+            model.eval()
+            with torch.no_grad():
+                for name, layer in layers.items():
+                    layer.log_scale_delta.copy_(
+                        stage_best_deltas[name].to(args.device)
+                    )
+                    layer.proxy_code.copy_(
+                        stage_best_proxies[name].to(args.device)
+                    )
+            best_step = stage_index * args.steps + stage_best_step
+            stage_summaries.append(
+                {
+                    "stage": stage_index,
+                    "levels": levels,
+                    "initial_selection_ratios": stage_initial_ratios,
+                    "best_step": stage_best_step,
+                    "best_objective": stage_best_objective,
+                }
+            )
     finally:
         handle.remove()
 
     model.eval()
-    with torch.no_grad():
-        for name, layer in layers.items():
-            layer.log_scale_delta.copy_(best_deltas[name].to(args.device))
-            layer.proxy_code.copy_(best_proxies[name].to(args.device))
     attempted = evaluate_domains(model, gates, args.device)
     attempted_selection = evaluate_domains(model, selection_gates, args.device)
     attempted_ratios = ratios(attempted, baseline)
@@ -458,13 +621,31 @@ def main() -> None:
     if args.write_artifact and passed:
         recovered = copy.deepcopy(candidate_artifact)
         for name, layer in layers.items():
-            recovered["matrices"][name]["q4_scales_fp16"] = layer.deploy_scales()
-            recovered["matrices"][name]["q4_codes_int8"] = layer.deploy_codes()
+            matrix_entry = recovered["matrices"][name]
+            deployed_scales = layer.deploy_scales()
+            deployed_codes = layer.deploy_codes()
+            if progressive_levels and progressive_levels[-1] == 3:
+                q4_mask = matrix_entry["q4_mask"].bool().clone()
+                if int(deployed_codes.abs().max()) > 1:
+                    raise RuntimeError("final three-level stage is not ternary")
+                matrix_entry["q2_codes_int8"] = matrix_entry[
+                    "q2_codes_int8"
+                ].clone()
+                matrix_entry["q2_scales_fp16"] = matrix_entry[
+                    "q2_scales_fp16"
+                ].clone()
+                matrix_entry["q2_codes_int8"][q4_mask] = deployed_codes[q4_mask]
+                matrix_entry["q2_scales_fp16"][q4_mask] = deployed_scales[q4_mask]
+                matrix_entry["q4_mask"] = torch.zeros_like(q4_mask)
+            else:
+                matrix_entry["q4_scales_fp16"] = deployed_scales
+                matrix_entry["q4_codes_int8"] = deployed_codes
         recovered["parent_artifact_sha256"] = sha256_file(parent_path)
         recovered["scale_recovery"] = {
             "source_candidate_sha256": sha256_file(candidate_path),
             "best_step": best_step,
             "proxy_lr": args.proxy_lr,
+            "progressive_levels": progressive_levels,
             "development_ratios": attempted_ratios,
             "development_incremental_ratios_vs_parent": attempted_incremental,
         }
@@ -498,6 +679,8 @@ def main() -> None:
         "train_sequences": args.train_sequences,
         "lr": args.lr,
         "proxy_lr": args.proxy_lr,
+        "progressive_levels": progressive_levels,
+        "moment_sequences": args.moment_sequences,
         "weights": {
             "ce": args.ce_weight,
             "kd": args.kd_weight,
@@ -519,6 +702,7 @@ def main() -> None:
         ),
         "selection_improvement": selection_improvement,
         "best_step": best_step,
+        "stage_summaries": stage_summaries,
         "history": history,
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
