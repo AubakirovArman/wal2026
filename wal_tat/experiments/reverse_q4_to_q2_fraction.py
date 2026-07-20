@@ -221,7 +221,7 @@ def main() -> None:
     if total_eligible_groups == 0:
         raise ValueError("target contains no Q4 groups")
     attempts = []
-    best = None
+    selection_candidates = []
     for fraction in fractions:
         count = max(1, min(total_eligible_groups, round(total_eligible_groups * fraction)))
         masks = global_lowest_masks(damage, eligible, count)
@@ -262,8 +262,10 @@ def main() -> None:
             f"passed={passed} ratios={absolute} incremental={incremental}",
             flush=True,
         )
-        if passed and (best is None or count > best["count"]):
-            best = {"count": count, "masks": masks, "candidate": candidate, **attempt}
+        if passed:
+            selection_candidates.append(
+                {"count": count, "masks": masks, "candidate": candidate, **attempt}
+            )
 
     final_metrics = None
     final_ratios = None
@@ -271,39 +273,67 @@ def main() -> None:
     final_passed = False
     artifact_path = None
     artifact_sha256 = None
-    if best is not None:
+    accepted = None
+    full_evaluations = []
+    for selection in sorted(
+        selection_candidates, key=lambda item: item["count"], reverse=True
+    ):
         install_mixed_q2_q4_artifact(
             model,
-            best["candidate"],
+            selection["candidate"],
             source,
             device=args.device,
             expected_source_sha256=source_hash,
         )
-        final_metrics = evaluate_domains(model, gates, args.device)
-        final_ratios = ratios(final_metrics, baseline)
-        final_incremental = ratios(final_metrics, parent)
-        final_passed = all(
-            value <= args.gate_ratio for value in final_ratios.values()
+        metrics = evaluate_domains(model, gates, args.device)
+        absolute = ratios(metrics, baseline)
+        incremental = ratios(metrics, parent)
+        passed = all(
+            value <= args.gate_ratio for value in absolute.values()
         ) and all(
             value <= args.incremental_gate_ratio
-            for value in final_incremental.values()
+            for value in incremental.values()
         )
-        if args.write_artifact and final_passed:
-            artifact = best["candidate"]
-            artifact["parent_artifact_sha256"] = sha256_file(parent_path)
-            artifact["reverse_q4_to_q2"] = {
-                "selected_groups": best["selected_groups"],
-                "selected_weights": best["selected_weights"],
-                "development_ratios": final_ratios,
-                "development_incremental_ratios_vs_parent": final_incremental,
+        full_evaluations.append(
+            {
+                "fraction": selection["fraction"],
+                "selected_groups": selection["selected_groups"],
+                "selected_weights": selection["selected_weights"],
+                "metrics": metrics,
+                "ratios": absolute,
+                "incremental_ratios_vs_parent": incremental,
+                "passed": passed,
             }
-            artifact_path = (
-                source_path.parents[1]
-                / "artifacts"
-                / f"wal-tat-{args.tag}-mixed-q2-q4-q8.pt"
-            )
-            torch.save(artifact, artifact_path)
-            artifact_sha256 = sha256_file(artifact_path)
+        )
+        print(
+            f"full fraction={selection['fraction']:.6f} passed={passed} "
+            f"ratios={absolute} incremental={incremental}",
+            flush=True,
+        )
+        if passed:
+            accepted = selection
+            final_metrics = metrics
+            final_ratios = absolute
+            final_incremental = incremental
+            final_passed = True
+            break
+
+    if accepted is not None and args.write_artifact:
+        artifact = accepted["candidate"]
+        artifact["parent_artifact_sha256"] = sha256_file(parent_path)
+        artifact["reverse_q4_to_q2"] = {
+            "selected_groups": accepted["selected_groups"],
+            "selected_weights": accepted["selected_weights"],
+            "development_ratios": final_ratios,
+            "development_incremental_ratios_vs_parent": final_incremental,
+        }
+        artifact_path = (
+            source_path.parents[1]
+            / "artifacts"
+            / f"wal-tat-{args.tag}-mixed-q2-q4-q8.pt"
+        )
+        torch.save(artifact, artifact_path)
+        artifact_sha256 = sha256_file(artifact_path)
 
     result = {
         "schema": "wal-tat-reverse-q4-to-q2-fraction-v1",
@@ -325,9 +355,25 @@ def main() -> None:
         "parent": parent,
         "parent_ratios": ratios(parent, baseline),
         "attempts": attempts,
-        "best_selection": (
-            {key: value for key, value in best.items() if key not in {"masks", "candidate"}}
-            if best is not None
+        "largest_selection_pass": (
+            {
+                key: value
+                for key, value in max(
+                    selection_candidates, key=lambda item: item["count"]
+                ).items()
+                if key not in {"masks", "candidate"}
+            }
+            if selection_candidates
+            else None
+        ),
+        "full_evaluations": full_evaluations,
+        "accepted_selection": (
+            {
+                key: value
+                for key, value in accepted.items()
+                if key not in {"masks", "candidate"}
+            }
+            if accepted is not None
             else None
         ),
         "final_metrics": final_metrics,

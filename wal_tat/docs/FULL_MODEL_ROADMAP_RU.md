@@ -23,9 +23,9 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
-strict ternary weights: 79,426,432 / 1,720,451,072 = 4.616605% in mixed artifact
-Q4 rescue weights:      72,806,656 / 1,720,451,072 = 4.231835%
-Q8 rescue weights:      99,425,152 / 1,720,451,072 = 5.779017%
+strict ternary weights: 80,826,752 / 1,720,451,072 = 4.697998% in mixed artifact
+Q4 rescue weights:      71,507,072 / 1,720,451,072 = 4.156298%
+Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
 embedding/head:       0 / 1 tied matrix
@@ -164,6 +164,25 @@ absolute ratios `0.993773 / 0.943618 / 0.968501`; incremental worst равен
 `1.003159` против strict source и `1.000108` против принятого parent.
 Accepted artifact SHA-256:
 `6d09ee3f4a697467a21f3d5da6987a5ec413cb4c4ff3eb345d1eff6b18291dc8`.
+
+Второй layer-25 Q8→Q4 шаг уточнил полный development frontier между `0.2%`
+и `0.5%` оставшихся Q8-групп. Максимум составил 787 групп, или 100,736
+весов; следующий размер уже не прошёл code gate. После принятия layer 25
+содержит `20.160166%` Q4 и `79.839834%` Q8 при `7.318593 bpw`. Sealed
+audit-v33 дал absolute ratios `0.991459 / 0.940683 / 0.942708`, incremental
+worst `1.003351` против strict source и `1.000018` против parent. Новый
+accepted artifact SHA-256:
+`6f6da5385d37f77773af9c1c15a317282cdf93dfe31c1ee2cf84b4eb2f48cf2c`.
+
+Первый layer-25 Q4→Q2 шаг затем использовал тот же activation-weighted
+rate--distortion selector. Full development принял `13.8%` Q4-групп, а
+`13.9%` уже не прошло selection code gate. В strict ternary переведены
+10,940 групп, или 1,400,320 весов. Теперь блок содержит `2.782186%` Q2,
+`17.377981%` Q4 и `79.839834%` Q8 при `7.262950 bpw`. Audit-v34 дал
+absolute ratios `0.993359 / 0.943748 / 0.961192`; incremental worst равен
+`1.004102` против strict source и `1.000934` против parent. Новый accepted
+artifact SHA-256:
+`bf17ca58ad836ef1f0569b6ae9d2d28f7224cfb383a64898dfbaef2f9acf5701`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
