@@ -1,9 +1,8 @@
-"""Build recovery/dev data from validation-domain sources without audit overlap.
+"""Build recovery/dev data from selected domain sources without audit overlap.
 
-The suite intentionally matches the source *types* used by rotating audit v5
-(C4 validation, SQuAD validation contexts and PyTorch source) while using
-different declared token ranges.  It is development data and must never be
-described as sealed audit evidence.
+The suite can match either validation or train sources while using declared
+token ranges. It is development data and must never be described as sealed
+audit evidence.
 """
 from __future__ import annotations
 
@@ -72,6 +71,12 @@ def main() -> None:
     )
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--length", type=int, default=256)
+    parser.add_argument(
+        "--c4-split", choices=("validation", "train"), default="validation"
+    )
+    parser.add_argument(
+        "--squad-split", choices=("validation", "train"), default="validation"
+    )
     parser.add_argument("--calibration-per-domain", type=int, default=64)
     parser.add_argument("--c4-calibration-repeat", type=int, default=1)
     parser.add_argument("--squad-calibration-repeat", type=int, default=4)
@@ -98,20 +103,33 @@ def main() -> None:
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
-    c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
-    squad_path = one_file("squad/plain_text/0.0.0/*/squad-validation.arrow")
+    if args.c4_split == "validation":
+        c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
+    else:
+        c4_path = one_file(
+            "allenai___c4/default-b*/0.0.0/*/c4-train-00000-of-*.arrow"
+        )
+    squad_path = one_file(
+        f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
+    )
     c4_texts = arrow_column(c4_path, "text")[:4000]
     squad_texts = arrow_column(squad_path, "context")
     code_paths, code_texts = code_corpus(args.code_source)
+    c4_domain = f"c4_{args.c4_split}"
+    squad_domain = (
+        "squad_context"
+        if args.squad_split == "validation"
+        else "squad_train_context"
+    )
     code_domain = f"{args.code_source}_code"
     token_sources = {
-        "c4_validation": tokenize(tokenizer, c4_texts),
-        "squad_context": tokenize(tokenizer, squad_texts),
+        c4_domain: tokenize(tokenizer, c4_texts),
+        squad_domain: tokenize(tokenizer, squad_texts),
         code_domain: tokenize(tokenizer, code_texts),
     }
     repeats = {
-        "c4_validation": args.c4_calibration_repeat,
-        "squad_context": args.squad_calibration_repeat,
+        c4_domain: args.c4_calibration_repeat,
+        squad_domain: args.squad_calibration_repeat,
         code_domain: args.code_calibration_repeat,
     }
     calibration_by_domain = {}
@@ -172,9 +190,13 @@ def main() -> None:
         "gate_offset": args.gate_offset,
         "interleave_calibration": args.interleave_calibration,
         "source_splits": {
-            "c4_validation": "c4 validation",
-            "squad_context": "squad validation",
+            c4_domain: f"c4 {args.c4_split}",
+            squad_domain: f"squad {args.squad_split}",
             code_domain: f"installed {args.code_source} Python source",
+        },
+        "data_splits": {
+            "c4": args.c4_split,
+            "squad": args.squad_split,
         },
         "code_source": args.code_source,
         "ranges": ranges,

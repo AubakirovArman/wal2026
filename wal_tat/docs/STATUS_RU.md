@@ -59,20 +59,20 @@ Q2-g128 упаковки их расчётный payload составит 18.957
 
 ## Текущая validation
 
-Текущий принятый frontier — `s0050`. Он наследует `s0049` и добавляет 2,048
-g128-групп `layer24.gate_proj`. На новом one-shot audit-v10 абсолютные NLL
-ratios равны:
+Текущий принятый frontier — `s0050r1`. Он сохраняет все ternary-группы
+`s0050`, но компенсирует их ошибку только в ещё не принятых BF16-группах MLP
+слоя 24. На one-shot audit-v12 абсолютные NLL ratios равны:
 
-| Domain | Ratio к BF16 | Incremental upper-95 к `s0049` |
+| Domain | Ratio к BF16 | Incremental upper-95 к `s0050` |
 |---|---:|---:|
-| C4 validation | 0.992968 | 1.000039 |
-| SQuAD context | 0.997178 | 1.000336 |
-| PyTorch code | 0.988100 | 1.000148 |
+| C4 train | 0.994325 | 0.998983 |
+| SQuAD train context | 0.995866 | 0.998855 |
+| Transformers code | 0.990334 | 0.997520 |
 
-Все cumulative point/confidence и policy-level incremental upper-95 проверки
-пройдены. Fresh-process standard verification дала `wiki=0.947148` и
-`code=0.959176` relative NLL. В accepted groups нет BF16 residual; добавленные
-262,144 weights используют только strict ternary codes и FP16 g128 scales.
+Все cumulative point и policy-level incremental upper-95 проверки пройдены.
+Fresh-process standard verification дала `wiki=0.946518` и `code=0.957625`
+relative NLL. В accepted groups нет BF16 residual; coverage, codes, scales и
+masks идентичны `s0050`.
 
 ### Историческая recurring validation parent `s0048r2`
 
@@ -837,6 +837,22 @@ C4/SQuAD/code равны `1.000039423 / 1.000335574 / 1.000147976`, все ни�
 добавил 2,048 g128-групп. Fresh reload дал `wiki=0.947148` и `code=0.959176`;
 accepted coverage теперь 74,838,016 weights, или 4.349907%.
 
+### Coverage-neutral recovery и frontier `s0050r1`
+
+Новый audit-v11 отклонил следующий 2,048-group candidate и одновременно
+показал, что сам `s0050` имеет SQuAD-train ratio `1.007967` на этом новом
+срезе. Кандидат не был принят. Recovery обучал только непринятые BF16-группы
+`layer24.up/gate/down`, не меняя ни одного принятого ternary-code, scale или
+mask. Первый запуск узко не прошёл заранее заданный confirmation improvement;
+второй использовал новую development-suite с нулевым overlap и прошёл.
+
+Замороженный artifact один раз проверен на audit-v12. Абсолютные C4/SQuAD/
+Transformers-code ratios равны `0.994325 / 0.995866 / 0.990334`, а
+incremental upper-95 относительно `s0050` —
+`0.998983 / 0.998855 / 0.997520`. Atomic checkpoint `s0050r1` сохранил
+coverage `74,838,016` и fresh reload дал `wiki=0.946518`, `code=0.957625`.
+После проверки parent и полностью интегрированные/rejected artifacts удалены.
+
 ### Reference Q2-g128 packer и реальный bpw
 
 Добавлен versioned binary format без pickle overhead. Он хранит mapping
@@ -845,7 +861,7 @@ accepted coverage теперь 74,838,016 weights, или 4.349907%.
 сразу отклоняет reserved code, проверяет длины payload и точно восстанавливает
 deployed weight.
 
-На настоящем `layer24.up_proj` (его mask coverage не изменилось в `s0050`):
+На настоящем `layer24.up_proj` (его mask coverage не изменилось в `s0050r1`):
 
 - shape: `6144 x 2048`, всего 12,582,912 weights;
 - committed: 74,496 из 98,304 групп, то есть 75.78125%;
@@ -867,11 +883,11 @@ runtime/KV-cache. Это storage projection, не текущая VRAM трени
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt
+wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0050r1.pt
 ```
 
-- размер: `304,658,894` bytes;
-- SHA-256: `e1210d5ca1192ec82aaef56ae24adbd3207134eacc572fa264a485da5bf6f934`;
+- размер: `304,660,797` bytes;
+- SHA-256: `6210881e8df6dcef396494cb700fec6635077f017c644a4a6f25bf990e3e37fd`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
   `up_proj`, 8.528646% `gate_proj` и 10.44921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -881,12 +897,12 @@ wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt
 
 ## Следующий технический шаг
 
-1. до нового candidate построить audit-v11 с новыми непересекающимися token
+1. до нового candidate построить audit-v13 с новыми непересекающимися token
    ranges и записать его hash/policy;
-2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0050`;
+2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0050r1`;
 3. повторить prospective atom по 2,048 групп, уменьшая его только если
    development gate не проходит; candidate проходит development recovery,
-   frozen audit-v11 и fresh-process reload;
+   frozen audit-v13 и fresh-process reload;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и

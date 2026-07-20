@@ -4,6 +4,7 @@ from mlp_fallback_compensation_recovery import (
     aggregate_relative_delta,
     apply_strict_recode_artifact,
     fallback_change_statistics,
+    strict_mlp_artifact_from_checkpoint,
     validate_disjoint_slices,
 )
 from wal_tat import TransactionalTernaryMatrix
@@ -73,3 +74,33 @@ def test_disjoint_slice_validation():
         assert "overlap" in str(error)
     else:
         raise AssertionError("overlapping slices must fail")
+
+
+def test_strict_mlp_artifact_is_derived_exactly_from_checkpoint():
+    matrices = {}
+    expected_names = []
+    for projection in ("up_proj", "gate_proj", "down_proj"):
+        name = f"model.layers.3.mlp.{projection}"
+        expected_names.append(name)
+        codes = torch.tensor([[1, 0, -1, 1, 0]], dtype=torch.int8)
+        matrices[name] = {
+            "shape": (1, 5),
+            "group_size": 2,
+            "committed_mask": torch.tensor([[True, False, True]]),
+            "ternary_codes_int8": codes,
+            "scales_fp16": torch.tensor([[0.5, 0.25, 0.125]], dtype=torch.float16),
+        }
+    payload = {"format": "wal-tat-multi-g128-v2", "matrices": matrices}
+    artifact = strict_mlp_artifact_from_checkpoint(payload, "checkpoint-hash", 3)
+
+    assert artifact["source_checkpoint_sha256"] == "checkpoint-hash"
+    assert artifact["target_names"] == expected_names
+    assert artifact["derived_from_source_checkpoint"] is True
+    for name in expected_names:
+        entry = artifact["matrices"][name]
+        assert entry["ternary_codes_int8"].shape == (1, 3, 2)
+        assert entry["ternary_codes_int8"].dtype == torch.int8
+        assert entry["ternary_codes_int8"][0, -1].tolist() == [0, 0]
+        assert torch.equal(
+            entry["committed_mask"], matrices[name]["committed_mask"]
+        )

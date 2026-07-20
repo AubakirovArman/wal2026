@@ -57,6 +57,18 @@ def main() -> None:
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--length", type=int, default=256)
     parser.add_argument("--sequences", type=int, default=512)
+    parser.add_argument(
+        "--c4-split",
+        choices=("validation", "train"),
+        default="validation",
+        help="Use a fresh raw Arrow source after the validation stream is exhausted.",
+    )
+    parser.add_argument(
+        "--squad-split",
+        choices=("validation", "train"),
+        default="validation",
+        help="Use a fresh raw Arrow source after the validation stream is exhausted.",
+    )
     parser.add_argument("--c4-offset", type=int, default=17011)
     parser.add_argument("--squad-offset", type=int, default=9011)
     parser.add_argument("--code-offset", type=int, default=4001)
@@ -74,8 +86,15 @@ def main() -> None:
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
-    c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
-    squad_path = one_file("squad/plain_text/0.0.0/*/squad-validation.arrow")
+    if args.c4_split == "validation":
+        c4_path = one_file("allenai___c4/default-c*/0.0.0/*/c4-validation.arrow")
+    else:
+        c4_path = one_file(
+            "allenai___c4/default-b*/0.0.0/*/c4-train-00000-of-*.arrow"
+        )
+    squad_path = one_file(
+        f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
+    )
     c4_texts = arrow_column(c4_path, "text")
     squad_contexts = arrow_column(squad_path, "context")
 
@@ -103,26 +122,32 @@ def main() -> None:
             f"# source: {label}\n{path.read_text(encoding='utf-8', errors='ignore')}"
         )
 
+    c4_domain = f"c4_{args.c4_split}"
+    squad_domain = (
+        "squad_context"
+        if args.squad_split == "validation"
+        else "squad_train_context"
+    )
     code_domain = f"{args.code_source}_code"
     token_sources = {
-        "c4_validation": token_stream(tokenizer, c4_texts[:4000]),
-        "squad_context": token_stream(tokenizer, squad_contexts),
+        c4_domain: token_stream(tokenizer, c4_texts[:4000]),
+        squad_domain: token_stream(tokenizer, squad_contexts),
         code_domain: token_stream(tokenizer, code_texts),
     }
     offsets = {
-        "c4_validation": args.c4_offset,
-        "squad_context": args.squad_offset,
+        c4_domain: args.c4_offset,
+        squad_domain: args.squad_offset,
         code_domain: args.code_offset,
     }
     gates = {
-        "c4_validation": text_windows(
-            token_sources["c4_validation"],
+        c4_domain: text_windows(
+            token_sources[c4_domain],
             count=args.sequences,
             length=args.length,
             offset=args.c4_offset,
         ),
-        "squad_context": text_windows(
-            token_sources["squad_context"],
+        squad_domain: text_windows(
+            token_sources[squad_domain],
             count=args.sequences,
             length=args.length,
             offset=args.squad_offset,
@@ -143,8 +168,8 @@ def main() -> None:
         "sequences_per_domain": args.sequences,
         "predicted_tokens_per_domain": args.length * args.sequences,
         "offsets": {
-            "c4_validation": args.c4_offset,
-            "squad_context": args.squad_offset,
+            c4_domain: args.c4_offset,
+            squad_domain: args.squad_offset,
             "code": args.code_offset,
         },
         "ranges": {
@@ -152,6 +177,10 @@ def main() -> None:
                 domain: [offsets[domain], offsets[domain] + args.sequences * args.length]
                 for domain in gates
             }
+        },
+        "data_splits": {
+            "c4": args.c4_split,
+            "squad": args.squad_split,
         },
         "code_source": args.code_source,
         "gates": gates,

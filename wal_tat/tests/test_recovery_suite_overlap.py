@@ -48,3 +48,26 @@ def test_legacy_audit_offsets_use_source_file_identity():
     assert ranges[squad_id][0]["end"] == 28
     assert ranges[code_id][0]["start"] == 40
     assert ranges[code_id][0]["end"] == 44
+
+
+def test_train_and_validation_arrow_sources_have_distinct_identities():
+    common = {
+        "model_revision": "revision",
+        "sequence_length": 4,
+        "ranges": {"gates": {"squad_context": [0, 4]}},
+    }
+    validation = {
+        **common,
+        "sources": ["/cache/squad-validation.arrow"],
+        "source_sha256": {"/cache/squad-validation.arrow": "validation-sha"},
+    }
+    train = {
+        **common,
+        "ranges": {"gates": {"squad_train_context": [0, 4]}},
+        "sources": ["/cache/squad-train.arrow"],
+        "source_sha256": {"/cache/squad-train.arrow": "train-sha"},
+    }
+    assert stream_identity(validation, "squad_context") != stream_identity(
+        train, "squad_train_context"
+    )
+    assert source_ranges(validation).keys() != source_ranges(train).keys()

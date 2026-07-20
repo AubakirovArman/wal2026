@@ -1,0 +1,191 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-recovery-v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt",
+  "source_checkpoint_sha256": "e1210d5ca1192ec82aaef56ae24adbd3207134eacc572fa264a485da5bf6f934",
+  "starting_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt",
+  "starting_artifact_sha256": "e1210d5ca1192ec82aaef56ae24adbd3207134eacc572fa264a485da5bf6f934",
+  "starting_artifact_role": "derived_exactly_from_source_checkpoint",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "cc7cab8fc5bc94d9fa2bde0ff93e08353aa3793d23fd010f31bb1808cc74d7c8",
+  "suite_role": "development training, selection and disjoint confirmation; never audit",
+  "target_layer": 24,
+  "target_names": [
+    "model.layers.24.mlp.up_proj",
+    "model.layers.24.mlp.gate_proj",
+    "model.layers.24.mlp.down_proj"
+  ],
+  "teacher_source": "target_counterfactual_mlp",
+  "teacher_selection_ratios": {
+    "c4_train": 0.9884371643486292,
+    "squad_train_context": 0.9985124617944181,
+    "torch_code": 0.9884103980856667
+  },
+  "teacher_confirmation_ratios": {
+    "c4_train": 0.9963796773094272,
+    "squad_train_context": 0.9897802998315117,
+    "torch_code": 0.9791326109908894
+  },
+  "source_restoration_exact": true,
+  "steps": 768,
+  "lr": 2e-06,
+  "loss_weights": {
+    "ce": 1.0,
+    "block": 0.25,
+    "kd": 0.5,
+    "delta_anchor": 0.01
+  },
+  "selection_slice": [
+    0,
+    128
+  ],
+  "confirmation_slice": [
+    128,
+    128
+  ],
+  "source_selection_ratios": {
+    "c4_train": 0.9899342156873375,
+    "squad_train_context": 1.0063232663503061,
+    "torch_code": 0.9900464536281861
+  },
+  "source_confirmation_ratios": {
+    "c4_train": 0.997190681085962,
+    "squad_train_context": 0.9937950003372052,
+    "torch_code": 0.9792798359787727
+  },
+  "best_step": 768,
+  "best_selection_ratios": {
+    "c4_train": 0.9890223230789912,
+    "squad_train_context": 1.0000159110224391,
+    "torch_code": 0.9855965277169458
+  },
+  "attempted_selection_ratios": {
+    "c4_train": 0.9890223230789912,
+    "squad_train_context": 1.0000159110224391,
+    "torch_code": 0.9855965277169458
+  },
+  "attempted_confirmation_ratios": {
+    "c4_train": 0.996230697535474,
+    "squad_train_context": 0.9902343343757173,
+    "torch_code": 0.9744888104274502
+  },
+  "selection_worst_ratio_improvement": 0.00630735532786697,
+  "confirmation_worst_ratio_improvement": 0.0009599835504879861,
+  "min_selection_improvement": 0.001,
+  "min_confirmation_improvement": 0.001,
+  "max_relative_delta": 0.1,
+  "fallback_change": {
+    "model.layers.24.mlp.up_proj": {
+      "fallback_groups": 23808,
+      "fallback_weights": 3047424,
+      "changed_fallback_weights": 1831364,
+      "absolute_delta_mean": 9.746834257384762e-05,
+      "absolute_delta_p95": 0.000244140625,
+      "absolute_delta_max": 0.0009765625,
+      "relative_delta_to_source_absmean": 0.0033441728446632624,
+      "committed_master_values_unchanged": true
+    },
+    "model.layers.24.mlp.gate_proj": {
+      "fallback_groups": 89920,
+      "fallback_weights": 11509760,
+      "changed_fallback_weights": 6976694,
+      "absolute_delta_mean": 9.602379577700049e-05,
+      "absolute_delta_p95": 0.000244140625,
+      "absolute_delta_max": 0.0009765625,
+      "relative_delta_to_source_absmean": 0.003420542925596237,
+      "committed_master_values_unchanged": true
+    },
+    "model.layers.24.mlp.down_proj": {
+      "fallback_groups": 88032,
+      "fallback_weights": 11268096,
+      "changed_fallback_weights": 6669053,
+      "absolute_delta_mean": 9.525383211439475e-05,
+      "absolute_delta_p95": 0.000244140625,
+      "absolute_delta_max": 0.0009765625,
+      "relative_delta_to_source_absmean": 0.003174103796482086,
+      "committed_master_values_unchanged": true
+    }
+  },
+  "aggregate_relative_delta": 0.0033040047202977183,
+  "committed_master_values_unchanged": true,
+  "ternary_codes_unchanged": true,
+  "scales_unchanged": true,
+  "committed_masks_unchanged": true,
+  "codes_strict_ternary": true,
+  "persistent_bf16_residual_on_committed_groups": false,
+  "coverage_changed": false,
+  "passed": false,
+  "artifact": null,
+  "artifact_sha256": null,
+  "checkpoint_written": false,
+  "final_restoration_exact": true,
+  "history": [
+    {
+      "step": 1,
+      "ce": 4.1296796798706055,
+      "block_loss": 0.004527129698544741,
+      "kd_loss": 0.0015804710565134883,
+      "anchor_loss": 0.0,
+      "gradient_norm": 1.0806362628936768,
+      "selection_ratios": null,
+      "best_step": 0
+    },
+    {
+      "step": 192,
+      "ce": 1.88818359375,
+      "block_loss": 0.003273125272244215,
+      "kd_loss": 0.002520840149372816,
+      "anchor_loss": 1.534033685857139e-06,
+      "gradient_norm": 0.8584885001182556,
+      "selection_ratios": {
+        "c4_train": 0.9897401717939718,
+        "squad_train_context": 1.0054433802162146,
+        "torch_code": 0.9891686250063643
+      },
+      "best_step": 192
+    },
+    {
+      "step": 384,
+      "ce": 2.7723166942596436,
+      "block_loss": 0.0027397628873586655,
+      "kd_loss": 0.0024197581224143505,
+      "anchor_loss": 3.6883393477182835e-06,
+      "gradient_norm": 0.8656331896781921,
+      "selection_ratios": {
+        "c4_train": 0.9895255895896756,
+        "squad_train_context": 1.0033031469678884,
+        "torch_code": 0.9878975494440618
+      },
+      "best_step": 384
+    },
+    {
+      "step": 576,
+      "ce": 1.8788727521896362,
+      "block_loss": 0.003273278707638383,
+      "kd_loss": 0.002440717304125428,
+      "anchor_loss": 8.246420293289702e-06,
+      "gradient_norm": 0.8445117473602295,
+      "selection_ratios": {
+        "c4_train": 0.9892388117255656,
+        "squad_train_context": 1.0018252300066912,
+        "torch_code": 0.986624484402208
+      },
+      "best_step": 576
+    },
+    {
+      "step": 768,
+      "ce": 2.7634849548339844,
+      "block_loss": 0.0027559709269553423,
+      "kd_loss": 0.0024238682817667723,
+      "anchor_loss": 1.3488330296240747e-05,
+      "gradient_norm": 0.8584429621696472,
+      "selection_ratios": {
+        "c4_train": 0.9890223230789912,
+        "squad_train_context": 1.0000159110224391,
+        "torch_code": 0.9855965277169458
+      },
+      "best_step": 768
+    }
+  ],
+  "elapsed_seconds": 283.275027513504,
+  "peak_cuda_allocated_bytes": 5546761728
+}

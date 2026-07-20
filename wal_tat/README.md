@@ -25,7 +25,7 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0050` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0050r1` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
@@ -107,7 +107,17 @@ The accepted frontier `s0050` on `Qwen/Qwen3-1.7B` has:
   paired upper-95 ratios were `1.000039 / 1.000336 / 1.000148`, below the
   predeclared size-adjusted `1.000924` limit. `s0050` therefore raises coverage
   to 74,838,016 weights and fresh-verifies at `wiki=0.947148` and
-  `code=0.959176`; it is the accepted WAL-TAT frontier;
+  `code=0.959176`;
+- audit-v11 rejected the next 262,144-weight candidate and exposed a
+  pre-existing SQuAD-train generalization gap. A coverage-neutral fallback QAT
+  run then changed only the still-uncommitted layer-24 MLP master weights while
+  preserving every accepted ternary code, FP16 scale and mask;
+- the exact frozen recovery passed one-shot audit-v12 with absolute C4/SQuAD/
+  Transformers-code ratios `0.994325 / 0.995866 / 0.990334` and incremental
+  upper-95 ratios `0.998983 / 0.998855 / 0.997520` versus `s0050`;
+- `s0050r1` keeps coverage at 74,838,016 weights, contains no BF16 residual in
+  committed groups, and fresh-verifies at `wiki=0.946518` and `code=0.957625`.
+  It is the accepted WAL-TAT frontier;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);

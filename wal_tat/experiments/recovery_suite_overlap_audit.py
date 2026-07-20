@@ -36,10 +36,18 @@ def stream_identity(payload: dict, domain: str) -> str | None:
     source_sha = payload.get("source_sha256", {})
     if domain.startswith("c4"):
         family = "c4"
-        selected = [path for path in sources if "c4-validation.arrow" in path]
+        selected = [
+            path
+            for path in sources
+            if Path(path).name.startswith("c4-") and path.endswith(".arrow")
+        ]
     elif domain.startswith("squad"):
         family = "squad"
-        selected = [path for path in sources if "squad-validation.arrow" in path]
+        selected = [
+            path
+            for path in sources
+            if Path(path).name.startswith("squad-") and path.endswith(".arrow")
+        ]
     else:
         family = "code"
         selected = [path for path in sources if path.endswith(".py")]

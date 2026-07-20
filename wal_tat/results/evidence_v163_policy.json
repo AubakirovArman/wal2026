@@ -1,0 +1,52 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v163",
+  "declared_before_execution": true,
+  "objective": "build audit-only v12 before train-domain coverage-neutral recovery of s0050; use ranges disjoint from audit-v11 and the new development suite",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "ef10ec1da42ad2c80d80fb58d8063b51b2363977e6177a25a5eb0af25139afe8",
+  "output": "wal2/cache/wal-tat-audit-holdout-v12-l256-g512.pt",
+  "sequence_length": 256,
+  "sequences_per_domain": 512,
+  "data_splits": {
+    "c4": "train shard 00000",
+    "squad": "train",
+    "code": "transformers"
+  },
+  "offsets": {
+    "c4_train": 1200003,
+    "squad_train_context": 1200003,
+    "transformers_code": 700003
+  },
+  "declared_ranges": {
+    "c4_train": [
+      1200003,
+      1331075
+    ],
+    "squad_train_context": [
+      1200003,
+      1331075
+    ],
+    "transformers_code": [
+      700003,
+      831075
+    ]
+  },
+  "range_rationale": {
+    "c4_train": "starts after train-development gates ending at 1085539",
+    "squad_train_context": "starts after train-development gates ending at 1085539",
+    "transformers_code": "starts after legacy audit-v6 ending at 581075 and uses a source distinct from the train-development torch code"
+  },
+  "role": "audit-only v12; never use for training, candidate selection, rollback selection or hyperparameter tuning",
+  "audit_firewall": {
+    "built_before_s0050_recovery": true,
+    "v12_model_evaluation_forbidden_until_a_recovery_artifact_is_frozen": true,
+    "one_shot_recovery_decision": true
+  },
+  "acceptance": {
+    "suite_file_created": true,
+    "tokens_per_domain": 131072,
+    "zero_exact_and_declared_range_overlap_required_before_recovery": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v12-l256-g512.pt --length 256 --sequences 512 --c4-split train --squad-split train --c4-offset 1200003 --squad-offset 1200003 --code-offset 700003 --code-source transformers --policy 'audit-only v12; built before s0050 train-domain recovery; never use for training or model selection'"
+}

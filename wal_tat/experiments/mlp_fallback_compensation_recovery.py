@@ -43,7 +43,14 @@ from wal_tat.quantization import padded_grouped
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
-    parser.add_argument("--starting-artifact", type=Path, required=True)
+    parser.add_argument(
+        "--starting-artifact",
+        type=Path,
+        help=(
+            "Optional frozen strict-ternary overlay. When omitted, derive the "
+            "three target MLP entries exactly from the source checkpoint."
+        ),
+    )
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
@@ -87,6 +94,69 @@ def validate_disjoint_slices(args: argparse.Namespace) -> None:
     )
     if selection & confirmation:
         raise ValueError("selection and confirmation gate slices overlap")
+
+
+def strict_mlp_artifact_from_checkpoint(
+    source_payload: dict, source_hash: str, target_layer: int
+) -> dict:
+    """Build an exact in-memory strict-ternary bundle from a WAL-TAT checkpoint."""
+    if source_payload.get("format") not in {
+        "wal-tat-multi-g128-v1",
+        "wal-tat-multi-g128-v2",
+    }:
+        raise ValueError("unsupported source checkpoint format")
+    names = tuple(
+        f"model.layers.{target_layer}.mlp.{projection}"
+        for projection in ("up_proj", "gate_proj", "down_proj")
+    )
+    matrices = source_payload.get("matrices")
+    if not isinstance(matrices, dict):
+        raise ValueError("source checkpoint has no matrix entries")
+    entries = {}
+    for name in names:
+        if name not in matrices:
+            raise ValueError(f"source checkpoint is missing target matrix: {name}")
+        source = matrices[name]
+        shape = tuple(source.get("shape", ()))
+        group_size = int(source.get("group_size", 0))
+        mask = source.get("committed_mask")
+        codes = source.get("ternary_codes_int8")
+        scales = source.get("scales_fp16")
+        if len(shape) != 2 or min(shape) <= 0 or group_size <= 0:
+            raise ValueError(f"invalid matrix metadata for {name}")
+        if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool:
+            raise ValueError(f"invalid committed mask for {name}")
+        if not isinstance(codes, torch.Tensor) or codes.dtype != torch.int8:
+            raise ValueError(f"invalid ternary codes for {name}")
+        if not isinstance(scales, torch.Tensor) or scales.dtype != torch.float16:
+            raise ValueError(f"invalid FP16 scales for {name}")
+        if tuple(codes.shape) != shape:
+            raise ValueError(f"ternary code shape mismatch for {name}")
+        padding = (-shape[1]) % min(group_size, shape[1])
+        grouped_codes = F.pad(codes, (0, padding)).view(
+            shape[0], -1, min(group_size, shape[1])
+        )
+        expected_group_shape = grouped_codes.shape[:2]
+        if tuple(mask.shape) != expected_group_shape:
+            raise ValueError(f"committed mask shape mismatch for {name}")
+        if tuple(scales.shape) != expected_group_shape:
+            raise ValueError(f"scale shape mismatch for {name}")
+        if not set(grouped_codes.unique().tolist()) <= {-1, 0, 1}:
+            raise ValueError(f"non-ternary checkpoint codes for {name}")
+        if not torch.isfinite(scales).all() or not (scales > 0).all():
+            raise ValueError(f"invalid checkpoint scales for {name}")
+        entries[name] = {
+            "committed_mask": mask.detach().cpu().clone(),
+            "ternary_codes_int8": grouped_codes.detach().cpu().clone(),
+            "scales_fp16": scales.detach().cpu().clone(),
+        }
+    return {
+        "format": "wal-tat-ternary-recode-bundle-v1",
+        "source_checkpoint_sha256": source_hash,
+        "target_names": list(names),
+        "matrices": entries,
+        "derived_from_source_checkpoint": True,
+    }
 
 
 @torch.no_grad()
@@ -193,8 +263,6 @@ def main() -> None:
     validate_disjoint_slices(args)
     source_path = args.source_checkpoint.resolve()
     source_hash = sha256_file(source_path)
-    artifact_path = args.starting_artifact.resolve()
-    artifact_hash = sha256_file(artifact_path)
     suite_path = args.suite.resolve()
     suite_hash = sha256_file(suite_path)
     model_path = (args.model_path or default_model_path()).resolve()
@@ -213,9 +281,20 @@ def main() -> None:
         role="confirmation",
     )
     source_payload = torch.load(source_path, map_location="cpu", weights_only=False)
-    starting_artifact = torch.load(
-        artifact_path, map_location="cpu", weights_only=False
-    )
+    if args.starting_artifact is None:
+        artifact_path = source_path
+        artifact_hash = source_hash
+        starting_artifact = strict_mlp_artifact_from_checkpoint(
+            source_payload, source_hash, args.target_layer
+        )
+        starting_artifact_role = "derived_exactly_from_source_checkpoint"
+    else:
+        artifact_path = args.starting_artifact.resolve()
+        artifact_hash = sha256_file(artifact_path)
+        starting_artifact = torch.load(
+            artifact_path, map_location="cpu", weights_only=False
+        )
+        starting_artifact_role = "external_frozen_artifact"
     artifact_entries = artifact_matrix_entries(starting_artifact)
     expected_prefix = f"model.layers.{args.target_layer}.mlp."
     target_names = tuple(
@@ -442,6 +521,7 @@ def main() -> None:
                 "format": "wal-tat-ternary-fallback-compensation-v1",
                 "source_checkpoint_sha256": source_hash,
                 "starting_artifact_sha256": artifact_hash,
+                "starting_artifact_role": starting_artifact_role,
                 "suite_sha256": suite_hash,
                 "target_layer": args.target_layer,
                 "target_names": list(target_names),
@@ -478,6 +558,7 @@ def main() -> None:
         "source_checkpoint_sha256": source_hash,
         "starting_artifact": str(artifact_path),
         "starting_artifact_sha256": artifact_hash,
+        "starting_artifact_role": starting_artifact_role,
         "suite": str(suite_path),
         "suite_sha256": suite_hash,
         "suite_role": "development training, selection and disjoint confirmation; never audit",
