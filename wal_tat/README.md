@@ -32,13 +32,18 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `bf17ca5...`: 80,826,752 ternary, 71,507,072
+- sealed-audited mixed artifact `b4938a3...`: 81,054,720 ternary, 71,279,104
   signed-Q4 and 99,324,416 signed-Q8 weights, for 251,658,240 low-bit weights
   (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
 
-The mixed block-24 MLP is `39.625041%` ternary and `60.374959%` Q4 at an
-average `3.332499 bpw`. After its first accepted reverse-compression step,
+The mixed block-24 MLP is `40.228950%` ternary and `59.771050%` Q4 at an
+average `3.320421 bpw`. Including its already strict-Q2 attention, the complete
+block is `55.171712%` Q2 and `44.828288%` Q4 at `3.021566 bpw`. Its new
+227,968-weight Q4→Q2 step passed sealed audit-v35 at
+`0.992240 / 0.944613 / 0.966782`, with incremental worst `1.004161` versus
+the immutable strict source and `1.000162` versus the accepted parent.
+After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are
 `0.992754 / 0.992227 / 0.961534`; incremental ratios versus immutable `s0053`

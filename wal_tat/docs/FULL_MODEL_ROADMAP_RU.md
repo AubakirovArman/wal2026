@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
-strict ternary weights: 80,826,752 / 1,720,451,072 = 4.697998% in mixed artifact
-Q4 rescue weights:      71,507,072 / 1,720,451,072 = 4.156298%
+strict ternary weights: 81,054,720 / 1,720,451,072 = 4.711248% in mixed artifact
+Q4 rescue weights:      71,279,104 / 1,720,451,072 = 4.143047%
 Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
@@ -183,6 +183,18 @@ absolute ratios `0.993359 / 0.943748 / 0.961192`; incremental worst равен
 `1.004102` против strict source и `1.000934` против parent. Новый accepted
 artifact SHA-256:
 `bf17ca58ad836ef1f0569b6ae9d2d28f7224cfb383a64898dfbaef2f9acf5701`.
+
+Следующий глобальный поиск показал, что новый `1%` Q4-хвоста layer 25 уже не
+проходит absolute code gate. Полный `7→5→3` collapse его 8,746,624
+Q4-весов также отклонён: все стадии завершились с нулевым hard-code churn, а
+финальные ratios составили `1.002569 / 1.013937 / 1.034209`. Поэтому selector
+перешёл к Q4-группам `layer 24 MLP`. Там максимум full-development составил
+1,781 группу, или `227,968` весов; `2%` уже не прошли selection code gate.
+Новый кандидат прошёл fresh reload и sealed audit-v35 с absolute ratios
+`0.992240 / 0.944613 / 0.966782`, incremental worst `1.004161` против strict
+source и `1.000162` против parent. Весь layer 24 теперь содержит
+`55.171712%` Q2 и `44.828288%` Q4 при `3.021566 bpw`. Accepted artifact:
+`b4938a3417fa59bc89075dc1af4edd509c2e44c1bfe6ff9135729222a5a6746d`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
