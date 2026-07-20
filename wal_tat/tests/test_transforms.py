@@ -3,6 +3,8 @@ import torch.nn.functional as F
 
 from wal_tat import (
     FixedTernaryLinear,
+    ProxyTernaryMatrix,
+    TransformedProxyTernaryLinear,
     blockwise_randomized_hadamard,
     inverse_blockwise_randomized_hadamard,
     normalized_hadamard,
@@ -74,3 +76,33 @@ def test_transform_rejects_padding_and_non_power_of_two():
         assert "power of two" in str(error)
     else:
         raise AssertionError("expected non-power-of-two transform to fail")
+
+
+def test_transformed_proxy_executes_hard_forward_and_supplies_gradients():
+    weight = torch.randn(6, 16)
+    transformed = blockwise_randomized_hadamard(weight, group_size=8, seed=47)
+    fixed = FixedTernaryLinear.from_weight(
+        weight, group_size=8, transform="rht", transform_seed=47
+    )
+    proxy = ProxyTernaryMatrix(
+        fixed.ternary_codes,
+        fixed.group_scales,
+        compute_dtype=weight.dtype,
+        temperature=0.25,
+    )
+    layer = TransformedProxyTernaryLinear(
+        proxy, transform="rht", transform_seed=47
+    )
+    value = torch.randn(4, 16)
+    actual = layer(value)
+    hard_weight = (
+        proxy.hard_codes().float() * proxy.group_scale.detach().unsqueeze(-1)
+    ).reshape_as(transformed)
+    expected = F.linear(
+        blockwise_randomized_hadamard(value, group_size=8, seed=47),
+        hard_weight,
+    )
+    assert torch.allclose(actual.detach(), expected, atol=2e-6, rtol=2e-6)
+    actual.square().mean().backward()
+    assert proxy.proxy_code.grad is not None
+    assert proxy.group_scale.grad is not None

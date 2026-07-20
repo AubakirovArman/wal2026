@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.48828125% up + 6.0546875% gate + 10.05859375% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.34765625% gate + 10.3515625% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,440,704 / 1,720,451,072 = 4.326813%
+major matrix weights: 74,551,296 / 1,720,451,072 = 4.333241%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       0% implemented
 ```
@@ -35,7 +35,7 @@ packed runtime:       0% implemented
 |---|---|---|
 | Micro transaction | маленькие frozen suites | быстрый rollback, limit 1.02 |
 | Block development | recovery domains | выбор optimizer/objective |
-| Independent block audit | полностью отложенные domains | проверка generalization |
+| Sealed block audit | непересекающиеся, ранее не раскрытые domains | проверка generalization |
 | Cumulative model audit | один неизменяемый большой harness | общий NLL/PPL budget |
 | Task audit | reasoning/code/instruction/knowledge | поведенческое качество |
 | Runtime audit | packed artifact | память и скорость |
@@ -99,11 +99,13 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 ## Текущая фаза 4 — закончить block 24
 
-Q/K/V/O layer 24 приняты и совместно с layer 27 прошли audit-v3/v4. Через
-sensitivity-ranked транзакции также приняты 75.48828125% `up_proj`, первые
-6.0546875% `gate_proj` и 10.05859375% `down_proj`. Текущее покрытие
-`4.326813%`, условная `+5% NLL` guide равна `1.00216341`, худший измеренный
-точечный ratio равен `1.001346`.
+Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
+recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
+75.78125% `up_proj`, 6.34765625% `gate_proj` и 10.3515625% `down_proj`.
+Текущее покрытие `4.333241%`, условная `+5% NLL` guide равна `1.00216662`,
+худший измеренный точечный ratio равен `1.001561`. Paired SQuAD upper-95
+равен `1.007022` на v3 и `1.003625` на v4, поэтому следующий рост по старой
+point-only policy остановлен до statistical gate и новых sealed suites.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и
@@ -442,13 +444,20 @@ coverage модели `4.326813195%`. Точечные audit-v3/v4 проход�
 его predeclared policy.
 
 Параллельно открыт безопасный `transform slot`: на нетронутой
-`layer23.q_proj` fixed g128 RHT seed 307 уменьшил worst-domain ущерб обычной
-тернаризации примерно на 90% на двух независимых holdout. Однако v4 ratio
-`1.002547` пока чуть выше guide. Поэтому transform ещё не является commit и
-не меняет coverage. Следующий этап — RHT + короткий proxy/scale recovery +
-paired CI; только после успешной приёмки transform войдёт в artifact contract.
-Это также означает, что будущий `llama.cpp` путь должен уметь исполнять RHT
-рядом с packed codes, а не деквантизировать полную BF16-матрицу.
+`layer23.q_proj` fixed g128 RHT seed 307 уменьшил **инкрементальный**
+worst-domain ущерб обычной тернаризации примерно на 90% на v3/v4. Эти ratios
+считались относительно frontier `s0044`, поэтому сравнивать их напрямую с
+кумулятивной BF16-guide было нельзя. Короткий hard-forward proxy/scale recovery
+затем был выбран только на development и проверен кумулятивно: audit-v3 дал
+SQuAD ratio `1.002892` и upper-95 ratio `1.008465`, audit-v4 — point
+`0.998729`, но upper-95 `1.004656`. Кандидат отклонён, coverage не изменён.
+RHT остаётся сильной инициализацией для будущих WLS/tail ablation, но не
+является принятым transform commit. Будущий `llama.cpp` путь всё равно должен
+уметь исполнять transform рядом с packed codes, а не материализовать BF16.
+
+Поскольку v3/v4 многократно влияли на выбор arm и размер транзакций, дальше они
+называются recurring validation. Для независимого доказательства нужны новые
+непересекающиеся sealed v5/v6, которые не участвуют в настройке.
 
 Остались три MLP-матрицы. Component ablation показал:
 

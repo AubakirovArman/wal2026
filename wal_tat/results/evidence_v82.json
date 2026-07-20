@@ -1,0 +1,76 @@
+{
+  "schema": "wal-tat-evidence-v82",
+  "date_utc": "2026-07-20",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "round_robin_cycles_37_39_completed_point_gate_only",
+  "campaign": {
+    "result": "wal_tat/results/block24_round_robin_cycles_37_39.json",
+    "result_sha256": "e906a070928dd53ad8ee296c6311e4f46cb3cfada78dd82d7214ddb68b10a0ed",
+    "cycles": 3,
+    "transactions": 9,
+    "accepted_transactions": 9,
+    "maximum_concurrent_campaigns": 1,
+    "new_hard_ternary_weights": 110592,
+    "selected_arms": {
+      "candidate_bf16_mlp": 2,
+      "candidate_only": 7
+    },
+    "deleted_checkpoint_count": 13,
+    "deleted_checkpoint_bytes": 3960569665
+  },
+  "frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0047-candidate_only.pt",
+    "sha256": "d9f4e33a87cc8de8f2fe4e94c2873b1dc3109836bafe8a3b1f3922236fa3c674",
+    "bytes": 304658813,
+    "accepted_weights": 74551296,
+    "total_major_weights": 1720451072,
+    "remaining_weights": 1645899776,
+    "coverage_percent": 4.333241276855097,
+    "full_decoder_blocks": 1,
+    "full_major_matrices": 11,
+    "layer24": {
+      "up_proj_coverage": 0.7578125,
+      "down_proj_coverage": 0.103515625,
+      "gate_proj_coverage": 0.0634765625
+    }
+  },
+  "paired_recurring_validation_v3": {
+    "result": "wal_tat/results/block24_s0047_paired_audit_v3.json",
+    "result_sha256": "00a87dce65eeb697b7070568744545ac138b110e1c34b957883e34bada23ed0e",
+    "point_passed": true,
+    "confidence_passed": false,
+    "ratios": {
+      "c4_validation": 0.9972096712746913,
+      "squad_context": 1.0015608712961679,
+      "torch_code": 0.9822856328481357
+    },
+    "squad_upper_95_ratio": 1.0070223460491592
+  },
+  "paired_recurring_validation_v4": {
+    "result": "wal_tat/results/block24_s0047_paired_audit_v4.json",
+    "result_sha256": "09120696fa7ccabae490d2a76391b0d948dab7f069eee65d874f0b46a287a172",
+    "point_passed": true,
+    "confidence_passed": false,
+    "ratios": {
+      "c4_validation": 0.9972096712746913,
+      "squad_context": 0.9977835769031776,
+      "transformers_code": 0.9834657943249809
+    },
+    "squad_upper_95_ratio": 1.0036247527979705
+  },
+  "interpretation": {
+    "frontier_is_kept": true,
+    "reason": "cycles 37-39 used the predeclared point-gate policy; confidence gating was not retroactively applied",
+    "future_growth_allowed_under_same_policy": false,
+    "required_before_next_growth": [
+      "separate arm selection from sealed audit",
+      "use recurring v3/v4 only for validation",
+      "add paired upper-confidence acceptance",
+      "run activation-WLS and difficult-tail ablations"
+    ]
+  },
+  "storage": {
+    "checkpoint_files_remaining": 1,
+    "format": "training checkpoint; not a packed artifact"
+  }
+}

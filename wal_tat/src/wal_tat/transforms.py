@@ -226,3 +226,47 @@ class FixedTernaryLinear(nn.Module):
             {int(value): int(count) for value, count in zip(values, counts)}
         )
         return result
+
+
+class TransformedProxyTernaryLinear(nn.Module):
+    """Training wrapper for hard-forward proxy codes in a transformed basis.
+
+    ``matrix.effective_weight()`` is expected to return the deployed weight in
+    transform space.  The input transform stays explicit so no dense inverse
+    weight is materialized during forward.
+    """
+
+    def __init__(
+        self,
+        matrix: nn.Module,
+        *,
+        transform: str = "rht",
+        transform_seed: int = 109,
+        bias: torch.Tensor | None = None,
+    ):
+        super().__init__()
+        if transform not in {"identity", "rht"}:
+            raise ValueError("transform must be 'identity' or 'rht'")
+        if not hasattr(matrix, "effective_weight"):
+            raise TypeError("matrix must provide effective_weight()")
+        self.matrix = matrix
+        if bias is not None:
+            self.register_buffer("bias", bias.detach().clone())
+        else:
+            self.bias = None
+        self.transform = transform
+        self.transform_seed = int(transform_seed)
+        self.in_features = int(matrix.in_features)
+        self.out_features = int(matrix.out_features)
+        self.group_size = int(matrix.group_size)
+
+    def forward(self, value: torch.Tensor) -> torch.Tensor:
+        if self.transform == "rht":
+            value = blockwise_randomized_hadamard(
+                value,
+                group_size=self.group_size,
+                seed=self.transform_seed,
+            )
+        weight = self.matrix.effective_weight().to(value.dtype)
+        bias = None if self.bias is None else self.bias.to(value.dtype)
+        return F.linear(value, weight, bias)

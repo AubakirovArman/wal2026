@@ -1,0 +1,75 @@
+{
+  "schema": "wal-tat-evidence-v81",
+  "date_utc": "2026-07-20",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "rht_proxy_recovery_rejected_by_cumulative_audit",
+  "corrects": "wal_tat/results/evidence_v80.json",
+  "source_checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0044-candidate_only.pt",
+    "sha256": "e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1"
+  },
+  "target": {
+    "name": "model.layers.23.self_attn.q_proj",
+    "state_before_experiment": "untouched BF16",
+    "transform": "fixed blockwise randomized Hadamard",
+    "transform_seed": 307,
+    "group_size": 128
+  },
+  "frozen_artifact": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-layer23_qproj_rht307_proxy_recovery_v1.pt",
+    "sha256": "4f4837ac0d1bfec668232c68410b851dfe461b6318687908c453942240679434",
+    "best_development_step": 256,
+    "code_churn": 0.0,
+    "accepted_coverage_changed": false,
+    "checkpoint_mutated": false
+  },
+  "development_only_selection": {
+    "result": "wal_tat/results/layer23_qproj_rht307_proxy_recovery_v1.json",
+    "cumulative_ratios_to_raw_bf16": {
+      "c4_train": 0.9956717526319707,
+      "squad_train": 1.0020795747118107,
+      "vendor_code_train": 0.9836429873720015
+    },
+    "incremental_ratios_to_source_frontier": {
+      "c4_train": 1.0003968629432247,
+      "squad_train": 1.0002578677554868,
+      "vendor_code_train": 1.0001634103736756
+    }
+  },
+  "recurring_validation_v3": {
+    "result": "wal_tat/results/layer23_qproj_rht307_proxy_recovery_v1_paired_audit_v3.json",
+    "cumulative_ratios_to_raw_bf16": {
+      "c4_validation": 0.9974354370391159,
+      "squad_context": 1.0028920931207803,
+      "torch_code": 0.9817871554134912
+    },
+    "squad_upper_95_ratio": 1.008465489672312,
+    "point_passed": false,
+    "confidence_passed": false
+  },
+  "recurring_validation_v4": {
+    "result": "wal_tat/results/layer23_qproj_rht307_proxy_recovery_v1_paired_audit_v4.json",
+    "cumulative_ratios_to_raw_bf16": {
+      "c4_validation": 0.9974354370391159,
+      "squad_context": 0.9987289099031824,
+      "transformers_code": 0.9839463361525772
+    },
+    "squad_upper_95_ratio": 1.0046563129900812,
+    "point_passed": true,
+    "confidence_passed": false
+  },
+  "decision": {
+    "accepted": false,
+    "reason": "cumulative audit-v3 exceeds the predeclared point guide and both SQuAD confidence bounds exceed it",
+    "rht_research_value": "retain as an initialization candidate; the approximately 90% identity-to-RHT damage reduction remains an incremental ablation result",
+    "frontier_coverage_changed": false
+  },
+  "methodology_correction": {
+    "v3_v4_role": "recurring validation after repeated adaptive exposure; not a sealed independent final audit",
+    "required_next_evidence": "new non-overlapping sealed suites plus activation-WLS and tail-sensitivity ablations before reconsidering transform commits"
+  },
+  "verification": {
+    "maximum_concurrent_experiments": 1,
+    "artifact_was_not_retuned_on_v3_or_v4": true
+  }
+}

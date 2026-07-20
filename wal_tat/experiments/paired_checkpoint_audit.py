@@ -33,6 +33,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--confidence", type=float, default=0.95)
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--seed", type=int, default=109)
+    parser.add_argument(
+        "--suite-role",
+        default="recurring validation; no gradient updates",
+        help="Declared methodological role of this suite in the current study.",
+    )
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     return parser.parse_args()
 
@@ -111,6 +116,7 @@ def main() -> None:
         "checkpoint_sha256": sha256_file(checkpoint),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
+        "suite_role": args.suite_role,
         "model": str(model_path),
         "gate_ratio": args.gate_ratio,
         "batch_size": args.batch_size,

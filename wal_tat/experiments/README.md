@@ -17,9 +17,13 @@ deliberately ignored. Store their SHA-256 and reproduction command in a small
 result JSON instead of committing the binaries.
 
 For a statistically paired audit of an accepted frontier, run
-`paired_checkpoint_audit.py` on a frozen holdout. It stores per-window BF16 and
-candidate NLL sums and uses a deterministic circular moving-block bootstrap.
-The block resampling is required because adjacent frozen windows come from a
-contiguous token stream and are not independent documents. A checkpoint is
-`confidence_passed` only when every domain's upper ratio confidence bound is
-within the supplied cumulative gate.
+`paired_checkpoint_audit.py` on a frozen suite and declare its role with
+`--suite-role`. Repeatedly exposed v3/v4 suites are recurring validation, not
+sealed holdout evidence. A sealed block suite must be non-overlapping, must not
+select between arms, and becomes disclosed after its first inspection.
+
+The audit stores per-window BF16 and candidate NLL sums and uses a deterministic
+circular moving-block bootstrap. Block resampling is required because adjacent
+frozen windows come from a contiguous token stream and are not independent
+documents. A checkpoint is `confidence_passed` only when every domain's upper
+ratio confidence bound is within the supplied cumulative gate.

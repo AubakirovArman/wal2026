@@ -28,15 +28,18 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 The accepted frontier on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
-- Q/K/V/O of layer 24 hard ternary plus 75.48828125% `up_proj`,
-  6.0546875% `gate_proj`, and 10.05859375% `down_proj`;
-- 74,440,704 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.326813% of major matrix
+- Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
+  6.34765625% `gate_proj`, and 10.3515625% `down_proj`;
+- 74,551,296 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.333241% of major matrix
   weights accepted;
-- audit-v3 NLL ratios `0.997072 / 1.001346 / 0.981851` on C4, SQuAD and
+- recurring validation-v3 NLL ratios `0.997210 / 1.001561 / 0.982286` on C4, SQuAD and
   PyTorch code;
-- audit-v4 ratios `0.997072 / 0.997649 / 0.982829` on C4, a different SQuAD
+- recurring validation-v4 ratios `0.997210 / 0.997784 / 0.983466` on C4, a different SQuAD
   slice and Transformers code;
+- paired 95% upper bounds still fail the narrow SQuAD guide (`1.007022` on
+  v3 and `1.003625` on v4), so future commits require a statistical gate and
+  new sealed suites;
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 
@@ -67,11 +70,15 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
 - `AdaptiveTransactionSizer`: rollback/tight-margin shrinking and cautious
   safe-streak growth for the next sensitivity-ranked atom;
 - `experiments/adaptive_campaign.py`: durable real-training campaign loop that
-  runs recovery, independent audits, adaptive resizing and exact opt-in cleanup;
+  runs recovery, recurring validation, adaptive resizing and exact opt-in cleanup;
 - `experiments/round_robin_campaign.py`: single-session sequential orchestrator
   that synchronizes several campaign frontiers before crash-safe cleanup;
 - `experiments/fixed_transform_ablation.py`: checkpoint-neutral identity/RHT
   comparison on untouched BF16 matrices with fixed-seed holdout replication;
+- `experiments/rht_proxy_recovery.py`: development-only hard-forward recovery
+  of a frozen transform artifact without mutating the accepted frontier;
+- `experiments/rht_artifact_audit.py`: cumulative BF16 and incremental frontier
+  paired audit for a fixed transform artifact;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic
   frontier synchronization, and active-worker detection;
 - `evaluation.py`: deterministic HF-style before/after NLL and PPL evaluator.

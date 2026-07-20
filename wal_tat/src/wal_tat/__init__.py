@@ -52,6 +52,7 @@ from .transaction import (
 )
 from .transforms import (
     FixedTernaryLinear,
+    TransformedProxyTernaryLinear,
     blockwise_randomized_hadamard,
     inverse_blockwise_randomized_hadamard,
     normalized_hadamard,
@@ -62,6 +63,7 @@ from .wal import HashChainWAL, WALIntegrityError, WALRecord
 
 __all__ = [
     "FixedTernaryLinear",
+    "TransformedProxyTernaryLinear",
     "blockwise_randomized_hadamard",
     "inverse_blockwise_randomized_hadamard",
     "normalized_hadamard",
