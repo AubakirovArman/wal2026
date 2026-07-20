@@ -20,14 +20,14 @@ signed Q4-g128 4.125 bpw для групп, которые не проходят
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  4 / 28 complete, 24 remain
+mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  28 / 197 complete, 169 remain
+mixed major matrices:  35 / 197 complete, 162 remain
 strict ternary weights: 79,426,432 / 1,720,451,072 = 4.616605% in mixed artifact
-Q4 rescue weights:      62,760,448 / 1,720,451,072 = 3.647907%
-Q8 rescue weights:      59,139,712 / 1,720,451,072 = 3.437454%
-all low-bit weights:    201,326,592 / 1,720,451,072 = 11.701966%
-remaining high precision: 1,519,124,480 = 88.298034%
+Q4 rescue weights:      66,786,944 / 1,720,451,072 = 3.881944%
+Q8 rescue weights:      105,444,864 / 1,720,451,072 = 6.128908%
+all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
+remaining high precision: 1,468,792,832 = 85.372543%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
@@ -145,6 +145,16 @@ Fresh reload дал `0.994688 / 1.000512 / 1.019039`; one-shot audit-v27 —
 `0.992754 / 0.992227 / 0.961534`, incremental worst против immutable strict
 source `1.003856 <= 1.005`. Новый accepted artifact имеет SHA-256
 `f7394ff69e348c89ba424369c004c719df05c55e8d23315687758f3b7d573eeb`.
+
+Следующим по двум совпавшим sensitivity scan был обработан layer 25. Full-Q4
+candidate не прошёл официальный absolute code gate, поэтому Q8 allocator
+нашёл минимальную full-development точку `7.999929%` Q4 и `92.000071%` Q8
+при `7.805003 bpw`; точки до `91.9%` Q8 были отклонены без ослабления порога.
+Fresh reload дал `0.994942 / 1.001131 / 1.019953`. Prospective one-shot
+audit-v31 прошёл с absolute ratios `0.993532 / 1.003477 / 0.971895` и
+incremental worst `1.004159 <= 1.005`. Пятый полный low-bit decoder block
+увеличил coverage до `14.627457%`; accepted artifact SHA-256:
+`466fb84e60f851e938a249db07ac38bf22e1ff4bcaa4eda68ef5f1aed6b1ffa2`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

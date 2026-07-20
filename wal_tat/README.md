@@ -32,9 +32,9 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `f7394ff...`: 79,426,432 ternary, 62,760,448
-  signed-Q4 and 59,139,712 signed-Q8 weights, for 201,326,592 low-bit weights
-  (`11.701966%`), four complete low-bit decoder blocks and 28 complete low-bit
+- sealed-audited mixed artifact `466fb84...`: 79,426,432 ternary, 66,786,944
+  signed-Q4 and 105,444,864 signed-Q8 weights, for 251,658,240 low-bit weights
+  (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
 
 The mixed block-24 MLP is `39.625041%` ternary and `60.374959%` Q4 at an
@@ -50,6 +50,12 @@ reverse-compression step: `1.899974%` Q2, `18.099976%` Q4 and `80.000051%`
 Q8 at `7.287003 bpw`. Sealed audit-v29 ratios are
 `0.991622 / 0.989226 / 0.973866`, with incremental worst `1.004860`. The
 high Q8 share remains explicitly scheduled for reverse Q8→Q4→Q2 distillation.
+
+Layer 25 is now fully low-bit at `7.999929%` Q4 and `92.000071%` Q8
+(`7.805003 bpw`). Sealed audit-v31 ratios are
+`0.993532 / 1.003477 / 0.971895`; incremental worst versus immutable `s0053`
+is `1.004159 <= 1.005`. Its high Q8 share is a safe upper bound scheduled for
+reverse compression, not a claim that Q8 is the final target format.
 
 The strict historical lineage has:
 
