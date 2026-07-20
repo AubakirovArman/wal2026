@@ -25,7 +25,7 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0048r1` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
@@ -46,8 +46,16 @@ The accepted frontier on `Qwen/Qwen3-1.7B` has:
 - exact hard-forward ternary codes with smooth proxy-code gradients used only
   during backward recovery.
 - fresh rotating validation v5/v6 exposed a pre-existing SQuAD generalization
-  gap; four coverage-neutral KD/scale/code/staged recovery attempts were
-  rejected without publishing a checkpoint, so the frontier remains `s0048`;
+  gap; four broad coverage-neutral KD/scale/code/staged recovery attempts were
+  rejected without publishing a checkpoint;
+- a matched counterfactual audit localized most of the recoverable block-24
+  damage to committed `up_proj` groups. Target-local counterfactual-teacher
+  distillation produced a useful BF16 residual, then projected it into fixed
+  ternary codes plus FP16 g128 scales with no persistent residual;
+- the frozen strict-Q2 scale update improved all three audit-v3 point estimates.
+  Its paired incremental upper-95 ratios were `1.000032 / 0.999990 / 1.000039`,
+  all below the predeclared `1.0001` limit. The resulting lineage checkpoint
+  `s0048r1` was fresh-loaded before its parent was deleted;
 - proxy recovery now reports distance to the `-0.5/+0.5` code boundaries,
   code entropy/churn and scale health. These diagnostics show that proxies do
   move before churn becomes nonzero, but the first broad MLP code changes were
@@ -97,6 +105,16 @@ WAL-TAT commit and is not a BitNet/Prism standard. See
   interleaved recovery/development suites with configurable code corpora;
 - `experiments/recovery_suite_overlap_audit.py`: exact-window and declared-range
   leakage audit across recovery and validation artifacts;
+- `experiments/counterfactual_bf16_restore_audit.py`: checkpoint-neutral
+  localization of damage from committed and fallback regions;
+- `experiments/matched_bf16_residual_recovery.py`: matched continuous control
+  with raw or target-local counterfactual teachers;
+- `experiments/distill_residual_to_ternary.py`: strict projection of a useful
+  continuous residual into ternary codes and FP16 g128 scales;
+- `experiments/ternary_recode_artifact_audit.py`: fresh paired cumulative and
+  incremental audit of a frozen coverage-neutral Q2 artifact;
+- `experiments/commit_ternary_recode_artifact.py`: atomic, hash-checked
+  publication of an audited coverage-neutral child checkpoint;
 - `experiments/commit_partial_initializer_artifact.py`: hash-checked prospective
   dual-gate commit that publishes a new checkpoint without mutating its parent;
 - `orchestration.py`: checkpoint hashing, common-frontier validation, atomic

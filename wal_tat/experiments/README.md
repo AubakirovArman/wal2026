@@ -39,3 +39,14 @@ declare the candidate policy before running it and keep two tests separate:
 publishes a child checkpoint only after every required audit agrees with the
 policy. This prospective incremental gate does not turn recurring validation
 into sealed evidence and must never be defined after seeing the candidate.
+
+Coverage-neutral recovery uses the same discipline. First,
+`counterfactual_bf16_restore_audit.py` identifies which already committed
+region actually causes a domain gap. `matched_bf16_residual_recovery.py` may
+then learn a continuous control from a target-local counterfactual teacher, but
+that residual is training-only. `distill_residual_to_ternary.py` must project a
+passing direction back into strict ternary codes and shared FP16 scales.
+`ternary_recode_artifact_audit.py` audits that frozen state in a fresh process;
+only `commit_ternary_recode_artifact.py` may publish it as a lineage-linked
+checkpoint. The parent checkpoint remains on disk until a separate fresh-load
+verification succeeds.

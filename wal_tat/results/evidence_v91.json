@@ -1,0 +1,30 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v91-matched-bf16-up-residual-recovery-v1-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v91_policy.json",
+    "sha256": "282fab7895b297078cf46ebbf68b2dccf3358f6fdacea813a989b62a3f06a95b"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_matched_bf16_residual_v1.json",
+    "sha256": "38ac9c1802bf1a54dd55d8812cb87c0f863d5f2431d83cb2182ed05a1be8d8ed",
+    "passed": false,
+    "best_step": 0,
+    "artifact": null,
+    "coverage_changed": false
+  },
+  "trajectory": {
+    "step_128_squad_nll_ratio": 1.0139798366415003,
+    "step_512_squad_nll_ratio": 1.0156069780069312,
+    "step_512_learned_to_oracle_l2_ratio": 0.04848500341176987,
+    "step_512_cosine_to_original_bf16_correction": 0.008830877020955086
+  },
+  "conclusion": {
+    "continuous_capacity_available": true,
+    "raw_bf16_teacher_is_mismatched": true,
+    "reason": "The residual moved almost orthogonally to the known original-BF16 correction and monotonically worsened all selection snapshots. Raw BF16 also removes the beneficial recovered layer-27 behavior, so it is not a valid local teacher for repairing only layer24 up_proj.",
+    "next_step": "Use a target-local counterfactual teacher: s0048 with only committed layer24 up_proj groups restored to BF16."
+  },
+  "frontier_changed": false
+}

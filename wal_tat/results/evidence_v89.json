@@ -1,0 +1,66 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v89-counterfactual-bf16-restore-audit-v1",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v89_policy.json",
+    "sha256": "f9023e17427bd856e1b11f3ca0fa6258de2672fdadad6aba6bf77eb38ebc9e42"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_counterfactual_bf16_restore_v1.json",
+    "sha256": "2c2488c61fb069f623ddb2f8d6e2a4b5d31d434f2798f1e2edba27ca6d4589a3",
+    "source_restoration_exact": true,
+    "checkpoint_written": false
+  },
+  "source_squad": {
+    "nll_ratio_to_bf16": 1.0134932970709492,
+    "delta_nll": 0.03439838043414056,
+    "ppl_ratio_to_bf16": 1.0349968471016988
+  },
+  "squad_counterfactuals": {
+    "layer24_down": {
+      "nll_ratio": 1.0116361503024989,
+      "source_gap_recovered_fraction": 0.13763476477877315
+    },
+    "layer24_gate": {
+      "nll_ratio": 1.0121247946056984,
+      "source_gap_recovered_fraction": 0.1014209098084046
+    },
+    "layer24_up": {
+      "nll_ratio": 1.003498701785102,
+      "source_gap_recovered_fraction": 0.7407081629711737
+    },
+    "layer24_mlp": {
+      "nll_ratio": 1.0010248171137248,
+      "source_gap_recovered_fraction": 0.9240499109790361
+    },
+    "layer24_attention": {
+      "nll_ratio": 1.010119741437884,
+      "source_gap_recovered_fraction": 0.25001714668599484
+    },
+    "layer24_all": {
+      "nll_ratio": 0.997350266810971,
+      "source_gap_recovered_fraction": 1.1963740348334697
+    },
+    "layer27_all": {
+      "nll_ratio": 1.0268519588376501,
+      "source_gap_recovered_fraction": -0.9900220603207451
+    },
+    "norm_extras_only": {
+      "nll_ratio": 1.0135127365077277,
+      "source_gap_recovered_fraction": -0.0014406735934382096
+    }
+  },
+  "conclusion": {
+    "primary_damage_region": "model.layers.24.mlp.up_proj committed ternary groups",
+    "secondary_damage_regions": [
+      "model.layers.24 attention",
+      "model.layers.24.mlp.down_proj",
+      "model.layers.24.mlp.gate_proj"
+    ],
+    "layer27_state": "Current ternary/recovered layer 27 is beneficial relative to restoring its original BF16 weights and must not be rolled back.",
+    "norm_state": "Restoring norm extras alone does not repair the gap; norm effects interact with the matrix state.",
+    "next_step": "Separate committed-code damage from uncommitted BF16 fallback drift, then run a matched continuous control on layer24 up_proj."
+  },
+  "frontier_changed": false
+}

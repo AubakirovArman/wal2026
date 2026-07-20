@@ -665,17 +665,52 @@ recovery-v1 и v5/v6 равны нулю. Этот suite воспроизвёл 
 entropy, zero fraction, proxy displacement, scale percentiles и доля scale на
 clamp. Они подтвердили, что прежний `code_churn = 0` не означал отсутствие
 обучения: proxy двигались к границам, но первые реальные переключения были
-вредными. Ни один recovery checkpoint не опубликован; frontier и coverage
-остались ровно `s0048`.
+вредными. Ни один из этих broad recovery checkpoint не опубликован; frontier
+на этом этапе оставался ровно `s0048`.
+
+### Matched control, counterfactual teacher и frontier `s0048r1`
+
+После broad recovery выполнен checkpoint-neutral counterfactual аудит. Он
+показал, что основная локальная причина SQuAD gap находится не в fallback и не
+в norm extras, а в уже принятых группах `layer 24 up_proj`: восстановление
+только этой committed-области в исходный BF16 возвращало около 74% наблюдаемого
+разрыва, а восстановление всех committed MLP-групп — около 92%.
+
+Чистый matched BF16 control с raw исходной моделью в роли teacher не помог:
+такой teacher одновременно убирал полезное состояние layer 27. Новый
+target-local counterfactual teacher оставил весь `s0048` без изменений и
+восстановил в BF16 только committed-группы target `up_proj`. С ним continuous
+residual recovery прошёл заранее объявленный development gate на шаге 384:
+worst-ratio улучшился на `0.000530185`. Этот residual был только обучающим
+контролем и не принимался как deploy-состояние.
+
+Затем residual спроецирован обратно в строгий Q2-g128. Codes остались
+неизменными (`code churn = 0`), менялись только общие FP16 scales. Базовая
+амплитуда `1x` улучшала два recurring среза, но не достигла заранее заданного
+selection-порога. Амплитуда `8x` прошла selection и провалила confirmation.
+Фиксированный `4x` кандидат прошёл оба: `+0.000051848` на selection и
+`+0.000024568` на confirmation.
+
+После заморозки кандидат проверен на 512 новых окнах каждого домена audit-v3.
+Относительно parent `s0048` point ratios равны `0.999988306 / 0.999931357 /
+0.999970879` для C4/SQuAD/code. Верхние paired 95% границы равны
+`1.000031683 / 0.999989735 / 1.000039381`, то есть все прошли заранее
+объявленный incremental limit `1.0001`. Persistent BF16 residual отсутствует.
+
+Опубликован lineage checkpoint `s0048r1`. В нём изменено 72,573 group-scales,
+ни одного ternary code value и ни одного committed mask. Fresh-load проверка
+дала `wiki=0.950322018`, `code=0.961868530` относительно BF16 на стандартном
+gate. Parent `s0048` удалён только после проверки. Coverage поэтому не вырос,
+но качество принятого strict-Q2 состояния стало лучше.
 
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt
+wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt
 ```
 
-- размер: `304,659,483` bytes;
-- SHA-256: `6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887`;
+- размер: `304,662,799` bytes;
+- SHA-256: `c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
   `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
@@ -685,13 +720,12 @@ wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt
 
 ## Следующий технический шаг
 
-1. добавить чистый matched-BF16 recovery control: те же tokens, steps,
-   optimizer и trainable region, но без нового ternary deployment edit;
+1. использовать подтверждённый target-local counterfactual teacher для прямого
+   strict-scale QAT и проверить, можно ли восстановить больше без code churn;
 2. не продолжать tuning по раскрытым v5/v6; следующий block/final audit должен
    использовать новые sealed suites и exposure accounting;
-3. только если matched BF16 control улучшает новый SQuAD suite, расширять
-   compensation capacity или distillation; если он тоже не помогает — менять
-   recovery corpus/objective, а не learning rate proxy;
+3. после более сильного coverage-neutral recovery повторить prospective tail
+   step; не принимать новый coverage только из-за улучшения development;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. реализовать reference Q2-g128 packer и `true_artifact_bpw()` до массовой

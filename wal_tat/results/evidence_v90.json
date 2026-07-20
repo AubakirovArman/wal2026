@@ -1,0 +1,49 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v90-counterfactual-fallback-restore-audit-v1",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v90_policy.json",
+    "sha256": "5bd3c18ec196655cebf16a7a7497546a54a86fca83ad0987496e1dc746ff7136"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_counterfactual_fallback_restore_v1.json",
+    "sha256": "c6046735d077b264406fe70fa9ce3ad85941f71ba22c12d8c43776649d7c5211",
+    "source_restoration_exact": true,
+    "full_original_matches_raw_bf16": true,
+    "checkpoint_written": false
+  },
+  "fallback_drift": {
+    "down_proj": {
+      "weights": 11268096,
+      "relative_l2": 0.016049306839704514,
+      "squad_nll_ratio_after_restore": 1.0142898160399496
+    },
+    "gate_proj": {
+      "weights": 11784192,
+      "relative_l2": 0.017458682879805565,
+      "squad_nll_ratio_after_restore": 1.0137971252980438
+    },
+    "up_proj": {
+      "weights": 3047424,
+      "relative_l2": 0.007210728712379932,
+      "squad_nll_ratio_after_restore": 1.013543594838359
+    }
+  },
+  "squad_counterfactuals": {
+    "source": 1.0134932970709492,
+    "up_committed_only_original_keep_current_fallback": 1.003498701785102,
+    "up_full_original": 1.0036358811261445,
+    "mlp_committed_only_original_keep_current_fallback": 1.0010248171137248,
+    "mlp_full_original": 1.0034876651132554,
+    "layer24_full_original": 0.9987074356859182,
+    "all_full_original_matrices_plus_norms": 1.0
+  },
+  "conclusion": {
+    "primary_damage": "Committed ternary up_proj groups, not its uncommitted BF16 fallback.",
+    "fallback_role": "Existing BF16 fallback compensation is domain-dependent and improves SQuAD while sometimes harming C4/code; clearing it globally is invalid.",
+    "matched_control_target": "Add a training-only continuous residual solely over committed layer24 up_proj groups, leaving fallback, codes, scales and norms frozen.",
+    "deployment_constraint": "The residual is diagnostic only and must later be distilled back into ternary codes/scales or a strictly budgeted low-bit representation."
+  },
+  "frontier_changed": false
+}

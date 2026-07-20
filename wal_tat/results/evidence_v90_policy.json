@@ -1,0 +1,42 @@
+{
+  "schema": "wal-tat-predeclared-diagnostic-policy-v1",
+  "policy_id": "evidence-v90-counterfactual-fallback-restore-audit-v1",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "purpose": "Separate damage from committed ternary groups and drift in uncommitted BF16 fallback weights of the partial layer-24 MLP matrices.",
+  "checkpoint": {
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887"
+  },
+  "suite": {
+    "sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+    "role": "development diagnostic only",
+    "gate_sequences_each_domain": 256
+  },
+  "runner": {
+    "path": "wal_tat/experiments/counterfactual_bf16_restore_audit.py",
+    "sha256": "50d529b766e981726208c03635908cf9960b2597158b50eaf31af9570c103d22",
+    "arm_set": "fallback",
+    "tag": "block24_counterfactual_fallback_restore_v1",
+    "seed": 151,
+    "physical_gpu": 2
+  },
+  "fixed_arms": [
+    "layer24_down_fallback",
+    "layer24_gate_fallback",
+    "layer24_up_fallback",
+    "layer24_mlp_fallback",
+    "layer24_up_full_original",
+    "layer24_mlp_full_original",
+    "layer24_all_full_original",
+    "all_full_original_matrices_plus_all_norms"
+  ],
+  "invariants": {
+    "training_steps": 0,
+    "checkpoint_written": false,
+    "accepted_coverage_changed": false,
+    "source_state_must_restore_exactly_between_arms": true,
+    "all_full_original_arm_must_match_raw_bf16": true,
+    "v5_v6_must_not_be_opened": true
+  }
+}

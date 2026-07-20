@@ -1,0 +1,23 @@
+{
+  "schema": "wal-tat-execution-evidence-v1",
+  "evidence_id": "v93-distill-up-residual-to-ternary-v1-execution-failure",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v93_policy.json",
+    "sha256": "7911e97869499c1e72545a638ed107b2ee542b219d9950ee27244f378ff572fb"
+  },
+  "failure": {
+    "stage": "apply first candidate scales before evaluation",
+    "exception": "RuntimeError: a leaf Variable that requires grad is being used in an in-place operation",
+    "cause": "Candidate code was generated under no_grad, but the subsequent group_scale.copy_ mutation was not enclosed in no_grad.",
+    "fixed_scope": "Wrap only candidate codes/scales copy operations in torch.no_grad()."
+  },
+  "side_effects": {
+    "result_created": false,
+    "artifact_created": false,
+    "checkpoint_created": false,
+    "coverage_changed": false,
+    "source_checkpoint_changed": false
+  },
+  "rerun_policy": "Do not reuse v93; use a new predeclared v94 policy with the corrected runner hash."
+}

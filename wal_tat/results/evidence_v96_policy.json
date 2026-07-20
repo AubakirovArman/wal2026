@@ -1,0 +1,45 @@
+{
+  "schema": "wal-tat-predeclared-distillation-policy-v1",
+  "policy_id": "evidence-v96-fixed-code-residual-gain4-v1",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "source_checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+  "residual_artifact_sha256": "ebc0e033c03f0348855b07d4d4147cf6a5bccda2c90592e1815e4d24e6db9b66",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "runner": {
+    "path": "wal_tat/experiments/distill_residual_to_ternary.py",
+    "sha256": "cc4f71fafc483d2fa56d0e4172bc3f9165a52298c640b679fa02b663e247ca0f",
+    "tag": "block24_up_residual_gain4_v1",
+    "physical_gpu": 2
+  },
+  "candidate_origin": {
+    "parent_evidence": "v95",
+    "rule": "Use the next predeclared v95 gain whose selection improvement exceeded 0.00005; do not inspect its confirmation result before this run.",
+    "previous_confirmation_exposures_for_this_candidate": 0
+  },
+  "fixed_recipes": ["fixed_code_ls"],
+  "fixed_residual_gains": [4.0],
+  "selection": {
+    "gate_window_indices": [0, 127],
+    "sequences_each_domain": 128,
+    "classification": "recurring selection; already exposed"
+  },
+  "confirmation": {
+    "gate_window_indices": [128, 255],
+    "sequences_each_domain": 128,
+    "classification": "recurring confirmation; not a sealed audit"
+  },
+  "acceptance": {
+    "minimum_selection_worst_nll_ratio_improvement": 0.00005,
+    "minimum_confirmation_worst_nll_ratio_improvement": 0.0,
+    "maximum_code_churn": 0.0,
+    "strict_ternary_codes": true,
+    "persistent_bf16_residual": false,
+    "coverage_must_not_change": true,
+    "checkpoint_written": false,
+    "passing_artifact_requires_separate_frozen_audit": true,
+    "v5_v6_must_not_be_opened": true
+  },
+  "seed": 181
+}

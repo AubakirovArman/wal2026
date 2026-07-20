@@ -1,0 +1,51 @@
+{
+  "schema": "wal-tat-predeclared-diagnostic-policy-v1",
+  "policy_id": "evidence-v89-counterfactual-bf16-restore-audit-v1",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "purpose": "Localize the recovery-v2 SQuAD gap by restoring original BF16 values for fixed committed matrix/norm regions without training, committing, or opening rotating validation.",
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887"
+  },
+  "suite": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+    "sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+    "role": "development diagnostic only",
+    "gate_sequences_each_domain": 256
+  },
+  "runner": {
+    "path": "wal_tat/experiments/counterfactual_bf16_restore_audit.py",
+    "sha256": "96a6c1948b92fdbdea8950ae23848ad621c7dcf11e1d4f4c9af0af9ae33fd376",
+    "tag": "block24_counterfactual_bf16_restore_v1",
+    "seed": 149,
+    "physical_gpu": 2
+  },
+  "fixed_arms": [
+    "layer24_down",
+    "layer24_gate",
+    "layer24_up",
+    "layer24_mlp",
+    "layer24_attention",
+    "layer24_all",
+    "layer27_all",
+    "all_checkpoint_matrices",
+    "norm_extras_only",
+    "layer24_all_plus_layer24_norms",
+    "all_matrices_plus_all_norms"
+  ],
+  "invariants": {
+    "training_steps": 0,
+    "checkpoint_written": false,
+    "accepted_coverage_changed": false,
+    "source_state_must_restore_exactly_between_arms": true,
+    "v5_v6_must_not_be_opened": true
+  },
+  "interpretation": {
+    "matrix_restore_improves_squad": "The restored matrix region contains quantization damage that should be targeted by matched BF16/proxy recovery.",
+    "norm_restore_improves_squad": "High-precision norm drift contributes to the gap and must be frozen or explicitly budgeted.",
+    "only_all_restore_improves_squad": "Damage is distributed across blocks and local block-24 recovery is under-capacity.",
+    "no_restore_improves_squad": "The gap is dominated by evaluation variance or state outside the stored frontier and requires a different diagnostic."
+  }
+}
