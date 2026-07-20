@@ -32,9 +32,9 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `1498f0f...`: 77,872,512 ternary, 54,248,064
-  signed-Q4 and 18,874,368 signed-Q8 weights, for 150,994,944 low-bit weights
-  (`8.776474%`), three complete low-bit decoder blocks and 21 complete low-bit
+- sealed-audited mixed artifact `a66239a...`: 77,872,512 ternary, 64,314,368
+  signed-Q4 and 59,139,712 signed-Q8 weights, for 201,326,592 low-bit weights
+  (`11.701966%`), four complete low-bit decoder blocks and 28 complete low-bit
   major matrices.
 
 The mixed block-24 MLP is `39.625041%` ternary and `60.374959%` Q4 at an
@@ -43,6 +43,12 @@ On sealed audit-v27 the cumulative C4/SQuAD/datasets-code NLL ratios are
 `0.991963 / 1.005302 / 0.959639`; incremental ratios versus immutable `s0053`
 are `1.001843 / 1.003018 / 1.002363`, below the prospectively declared
 `1.005` limit. Audit-v27 is now disclosed.
+
+Layer 22 is a conservative deployable upper bound: `19.999949%` Q4 and
+`80.000051%` Q8 at `7.325002 bpw`. Sealed audit-v28 ratios are
+`0.991651 / 0.993830 / 0.938898`, with incremental worst `1.002913`. This
+closes a fourth low-bit block, but the high Q8 share is explicitly scheduled
+for reverse Q8→Q4→Q2 distillation.
 
 The strict historical lineage has:
 
@@ -176,7 +182,7 @@ The strict historical lineage has:
   harmful on the new development suite.
 
 This is a successful partial conversion, **not a finished compressed 1.7B
-checkpoint**. One decoder block is strict ternary and three of 28 are fully
+checkpoint**. One decoder block is strict ternary and four of 28 are fully
 low-bit. The old `1.02` limit
 is explicitly a local diagnostic gate,
 not a safe per-block full-model budget. It was manually chosen in the first

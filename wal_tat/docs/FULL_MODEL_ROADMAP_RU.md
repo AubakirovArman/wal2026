@@ -20,14 +20,14 @@ signed Q4-g128 4.125 bpw для групп, которые не проходят
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  3 / 28 complete, 25 remain
+mixed low-bit blocks:  4 / 28 complete, 24 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  21 / 197 complete, 176 remain
+mixed major matrices:  28 / 197 complete, 169 remain
 strict ternary weights: 77,872,512 / 1,720,451,072 = 4.526285% in mixed artifact
-Q4 rescue weights:      54,248,064 / 1,720,451,072 = 3.153130%
-Q8 rescue weights:      18,874,368 / 1,720,451,072 = 1.097059%
-all low-bit weights:    150,994,944 / 1,720,451,072 = 8.776474%
-remaining high precision: 1,569,456,128 = 91.223526%
+Q4 rescue weights:      64,314,368 / 1,720,451,072 = 3.738227%
+Q8 rescue weights:      59,139,712 / 1,720,451,072 = 3.437454%
+all low-bit weights:    201,326,592 / 1,720,451,072 = 11.701966%
+remaining high precision: 1,519,124,480 = 88.298034%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
@@ -137,6 +137,14 @@ absolute `1.02`. Fixed-code Q4 scale-QAT ухудшил code до `1.021982` и 
 Fresh reload дал `0.994688 / 1.000512 / 1.019039`; one-shot audit-v27 —
 `0.991963 / 1.005302 / 0.959639`, incremental worst `1.003018 <= 1.005`.
 Это завершило третий low-bit decoder block без BF16 в его крупных матрицах.
+
+Layer 22 показал распределённую чувствительность: полный Q4 имел development
+code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
+`19.999949%` групп Q4 и перевела `80.000051%` в Q8 (`7.325002 bpw`). Fresh
+reload дал `0.994716 / 1.000847 / 1.019173`; audit-v28 —
+`0.991651 / 0.993830 / 0.938898`, incremental worst `1.002913`. Это четвёртый
+полный low-bit block, но одновременно сигнал остановить слепое накопление Q8 и
+добавить reverse-distillation Q8→Q4→Q2.
 
 Следующий этап — versioned packed Q2/Q4/Q8 layout и перенос composable compiler
 на следующие блоки. Параллельно strict research продолжает progressive

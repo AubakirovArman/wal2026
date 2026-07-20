@@ -310,7 +310,7 @@ def main() -> None:
                 entry["q8_mask"] = q8_mask
                 entry["q8_codes_int8"] = q8_codes[name]
                 entry["q8_scales_fp16"] = q8_scales[name]
-            else:
+            elif "q8_mask" not in entry:
                 entry["q8_mask"] = torch.zeros_like(entry["q4_mask"], dtype=torch.bool)
                 entry["q8_codes_int8"] = torch.zeros_like(
                     entry["q4_codes_int8"], dtype=torch.int8

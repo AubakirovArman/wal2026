@@ -36,6 +36,7 @@ from wal_tat import (
     install_mixed_q2_q4_artifact,
     q2_g128_physical_bpw,
     q4_g128_physical_bpw,
+    q8_g128_physical_bpw,
 )
 from wal_tat.quantization import weighted_symmetric_q4_project
 from wal_tat.scoring import exact_diagonal_ternary_project
@@ -387,50 +388,77 @@ def main() -> None:
     artifact_path = None
     artifact_sha256 = None
     if args.write_artifact and first_full_pass is not None:
+        parent_has_q8 = (
+            parent_artifact is not None
+            and parent_artifact.get("format") == "wal-tat-mixed-q2-q4-q8-v1"
+        )
         artifact_path = (
             Path(source_path).parents[1]
             / "artifacts"
-            / f"wal-tat-{args.tag}-mixed-q2-q4.pt"
+            / (
+                f"wal-tat-{args.tag}-mixed-q2-q4-q8.pt"
+                if parent_has_q8
+                else f"wal-tat-{args.tag}-mixed-q2-q4.pt"
+            )
         )
         artifact_path.parent.mkdir(parents=True, exist_ok=True)
+        artifact_matrices = (
+            copy.deepcopy(parent_artifact["matrices"])
+            if parent_artifact is not None
+            else {}
+        )
+        for name in names:
+            target_entry = {
+                "shape": tuple(matrices[name].master_weight.shape),
+                "source_committed_mask": source_committed_masks[name],
+                "q4_mask": candidate_masks[first_full_pass][name],
+                "q2_codes_int8": q2_codes[name],
+                "q2_scales_fp16": q2_scales[name],
+                "q4_codes_int8": q4_codes_by_name[name],
+                "q4_scales_fp16": q4_scales_by_name[name],
+            }
+            if parent_has_q8:
+                target_entry.update(
+                    {
+                        "q8_mask": torch.zeros_like(
+                            target_entry["q4_mask"], dtype=torch.bool
+                        ),
+                        "q8_codes_int8": torch.zeros_like(
+                            target_entry["q4_codes_int8"], dtype=torch.int8
+                        ),
+                        "q8_scales_fp16": torch.ones_like(
+                            target_entry["q4_scales_fp16"], dtype=torch.float16
+                        ),
+                    }
+                )
+            artifact_matrices[name] = target_entry
+        artifact_payload = {
+            "format": (
+                "wal-tat-mixed-q2-q4-q8-v1"
+                if parent_has_q8
+                else "wal-tat-mixed-q2-q4-v1"
+            ),
+            "source_checkpoint_sha256": sha256_file(source_path),
+            "suite_sha256": sha256_file(suite_path),
+            "target_layer": args.target_layer,
+            "target_projections": requested,
+            "parent_artifact_sha256": (
+                sha256_file(parent_path) if parent_path is not None else None
+            ),
+            "candidate": first_full_pass,
+            "group_size": 128,
+            "q2_physical_bpw": q2_g128_physical_bpw(),
+            "q4_physical_bpw": q4_g128_physical_bpw(),
+            "matrices": artifact_matrices,
+            "development_ratios": full_evaluations[first_full_pass]["ratios"],
+            "development_incremental_ratios_vs_parent": full_evaluations[
+                first_full_pass
+            ]["incremental_ratios_vs_parent"],
+        }
+        if parent_has_q8:
+            artifact_payload["q8_physical_bpw"] = q8_g128_physical_bpw()
         torch.save(
-            {
-                "format": "wal-tat-mixed-q2-q4-v1",
-                "source_checkpoint_sha256": sha256_file(source_path),
-                "suite_sha256": sha256_file(suite_path),
-                "target_layer": args.target_layer,
-                "target_projections": requested,
-                "parent_artifact_sha256": (
-                    sha256_file(parent_path) if parent_path is not None else None
-                ),
-                "candidate": first_full_pass,
-                "group_size": 128,
-                "q2_physical_bpw": q2_g128_physical_bpw(),
-                "q4_physical_bpw": q4_g128_physical_bpw(),
-                "matrices": {
-                    **(
-                        copy.deepcopy(parent_artifact["matrices"])
-                        if parent_artifact is not None
-                        else {}
-                    ),
-                    **{
-                        name: {
-                        "shape": tuple(matrices[name].master_weight.shape),
-                        "source_committed_mask": source_committed_masks[name],
-                        "q4_mask": candidate_masks[first_full_pass][name],
-                        "q2_codes_int8": q2_codes[name],
-                        "q2_scales_fp16": q2_scales[name],
-                        "q4_codes_int8": q4_codes_by_name[name],
-                        "q4_scales_fp16": q4_scales_by_name[name],
-                        }
-                        for name in names
-                    },
-                },
-                "development_ratios": full_evaluations[first_full_pass]["ratios"],
-                "development_incremental_ratios_vs_parent": full_evaluations[
-                    first_full_pass
-                ]["incremental_ratios_vs_parent"],
-            },
+            artifact_payload,
             artifact_path,
         )
         artifact_sha256 = sha256_file(artifact_path)
@@ -449,6 +477,9 @@ def main() -> None:
         ),
         "parent_q4_weights": (
             parent_install.q4_weights if parent_install is not None else 0
+        ),
+        "parent_q8_weights": (
+            parent_install.q8_weights if parent_install is not None else 0
         ),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
