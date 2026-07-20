@@ -23,6 +23,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
     parser.add_argument("--artifact", type=Path, required=True)
+    parser.add_argument(
+        "--parent-artifact",
+        type=Path,
+        help="Optional accepted mixed parent for a direct incremental gate.",
+    )
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
@@ -39,10 +44,18 @@ def main() -> None:
     args = parse_args()
     source_path = args.source_checkpoint.resolve()
     artifact_path = args.artifact.resolve()
+    parent_artifact_path = (
+        args.parent_artifact.resolve() if args.parent_artifact is not None else None
+    )
     suite_path = args.suite.resolve()
     model_path = (args.model_path or default_model_path()).resolve()
     source = torch.load(source_path, map_location="cpu", weights_only=False)
     artifact = torch.load(artifact_path, map_location="cpu", weights_only=False)
+    parent_artifact = (
+        torch.load(parent_artifact_path, map_location="cpu", weights_only=False)
+        if parent_artifact_path is not None
+        else None
+    )
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
     model = load_model(model_path, args.device)
     baseline = evaluate_domains(model, suite["gates"], args.device)
@@ -51,6 +64,17 @@ def main() -> None:
     source_ratios = ratios(source_metrics, baseline)
     source_ternary_counts = accepted_weight_counts(source)
     source_ternary_weights = sum(source_ternary_counts.values())
+    parent_metrics = None
+    parent_incremental_ratios = None
+    if parent_artifact is not None:
+        install_mixed_q2_q4_artifact(
+            model,
+            parent_artifact,
+            source,
+            device=args.device,
+            expected_source_sha256=sha256_file(source_path),
+        )
+        parent_metrics = evaluate_domains(model, suite["gates"], args.device)
     install_result = install_mixed_q2_q4_artifact(
         model,
         artifact,
@@ -66,6 +90,8 @@ def main() -> None:
     metrics = evaluate_domains(model, suite["gates"], args.device)
     metric_ratios = ratios(metrics, baseline)
     incremental_ratios = ratios(metrics, source_metrics)
+    if parent_metrics is not None:
+        parent_incremental_ratios = ratios(metrics, parent_metrics)
     cumulative_passed = all(
         value <= args.gate_ratio for value in metric_ratios.values()
     )
@@ -73,7 +99,11 @@ def main() -> None:
         value <= args.incremental_gate_ratio
         for value in incremental_ratios.values()
     )
-    passed = cumulative_passed and incremental_passed
+    parent_incremental_passed = parent_incremental_ratios is None or all(
+        value <= args.incremental_gate_ratio
+        for value in parent_incremental_ratios.values()
+    )
+    passed = cumulative_passed and incremental_passed and parent_incremental_passed
     strict_ternary_weights = source_ternary_weights + new_q2_weights
     low_bit_weights = strict_ternary_weights + q4_weights + q8_weights
     result = {
@@ -83,6 +113,14 @@ def main() -> None:
         "source_checkpoint_sha256": sha256_file(source_path),
         "artifact": str(artifact_path),
         "artifact_sha256": sha256_file(artifact_path),
+        "parent_artifact": (
+            str(parent_artifact_path) if parent_artifact_path is not None else None
+        ),
+        "parent_artifact_sha256": (
+            sha256_file(parent_artifact_path)
+            if parent_artifact_path is not None
+            else None
+        ),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
         "baseline": baseline,
@@ -91,10 +129,13 @@ def main() -> None:
         "metrics": metrics,
         "ratios": metric_ratios,
         "incremental_ratios_vs_source": incremental_ratios,
+        "parent_metrics": parent_metrics,
+        "incremental_ratios_vs_parent": parent_incremental_ratios,
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
         "cumulative_passed": cumulative_passed,
         "incremental_passed": incremental_passed,
+        "parent_incremental_passed": parent_incremental_passed,
         "passed": passed,
         "strict_q2_codes_only": True,
         "signed_q4_codes_only": True,

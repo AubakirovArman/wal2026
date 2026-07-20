@@ -24,8 +24,8 @@ mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
 strict ternary weights: 79,426,432 / 1,720,451,072 = 4.616605% in mixed artifact
-Q4 rescue weights:      66,786,944 / 1,720,451,072 = 3.881944%
-Q8 rescue weights:      105,444,864 / 1,720,451,072 = 6.128908%
+Q4 rescue weights:      72,806,656 / 1,720,451,072 = 4.231835%
+Q8 rescue weights:      99,425,152 / 1,720,451,072 = 5.779017%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
 embedding/head:       0 / 1 tied matrix
@@ -155,6 +155,15 @@ audit-v31 прошёл с absolute ratios `0.993532 / 1.003477 / 0.971895` и
 incremental worst `1.004159 <= 1.005`. Пятый полный low-bit decoder block
 увеличил coverage до `14.627457%`; accepted artifact SHA-256:
 `466fb84e60f851e938a249db07ac38bf22e1ff4bcaa4eda68ef5f1aed6b1ffa2`.
+
+Первый layer-25 Q8→Q4 rate--distortion шаг затем выбрал 47,029 наименее
+чувствительных Q8-групп: 6,019,712 весов стали Q4. Доля Q4 блока выросла до
+`19.960022%`, Q8 снизилась до `80.039978%`, а budget — с `7.805003` до
+`7.326599 bpw`. Новый WikiText-103/C4/datasets-code audit-v32 прошёл с
+absolute ratios `0.993773 / 0.943618 / 0.968501`; incremental worst равен
+`1.003159` против strict source и `1.000108` против принятого parent.
+Accepted artifact SHA-256:
+`6d09ee3f4a697467a21f3d5da6987a5ec413cb4c4ff3eb345d1eff6b18291dc8`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

@@ -40,6 +40,23 @@ def c4_arrow_pattern(split: str, train_shard: int = 0) -> str:
     )
 
 
+def wikitext103_arrow_pattern(split: str, train_shard: int = 0) -> str:
+    """Return the cached WikiText-103 raw Arrow pattern for one split."""
+    if split in {"validation", "test"}:
+        return (
+            "wikitext/wikitext-103-raw-v1/0.0.0/*/"
+            f"wikitext-{split}.arrow"
+        )
+    if split != "train":
+        raise ValueError(f"unsupported WikiText-103 split: {split}")
+    if train_shard not in {0, 1}:
+        raise ValueError("WikiText-103 train shard must be 0 or 1")
+    return (
+        "wikitext/wikitext-103-raw-v1/0.0.0/*/"
+        f"wikitext-train-{train_shard:05d}-of-*.arrow"
+    )
+
+
 def token_stream(tokenizer, texts):
     return tokenizer(
         "\n\n".join(text for text in texts if text.strip()),
@@ -110,6 +127,20 @@ def main() -> None:
         help="Use a fresh raw Arrow source after the validation stream is exhausted.",
     )
     parser.add_argument(
+        "--prose-source",
+        choices=("squad", "wikitext103"),
+        default="squad",
+        help="Independent prose source used for the second audit domain.",
+    )
+    parser.add_argument(
+        "--wikitext-split",
+        choices=("train", "validation", "test"),
+        default="train",
+    )
+    parser.add_argument("--wikitext-train-shard", type=int, default=0)
+    parser.add_argument("--prose-text-start", type=int, default=0)
+    parser.add_argument("--prose-text-count", type=int, default=10000)
+    parser.add_argument(
         "--c4-train-shard",
         type=int,
         default=0,
@@ -118,7 +149,9 @@ def main() -> None:
     parser.add_argument("--c4-text-start", type=int, default=0)
     parser.add_argument("--c4-text-count", type=int, default=4000)
     parser.add_argument("--c4-offset", type=int, default=17011)
-    parser.add_argument("--squad-offset", type=int, default=9011)
+    parser.add_argument(
+        "--squad-offset", "--prose-offset", dest="prose_offset", type=int, default=9011
+    )
     parser.add_argument("--code-offset", type=int, default=4001)
     parser.add_argument(
         "--code-source",
@@ -140,15 +173,34 @@ def main() -> None:
     args = parser.parse_args()
     if args.c4_text_start < 0 or args.c4_text_count < 1:
         raise ValueError("C4 text start/count must be non-negative/positive")
+    if args.prose_text_start < 0 or args.prose_text_count < 1:
+        raise ValueError("prose text start/count must be non-negative/positive")
     model_path = (args.model_path or default_model_path()).resolve()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
     c4_path = one_file(c4_arrow_pattern(args.c4_split, args.c4_train_shard))
-    squad_path = one_file(
-        f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
-    )
     c4_texts = arrow_column(c4_path, "text")
-    squad_contexts = arrow_column(squad_path, "context")
+    if args.prose_source == "squad":
+        prose_path = one_file(
+            f"squad/plain_text/0.0.0/*/squad-{args.squad_split}.arrow"
+        )
+        prose_texts = arrow_column(prose_path, "context")
+        prose_domain = (
+            "squad_context"
+            if args.squad_split == "validation"
+            else "squad_train_context"
+        )
+    else:
+        prose_path = one_file(
+            wikitext103_arrow_pattern(
+                args.wikitext_split, args.wikitext_train_shard
+            )
+        )
+        all_prose_texts = arrow_column(prose_path, "text")
+        prose_texts = all_prose_texts[
+            args.prose_text_start : args.prose_text_start + args.prose_text_count
+        ]
+        prose_domain = f"wikitext103_{args.wikitext_split}"
 
     code_files = []
     directories = code_source_directories(args.code_source)
@@ -166,11 +218,6 @@ def main() -> None:
         )
 
     c4_domain = f"c4_{args.c4_split}"
-    squad_domain = (
-        "squad_context"
-        if args.squad_split == "validation"
-        else "squad_train_context"
-    )
     code_domain = f"{args.code_source}_code"
     token_sources = {
         c4_domain: token_stream(
@@ -179,12 +226,12 @@ def main() -> None:
                 args.c4_text_start : args.c4_text_start + args.c4_text_count
             ],
         ),
-        squad_domain: token_stream(tokenizer, squad_contexts),
+        prose_domain: token_stream(tokenizer, prose_texts),
         code_domain: token_stream(tokenizer, code_texts),
     }
     offsets = {
         c4_domain: args.c4_offset,
-        squad_domain: args.squad_offset,
+        prose_domain: args.prose_offset,
         code_domain: args.code_offset,
     }
     gates = {
@@ -194,11 +241,11 @@ def main() -> None:
             length=args.length,
             offset=args.c4_offset,
         ),
-        squad_domain: text_windows(
-            token_sources[squad_domain],
+        prose_domain: text_windows(
+            token_sources[prose_domain],
             count=args.sequences,
             length=args.length,
-            offset=args.squad_offset,
+            offset=args.prose_offset,
         ),
         code_domain: text_windows(
             token_sources[code_domain],
@@ -207,7 +254,7 @@ def main() -> None:
             offset=args.code_offset,
         ),
     }
-    source_paths = [c4_path, squad_path, *code_files]
+    source_paths = [c4_path, prose_path, *code_files]
     payload = {
         "format": "wal-tat-audit-holdout-v1",
         "policy": args.policy,
@@ -217,7 +264,7 @@ def main() -> None:
         "predicted_tokens_per_domain": args.length * args.sequences,
         "offsets": {
             c4_domain: args.c4_offset,
-            squad_domain: args.squad_offset,
+            prose_domain: args.prose_offset,
             "code": args.code_offset,
         },
         "ranges": {
@@ -228,13 +275,27 @@ def main() -> None:
         },
         "data_splits": {
             "c4": args.c4_split,
-            "squad": args.squad_split,
+            "prose_source": args.prose_source,
+            "squad": args.squad_split if args.prose_source == "squad" else None,
+            "wikitext103": (
+                args.wikitext_split
+                if args.prose_source == "wikitext103"
+                else None
+            ),
         },
         "c4_train_shard": (
             args.c4_train_shard if args.c4_split == "train" else None
         ),
         "c4_text_start": args.c4_text_start,
         "c4_text_count": args.c4_text_count,
+        "prose_text_start": args.prose_text_start,
+        "prose_text_count": args.prose_text_count,
+        "wikitext_train_shard": (
+            args.wikitext_train_shard
+            if args.prose_source == "wikitext103"
+            and args.wikitext_split == "train"
+            else None
+        ),
         "code_source": args.code_source,
         "gates": gates,
         "sources": [str(path) for path in source_paths],

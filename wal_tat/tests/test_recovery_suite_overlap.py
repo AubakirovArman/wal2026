@@ -84,6 +84,25 @@ def test_c4_text_slices_have_distinct_stream_identities():
     assert stream_identity(first, "c4_train") != stream_identity(second, "c4_train")
 
 
+def test_wikitext_is_not_classified_as_code():
+    payload = {
+        "model_revision": "revision",
+        "sources": [
+            "/cache/wikitext-train-00000-of-00002.arrow",
+            "/lib/a.py",
+        ],
+        "source_sha256": {
+            "/cache/wikitext-train-00000-of-00002.arrow": "wiki-sha",
+            "/lib/a.py": "code-sha",
+        },
+        "prose_text_start": 100,
+        "prose_text_count": 200,
+    }
+    assert stream_identity(payload, "wikitext103_train") != stream_identity(
+        payload, "datasets_code"
+    )
+
+
 def test_segmented_ranges_are_expanded_for_overlap_checks():
     payload = {
         "full_token_stream_sha256": {"squad": "full"},

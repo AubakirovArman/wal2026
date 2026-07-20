@@ -32,8 +32,8 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `466fb84...`: 79,426,432 ternary, 66,786,944
-  signed-Q4 and 105,444,864 signed-Q8 weights, for 251,658,240 low-bit weights
+- sealed-audited mixed artifact `6d09ee3...`: 79,426,432 ternary, 72,806,656
+  signed-Q4 and 99,425,152 signed-Q8 weights, for 251,658,240 low-bit weights
   (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
 
@@ -51,11 +51,12 @@ Q8 at `7.287003 bpw`. Sealed audit-v29 ratios are
 `0.991622 / 0.989226 / 0.973866`, with incremental worst `1.004860`. The
 high Q8 share remains explicitly scheduled for reverse Q8→Q4→Q2 distillation.
 
-Layer 25 is now fully low-bit at `7.999929%` Q4 and `92.000071%` Q8
-(`7.805003 bpw`). Sealed audit-v31 ratios are
-`0.993532 / 1.003477 / 0.971895`; incremental worst versus immutable `s0053`
-is `1.004159 <= 1.005`. Its high Q8 share is a safe upper bound scheduled for
-reverse compression, not a claim that Q8 is the final target format.
+Layer 25 is now fully low-bit at `19.960022%` Q4 and `80.039978%` Q8
+(`7.326599 bpw`). Its first Q8→Q4 rate--distortion step replaced 6,019,712
+weights without changing coverage. Sealed audit-v32 ratios are
+`0.993773 / 0.943618 / 0.968501`; incremental worst is `1.003159` versus the
+immutable `s0053` and only `1.000108` versus the accepted parent, both below
+the prospectively declared `1.005` limit.
 
 The strict historical lineage has:
 

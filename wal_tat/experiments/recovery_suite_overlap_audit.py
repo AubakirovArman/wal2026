@@ -48,6 +48,13 @@ def stream_identity(payload: dict, domain: str) -> str | None:
             for path in sources
             if Path(path).name.startswith("squad-") and path.endswith(".arrow")
         ]
+    elif domain.startswith("wikitext103"):
+        family = "wikitext103"
+        selected = [
+            path
+            for path in sources
+            if Path(path).name.startswith("wikitext-") and path.endswith(".arrow")
+        ]
     else:
         family = "code"
         selected = [path for path in sources if path.endswith(".py")]
@@ -57,6 +64,11 @@ def stream_identity(payload: dict, domain: str) -> str | None:
             stream_view = {
                 "text_start": int(payload.get("c4_text_start", 0)),
                 "text_count": int(payload.get("c4_text_count", 4000)),
+            }
+        elif family == "wikitext103":
+            stream_view = {
+                "text_start": int(payload.get("prose_text_start", 0)),
+                "text_count": int(payload.get("prose_text_count", 10000)),
             }
         material = {
             "model_revision": payload.get("model_revision"),
