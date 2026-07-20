@@ -12,11 +12,11 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 | Единица | Принято | Осталось |
 |---|---:|---:|
 | Полностью ternary decoder blocks | 1 / 28 (`layer 27`) | 27 |
-| Матрицы в `layer 24` | Q/K/V/O + 75.78125% up + 6.34765625% gate + 10.44921875% down | 24.21875% up + 93.65234375% gate + 89.55078125% down |
+| Матрицы в `layer 24` | Q/K/V/O + 75.78125% up + 6.4453125% gate + 10.44921875% down | 24.21875% up + 93.5546875% gate + 89.55078125% down |
 | Крупные матрицы, включая tied embedding/head | 11 / 197 | 186 |
-| Крупные matrix weights | 74,563,584 / 1,720,451,072 | 1,645,887,488 |
+| Крупные matrix weights | 74,575,872 / 1,720,451,072 | 1,645,875,200 |
 
-Покрытие крупных matrix weights равно `4.333956%`. Нельзя округлять частично
+Покрытие крупных matrix weights равно `4.334670%`. Нельзя округлять частично
 готовый `layer 24` до второго законченного блока: честный счётчик остаётся
 `1 полный block + 4/7 матриц следующего`.
 
@@ -36,9 +36,9 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
 deploy-файлом.
 
-Принятые 74,563,584 weights занимают 142.2188 MiB в BF16. После настоящей
-Q2-g128 упаковки их расчётный payload составит 18.8884 MiB, экономия —
-123.3303 MiB. Экономия VRAM появится только после packed runtime; fake-quant
+Принятые 74,575,872 weights занимают 142.2422 MiB в BF16. После настоящей
+Q2-g128 упаковки их расчётный payload составит 18.8915 MiB, экономия —
+123.3506 MiB. Экономия VRAM появится только после packed runtime; fake-quant
 обучение её не даёт.
 
 ## Что именно преобразовано
@@ -53,27 +53,26 @@ Q2-g128 упаковки их расчётный payload составит 18.888
 - `self_attn.v_proj` и `o_proj`;
 - `self_attn.q_proj` и `k_proj`.
 
-В `layer 24` приняты 75.78125% g128-групп `up_proj`, 6.34765625%
+В `layer 24` приняты 75.78125% g128-групп `up_proj`, 6.4453125%
 `gate_proj` и 10.44921875% `down_proj`. Остальные 24.21875% `up_proj`,
-93.65234375% `gate_proj` и 89.55078125% `down_proj` пока остаются BF16.
+93.5546875% `gate_proj` и 89.55078125% `down_proj` пока остаются BF16.
 
 ## Текущая validation
 
-Текущий принятый frontier — `s0048r3`. Coverage не изменился относительно
-`s0048r2`, но геометрия уже принятых ternary-групп и ещё не принятый BF16 MLP
-fallback были совместно восстановлены target-local QAT. На независимом
-audit-v8 абсолютные NLL ratios равны:
+Текущий принятый frontier — `s0049`. Он наследует coverage-neutral recovery
+`s0048r3` и добавляет 96 g128-групп `layer24.gate_proj`. На новом one-shot
+audit-v9 абсолютные NLL ratios равны:
 
-| Domain | Ratio к BF16 | Incremental upper-95 к `s0048r2` |
+| Domain | Ratio к BF16 | Incremental upper-95 к `s0048r3` |
 |---|---:|---:|
-| C4 validation | 0.993307 | 0.998246 |
-| SQuAD context | 0.992380 | 0.996783 |
-| PyTorch code | 0.985639 | 0.994289 |
+| C4 validation | 0.995646 | 1.000039 |
+| SQuAD context | 0.988960 | 1.000028 |
+| PyTorch code | 0.981130 | 1.000000 |
 
-Все cumulative point/confidence и incremental point/confidence проверки
-пройдены. Fresh-process standard verification дала `wiki=0.947025` и
-`code=0.959163` relative NLL. В accepted groups нет BF16 residual, а изменения
-BF16 master weight разрешены только в группах с false committed mask.
+Все cumulative point/confidence и policy-level incremental upper-95 проверки
+пройдены. Fresh-process standard verification дала `wiki=0.947054` и
+`code=0.959188` relative NLL. В accepted groups нет BF16 residual; добавленные
+12,288 weights используют только strict ternary codes и FP16 g128 scales.
 
 ### Историческая recurring validation parent `s0048r2`
 
@@ -160,7 +159,7 @@ teacher NLL около `3.5` ratio `1.02` соответствует приме�
 на первых блоках и ошибочно назвать процесс масштабируемым.
 
 Текущий accepted frontier проходит условную `+5% NLL` guide. На новом
-audit-v8 худший point ratio равен `0.993307015`, при guide `1.002166978`.
+audit-v9 худший point ratio равен `0.995646121`, при guide `1.002167335`.
 
 ## Главный технический результат
 
@@ -799,6 +798,26 @@ incremental upper-95 ratios оказались ниже единицы, source �
 остаётся `74,563,584` weights. После fresh-process verification parent и
 промежуточные бинарные artifacts удалены, а JSON evidence и hashes сохранены.
 
+### Новый prospective atom и frontier `s0049`
+
+До выбора следующего кандидата построен audit-v9. Первая заранее объявленная
+попытка диапазона была технически невозможна из-за длины SQuAD stream и не
+создала suite. Повторная policy выбрала отдельные свободные диапазоны для
+C4/SQuAD/torch. Улучшенный overlap checker восстановил интервалы legacy
+audit-v2--v6 из offsets и source identities; v9 имеет ноль exact-window и
+range overlaps со всеми 18 retained suites.
+
+На development заново просканированы 96 D1-групп каждой оставшейся MLP
+матрицы после fallback-QAT. Победил `gate_proj + threshold_ls` с worst
+incremental ratio `1.000053006`. Hard-forward proxy-QAT не превзошёл исходную
+инициализацию, поэтому корректно сохранил `step 0`, churn codes равен нулю.
+
+Точный frozen artifact единожды проверен на audit-v9. Incremental upper-95
+C4/SQuAD/code равны `1.000039151 / 1.000027537 / 1.000000139`, все ниже
+заранее заданного `1.0002`. Atomic commit `s0049` добавил 96 g128-групп, или
+12,288 strict-ternary weights. Fresh reload прошёл; parent `s0048r3` и четыре
+промежуточных artifact-файла удалены только после этого.
+
 ### Reference Q2-g128 packer и реальный bpw
 
 Добавлен versioned binary format без pickle overhead. Он хранит mapping
@@ -807,7 +826,7 @@ incremental upper-95 ratios оказались ниже единицы, source �
 сразу отклоняет reserved code, проверяет длины payload и точно восстанавливает
 deployed weight.
 
-На настоящем `layer24.up_proj` (mask coverage не изменилось в `s0048r3`):
+На настоящем `layer24.up_proj` (его mask coverage не изменилось в `s0049`):
 
 - shape: `6144 x 2048`, всего 12,582,912 weights;
 - committed: 74,496 из 98,304 групп, то есть 75.78125%;
@@ -819,9 +838,9 @@ deployed weight.
 
 Почему здесь не 2.125 bpw: четверть этой конкретной матрицы всё ещё хранится
 как BF16 fallback. Полностью committed g128-матрица имеет ровно `2.125` payload
-bpw плюс исчезающе малый header. Для всего текущего frontier только 4.333956%
+bpw плюс исчезающе малый header. Для всего текущего frontier только 4.334670%
 major weights уже Q2, поэтому честная проекция major-weight storage пока
-`15.398835 bpw`, или около `3.084 GiB` вместо `3.205 GiB` BF16. При 100%
+`15.398565 bpw`, или около `3.084 GiB` вместо `3.205 GiB` BF16. При 100%
 Q2-g128 те же 1,720,451,072 major weights занимали бы около `0.426 GiB` без
 runtime/KV-cache. Это storage projection, не текущая VRAM тренировки и не
 готовый `llama.cpp` kernel.
@@ -829,13 +848,13 @@ runtime/KV-cache. Это storage projection, не текущая VRAM трени
 ## Лучший воспроизводимый checkpoint
 
 ```text
-wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt
+wal2/checkpoints/wal-tat-block24_gate_d1_thresholdls_s0049.pt
 ```
 
-- размер: `304,665,504` bytes;
-- SHA-256: `50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca`;
+- размер: `304,658,480` bytes;
+- SHA-256: `e643a500102ac277b66e8399b6b31811063af2dd337dbbdff9fdf036374d5f70`;
 - содержание: полный ternary block 27, Q/K/V/O block 24, 75.78125%
-  `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`;
+  `up_proj`, 6.4453125% `gate_proj` и 10.44921875% `down_proj`;
 - формат: training checkpoint, не packed artifact.
 
 Промежуточные и провалившие audit checkpoints удалены; их метрики и команды
@@ -843,13 +862,12 @@ wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt
 
 ## Следующий технический шаг
 
-1. до нового candidate построить audit-v9 с новыми непересекающимися token
+1. до нового candidate построить audit-v10 с новыми непересекающимися token
    ranges и записать его hash/policy;
-2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0048r3`, так
-   как fallback-QAT изменил их BF16 geometry;
+2. пересчитать sensitivity оставшихся `up/gate/down` групп на `s0049`;
 3. повторить малый prospective tail atom, начиная с наименее чувствительных
    оставшихся групп; candidate проходит disjoint selection/confirmation,
-   frozen audit-v9 и fresh-process reload;
+   frozen audit-v10 и fresh-process reload;
 4. перенести prospective dual gate из отдельного commit validator в основной
    campaign controller;
 5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и

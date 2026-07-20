@@ -18,9 +18,9 @@
 
 ```text
 decoder blocks:       1 / 28 complete, 27 remain
-next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.34765625% gate + 10.44921875% down
+next block:           layer 24 has Q/K/V/O + 75.78125% up + 6.4453125% gate + 10.44921875% down
 major matrices:       11 / 197 accepted, 186 remain
-major matrix weights: 74,563,584 / 1,720,451,072 = 4.333956%
+major matrix weights: 74,575,872 / 1,720,451,072 = 4.334670%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       reference matrix packer ready; full manifest/kernels remain
 ```
@@ -101,21 +101,30 @@ allowed_NLL_ratio(domain) = 1 + c*log(1.05)/teacher_NLL(domain)
 
 Q/K/V/O layer 24 приняты и совместно с layer 27 прошли point gate на
 recurring validation-v3/v4. Через sensitivity-ranked транзакции также приняты
-75.78125% `up_proj`, 6.34765625% `gate_proj` и 10.44921875% `down_proj`.
-Текущее покрытие `4.333956%`, условная `+5% NLL` guide равна `1.00216698`,
+75.78125% `up_proj`, 6.4453125% `gate_proj` и 10.44921875% `down_proj`.
+Текущее покрытие `4.334670%`, условная `+5% NLL` guide равна `1.00216733`,
 худший измеренный точечный ratio равен `1.001472`. Кумулятивный paired SQuAD
 upper-95 равен `1.006937` на v3 и `1.003597` на v4, но последний D10-шаг был
 принят уже по prospective dual gate: cumulative point плюс incremental
 upper-95 `<=1.0002`. Его incremental maxima равны `1.00005088` и
 `1.00010712`; это не заменяет будущий sealed block audit.
 
-Текущий lineage checkpoint — `s0048r3`. Он сохраняет то же coverage, но после
+Lineage checkpoint `s0048r3` сохранил то же coverage, но после
 target-local fallback-compensation QAT проходит новый audit-v8 с абсолютными
 C4/SQuAD/code ratios `0.993307 / 0.992380 / 0.985639`; incremental paired
 upper-95 относительно parent равны `0.998246 / 0.996783 / 0.994289`. Это
 создаёт quality headroom для следующего роста, но audit-v8 уже раскрыт и не
 будет использоваться для подбора следующего кандидата. До следующей
 тернаризации строится заранее зафиксированный audit-v9.
+
+После этого audit-v9 был заморожен и проверен на отсутствие пересечений с 18
+retained suites. Development-only scan выбрал 96 D1-групп `gate_proj` с
+`threshold_ls`; proxy-QAT не превзошёл step zero и потому не изменил codes.
+Один заранее объявленный audit-v9 дал incremental upper-95
+`1.000039 / 1.000028 / 1.000000`, кандидат принят как `s0049`. Добавлено
+12,288 strict-ternary weights, coverage `gate_proj` вырос до `6.4453125%`, а
+общий счётчик — до `74,575,872`. Перед следующей кандидатной настройкой должен
+быть построен новый audit-v10: раскрытый v9 повторно использовать нельзя.
 
 Masked proxy recovery теперь поддерживает этот частичный block без ложной
 тернаризации оставшихся BF16-групп. На текущем frontier он сохранил coverage и

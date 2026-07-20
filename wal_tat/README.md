@@ -25,13 +25,13 @@ Q2-g128 2.125 bpw**. A partially converted model is a BF16 + Q2-g128 mixture.
 
 ## Current evidence
 
-The accepted frontier `s0048r3` on `Qwen/Qwen3-1.7B` has:
+The accepted frontier `s0049` on `Qwen/Qwen3-1.7B` has:
 
 - all seven major matrices of layer 27 hard ternary;
 - Q/K/V/O of layer 24 hard ternary plus 75.78125% `up_proj`,
-  6.34765625% `gate_proj`, and 10.44921875% `down_proj`;
-- 74,563,584 weights in `{-scale, 0, +scale}`;
-- 11 full major matrices plus three partial matrices and 4.333956% of major matrix
+  6.4453125% `gate_proj`, and 10.44921875% `down_proj`;
+- 74,575,872 weights in `{-scale, 0, +scale}`;
+- 11 full major matrices plus three partial matrices and 4.334670% of major matrix
   weights accepted;
 - recurring validation-v3 NLL ratios `0.996756 / 1.001149 / 0.981170` on C4,
   SQuAD and PyTorch code;
@@ -84,10 +84,19 @@ The accepted frontier `s0048r3` on `Qwen/Qwen3-1.7B` has:
   SQuAD and PyTorch code. Absolute NLL ratios were
   `0.993307 / 0.992380 / 0.985639`; paired incremental upper-95 ratios versus
   the parent frontier were `0.998246 / 0.996783 / 0.994289`;
-- `s0048r3` atomically publishes that state. It changes no committed mask,
-  keeps coverage at 74,563,584 weights, contains no BF16 residual in committed
+- `s0048r3` atomically published that state. It changed no committed mask,
+  kept coverage at 74,563,584 weights, contained no BF16 residual in committed
   groups, and fresh-verifies at `wiki=0.947025` and `code=0.959163` relative
-  NLL. It is now the sole retained WAL-TAT checkpoint;
+  NLL;
+- after freezing a new non-overlapping audit-v9, a post-QAT scan compared the
+  96 lowest-damage remaining groups of all three layer-24 MLP matrices. A
+  `gate_proj` threshold-LS candidate won development, and proxy QAT safely
+  retained step zero rather than publishing a worse trained snapshot;
+- the exact 12,288-weight candidate passed one-shot audit-v9. Its incremental
+  paired upper-95 ratios were `1.000039 / 1.000028 / 1.000000` on
+  C4/SQuAD/code, below the predeclared `1.0002` limit. `s0049` therefore raises
+  coverage to 74,575,872 weights and fresh-verifies at `wiki=0.947054` and
+  `code=0.959188`; it is the sole retained WAL-TAT checkpoint;
 - the reference binary packer exactly round-tripped the real partial
   `layer24.up_proj`: 12,582,912 weights became an 8,640,072-byte file at
   `5.493210` true bpw (75.78125% Q2-g128 plus BF16 fallback and all metadata);

@@ -1,0 +1,224 @@
+{
+  "schema": "wal-tat-tail-initializer-ablation-v1",
+  "status": "checkpoint_neutral_development_ablation",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt",
+  "source_checkpoint_sha256": "50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "development-only initializer and tail selection",
+  "candidate_name": "model.layers.24.mlp.gate_proj",
+  "group_size": 128,
+  "deciles": [
+    1
+  ],
+  "groups_per_decile": 96,
+  "samples_per_domain": 8,
+  "domain_offset": 0,
+  "sequences_per_domain": 64,
+  "threshold_multipliers": [
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0,
+    1.125,
+    1.25,
+    1.375,
+    1.5,
+    1.625,
+    1.75,
+    1.875,
+    2.0,
+    2.125,
+    2.25,
+    2.375,
+    2.5,
+    2.625,
+    2.75,
+    2.875,
+    3.0
+  ],
+  "forced_initializer": null,
+  "excluded_artifacts": [],
+  "excluded_groups": 0,
+  "baseline_raw_bf16": {
+    "c4_validation": {
+      "nll": 3.220997042953968,
+      "ppl": 25.05308673651138,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.248296843841672,
+      "ppl": 9.471590493563035,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.496952347457409,
+      "ppl": 12.145422471212541,
+      "tokens": 16384
+    }
+  },
+  "frontier": {
+    "c4_validation": {
+      "nll": 3.202744584530592,
+      "ppl": 24.59995428321244,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.2716229036450386,
+      "ppl": 9.695122302715776,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.4630157817155123,
+      "ppl": 11.740163977429857,
+      "tokens": 16384
+    }
+  },
+  "frontier_ratios_to_raw_bf16": {
+    "c4_validation": 0.9943332892952187,
+    "squad_context": 1.0103749911259534,
+    "torch_code": 0.9864088052074949
+  },
+  "experiments": {
+    "D1": {
+      "mask_sha256": "9b10be86650fc45328c0376f7815ad4c210ef42df55e22cf5181d335c1f71de2",
+      "groups": 96,
+      "weights": 12288,
+      "score_min": 3.79590615531963e-15,
+      "score_mean": 4.321688135393992e-14,
+      "score_max": 6.554075993947875e-14,
+      "initializers": {
+        "absmean_round": {
+          "metrics": {
+            "c4_validation": {
+              "nll": 3.20280684158206,
+              "ppl": 24.601485851507327,
+              "tokens": 16384
+            },
+            "squad_context": {
+              "nll": 2.2715287767350674,
+              "ppl": 9.694209773759066,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.4632456209510565,
+              "ppl": 11.742862637860737,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_validation": 0.9943526177983616,
+            "squad_context": 1.0103331252530243,
+            "torch_code": 0.9865008531137267
+          },
+          "ratios_to_frontier": {
+            "c4_validation": 1.000019438656385,
+            "squad_context": 0.9999585640249443,
+            "torch_code": 1.000093316184675
+          },
+          "relative_weight_mse": 0.25964000821113586,
+          "relative_activation_weighted_mse": 0.22330382466316223,
+          "code_histogram": {
+            "-1": 4292,
+            "0": 3745,
+            "1": 4251
+          },
+          "zero_fraction": 0.3047688901424408,
+          "scale_mean": 0.02993837557733059,
+          "scale_p95": 0.03487911447882652
+        },
+        "threshold_ls": {
+          "metrics": {
+            "c4_validation": {
+              "nll": 3.202761160209775,
+              "ppl": 24.60036204754203,
+              "tokens": 16384
+            },
+            "squad_context": {
+              "nll": 2.2716749981045723,
+              "ppl": 9.695627378027947,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.463146336376667,
+              "ppl": 11.741696810616912,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_validation": 0.994338435428221,
+            "squad_context": 1.0103981617582818,
+            "torch_code": 0.9864610908112981
+          },
+          "ratios_to_frontier": {
+            "c4_validation": 1.0000051754608417,
+            "squad_context": 1.0000229327057102,
+            "torch_code": 1.0000530060189317
+          },
+          "relative_weight_mse": 0.18973392248153687,
+          "relative_activation_weighted_mse": 0.18080583214759827,
+          "code_histogram": {
+            "-1": 3360,
+            "0": 5584,
+            "1": 3344
+          },
+          "zero_fraction": 0.4544270932674408,
+          "scale_mean": 0.045664750039577484,
+          "scale_p95": 0.05553683638572693
+        },
+        "activation_wls": {
+          "metrics": {
+            "c4_validation": {
+              "nll": 3.2025653179734945,
+              "ppl": 24.595544729357915,
+              "tokens": 16384
+            },
+            "squad_context": {
+              "nll": 2.2719112876802683,
+              "ppl": 9.697918624395363,
+              "tokens": 16384
+            },
+            "torch_code": {
+              "nll": 2.4632122702896595,
+              "ppl": 11.742471012155596,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_validation": 0.9942776336846402,
+            "squad_context": 1.0105032589016343,
+            "torch_code": 0.9864874965667222
+          },
+          "ratios_to_frontier": {
+            "c4_validation": 0.9999440272078006,
+            "squad_context": 1.0001269506636719,
+            "torch_code": 1.0000797756050148
+          },
+          "relative_weight_mse": 0.19876529276371002,
+          "relative_activation_weighted_mse": 0.1625419706106186,
+          "code_histogram": {
+            "-1": 3488,
+            "0": 5325,
+            "1": 3475
+          },
+          "zero_fraction": 0.433349609375,
+          "scale_mean": 0.04322712868452072,
+          "scale_p95": 0.05445795878767967
+        }
+      },
+      "chosen_initializer": "threshold_ls"
+    }
+  },
+  "frozen_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_gate_s0048r3_d1g96_initializers_v1.pt",
+  "frozen_artifact_sha256": "67309c1c763950ef0a53d1baffe323fc37007b389862d89ee9d19becb259d75b",
+  "checkpoint_mutated": false,
+  "checkpoint_files_written": 0,
+  "elapsed_seconds": 32.824040688574314,
+  "peak_cuda_allocated_bytes": 5088318976
+}

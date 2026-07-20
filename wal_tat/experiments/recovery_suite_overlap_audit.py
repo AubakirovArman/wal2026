@@ -30,22 +30,45 @@ def window_digests(payload: dict) -> set[str]:
     return result
 
 
+def stream_identity(payload: dict, domain: str) -> str | None:
+    """Identify the untiled token stream, including legacy audit payloads."""
+    sources = [str(path) for path in payload.get("sources", [])]
+    source_sha = payload.get("source_sha256", {})
+    if domain.startswith("c4"):
+        family = "c4"
+        selected = [path for path in sources if "c4-validation.arrow" in path]
+    elif domain.startswith("squad"):
+        family = "squad"
+        selected = [path for path in sources if "squad-validation.arrow" in path]
+    else:
+        family = "code"
+        selected = [path for path in sources if path.endswith(".py")]
+    if selected and all(path in source_sha for path in selected):
+        material = {
+            "model_revision": payload.get("model_revision"),
+            "family": family,
+            "sources": [(path, source_sha[path]) for path in selected],
+        }
+        encoded = json.dumps(material, sort_keys=True, separators=(",", ":")).encode()
+        return f"sources:{hashlib.sha256(encoded).hexdigest()}"
+
+    full_sha = payload.get("full_token_stream_sha256", {})
+    if domain in full_sha:
+        return full_sha[domain]
+    return None
+
+
 def source_ranges(payload: dict) -> dict[str, list[dict]]:
     """Return ranges keyed by the tokenized source SHA rather than domain name."""
-    # New recovery suites record both the full tokenized source identity and a
-    # digest of the selected gate windows.  Declared offsets are meaningful
-    # only relative to the full stream, so prefer that identity when present.
-    token_sha = payload.get("full_token_stream_sha256") or payload.get(
-        "token_sha256", {}
-    )
     declared = payload.get("ranges")
     result: dict[str, list[dict]] = {}
     if declared is not None:
         for split, domains in declared.items():
             for domain, bounds in domains.items():
-                if domain not in token_sha:
+                source_id = stream_identity(payload, domain)
+                if source_id is None:
                     continue
-                result.setdefault(token_sha[domain], []).append(
+                result.setdefault(source_id, []).append(
                     {
                         "split": split,
                         "domain": domain,
@@ -53,6 +76,30 @@ def source_ranges(payload: dict) -> dict[str, list[dict]]:
                         "end": int(bounds[1]),
                     }
                 )
+        return result
+
+    if payload.get("format") == "wal-tat-audit-holdout-v1" and payload.get(
+        "offsets"
+    ):
+        length = int(payload["sequence_length"])
+        offsets = payload["offsets"]
+        for domain, windows in payload.get("gates", {}).items():
+            offset_key = domain if domain in offsets else "code"
+            if offset_key not in offsets:
+                continue
+            source_id = stream_identity(payload, domain)
+            if source_id is None:
+                continue
+            start = int(offsets[offset_key])
+            result.setdefault(source_id, []).append(
+                {
+                    "split": "gates",
+                    "domain": domain,
+                    "start": start,
+                    "end": start + len(windows) * length,
+                    "inferred_legacy_audit": True,
+                }
+            )
         return result
 
     if payload.get("format") != "wal-tat-diverse-recovery-v1":
@@ -64,9 +111,15 @@ def source_ranges(payload: dict) -> dict[str, list[dict]]:
         "squad_train": int(payload.get("squad_calibration_repeat") or 1),
         "vendor_code_train": int(payload.get("code_calibration_repeat") or 1),
     }
-    for domain, source_sha in token_sha.items():
+    domains = payload.get("full_token_stream_sha256") or payload.get(
+        "token_sha256", {}
+    )
+    for domain in domains:
+        source_id = stream_identity(payload, domain)
+        if source_id is None:
+            continue
         repeat = repeats.get(domain, 1)
-        result.setdefault(source_sha, []).append(
+        result.setdefault(source_id, []).append(
             {
                 "split": "calibration",
                 "domain": domain,
@@ -76,7 +129,7 @@ def source_ranges(payload: dict) -> dict[str, list[dict]]:
             }
         )
         if domain in payload.get("gates", {}):
-            result[source_sha].append(
+            result[source_id].append(
                 {
                     "split": "gates",
                     "domain": domain,

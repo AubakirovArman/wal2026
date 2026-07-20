@@ -1,0 +1,55 @@
+{
+  "schema": "wal-tat-remaining-mlp-scan-policy-v1",
+  "evidence_id": "v143",
+  "declared_before_execution": true,
+  "objective": "recompute the lowest-damage remaining layer-24 MLP groups after s0048r3 fallback QAT and select one matrix/initializer for the next prospective recovery",
+  "source_frontier": {
+    "path": "wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt",
+    "sha256": "50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca",
+    "accepted_weights": 74563584
+  },
+  "development_suite": {
+    "path": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+    "sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+    "role": "development-only; already disclosed; audit-v9 remains unopened"
+  },
+  "script": "wal_tat/experiments/tail_initializer_ablation.py",
+  "script_sha256": "e06474839a440cb5fe8a95c457711fbcc1d76a5b609d701d317d8b1bc50f80d2",
+  "targets": [
+    "model.layers.24.mlp.up_proj",
+    "model.layers.24.mlp.down_proj",
+    "model.layers.24.mlp.gate_proj"
+  ],
+  "scan": {
+    "deciles": [1],
+    "meaning": "D1 is the lowest activation/Fisher damage decile among currently uncommitted groups",
+    "groups_per_target": 96,
+    "weights_per_target": 12288,
+    "samples_per_domain": 8,
+    "domain_offset": 0,
+    "sequences_per_domain": 64,
+    "threshold_step": 0.125,
+    "threshold_max": 3.0,
+    "seed": 311,
+    "initializers": ["absmean_round", "threshold_ls", "activation_wls"]
+  },
+  "selection_rule": {
+    "primary": "minimum maximum ratios_to_frontier across development domains",
+    "secondary": "minimum sum ratios_to_frontier",
+    "tertiary": "target order up_proj, down_proj, gate_proj then initializer order absmean_round, threshold_ls, activation_wls",
+    "maximum_selected_incremental_ratio": 1.00025,
+    "if_no_arm_passes": "publish no candidate; declare a new smaller-group policy without opening audit-v9"
+  },
+  "invariants": {
+    "source_checkpoint_mutated": false,
+    "checkpoint_files_written": 0,
+    "candidate_codes_strict_ternary": true,
+    "audit_v9_model_evaluation_forbidden": true,
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "commands": [
+    "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --candidate-name model.layers.24.mlp.up_proj --tag block24_up_s0048r3_d1g96_initializers_v1 --deciles 1 --groups-per-decile 96 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --seed 311 --device cuda",
+    "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --candidate-name model.layers.24.mlp.down_proj --tag block24_down_s0048r3_d1g96_initializers_v1 --deciles 1 --groups-per-decile 96 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --seed 311 --device cuda",
+    "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --candidate-name model.layers.24.mlp.gate_proj --tag block24_gate_s0048r3_d1g96_initializers_v1 --deciles 1 --groups-per-decile 96 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --seed 311 --device cuda"
+  ]
+}
