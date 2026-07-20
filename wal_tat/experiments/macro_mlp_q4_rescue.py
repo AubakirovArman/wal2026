@@ -1,7 +1,7 @@
-"""Measure the minimum Q4-g128 rescue needed by a full ternary MLP candidate.
+"""Measure the minimum Q4-g128 rescue needed by a full ternary block stage.
 
 This is a checkpoint-neutral rate--distortion diagnostic.  Previously accepted
-groups remain strict ternary.  Every uncommitted group of the requested MLP is
+groups remain strict ternary.  Every uncommitted group of the requested stage is
 first projected to activation-aware ternary, then the groups with the largest
 estimated Q4 benefit are selectively represented by signed INT4 plus one FP16
 scale.  The source checkpoint is never modified or published by this script.
@@ -9,6 +9,7 @@ scale.  The source checkpoint is never modified or published by this script.
 from __future__ import annotations
 
 import argparse
+import copy
 import gc
 import json
 import time
@@ -23,6 +24,7 @@ from compensation_window import (
     PROJECT,
     default_model_path,
     evaluate_domains,
+    ensure_candidate_matrix,
     install_checkpoint,
     load_model,
     ratios,
@@ -30,12 +32,20 @@ from compensation_window import (
     set_submodule,
     sha256_file,
 )
-from wal_tat import q2_g128_physical_bpw, q4_g128_physical_bpw
+from wal_tat import (
+    install_mixed_q2_q4_artifact,
+    q2_g128_physical_bpw,
+    q4_g128_physical_bpw,
+)
 from wal_tat.quantization import weighted_symmetric_q4_project
 from wal_tat.scoring import exact_diagonal_ternary_project
 
 
 PROJECTION_MAP = {
+    "q_proj": "self_attn.q_proj",
+    "k_proj": "self_attn.k_proj",
+    "v_proj": "self_attn.v_proj",
+    "o_proj": "self_attn.o_proj",
     "up_proj": "mlp.up_proj",
     "gate_proj": "mlp.gate_proj",
     "down_proj": "mlp.down_proj",
@@ -61,6 +71,11 @@ class FixedWeightLinear(nn.Module):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
+    parser.add_argument(
+        "--parent-artifact",
+        type=Path,
+        help="optional consolidated mixed Q2/Q4 parent to extend",
+    )
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
@@ -74,6 +89,12 @@ def parse_args() -> argparse.Namespace:
         "--rescue-fractions", default="0.005,0.01,0.02,0.05,0.1,0.2,0.4,1.0"
     )
     parser.add_argument("--gate-ratio", type=float, default=1.02)
+    parser.add_argument("--incremental-gate-ratio", type=float, default=1.005)
+    parser.add_argument(
+        "--projection-ablation",
+        action="store_true",
+        help="measure each projection alone at Q4 and each Q4 block with one FP projection",
+    )
     parser.add_argument(
         "--write-artifact",
         action="store_true",
@@ -131,6 +152,7 @@ def main() -> None:
     fractions = parse_fractions(args.rescue_fractions)
     model_path = (args.model_path or default_model_path()).resolve()
     source_path = args.source_checkpoint.resolve()
+    parent_path = args.parent_artifact.resolve() if args.parent_artifact else None
     suite_path = args.suite.resolve()
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
     calibration = suite["calibration"]
@@ -160,10 +182,24 @@ def main() -> None:
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
     payload = torch.load(source_path, map_location="cpu", weights_only=False)
     matrices = install_checkpoint(model, payload, args.device)
-    missing = set(names) - set(matrices)
-    if missing:
-        raise ValueError(f"source checkpoint is missing {sorted(missing)}")
+    parent_artifact = None
+    parent_install = None
+    if parent_path is not None:
+        parent_artifact = torch.load(parent_path, map_location="cpu", weights_only=False)
+        overlap = set(names) & set(parent_artifact.get("matrices", {}))
+        if overlap:
+            raise ValueError(f"target matrices already exist in parent: {sorted(overlap)}")
+        parent_install = install_mixed_q2_q4_artifact(
+            model,
+            parent_artifact,
+            payload,
+            device=args.device,
+            expected_source_sha256=sha256_file(source_path),
+        )
+    for name in names:
+        ensure_candidate_matrix(model, matrices, name, args.device)
     source = evaluate_domains(model, gates, args.device)
+    selection_source = evaluate_domains(model, selection_gates, args.device)
     source_ratios = ratios(source, baseline)
     moments = collect_input_second_moments(
         model, names, calibration, args.device, args.moment_sequences
@@ -171,6 +207,7 @@ def main() -> None:
 
     ternary_grouped = {}
     q4_grouped = {}
+    source_grouped = {}
     q2_codes = {}
     q2_scales = {}
     q4_codes_by_name = {}
@@ -195,6 +232,7 @@ def main() -> None:
         source_weight = F.pad(
             matrix.effective_weight().detach().float(), (0, matrix.padding)
         ).view_as(matrix.committed_codes)
+        source_grouped[name] = source_weight
         ternary_value = source_weight.clone()
         q4_value = source_weight.clone()
         candidate_mask = ~matrix.committed_mask
@@ -244,6 +282,42 @@ def main() -> None:
     full_ternary = evaluate_domains(model, gates, args.device)
     full_ternary_ratios = ratios(full_ternary, baseline)
 
+    projection_ablation = {}
+    if args.projection_ablation:
+        for mode in ("q4_only", "q4_except"):
+            projection_ablation[mode] = {}
+            for ablated_name in names:
+                for name in names:
+                    use_q4 = (
+                        name == ablated_name
+                        if mode == "q4_only"
+                        else name != ablated_name
+                    )
+                    grouped = q4_grouped[name] if use_q4 else source_grouped[name]
+                    matrix = matrices[name]
+                    weight = grouped.reshape(matrix.out_features, -1)[
+                        :, : matrix.in_features
+                    ]
+                    set_submodule(
+                        model,
+                        name,
+                        FixedWeightLinear(
+                            weight.to(matrix.compute_dtype), biases[name]
+                        ).to(args.device),
+                    )
+                metrics = evaluate_domains(model, selection_gates, args.device)
+                projection_ablation[mode][ablated_name] = {
+                    "ratios": ratios(metrics, selection_baseline),
+                    "incremental_ratios_vs_parent": ratios(
+                        metrics, selection_source
+                    ),
+                }
+                print(
+                    f"{mode} {ablated_name} "
+                    f"{projection_ablation[mode][ablated_name]['ratios']}",
+                    flush=True,
+                )
+
     candidates = {}
     candidate_masks = {}
     for fraction in fractions:
@@ -252,6 +326,7 @@ def main() -> None:
         install_rescue(masks)
         selection_metrics = evaluate_domains(model, selection_gates, args.device)
         selection_ratios = ratios(selection_metrics, selection_baseline)
+        selection_incremental_ratios = ratios(selection_metrics, selection_source)
         actual_fraction = count / eligible_groups
         all_target_q4_fraction = count / total_groups
         target_average_bpw = (
@@ -266,12 +341,17 @@ def main() -> None:
             "eligible_groups": eligible_groups,
             "eligible_q4_fraction": actual_fraction,
             "all_target_q4_fraction": all_target_q4_fraction,
-            "target_mlp_physical_bpw": target_average_bpw,
+            "target_physical_bpw": target_average_bpw,
             "selection_metrics": selection_metrics,
             "selection_ratios": selection_ratios,
+            "selection_incremental_ratios": selection_incremental_ratios,
             "selection_worst_ratio": max(selection_ratios.values()),
             "selection_passed": all(
                 value <= args.gate_ratio for value in selection_ratios.values()
+            )
+            and all(
+                value <= args.incremental_gate_ratio
+                for value in selection_incremental_ratios.values()
             ),
         }
         candidate_masks[key] = {name: mask.cpu() for name, mask in masks.items()}
@@ -288,10 +368,15 @@ def main() -> None:
         install_rescue(masks)
         metrics = evaluate_domains(model, gates, args.device)
         metric_ratios = ratios(metrics, baseline)
-        passed = all(value <= args.gate_ratio for value in metric_ratios.values())
+        incremental_ratios = ratios(metrics, source)
+        passed = all(value <= args.gate_ratio for value in metric_ratios.values()) and all(
+            value <= args.incremental_gate_ratio
+            for value in incremental_ratios.values()
+        )
         full_evaluations[key] = {
             "metrics": metrics,
             "ratios": metric_ratios,
+            "incremental_ratios_vs_parent": incremental_ratios,
             "passed": passed,
         }
         print(f"full {key} passed={passed} ratios={metric_ratios}", flush=True)
@@ -315,12 +400,21 @@ def main() -> None:
                 "suite_sha256": sha256_file(suite_path),
                 "target_layer": args.target_layer,
                 "target_projections": requested,
+                "parent_artifact_sha256": (
+                    sha256_file(parent_path) if parent_path is not None else None
+                ),
                 "candidate": first_full_pass,
                 "group_size": 128,
                 "q2_physical_bpw": q2_g128_physical_bpw(),
                 "q4_physical_bpw": q4_g128_physical_bpw(),
                 "matrices": {
-                    name: {
+                    **(
+                        copy.deepcopy(parent_artifact["matrices"])
+                        if parent_artifact is not None
+                        else {}
+                    ),
+                    **{
+                        name: {
                         "shape": tuple(matrices[name].master_weight.shape),
                         "source_committed_mask": source_committed_masks[name],
                         "q4_mask": candidate_masks[first_full_pass][name],
@@ -328,10 +422,14 @@ def main() -> None:
                         "q2_scales_fp16": q2_scales[name],
                         "q4_codes_int8": q4_codes_by_name[name],
                         "q4_scales_fp16": q4_scales_by_name[name],
-                    }
-                    for name in names
+                        }
+                        for name in names
+                    },
                 },
                 "development_ratios": full_evaluations[first_full_pass]["ratios"],
+                "development_incremental_ratios_vs_parent": full_evaluations[
+                    first_full_pass
+                ]["incremental_ratios_vs_parent"],
             },
             artifact_path,
         )
@@ -342,6 +440,16 @@ def main() -> None:
         "tag": args.tag,
         "source_checkpoint": str(source_path),
         "source_checkpoint_sha256": sha256_file(source_path),
+        "parent_artifact": str(parent_path) if parent_path is not None else None,
+        "parent_artifact_sha256": (
+            sha256_file(parent_path) if parent_path is not None else None
+        ),
+        "parent_new_ternary_weights": (
+            parent_install.new_q2_weights if parent_install is not None else 0
+        ),
+        "parent_q4_weights": (
+            parent_install.q4_weights if parent_install is not None else 0
+        ),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
         "suite_role": "development rate-distortion diagnostic; sealed audit not opened",
@@ -350,12 +458,15 @@ def main() -> None:
         "moment_sequences": args.moment_sequences,
         "selection_gate_sequences": args.selection_gate_sequences,
         "gate_ratio": args.gate_ratio,
+        "incremental_gate_ratio": args.incremental_gate_ratio,
         "source_metrics": source,
+        "selection_source_metrics": selection_source,
         "source_ratios": source_ratios,
         "full_ternary_selection_metrics": full_ternary_selection,
         "full_ternary_selection_ratios": full_ternary_selection_ratios,
         "full_ternary_metrics": full_ternary,
         "full_ternary_ratios": full_ternary_ratios,
+        "projection_ablation": projection_ablation,
         "total_target_groups": total_groups,
         "eligible_groups": eligible_groups,
         "candidate_results": candidates,

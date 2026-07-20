@@ -12,10 +12,12 @@ from wal_tat import (
     hard_codes_scales,
     q2_g128_physical_bpw,
     q4_g128_physical_bpw,
+    q8_g128_physical_bpw,
     select_group_mask,
     sensitivity_decile_mask,
     transaction_schedule,
     weighted_symmetric_q4_project,
+    weighted_symmetric_q8_project,
 )
 
 
@@ -40,6 +42,10 @@ def test_q4_g128_layout_is_4_125_physical_bpw():
     assert q4_g128_physical_bpw() == 4.125
 
 
+def test_q8_g128_layout_is_8_125_physical_bpw():
+    assert q8_g128_physical_bpw() == 8.125
+
+
 def test_weighted_q4_project_uses_signed_codes_and_reconstructs_grid_values():
     weight = torch.tensor([[-7.0, -3.0, 0.0, 2.0, 7.0]])
     codes, scales, error = weighted_symmetric_q4_project(
@@ -49,6 +55,18 @@ def test_weighted_q4_project_uses_signed_codes_and_reconstructs_grid_values():
     reconstructed = codes.float() * scales.unsqueeze(-1)
     assert torch.allclose(reconstructed.reshape_as(weight), weight, atol=1e-5)
     assert error.item() == pytest.approx(0.0, abs=1e-7)
+
+
+def test_weighted_q8_project_uses_full_signed_int8_range():
+    weight = torch.tensor([[-127.0, -64.0, 0.0, 63.0, 127.0]])
+    codes, scales, error = weighted_symmetric_q8_project(
+        weight, torch.ones(5), group_size=5
+    )
+    assert codes.min().item() >= -128
+    assert codes.max().item() <= 127
+    reconstructed = codes.float() * scales.unsqueeze(-1)
+    assert torch.allclose(reconstructed.reshape_as(weight), weight, atol=1e-4)
+    assert error.item() == pytest.approx(0.0, abs=1e-6)
 
 
 def test_fisher_score_uses_causal_moments():

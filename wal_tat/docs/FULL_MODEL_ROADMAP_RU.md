@@ -13,21 +13,23 @@
 Основная исследовательская ветка: ternary `{-1,0,+1}`, logical 1.585 bit и
 physical Q2-g128 2.125 bpw. Практическая rate--distortion ветка разрешает
 signed Q4-g128 4.125 bpw для групп, которые не проходят sealed generalization.
-Форматы считаются раздельно; Q4 никогда не записывается в ternary coverage.
+Последний защитный формат — signed Q8-g128 8.125 bpw. Форматы считаются
+раздельно; Q4/Q8 никогда не записываются в ternary coverage.
 
 ## Текущий счётчик
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  2 / 28 complete, 26 remain
+mixed low-bit blocks:  3 / 28 complete, 25 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  14 / 197 complete, 183 remain
+mixed major matrices:  21 / 197 complete, 176 remain
 strict ternary weights: 77,872,512 / 1,720,451,072 = 4.526285% in mixed artifact
-Q4 rescue weights:      22,790,784 / 1,720,451,072 = 1.324698%
-all low-bit weights:     100,663,296 / 1,720,451,072 = 5.850983%
-remaining high precision: 1,619,787,776 = 94.149017%
+Q4 rescue weights:      54,248,064 / 1,720,451,072 = 3.153130%
+Q8 rescue weights:      18,874,368 / 1,720,451,072 = 1.097059%
+all low-bit weights:    150,994,944 / 1,720,451,072 = 8.776474%
+remaining high precision: 1,569,456,128 = 91.223526%
 embedding/head:       0 / 1 tied matrix
-packed runtime:       Q2 reference packer ready; mixed Q2/Q4 packer and kernels remain
+packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
 
 ## Система quality budgets
@@ -122,8 +124,22 @@ Fresh reload воспроизвёл development ratios
 `0.992737 / 1.002540 / 0.955660` и incremental gate против `s0053`
 `1.001073 / 1.002089 / 1.002177 <= 1.005`. Audit-v26 теперь раскрыт.
 
-Следующий этап — versioned packed Q2/Q4 layout и перенос mixed compiler на
-следующие блоки. Параллельно strict research продолжает progressive
+## Фаза 5 — composable mixed compiler и block 23
+
+Accepted Q2/Q4 artifact стал composable parent: loader разрешает новые
+матрицы с нулевой source-mask, но побитно защищает все прежние Q2 codes/scales.
+Полный Q4 layer 23 прошёл incremental gate, но code ratio `1.021478` не прошёл
+absolute `1.02`. Fixed-code Q4 scale-QAT ухудшил code до `1.021982` и был
+отклонён. Projection ablation локализовал ущерб в `gate/up`.
+
+Минимальный проверенный passing вариант оставил `62.5%` групп блока Q4 и
+перевёл `37.5%` групп в Q8. Средний budget layer 23 равен `5.625 bpw`.
+Fresh reload дал `0.994688 / 1.000512 / 1.019039`; one-shot audit-v27 —
+`0.991963 / 1.005302 / 0.959639`, incremental worst `1.003018 <= 1.005`.
+Это завершило третий low-bit decoder block без BF16 в его крупных матрицах.
+
+Следующий этап — versioned packed Q2/Q4/Q8 layout и перенос composable compiler
+на следующие блоки. Параллельно strict research продолжает progressive
 `Q4 -> 7 -> 5 -> 3`, transform-space и joint codebook recovery.
 
 ### Историческая strict lineage block 24

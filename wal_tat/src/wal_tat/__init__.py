@@ -24,6 +24,12 @@ from .compensation import (
 )
 from .evaluation import LossMetrics, evaluate_causal_lm
 from .moments import CausalMomentCollector
+from .mixed import (
+    FixedMixedQ2Q4Linear,
+    MixedArtifactInstallResult,
+    install_mixed_q2_q4_artifact,
+    valid_group_weight_count,
+)
 from .packing import (
     PackedQ2Matrix,
     pack_bool_mask,
@@ -41,9 +47,11 @@ from .quantization import (
     hestia_quantize,
     initial_group_scales,
     q4_g128_physical_bpw,
+    q8_g128_physical_bpw,
     q2_g128_physical_bpw,
     transaction_schedule,
     weighted_symmetric_q4_project,
+    weighted_symmetric_q8_project,
 )
 from .proxy import (
     ProxyTernaryLinear,
@@ -89,6 +97,8 @@ __all__ = [
     "normalized_hadamard",
     "rademacher_signs",
     "CausalMomentCollector",
+    "FixedMixedQ2Q4Linear",
+    "MixedArtifactInstallResult",
     "AdaptiveTransactionSizer",
     "AtomicTernaryTransaction",
     "GateDecision",
@@ -112,13 +122,16 @@ __all__ = [
     "hard_codes_scales",
     "hestia_quantize",
     "initial_group_scales",
+    "install_mixed_q2_q4_artifact",
     "linked_down_group_mask",
     "linked_gqa_output_group_mask",
     "linked_gqa_query_group_mask",
     "linked_output_group_mask",
     "q2_g128_physical_bpw",
     "q4_g128_physical_bpw",
+    "q8_g128_physical_bpw",
     "weighted_symmetric_q4_project",
+    "weighted_symmetric_q8_project",
     "paired_block_bootstrap_nll",
     "pack_bool_mask",
     "pack_partial_matrix",
@@ -143,6 +156,7 @@ __all__ = [
     "unpack_partial_matrix",
     "unpack_ternary_codes",
     "validate_checkpoint_deletion_target",
+    "valid_group_weight_count",
     "write_packed_matrix",
     "worst_ratio",
 ]

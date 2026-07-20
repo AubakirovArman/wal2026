@@ -1,0 +1,268 @@
+{
+  "schema": "wal-tat-macro-q8-rescue-v1",
+  "tag": "block23_gate_up_q8_rescue_parent_block24_v2",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "source_checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "parent_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_mlp_macro_q4_rescue95_artifact_s0053_v1-mixed-q2-q4.pt",
+  "parent_artifact_sha256": "dd49a9f5969683bf410a951f818e6118acee56b3e197f56d688770bc39da92fb",
+  "candidate_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block23_full_q4_projection_ablation_parent_block24_v2-mixed-q2-q4.pt",
+  "candidate_artifact_sha256": "81fdc09dc1be402d83c885530d22757fd4776b1ff777596fa25b517c37176bbb",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "target_layer": 23,
+  "target_projections": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "up_proj",
+    "gate_proj",
+    "down_proj"
+  ],
+  "rescue_projections": [
+    "gate_proj",
+    "up_proj"
+  ],
+  "moment_sequences": 128,
+  "selection_gate_sequences": 64,
+  "gate_ratio": 1.02,
+  "incremental_gate_ratio": 1.005,
+  "parent_metrics": {
+    "c4_train": {
+      "nll": 3.509682571515441,
+      "ppl": 33.43765203595066,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.199067431734875,
+      "ppl": 9.016600981485542,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7213855960872024,
+      "ppl": 5.592271728344381,
+      "tokens": 65536
+    }
+  },
+  "parent_ratios": {
+    "c4_train": 0.9940237340434184,
+    "squad_train_context": 0.999487002880311,
+    "scipy_code": 1.0186908600244926
+  },
+  "candidate_metrics": {
+    "c4_train": {
+      "nll": 3.5128572126850486,
+      "ppl": 33.543973259290254,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.202618340961635,
+      "ppl": 9.048675025412297,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.726114303106442,
+      "ppl": 5.61877856505958,
+      "tokens": 65536
+    }
+  },
+  "candidate_ratios": {
+    "c4_train": 0.9949228662598966,
+    "squad_train_context": 1.0011009086520657,
+    "scipy_code": 1.0214892397897135
+  },
+  "candidate_incremental_ratios_vs_parent": {
+    "c4_train": 1.0009045379759904,
+    "squad_train_context": 1.0016147341257102,
+    "scipy_code": 1.0027470353127088
+  },
+  "total_target_groups": 393216,
+  "eligible_q4_groups": 196608,
+  "candidate_results": {
+    "q8_0.25000000": {
+      "requested_fraction": 0.25,
+      "rescued_groups": 49152,
+      "eligible_groups": 196608,
+      "eligible_q8_fraction": 0.25,
+      "all_target_q8_fraction": 0.125,
+      "target_physical_bpw": 4.625,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3599829636514187,
+          "ppl": 28.78870042072931,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.538496708497405,
+          "ppl": 12.660624049332332,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.698431758210063,
+          "ppl": 5.4653696464189006,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9911731327627838,
+        "squad_train_context": 1.00793605370972,
+        "scipy_code": 1.0216213279382897
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.000694973417817,
+        "squad_train_context": 1.001822333103395,
+        "scipy_code": 1.0025050912634823
+      },
+      "selection_passed": false
+    },
+    "q8_0.50000000": {
+      "requested_fraction": 0.5,
+      "rescued_groups": 98304,
+      "eligible_groups": 196608,
+      "eligible_q8_fraction": 0.5,
+      "all_target_q8_fraction": 0.25,
+      "target_physical_bpw": 5.125,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3605111464858055,
+          "ppl": 28.803910134517114,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.537492647767067,
+          "ppl": 12.647918393595234,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6958002373576164,
+          "ppl": 5.451006319214264,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.991328943265484,
+        "squad_train_context": 1.007537381138338,
+        "scipy_code": 1.0200384454852396
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0008522807354834,
+        "squad_train_context": 1.0014260787139062,
+        "scipy_code": 1.0009518271776037
+      },
+      "selection_passed": false
+    },
+    "q8_0.75000000": {
+      "requested_fraction": 0.75,
+      "rescued_groups": 147456,
+      "eligible_groups": 196608,
+      "eligible_q8_fraction": 0.75,
+      "all_target_q8_fraction": 0.375,
+      "target_physical_bpw": 5.625,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3598417416214943,
+          "ppl": 28.784635109079545,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.536637630313635,
+          "ppl": 12.637108824462793,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6947122253477573,
+          "ppl": 5.44507878407259,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9911314731819677,
+        "squad_train_context": 1.0071978877228134,
+        "scipy_code": 1.0193839968923233
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0006529136285236,
+        "squad_train_context": 1.0010886445241458,
+        "scipy_code": 1.0003096244079208
+      },
+      "selection_passed": true
+    },
+    "q8_1.00000000": {
+      "requested_fraction": 1.0,
+      "rescued_groups": 196608,
+      "eligible_groups": 196608,
+      "eligible_q8_fraction": 1.0,
+      "all_target_q8_fraction": 0.5,
+      "target_physical_bpw": 6.125,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.359497055411339,
+          "ppl": 28.774715152027504,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5369748678058386,
+          "ppl": 12.641371250035919,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6941148806363344,
+          "ppl": 5.441827166322662,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9910297929905989,
+        "squad_train_context": 1.0073317913146191,
+        "scipy_code": 1.019024688904604
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0005502566324493,
+        "squad_train_context": 1.0012217359124933,
+        "scipy_code": 0.9999570396711212
+      },
+      "selection_passed": true
+    }
+  },
+  "full_evaluations": {
+    "q8_0.75000000": {
+      "metrics": {
+        "c4_train": {
+          "nll": 3.511936624068767,
+          "ppl": 33.51310726898242,
+          "tokens": 65536
+        },
+        "squad_train_context": {
+          "nll": 2.2013384010642767,
+          "ppl": 9.037100674046227,
+          "tokens": 65536
+        },
+        "scipy_code": {
+          "nll": 1.7221937524154782,
+          "ppl": 5.596792984826023,
+          "tokens": 65536
+        }
+      },
+      "ratios": {
+        "c4_train": 0.9946621341522977,
+        "squad_train_context": 1.000519169650607,
+        "scipy_code": 1.019169115138836
+      },
+      "incremental_ratios_vs_parent": {
+        "c4_train": 1.000642238295742,
+        "squad_train_context": 1.0010326965406469,
+        "scipy_code": 1.000469480127005
+      },
+      "passed": true
+    }
+  },
+  "first_full_pass": "q8_0.75000000",
+  "development_passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block23_gate_up_q8_rescue_parent_block24_v2-mixed-q2-q4-q8.pt",
+  "artifact_sha256": "1498f0f777169e6bc9ca44dc2c82a2389be0c42e7a566a7d94df7a61b1fc335f",
+  "artifact_written": true,
+  "checkpoint_written": false,
+  "sealed_audit_opened": false,
+  "elapsed_seconds": 110.59716701507568,
+  "peak_cuda_allocated_bytes": 5168673280
+}
