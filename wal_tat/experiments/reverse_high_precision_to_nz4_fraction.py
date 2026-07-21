@@ -42,6 +42,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
     parser.add_argument("--source-precision", choices=("q4", "q8"), required=True)
+    parser.add_argument(
+        "--projection-source",
+        choices=("parent", "strict-source"),
+        default="parent",
+        help=(
+            "project NZ4 codes from reconstructed parent Q4/Q8 weights or "
+            "directly from the strict-source/BF16 weights captured before "
+            "the mixed artifact is installed"
+        ),
+    )
     target = parser.add_mutually_exclusive_group(required=True)
     target.add_argument("--target-layer", type=int)
     target.add_argument("--target-layers")
@@ -99,6 +109,16 @@ def build_candidate(
     return candidate
 
 
+def snapshot_projection_weights(
+    model: torch.nn.Module, names: tuple[str, ...]
+) -> dict[str, torch.Tensor]:
+    """Freeze source weights before the mixed parent mutates model modules."""
+    return {
+        name: model.get_submodule(name).weight.detach().cpu().clone()
+        for name in names
+    }
+
+
 def main() -> None:
     args = parse_args()
     fractions = parse_fractions(args.fractions)
@@ -150,6 +170,11 @@ def main() -> None:
     baseline = evaluate_domains(model, gates, args.device)
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
     install_checkpoint(model, source, args.device)
+    source_projection_weights = (
+        snapshot_projection_weights(model, names)
+        if args.projection_source == "strict-source"
+        else None
+    )
     install_mixed_q2_q4_artifact(
         model,
         parent_artifact,
@@ -171,7 +196,10 @@ def main() -> None:
     total_eligible_weights = 0
     for name in names:
         entry = parent_artifact["matrices"][name]
-        weight = model.get_submodule(name).weight.detach().float()
+        if source_projection_weights is None:
+            weight = model.get_submodule(name).weight.detach().float()
+        else:
+            weight = source_projection_weights[name].to(args.device).float()
         codes, scales, error = weighted_symmetric_nz4_project(
             weight, moments[name], group_size=128
         )
@@ -292,6 +320,7 @@ def main() -> None:
         final_candidate["parent_artifact_sha256"] = sha256_file(parent_path)
         final_candidate["reverse_high_precision_to_nz4"] = {
             "source_precision": args.source_precision,
+            "projection_source": args.projection_source,
             **accepted,
         }
         artifact_path = (
@@ -306,6 +335,7 @@ def main() -> None:
         "schema": "wal-tat-reverse-high-precision-to-nz4-fraction-v1",
         "tag": args.tag,
         "source_precision": args.source_precision,
+        "projection_source": args.projection_source,
         "source_checkpoint": str(source_path),
         "source_checkpoint_sha256": source_hash,
         "parent_artifact": str(parent_path),
@@ -347,6 +377,8 @@ def main() -> None:
         flush=True,
     )
     del model, source, parent_artifact, nz4_codes, nz4_scales
+    if source_projection_weights is not None:
+        del source_projection_weights
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

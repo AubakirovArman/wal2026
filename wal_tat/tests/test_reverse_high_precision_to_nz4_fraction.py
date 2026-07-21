@@ -8,7 +8,10 @@ import torch
 EXPERIMENTS = Path(__file__).resolve().parents[1] / "experiments"
 sys.path.insert(0, str(EXPERIMENTS))
 
-from reverse_high_precision_to_nz4_fraction import build_candidate  # noqa: E402
+from reverse_high_precision_to_nz4_fraction import (  # noqa: E402
+    build_candidate,
+    snapshot_projection_weights,
+)
 
 
 def parent_artifact() -> dict:
@@ -79,3 +82,16 @@ def test_build_candidate_rejects_noneligible_selection():
         build_candidate(
             parent, selected, codes, scales, source_precision="q8"
         )
+
+
+def test_snapshot_projection_weights_is_independent_of_later_mutation():
+    model = torch.nn.Module()
+    model.proj = torch.nn.Linear(4, 2, bias=False)
+    expected = model.proj.weight.detach().clone()
+
+    snapshot = snapshot_projection_weights(model, ("proj",))
+    with torch.no_grad():
+        model.proj.weight.zero_()
+
+    assert snapshot["proj"].device.type == "cpu"
+    torch.testing.assert_close(snapshot["proj"], expected)
