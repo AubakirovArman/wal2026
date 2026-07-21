@@ -11,13 +11,13 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 
 | Единица | Strict ternary | Mixed low-bit |
 |---|---:|---:|
-| Полные decoder blocks | 1 / 28 (`layer 27`) | 7 / 28 (`27`, `26`, `25`, `24`, `23`, `22`, `21`) |
-| Полные крупные матрицы | 11 / 197 | 49 / 197 |
+| Полные decoder blocks | 1 / 28 (`layer 27`) | 8 / 28 (`27`, `26`, `25`, `24`, `23`, `22`, `21`, `20`) |
+| Полные крупные матрицы | 11 / 197 | 56 / 197 |
 | Ternary weights | 76,673,024 (`4.456565%`) | 81,250,048 (`4.722601%`) |
 | Q4-g128 weights | 0 | 75,278,080 (`4.375485%`) |
-| Q8-g128 weights | 0 | 195,793,408 (`11.380353%`) |
-| Все low-bit weights | 76,673,024 | 352,321,536 (`20.478440%`) |
-| Осталось high precision | 1,643,778,048 | 1,368,129,536 (`79.521560%`) |
+| Q8-g128 weights | 0 | 246,125,056 (`14.305845%`) |
+| Все low-bit weights | 76,673,024 | 402,653,184 (`23.403931%`) |
+| Осталось high precision | 1,643,778,048 | 1,317,797,888 (`76.596069%`) |
 
 Strict-ветка по-прежнему не называет `layer 24` полным ternary-блоком. Mixed
 artifact честно завершает его как Q2/Q4-блок: attention полностью Q2, а три
@@ -114,6 +114,13 @@ audit-v44 с ratios `0.995521 / 0.940669 / 0.982427`; incremental worst раве
 accepted artifact — `b68c291...`; layer 21 отдельно включён в очередь
 reverse Q8→Q4→Q2.
 
+`layer 20` также потребовал полный Q8 fallback: full-Q4 code ratio был
+`1.021178`, а только all-Q8 candidate прошёл все три development gate. Fresh
+reload подтвердил `0.995363 / 1.002046 / 1.019064`; audit-v45 дал
+`0.994545 / 0.943951 / 0.978751`. Incremental worst равен `1.004654` против
+strict source и `1.000037` против accepted parent. Это восьмой полный low-bit
+block; accepted artifact — `2c82589...`.
+
 ## Какой это quant
 
 В strict-Q2 части у каждого принятого веса ровно три состояния:
@@ -132,9 +139,9 @@ reverse Q8→Q4→Q2.
 является компактным deploy-файлом.
 
 Strict `s0053` содержит 76,673,024 ternary weights. Mixed frontier содержит
-81,250,048 Q2-весов, 75,278,080 Q4-весов и 195,793,408 Q8-весов. Текущий
+81,250,048 Q2-весов, 75,278,080 Q4-весов и 246,125,056 Q8-весов. Текущий
 `.pt` хранит дублирующиеся training arrays и не является packed deploy-файлом.
-Расчётный packed payload этих low-bit весов — 247.240 MiB против 672 MiB в
+Расчётный packed payload этих low-bit весов — 295.990 MiB против 768 MiB в
 BF16; реальная экономия VRAM появится только
 после versioned Q2/Q4/Q8 packer и runtime.
 
@@ -1075,12 +1082,12 @@ wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt
 
 ## Следующий технический шаг
 
-1. заморозить artifact `b68c291...` как новый accepted mixed frontier;
-2. начать полный low-bit проход `layer 20` с Q4 start и минимальным Q8 rescue;
-3. отдельно запустить reverse rate--distortion для `layer 21` и `layer 26`: Q8→Q4→Q2 с
+1. заморозить artifact `2c82589...` как новый accepted mixed frontier;
+2. начать полный low-bit проход `layer 19` с Q4 start и минимальным Q8 rescue;
+3. отдельно запустить reverse rate--distortion для `layer 20`, `layer 21` и `layer 26`: Q8→Q4→Q2 с
    неизменным общим coverage и новым sealed audit на каждом принятом шаге;
 4. расширить reference packer до mixed Q2/Q4/Q8 manifest и проверять
-   pack→reload logits/NLL для всех семи закрытых блоков;
+   pack→reload logits/NLL для всех восьми закрытых блоков;
 5. добавить cumulative task-canary до дальнейшего массового роста coverage;
-6. после `layer 20` перейти к progressive multi-block stages, сохраняя строгий
+6. после `layer 19` перейти к progressive multi-block stages, сохраняя строгий
    source gate `1.005` и отдельный parent-incremental gate.

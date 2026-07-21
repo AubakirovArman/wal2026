@@ -32,9 +32,9 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `b68c291...`: 81,250,048 ternary, 75,278,080
-  signed-Q4 and 195,793,408 signed-Q8 weights, for 352,321,536 low-bit weights
-  (`20.478440%`), seven complete low-bit decoder blocks and 49 complete low-bit
+- sealed-audited mixed artifact `2c82589...`: 81,250,048 ternary, 75,278,080
+  signed-Q4 and 246,125,056 signed-Q8 weights, for 402,653,184 low-bit weights
+  (`23.403931%`), eight complete low-bit decoder blocks and 56 complete low-bit
   major matrices.
 
 The mixed block-24 MLP is `40.228950%` ternary and `59.771050%` Q4 at an
@@ -89,8 +89,12 @@ strict source gate: lower rescue fractions up to 80% did not pass all three
 development gates. The all-Q8 block passed fresh reload and sealed audit-v44
 at `0.995521 / 0.940669 / 0.982427`, with incremental worst `1.004746`
 versus the strict source and `1.000017` versus the accepted parent. Artifact
-`b68c291...` is the current accepted frontier; layer 21 remains scheduled for
-reverse Q8→Q4→Q2 compression.
+`b68c291...` closed layer 21. Layer 20 then followed the same conservative
+path: only its all-Q8 candidate passed every development gate. Fresh reload
+and sealed audit-v45 passed at `0.994545 / 0.943951 / 0.978751`, with
+incremental worst `1.004654` versus the strict source and `1.000037` versus
+the accepted parent. Artifact `2c82589...` is the current accepted frontier;
+layers 20 and 21 remain scheduled for reverse Q8→Q4→Q2 compression.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are

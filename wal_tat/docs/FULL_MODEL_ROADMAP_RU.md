@@ -20,14 +20,14 @@ signed Q4-g128 4.125 bpw для групп, которые не проходят
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  7 / 28 complete, 21 remain
+mixed low-bit blocks:  8 / 28 complete, 20 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  49 / 197 complete, 148 remain
+mixed major matrices:  56 / 197 complete, 141 remain
 strict ternary weights: 81,250,048 / 1,720,451,072 = 4.722601% in mixed artifact
 Q4 rescue weights:      75,278,080 / 1,720,451,072 = 4.375485%
-Q8 rescue weights:      195,793,408 / 1,720,451,072 = 11.380353%
-all low-bit weights:    352,321,536 / 1,720,451,072 = 20.478440%
-remaining high precision: 1,368,129,536 = 79.521560%
+Q8 rescue weights:      246,125,056 / 1,720,451,072 = 14.305845%
+all low-bit weights:    402,653,184 / 1,720,451,072 = 23.403931%
+remaining high precision: 1,317,797,888 = 76.596069%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
@@ -269,6 +269,14 @@ All-Q8 candidate прошёл fresh reload и one-shot audit-v44 с ratios
 strict source и `1.000017` против parent. Это седьмой полный low-bit block.
 Accepted artifact SHA-256:
 `b68c29189b676a4d195ecb939e1c17d80b1f80328b000c2f5be620e1d8dff0c0`.
+
+Layer 20 также принят как полностью Q8. Full-Q4 code ratio `1.021178` не
+прошёл абсолютный gate, а только all-Q8 candidate прошёл strict-source gate.
+Fresh reload и one-shot audit-v45 дали соответственно
+`0.995363 / 1.002046 / 1.019064` и `0.994545 / 0.943951 / 0.978751`;
+incremental worst на sealed равен `1.004654` против strict source и
+`1.000037` против parent. Это восьмой полный low-bit block. Accepted artifact
+SHA-256: `2c825896e9a64b5c9265a8cd61f86b87a127a6c7434f0170558aff658b98b764`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
