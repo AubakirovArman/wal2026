@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
-strict ternary weights: 81,228,672 / 1,720,451,072 = 4.721359% in mixed artifact
-Q4 rescue weights:      71,105,152 / 1,720,451,072 = 4.132937%
+strict ternary weights: 81,250,048 / 1,720,451,072 = 4.722601% in mixed artifact
+Q4 rescue weights:      71,083,776 / 1,720,451,072 = 4.131694%
 Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
@@ -240,6 +240,15 @@ v10 дал `0.991688 / 0.997828 / 0.988282`; one-shot audit-v39 —
 `0.992793 / 0.940519 / 0.964751`. Incremental worst равен `1.004426` против
 strict source и `1.000003` против parent. Coverage-neutral accepted artifact:
 `5f35a9e7ac28138b358bb22762563faaf037a00d8bc52826712c6ce90d3f0ea7`.
+
+Следующий layer-25 атом уменьшен до `0.25%`: 167 групп (`21,376` весов)
+прошли `7→5→3` и стали strict Q2. Fresh v8 дал
+`0.995280 / 1.001836 / 1.019925`; one-shot audit-v40 —
+`0.997258 / 0.938989 / 0.974302`. Incremental worst равен `1.003959` против
+strict source и `1.000052` против recovered parent. Layer 25 теперь имеет
+`3.170268%` Q2, `16.989899%` Q4 и `79.839834%` Q8 при `7.255188 bpw`.
+Accepted artifact:
+`7494fa959b20a089ca7d7bb7afc48f15b67c9b7f6bdb88a5f3c9937dd77e0bd6`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

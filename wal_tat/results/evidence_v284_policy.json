@@ -1,0 +1,75 @@
+{
+  "schema": "wal-tat-layer25-third-masked-q4-to-q2-sealed-policy-v1",
+  "evidence_id": "v284",
+  "declared_before_execution": true,
+  "objective": "open sealed audit-v40 exactly once for the fresh-verified third masked 0.25-percent Q4-to-strict-ternary conversion in layer 25",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+    "accepted_parent_artifact": "wal2/artifacts/wal-tat-block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_512-mixed-q2-q4-q8.pt",
+    "accepted_parent_artifact_sha256": "5f35a9e7ac28138b358bb22762563faaf037a00d8bc52826712c6ce90d3f0ea7"
+  },
+  "candidate": {
+    "artifact": "wal2/artifacts/wal-tat-block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1-mixed-q2-q4-q8.pt",
+    "sha256": "7494fa959b20a089ca7d7bb7afc48f15b67c9b7f6bdb88a5f3c9937dd77e0bd6",
+    "target_layer": 25,
+    "target_projections": ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "gate_proj", "down_proj"],
+    "progressive_levels": [7, 5, 3],
+    "progressive_fraction": 0.0025,
+    "selected_groups": 167,
+    "selected_weights": 21376,
+    "selected_groups_by_matrix": {
+      "model.layers.25.self_attn.o_proj": 10,
+      "model.layers.25.mlp.up_proj": 17,
+      "model.layers.25.mlp.gate_proj": 118,
+      "model.layers.25.mlp.down_proj": 22
+    },
+    "strict_q2_weights": 81250048,
+    "q4_weights": 71083776,
+    "q8_weights": 99324416,
+    "total_low_bit_weights": 251658240,
+    "strict_q2_coverage_fraction": 0.04722601492267256,
+    "low_bit_coverage_fraction": 0.1462745695566052,
+    "remaining_high_precision_weights": 1468792832
+  },
+  "development": {
+    "training_suite": "wal2/cache/wal-tat-matched-train-recovery-v11-codeheavy-v8gate-l256.pt",
+    "training_suite_policy": "new code-heavy calibration with intentionally recurring v8 gates for development-only snapshot selection",
+    "selection_result": "wal_tat/results/block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1.json",
+    "selection_result_sha256": "f711d765829e4d32bc7806f932ebb677ae7cc249e7fcf61680e277a5593edbed",
+    "fresh_confirmation_suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "fresh_confirmation_result": "wal_tat/results/block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1_fresh_v8.json",
+    "fresh_confirmation_result_sha256": "03e9e668e34dbbf41ef1461c1fc16182bc0fc5ccc79dc2e77e60e1d57f76a3e6",
+    "fresh_confirmation_ratios": {
+      "c4_train": 0.9952802752362612,
+      "squad_train_context": 1.001836462501669,
+      "scipy_code": 1.0199254771994515
+    }
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v40-l256-g512.pt",
+    "sha256": "5f983d32839ffe0289802565179100cc01e2d15b19758a0f6b3d8f7eb2a51aad",
+    "domains": ["c4_train", "wikitext103_train", "pandas_code"],
+    "predicted_tokens_per_domain": 131072,
+    "overlap_result": "wal_tat/results/audit_v40_overlap_v1.json",
+    "overlap_result_sha256": "72cdd6025ddba59435ca818769635f31bcf67ba158b867c1bda37dd7b360d9b6",
+    "overlap_passed": true,
+    "comparison_count": 41,
+    "opened_during_training_or_selection": false
+  },
+  "acceptance": {
+    "absolute_nll_ratio_limit_per_domain": 1.02,
+    "incremental_vs_strict_nll_ratio_limit_per_domain": 1.005,
+    "incremental_vs_accepted_parent_nll_ratio_limit_per_domain": 1.005,
+    "only_the_hash_fixed_167_selected_parent_q4_groups_may_move_to_strict_q2": true,
+    "all_nonselected_q4_values_must_remain_bitwise_immutable": true,
+    "all_existing_q2_q8_values_and_masks_must_remain_bitwise_immutable": true,
+    "candidate_artifact_sha256_must_match": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_mixed_q2_q4_artifact.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --parent-artifact wal2/artifacts/wal-tat-block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_512-mixed-q2-q4-q8.pt --artifact wal2/artifacts/wal-tat-block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1-mixed-q2-q4-q8.pt --suite wal2/cache/wal-tat-audit-holdout-v40-l256-g512.pt --tag block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1_sealed_audit_v40 --gate-ratio 1.02 --incremental-gate-ratio 1.005 --device cuda"
+}

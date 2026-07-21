@@ -32,7 +32,7 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `411c8d3...`: 81,228,672 ternary, 71,105,152
+- sealed-audited mixed artifact `7494fa9...`: 81,250,048 ternary, 71,083,776
   signed-Q4 and 99,324,416 signed-Q8 weights, for 251,658,240 low-bit weights
   (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
@@ -68,6 +68,11 @@ scales. It selected step 448, fresh-verified on code-heavy v10, and passed
 sealed audit-v39 at `0.992793 / 0.940519 / 0.964751`; incremental worst was
 `1.004426` versus the strict source and `1.000003` versus the accepted parent.
 Artifact `5f35a9e...` is the current quality-recovered parent.
+A third, smaller `0.25%` layer-25 transaction then moved 167 groups (21,376
+weights) through `7→5→3` into strict Q2. It passed sealed audit-v40 at
+`0.997258 / 0.938989 / 0.974302`; incremental worst was `1.003959` versus
+the strict source and `1.000052` versus the recovered parent. Artifact
+`7494fa9...` is the current accepted frontier.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are
@@ -81,11 +86,11 @@ Q8 at `7.287003 bpw`. Sealed audit-v29 ratios are
 `0.991622 / 0.989226 / 0.973866`, with incremental worst `1.004860`. The
 high Q8 share remains explicitly scheduled for reverse Q8→Q4→Q2 distillation.
 
-Layer 25 is now fully low-bit at `3.127797%` Q2, `17.032369%` Q4 and
-`79.839834%` Q8 (`7.256037 bpw`). Its three accepted Q4→Q2 stages have
-converted 1,574,272 weights into strict ternary. The latest masked progressive
-stage passed sealed audit-v38 at `0.997427 / 0.940653 / 0.964373`;
-incremental worst is `1.004710` versus immutable `s0053` and `1.000047`
+Layer 25 is now fully low-bit at `3.170268%` Q2, `16.989899%` Q4 and
+`79.839834%` Q8 (`7.255188 bpw`). Its four accepted Q4→Q2 stages have
+converted 1,595,648 weights into strict ternary. The latest masked progressive
+stage passed sealed audit-v40 at `0.997258 / 0.938989 / 0.974302`;
+incremental worst is `1.003959` versus immutable `s0053` and `1.000052`
 versus the accepted parent, both below the prospectively declared `1.005`
 limit.
 
