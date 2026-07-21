@@ -233,6 +233,14 @@ strict source и `1.000047` против recovered parent. Layer 25 теперь
 Accepted artifact SHA-256:
 `411c8d337405c8f2e2f48288ffa33a9b7d4ca647c63fd611304be0ec5c054588`.
 
+Scale-only recovery Q4-групп самого layer 25 не набрал заранее заданный
+improvement и был отклонён. Повторный joint scale-only arm для layer-24 MLP
+изменил `35,378` FP16 scales при полностью неизменных codes и masks. Fresh
+v10 дал `0.991688 / 0.997828 / 0.988282`; one-shot audit-v39 —
+`0.992793 / 0.940519 / 0.964751`. Incremental worst равен `1.004426` против
+strict source и `1.000003` против parent. Coverage-neutral accepted artifact:
+`5f35a9e7ac28138b358bb22762563faaf037a00d8bc52826712c6ce90d3f0ea7`.
+
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
 `19.999949%` групп Q4 и перевела `80.000051%` в Q8 (`7.325002 bpw`). Fresh

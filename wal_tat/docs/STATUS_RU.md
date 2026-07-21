@@ -79,6 +79,13 @@ strict source и `1.000047` против parent. Из 676 групп 675 отн�
 одна — к `self_attn.o_proj`; все прочие Q4 и все прежние Q2/Q8 побитно
 неизменны.
 
+Scale-only recovery непосредственно в layer 25 не набрал заданный improvement
+и был отклонён. Повторная joint-компенсация layer-24 MLP, наоборот, выбрала
+step 448 и изменила только `35,378` Q4-scale. Fresh v10 прошёл; audit-v39 дал
+`0.992793 / 0.940519 / 0.964751`, incremental worst `1.004426` против strict
+source и `1.000003` против parent. Coverage и payload не изменились; текущий
+quality-recovered parent имеет SHA `5f35a9e...`.
+
 ## Какой это quant
 
 У каждого принятого веса ровно три состояния:

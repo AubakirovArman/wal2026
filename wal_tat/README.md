@@ -63,6 +63,11 @@ Using that recovered headroom, a second masked 1% layer-25 transaction moved
 the immutable strict source and `1.000047` versus the accepted parent. The
 projected payload decreased by another `0.020630 MiB` without changing total
 low-bit coverage.
+A second coverage-neutral layer-24 recovery then changed only 35,378 Q4
+scales. It selected step 448, fresh-verified on code-heavy v10, and passed
+sealed audit-v39 at `0.992793 / 0.940519 / 0.964751`; incremental worst was
+`1.004426` versus the strict source and `1.000003` versus the accepted parent.
+Artifact `5f35a9e...` is the current quality-recovered parent.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are
