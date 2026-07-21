@@ -23,8 +23,8 @@ strict decoder blocks: 1 / 28 complete
 mixed low-bit blocks:  5 / 28 complete, 23 remain
 strict major matrices: 11 / 197 complete
 mixed major matrices:  35 / 197 complete, 162 remain
-strict ternary weights: 81,142,144 / 1,720,451,072 = 4.716330% in mixed artifact
-Q4 rescue weights:      71,191,680 / 1,720,451,072 = 4.137966%
+strict ternary weights: 81,228,672 / 1,720,451,072 = 4.721359% in mixed artifact
+Q4 rescue weights:      71,105,152 / 1,720,451,072 = 4.132937%
 Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
 all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
 remaining high precision: 1,468,792,832 = 85.372543%
@@ -222,6 +222,16 @@ layer-24 MLP и сохраняет побитно все codes, masks, Q2 и Q8.
 strict source и `1.000078` против accepted parent. Coverage и projected bpw
 не изменились. Новый quality-recovered parent SHA-256:
 `f5f50147edcf6bf912fbfb476dc8c50ca494316bd1d52268f55982b6c900f0c9`.
+
+После этого тот же второй masked `1%` layer-25, ранее отклонённый на
+исчерпанном parent, прошёл. Из оставшихся Q4 выбраны 676 минимально
+чувствительных групп; `7→5→3` перевёл `86,528` весов в strict Q2. Fresh
+reload дал `0.995292 / 1.001841 / 1.019975`, one-shot audit-v38 —
+`0.997427 / 0.940653 / 0.964373`; incremental worst равен `1.004710` против
+strict source и `1.000047` против recovered parent. Layer 25 теперь содержит
+`3.127797%` Q2, `17.032369%` Q4 и `79.839834%` Q8 при `7.256037 bpw`.
+Accepted artifact SHA-256:
+`411c8d337405c8f2e2f48288ffa33a9b7d4ca647c63fd611304be0ec5c054588`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

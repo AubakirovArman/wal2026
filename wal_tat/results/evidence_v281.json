@@ -1,0 +1,77 @@
+{
+  "schema": "wal-tat-evidence-v281",
+  "status": "accepted_layer25_second_masked_q4_to_strict_q2_after_headroom",
+  "policy": "wal_tat/results/evidence_v280_policy.json",
+  "policy_sha256_at_sealed_execution": "9bde0a145b26811e199d41aed285cd8b84bcd11b70081d2019e34c969e6cf4d1",
+  "artifact": "wal2/artifacts/wal-tat-block25_masked_q4_to_q2_progressive_second_1pct_after_headroom_v1-mixed-q2-q4-q8.pt",
+  "artifact_sha256": "411c8d337405c8f2e2f48288ffa33a9b7d4ca647c63fd611304be0ec5c054588",
+  "parent_artifact_sha256": "f5f50147edcf6bf912fbfb476dc8c50ca494316bd1d52268f55982b6c900f0c9",
+  "selection_result": "wal_tat/results/block25_masked_q4_to_q2_progressive_second_1pct_after_headroom_v1.json",
+  "fresh_confirmation": "wal_tat/results/block25_masked_q4_to_q2_progressive_second_1pct_after_headroom_v1_fresh_v8.json",
+  "sealed_audit": "wal_tat/results/block25_masked_q4_to_q2_progressive_second_1pct_after_headroom_v1_sealed_audit_v38.json",
+  "sealed_audit_sha256": "c788a94a8cc7e949e4dc2cc4be3649653591089668a95b7f997a8755f67da5af",
+  "sealed_suite": "wal2/cache/wal-tat-audit-holdout-v38-l256-g512.pt",
+  "sealed_suite_sha256": "13f56b2cc2cbc9c33688997f896cf849f5743d14aa26de9bf7e3196be335d51b",
+  "sealed_ratios": {
+    "c4_train": 0.997427085405595,
+    "wikitext103_train": 0.9406529927302516,
+    "pandas_code": 0.9643727782541835
+  },
+  "sealed_incremental_ratios_vs_source": {
+    "c4_train": 1.0026246311384202,
+    "wikitext103_train": 1.003626844985473,
+    "pandas_code": 1.0047095029671214
+  },
+  "sealed_incremental_ratios_vs_parent": {
+    "c4_train": 0.9999939732650088,
+    "wikitext103_train": 1.0000466610046275,
+    "pandas_code": 1.0000470435947513
+  },
+  "strict_q2_weights": 81228672,
+  "q4_weights": 71105152,
+  "q8_weights": 99324416,
+  "total_low_bit_weights": 251658240,
+  "strict_q2_coverage_fraction": 0.04721359027407435,
+  "q4_coverage_fraction": 0.04132936597687795,
+  "q8_coverage_fraction": 0.0577316133056529,
+  "low_bit_coverage_fraction": 0.1462745695566052,
+  "remaining_high_precision_weights": 1468792832,
+  "conversion": {
+    "target_layer": 25,
+    "progressive_levels": [7, 5, 3],
+    "selected_groups": 676,
+    "selected_weights": 86528,
+    "selected_groups_by_matrix": {
+      "model.layers.25.self_attn.o_proj": 1,
+      "model.layers.25.mlp.up_proj": 166,
+      "model.layers.25.mlp.gate_proj": 507,
+      "model.layers.25.mlp.down_proj": 2
+    },
+    "nonselected_q4_values_unchanged": true,
+    "existing_q2_values_unchanged": true,
+    "all_q8_values_unchanged": true,
+    "all_changes_confined_to_selected_parent_q4_groups": true
+  },
+  "layer25": {
+    "strict_q2_weights": 1574272,
+    "q4_weights": 8572672,
+    "q8_weights": 40184704,
+    "strict_q2_fraction": 0.031277974446614585,
+    "q4_fraction": 0.17032368977864586,
+    "q8_fraction": 0.7983983357747397,
+    "physical_bpw": 7.2560373942057295
+  },
+  "projected_payload": {
+    "low_bit_payload_mib": 151.74514770507812,
+    "bf16_payload_mib": 480.0,
+    "savings_mib": 328.2548522949219,
+    "reduction_vs_parent_mib": 0.0206298828125
+  },
+  "policy_erratum": {
+    "preserved_policy_file_unchanged": true,
+    "description": "The immutable pre-audit policy listed only the three MLP projection names, while the already hash-fixed candidate was produced with the script default of all seven layer-25 projections. Artifact diffing after the audit shows that 675 selected groups are in the MLP and one selected group is in self_attn.o_proj. The artifact SHA-256 and total 676-group selection were fixed before the sealed audit, so this clerical mismatch created no post-audit candidate-selection freedom. The original policy file and its execution-time hash are retained rather than rewritten retroactively."
+  },
+  "tests": "169 passed",
+  "sealed_audit_opened_once": true,
+  "passed": true
+}
