@@ -1,0 +1,96 @@
+{
+  "schema": "wal-tat-layer26-all-except-o-q8-sealed-policy-v1",
+  "evidence_id": "v288",
+  "declared_before_execution": true,
+  "objective": "open sealed audit-v42 exactly once for the fresh-verified fully low-bit layer 26 with o_proj fixed at Q4 and every other major projection fixed at Q8",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+    "accepted_parent_artifact": "wal2/artifacts/wal-tat-block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1-mixed-q2-q4-q8.pt",
+    "accepted_parent_artifact_sha256": "7494fa959b20a089ca7d7bb7afc48f15b67c9b7f6bdb88a5f3c9937dd77e0bd6"
+  },
+  "candidate": {
+    "artifact": "wal2/artifacts/wal-tat-block26_all_except_o_full_q8_rescue_parent_v4-mixed-q2-q4-q8.pt",
+    "sha256": "cf11c9db128a977a02531e0138b3dbfad04728addab5cddda6e50395b7f6acb7",
+    "target_layer": 26,
+    "q4_projections": [
+      "o_proj"
+    ],
+    "q8_projections": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "up_proj",
+      "gate_proj",
+      "down_proj"
+    ],
+    "layer26_q4_weights": 4194304,
+    "layer26_q8_weights": 46137344,
+    "layer26_low_bit_weights": 50331648,
+    "layer26_q4_fraction": 0.08333333333333333,
+    "layer26_q8_fraction": 0.9166666666666666,
+    "layer26_physical_bpw": 7.791666666666667,
+    "strict_q2_weights": 81250048,
+    "q4_weights": 75278080,
+    "q8_weights": 145461760,
+    "total_low_bit_weights": 301989888,
+    "strict_q2_coverage_fraction": 0.04722601492267256,
+    "low_bit_coverage_fraction": 0.17552948346792624,
+    "remaining_high_precision_weights": 1418461184,
+    "projected_low_bit_payload_mib": 198.49005126953125,
+    "bf16_equivalent_mib": 576.0,
+    "projected_savings_mib": 377.50994873046875
+  },
+  "development": {
+    "selection_suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "selection_result": "wal_tat/results/block26_all_except_o_full_q8_rescue_parent_v4.json",
+    "selection_result_sha256": "54893d5effc8abfbd4fb737b39fa00d29ee6632435f2c54e902516fa98df08fc",
+    "fresh_confirmation_suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "fresh_confirmation_result": "wal_tat/results/block26_all_except_o_full_q8_rescue_parent_v4_fresh_strict_v8.json",
+    "fresh_confirmation_result_sha256": "ea4611862530160cbc2a2a976c9dd2f314cd531b37d3da32bd01730ee86b5f29",
+    "fresh_confirmation_ratios": {
+      "c4_train": 0.9953343575084386,
+      "squad_train_context": 1.0021429144973875,
+      "scipy_code": 1.0188734555248864
+    },
+    "fresh_incremental_ratios_vs_source": {
+      "c4_train": 1.0020836082839455,
+      "squad_train_context": 1.004450550615671,
+      "scipy_code": 1.0030034597134188
+    },
+    "fresh_incremental_ratios_vs_parent": {
+      "c4_train": 1.0000543387360556,
+      "squad_train_context": 1.0003058902397635,
+      "scipy_code": 0.9989685308406516
+    }
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v42-l256-g512.pt",
+    "sha256": "7b57d2b793061fd61a163830fd5bb943237237d0b1793161f051eb9aabfa2fc8",
+    "domains": [
+      "c4_train",
+      "wikitext103_train",
+      "pandas_code"
+    ],
+    "predicted_tokens_per_domain": 131072,
+    "overlap_result": "wal_tat/results/audit_v42_overlap_v1.json",
+    "overlap_result_sha256": "957b8566cd894c97097de28ead145b064284eec32c41031f6ca262b6bcb0e4a7",
+    "overlap_passed": true,
+    "comparison_count": 43,
+    "opened_during_training_or_selection": false
+  },
+  "acceptance": {
+    "absolute_nll_ratio_limit_per_domain": 1.02,
+    "incremental_vs_strict_nll_ratio_limit_per_domain": 1.005,
+    "incremental_vs_accepted_parent_nll_ratio_limit_per_domain": 1.005,
+    "all_layer26_major_matrix_weights_must_be_q4_or_q8": true,
+    "all_preexisting_q2_q4_q8_values_and_masks_must_remain_bitwise_immutable": true,
+    "candidate_artifact_sha256_must_match": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_mixed_q2_q4_artifact.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --parent-artifact wal2/artifacts/wal-tat-block25_masked_q4_to_q2_progressive_third_0p25pct_after_headroom_v1-mixed-q2-q4-q8.pt --artifact wal2/artifacts/wal-tat-block26_all_except_o_full_q8_rescue_parent_v4-mixed-q2-q4-q8.pt --suite wal2/cache/wal-tat-audit-holdout-v42-l256-g512.pt --tag block26_all_except_o_full_q8_rescue_parent_v4_sealed_audit_v42 --gate-ratio 1.02 --incremental-gate-ratio 1.005 --device cuda"
+}

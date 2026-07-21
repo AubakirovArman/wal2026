@@ -55,6 +55,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
         max_abs_log_scale_delta: float,
         bias: torch.Tensor | None,
         train_codes: bool = False,
+        train_q8_scales: bool = False,
         progressive_mask: torch.Tensor | None = None,
     ):
         super().__init__()
@@ -88,7 +89,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
             ).float(),
         )
         self.register_buffer(
-            "q8_scales",
+            "base_q8_scales",
             entry.get(
                 "q8_scales_fp16", torch.ones_like(entry["q4_scales_fp16"])
             ).float(),
@@ -100,6 +101,10 @@ class FixedCodeMixedScaleLinear(nn.Module):
         if torch.logical_and(self.q4_mask, self.q8_mask).any():
             raise ValueError("Q4 and Q8 masks overlap")
         self.log_scale_delta = nn.Parameter(torch.zeros_like(self.base_q4_scales))
+        self.q8_log_scale_delta = nn.Parameter(
+            torch.zeros_like(self.base_q8_scales),
+            requires_grad=bool(train_q8_scales),
+        )
         self.max_abs_log_scale_delta = float(max_abs_log_scale_delta)
         self.bias = None if bias is None else nn.Parameter(
             bias.detach().clone(), requires_grad=False
@@ -115,6 +120,14 @@ class FixedCodeMixedScaleLinear(nn.Module):
         rounded = scales.half().float()
         return scales + (rounded - scales).detach()
 
+    def effective_q8_scales(self) -> torch.Tensor:
+        bounded = self.q8_log_scale_delta.clamp(
+            -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
+        )
+        scales = self.base_q8_scales * bounded.exp()
+        rounded = scales.half().float()
+        return scales + (rounded - scales).detach()
+
     def effective_weight(self) -> torch.Tensor:
         q2 = self.q2_codes * self.q2_scales.unsqueeze(-1)
         hard = self.proxy_code.round().clamp(self.code_lower, self.code_upper)
@@ -125,7 +138,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
             self.progressive_mask.unsqueeze(-1), progressive_q4, fallback_q4
         )
         grouped = torch.where(self.q4_mask.unsqueeze(-1), q4, q2)
-        q8 = self.q8_codes * self.q8_scales.unsqueeze(-1)
+        q8 = self.q8_codes * self.effective_q8_scales().unsqueeze(-1)
         grouped = torch.where(self.q8_mask.unsqueeze(-1), q8, grouped)
         return grouped.reshape(self.rows, -1)[:, : self.columns]
 
@@ -138,6 +151,10 @@ class FixedCodeMixedScaleLinear(nn.Module):
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
         self.log_scale_delta.masked_fill_(~self.progressive_mask, 0)
+        self.q8_log_scale_delta.clamp_(
+            -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
+        )
+        self.q8_log_scale_delta.masked_fill_(~self.q8_mask, 0)
         active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
         self.proxy_code[active] = self.proxy_code[active].clamp(
             self.code_lower, self.code_upper
@@ -147,6 +164,10 @@ class FixedCodeMixedScaleLinear(nn.Module):
     @torch.no_grad()
     def deploy_scales(self) -> torch.Tensor:
         return self.effective_q4_scales().half().cpu()
+
+    @torch.no_grad()
+    def deploy_q8_scales(self) -> torch.Tensor:
+        return self.effective_q8_scales().half().cpu()
 
     @torch.no_grad()
     def deploy_codes(self) -> torch.Tensor:
@@ -248,6 +269,11 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=0.0,
         help="positive value enables hard-forward Q4 code proxy updates",
+    )
+    parser.add_argument(
+        "--train-q8-scales",
+        action="store_true",
+        help="also recover FP16 Q8 group scales while keeping Q8 codes fixed",
     )
     parser.add_argument("--ce-weight", type=float, default=0.0)
     parser.add_argument("--block-weight", type=float, default=0.1)
@@ -523,6 +549,7 @@ def main() -> None:
             max_abs_log_scale_delta=args.max_abs_log_scale_delta,
             bias=target.bias,
             train_codes=args.proxy_lr > 0,
+            train_q8_scales=args.train_q8_scales,
             progressive_mask=(
                 progressive_masks[name] if progressive_masks is not None else None
             ),
@@ -576,12 +603,20 @@ def main() -> None:
                 name: layer.log_scale_delta.detach().cpu().clone()
                 for name, layer in layers.items()
             }
+            stage_best_q8_deltas = {
+                name: layer.q8_log_scale_delta.detach().cpu().clone()
+                for name, layer in layers.items()
+            }
             stage_best_proxies = {
                 name: layer.proxy_code.detach().cpu().clone()
                 for name, layer in layers.items()
             }
 
             scale_parameters = [layer.log_scale_delta for layer in layers.values()]
+            if args.train_q8_scales:
+                scale_parameters.extend(
+                    layer.q8_log_scale_delta for layer in layers.values()
+                )
             proxy_parameters = (
                 [layer.proxy_code for layer in layers.values()]
                 if args.proxy_lr > 0
@@ -642,6 +677,10 @@ def main() -> None:
                             name: layer.log_scale_delta.detach().cpu().clone()
                             for name, layer in layers.items()
                         }
+                        stage_best_q8_deltas = {
+                            name: layer.q8_log_scale_delta.detach().cpu().clone()
+                            for name, layer in layers.items()
+                        }
                         stage_best_proxies = {
                             name: layer.proxy_code.detach().cpu().clone()
                             for name, layer in layers.items()
@@ -687,6 +726,9 @@ def main() -> None:
                 for name, layer in layers.items():
                     layer.log_scale_delta.copy_(
                         stage_best_deltas[name].to(args.device)
+                    )
+                    layer.q8_log_scale_delta.copy_(
+                        stage_best_q8_deltas[name].to(args.device)
                     )
                     layer.proxy_code.copy_(
                         stage_best_proxies[name].to(args.device)
@@ -751,11 +793,14 @@ def main() -> None:
             else:
                 matrix_entry["q4_scales_fp16"] = deployed_scales
                 matrix_entry["q4_codes_int8"] = deployed_codes
+            if args.train_q8_scales:
+                matrix_entry["q8_scales_fp16"] = layer.deploy_q8_scales()
         recovered["parent_artifact_sha256"] = sha256_file(parent_path)
         recovered["scale_recovery"] = {
             "source_candidate_sha256": sha256_file(candidate_path),
             "best_step": best_step,
             "proxy_lr": args.proxy_lr,
+            "train_q8_scales": args.train_q8_scales,
             "progressive_levels": progressive_levels,
             "progressive_fraction": args.progressive_fraction,
             "progressive_selected_groups": progressive_selected_groups,
@@ -793,6 +838,7 @@ def main() -> None:
         "train_sequences": args.train_sequences,
         "lr": args.lr,
         "proxy_lr": args.proxy_lr,
+        "train_q8_scales": args.train_q8_scales,
         "progressive_levels": progressive_levels,
         "progressive_fraction": args.progressive_fraction,
         "progressive_selected_groups": progressive_selected_groups,

@@ -127,6 +127,43 @@ def test_q8_groups_remain_fixed_while_q4_proxy_trains():
     assert torch.equal(changed[:, 4:], baseline[:, 4:])
 
 
+def test_optional_q8_scale_recovery_changes_only_q8_groups():
+    entry = {
+        "shape": (1, 6),
+        "q2_codes_int8": torch.tensor(
+            [[[1, -1], [0, 0], [0, 0]]], dtype=torch.int8
+        ),
+        "q2_scales_fp16": torch.tensor([[0.5, 1.0, 1.0]], dtype=torch.float16),
+        "q4_codes_int8": torch.tensor(
+            [[[0, 0], [2, -2], [0, 0]]], dtype=torch.int8
+        ),
+        "q4_scales_fp16": torch.tensor([[1.0, 0.25, 1.0]], dtype=torch.float16),
+        "q4_mask": torch.tensor([[False, True, False]]),
+        "q8_codes_int8": torch.tensor(
+            [[[0, 0], [0, 0], [100, -100]]], dtype=torch.int8
+        ),
+        "q8_scales_fp16": torch.tensor([[1.0, 1.0, 0.01]], dtype=torch.float16),
+        "q8_mask": torch.tensor([[False, False, True]]),
+    }
+    layer = FixedCodeMixedScaleLinear(
+        entry,
+        max_abs_log_scale_delta=0.5,
+        bias=None,
+        train_q8_scales=True,
+    )
+    baseline = layer.effective_weight().detach().clone()
+    with torch.no_grad():
+        layer.q8_log_scale_delta.fill_(0.2)
+        layer.constrain_()
+    changed = layer.effective_weight().detach()
+
+    assert torch.equal(changed[:, :4], baseline[:, :4])
+    assert not torch.equal(changed[:, 4:], baseline[:, 4:])
+    assert layer.q8_log_scale_delta[0, 0].item() == 0.0
+    assert layer.q8_log_scale_delta[0, 1].item() == 0.0
+    assert layer.deploy_q8_scales()[0, 2] != entry["q8_scales_fp16"][0, 2]
+
+
 def test_empty_q4_mask_has_finite_zero_diagnostics():
     entry = {
         "shape": (1, 2),

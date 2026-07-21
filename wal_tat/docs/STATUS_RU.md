@@ -11,13 +11,13 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 
 | Единица | Strict ternary | Mixed low-bit |
 |---|---:|---:|
-| Полные decoder blocks | 1 / 28 (`layer 27`) | 5 / 28 (`27`, `25`, `24`, `23`, `22`) |
-| Полные крупные матрицы | 11 / 197 | 35 / 197 |
+| Полные decoder blocks | 1 / 28 (`layer 27`) | 6 / 28 (`27`, `26`, `25`, `24`, `23`, `22`) |
+| Полные крупные матрицы | 11 / 197 | 42 / 197 |
 | Ternary weights | 76,673,024 (`4.456565%`) | 81,250,048 (`4.722601%`) |
-| Q4-g128 weights | 0 | 71,083,776 (`4.131694%`) |
-| Q8-g128 weights | 0 | 99,324,416 (`5.773161%`) |
-| Все low-bit weights | 76,673,024 | 251,658,240 (`14.627457%`) |
-| Осталось high precision | 1,643,778,048 | 1,468,792,832 (`85.372543%`) |
+| Q4-g128 weights | 0 | 75,278,080 (`4.375485%`) |
+| Q8-g128 weights | 0 | 145,461,760 (`8.454862%`) |
+| Все low-bit weights | 76,673,024 | 301,989,888 (`17.552948%`) |
+| Осталось high precision | 1,643,778,048 | 1,418,461,184 (`82.447052%`) |
 
 Strict-ветка по-прежнему не называет `layer 24` полным ternary-блоком. Mixed
 artifact честно завершает его как Q2/Q4-блок: attention полностью Q2, а три
@@ -93,6 +93,18 @@ quality-recovered parent имеет SHA `5f35a9e...`.
 strict source и `1.000052` против parent. Новый accepted frontier —
 `7494fa9...`.
 
+Следующим полностью закрыт `layer 26`. Full-Q4 и частичные Q8 rescue прошли
+development, но два prospectively sealed кандидата были отклонены на новых
+code-срезах: audit-v41 дал incremental `1.005861`, audit-v42 — `1.006725`
+против strict source при неизменном лимите `1.005`. В обоих случаях candidate
+оставался практически нейтрален к accepted parent, поэтому вместо ослабления
+gate добавлен Q8-scale recovery с неизменными codes/masks. Лучший step 64
+изменил `12,219` Q4-scale и `139,271` Q8-scale только в layer 26. Новый
+непересекающийся audit-v43 на C4/WikiText/sklearn-code прошёл с ratios
+`0.992036 / 0.940191 / 0.978863`; incremental worst равен `1.003721` против
+strict source и `1.000117` против parent. Layer 26 содержит `8.333333%` Q4 и
+`91.666667%` Q8 при `7.791667 bpw`; accepted artifact — `148908d...`.
+
 ## Какой это quant
 
 У каждого принятого веса ровно три состояния:
@@ -110,10 +122,10 @@ strict source и `1.000052` против parent. Новый accepted frontier �
 deploy-файлом.
 
 Strict `s0053` содержит 76,673,024 ternary weights. Mixed frontier содержит
-81,250,048 Q2-весов, 71,083,776 Q4-весов и 99,324,416 Q8-весов. Текущий
-579,580,153-byte `.pt` хранит дублирующиеся int8 training arrays и не является
+81,250,048 Q2-весов, 75,278,080 Q4-весов и 145,461,760 Q8-весов. Текущий
+734,156,159-byte `.pt` хранит дублирующиеся int8 training arrays и не является
 packed deploy-файлом. Расчётный packed payload этих low-bit весов —
-151.740 MiB против 480 MiB в BF16; реальная экономия VRAM появится только
+198.490 MiB против 576 MiB в BF16; реальная экономия VRAM появится только
 после versioned Q2/Q4/Q8 packer и runtime.
 
 ## Что именно преобразовано
@@ -140,16 +152,19 @@ packed deploy-файлом. Расчётный packed payload этих low-bit �
 `model.layers.22` также полностью low-bit: 956,288 весов используют Q2,
 9,110,016 — Q4 и 40,265,344 — Q8. BF16 в семи крупных матрицах блока нет.
 
-`model.layers.25` полностью low-bit: 1,487,744 веса используют Q2,
-8,659,200 — Q4 и 40,184,704 — Q8. BF16 в семи крупных матрицах блока нет.
+`model.layers.25` полностью low-bit: 1,595,648 весов используют Q2,
+8,551,296 — Q4 и 40,184,704 — Q8. BF16 в семи крупных матрицах блока нет.
+
+`model.layers.26` полностью low-bit: `o_proj` содержит 4,194,304 Q4-веса,
+а остальные шесть крупных матриц — 46,137,344 Q8-веса. BF16 в блоке нет.
 
 ## Текущая validation
 
 Актуальный strict parent — `s0053`, SHA-256
 `70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce`.
 Актуальный accepted mixed artifact имеет SHA-256
-`f5f50147edcf6bf912fbfb476dc8c50ca494316bd1d52268f55982b6c900f0c9`.
-Он прошёл fresh development, fresh v10 confirmation и sealed audit-v37.
+`148908dbc2f43d72d73402904e68a6642c8d1e1817c6400cd4209d0b30f7c76a`.
+Он прошёл fresh development, fresh v10 confirmation и sealed audit-v43.
 Ни Q4/Q8-веса, ни mixed
 coverage не прибавляются к strict ternary счётчику.
 
@@ -1050,15 +1065,13 @@ wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt
 
 ## Следующий технический шаг
 
-1. построить свежие development-v8 и sealed audit-v23, доказав их нулевое
-   пересечение со всеми ранее использованными suites;
-2. повторить 8,192-group `down_proj` atom из восстановленного `s0052r1`, не
-   раскрывая audit-v23 до заморозки кандидата;
-3. при отказе уменьшить атом или выполнить ещё один coverage-neutral recovery,
-   не меняя принятые ternary code/scale/mask;
-4. перенести prospective dual gate из отдельного commit validator в основной
-   campaign controller;
-5. расширить готовый reference Q2-g128 packer до full-checkpoint manifest и
-   проверить logit/NLL equality после загрузки нескольких связанных матриц;
-6. завершить второй block и затем проверить ранний чувствительный block, а не
-   идти только по easy-first карте.
+1. заморозить artifact `148908d...` как новый accepted mixed frontier;
+2. начать полный low-bit проход `layer 21`, следующего по совпавшим sensitivity
+   scan, с Q4 start и Q8 rescue без параллельных GPU-campaign;
+3. отдельно запустить reverse rate--distortion для `layer 26`: Q8→Q4→Q2 с
+   неизменным общим coverage и новым sealed audit на каждом принятом шаге;
+4. расширить reference packer до mixed Q2/Q4/Q8 manifest и проверять
+   pack→reload logits/NLL для всех шести закрытых блоков;
+5. добавить cumulative task-canary до дальнейшего массового роста coverage;
+6. после `layer 21` перейти к progressive multi-block stages, сохраняя строгий
+   source gate `1.005` и отдельный parent-incremental gate.

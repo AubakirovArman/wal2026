@@ -32,9 +32,9 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `7494fa9...`: 81,250,048 ternary, 71,083,776
-  signed-Q4 and 99,324,416 signed-Q8 weights, for 251,658,240 low-bit weights
-  (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
+- sealed-audited mixed artifact `148908d...`: 81,250,048 ternary, 75,278,080
+  signed-Q4 and 145,461,760 signed-Q8 weights, for 301,989,888 low-bit weights
+  (`17.552948%`), six complete low-bit decoder blocks and 42 complete low-bit
   major matrices.
 
 The mixed block-24 MLP is `40.228950%` ternary and `59.771050%` Q4 at an
@@ -67,12 +67,24 @@ A second coverage-neutral layer-24 recovery then changed only 35,378 Q4
 scales. It selected step 448, fresh-verified on code-heavy v10, and passed
 sealed audit-v39 at `0.992793 / 0.940519 / 0.964751`; incremental worst was
 `1.004426` versus the strict source and `1.000003` versus the accepted parent.
-Artifact `5f35a9e...` is the current quality-recovered parent.
+Artifact `5f35a9e...` was the quality-recovered parent for the following
+layer-25 transactions.
 A third, smaller `0.25%` layer-25 transaction then moved 167 groups (21,376
 weights) through `7→5→3` into strict Q2. It passed sealed audit-v40 at
 `0.997258 / 0.938989 / 0.974302`; incremental worst was `1.003959` versus
 the strict source and `1.000052` versus the recovered parent. Artifact
-`7494fa9...` is the current accepted frontier.
+`7494fa9...` was the accepted parent for the next full-block transaction.
+
+Layer 26 is now fully low-bit. Two earlier fixed-layout candidates passed
+development but failed new sealed code slices, so their audit evidence was
+retained and the `1.005` source gate was not weakened. The accepted layout
+keeps only `o_proj` in Q4 and stores the other six major matrices in Q8, for
+`7.791667 bpw` over the block. A code-heavy scale-only recovery changed
+12,219 Q4 scales and 139,271 Q8 scales while preserving every code and mask.
+Fresh v10 and sealed audit-v43 both passed; audit-v43 ratios are
+`0.992036 / 0.940191 / 0.978863`, with incremental worst `1.003721` versus
+the strict source and `1.000117` versus the accepted parent. Artifact
+`148908d...` is the current accepted frontier.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are

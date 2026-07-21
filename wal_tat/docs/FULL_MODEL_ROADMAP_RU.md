@@ -20,14 +20,14 @@ signed Q4-g128 4.125 bpw для групп, которые не проходят
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  5 / 28 complete, 23 remain
+mixed low-bit blocks:  6 / 28 complete, 22 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  35 / 197 complete, 162 remain
+mixed major matrices:  42 / 197 complete, 155 remain
 strict ternary weights: 81,250,048 / 1,720,451,072 = 4.722601% in mixed artifact
-Q4 rescue weights:      71,083,776 / 1,720,451,072 = 4.131694%
-Q8 rescue weights:      99,324,416 / 1,720,451,072 = 5.773161%
-all low-bit weights:    251,658,240 / 1,720,451,072 = 14.627457%
-remaining high precision: 1,468,792,832 = 85.372543%
+Q4 rescue weights:      75,278,080 / 1,720,451,072 = 4.375485%
+Q8 rescue weights:      145,461,760 / 1,720,451,072 = 8.454862%
+all low-bit weights:    301,989,888 / 1,720,451,072 = 17.552948%
+remaining high precision: 1,418,461,184 = 82.447052%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
@@ -249,6 +249,18 @@ strict source и `1.000052` против recovered parent. Layer 25 теперь
 `3.170268%` Q2, `16.989899%` Q4 и `79.839834%` Q8 при `7.255188 bpw`.
 Accepted artifact:
 `7494fa959b20a089ca7d7bb7afc48f15b67c9b7f6bdb88a5f3c9937dd77e0bd6`.
+
+Следующим завершён layer 26. Full-Q4 и два постепенно расширенных Q8 rescue
+прошли development, но audit-v41 и audit-v42 выявили code-domain source gaps
+`1.005861` и `1.006725` при фиксированном лимите `1.005`; оба кандидата были
+отклонены. Финальная раскладка оставляет `o_proj` в Q4, а остальные шесть
+матриц — в Q8 (`7.791667 bpw`). Добавленный Q8-scale recovery на code-heavy
+calibration изменил только 12,219 Q4-scale и 139,271 Q8-scale, сохранив все
+codes и masks. Fresh v10 прошёл, а новый audit-v43 на C4, WikiText-103 и
+sklearn code дал `0.992036 / 0.940191 / 0.978863`; incremental worst равен
+`1.003721` против strict source и `1.000117` против parent. Это шестой полный
+low-bit decoder block. Accepted artifact SHA-256:
+`148908dbc2f43d72d73402904e68a6642c8d1e1817c6400cd4209d0b30f7c76a`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
