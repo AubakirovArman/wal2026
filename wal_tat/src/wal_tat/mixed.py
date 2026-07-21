@@ -34,6 +34,7 @@ class FixedMixedQ2Q4Linear(nn.Module):
 @dataclass(frozen=True)
 class MixedArtifactInstallResult:
     new_q2_weights: int
+    nz4_weights: int
     q4_weights: int
     q8_weights: int
     matrix_statistics: dict[str, dict[str, int]]
@@ -166,6 +167,7 @@ def install_mixed_q2_q4_artifact(
 
     source_entries = source_checkpoint.get("matrices", {})
     new_q2_weights = 0
+    nz4_weights = 0
     q4_weights = 0
     q8_weights = 0
     matrix_statistics: dict[str, dict[str, int]] = {}
@@ -231,12 +233,17 @@ def install_mixed_q2_q4_artifact(
             if has_q8
             else torch.ones_like(q4_scales)
         )
+        nz4_mask = torch.as_tensor(
+            entry.get("nz4_mask", torch.zeros_like(q4_mask)), dtype=torch.bool
+        )
         if tuple(source_mask.shape) != scale_shape:
             raise ValueError(f"artifact source mask shape mismatch for {name}")
         if tuple(q4_mask.shape) != scale_shape:
             raise ValueError(f"artifact Q4 mask shape mismatch for {name}")
         if tuple(q8_mask.shape) != scale_shape:
             raise ValueError(f"artifact Q8 mask shape mismatch for {name}")
+        if tuple(nz4_mask.shape) != scale_shape:
+            raise ValueError(f"artifact NZ4 mask shape mismatch for {name}")
         if (
             tuple(q2_codes.shape) != code_shape
             or tuple(q4_codes.shape) != code_shape
@@ -249,8 +256,26 @@ def install_mixed_q2_q4_artifact(
             or tuple(q8_scales.shape) != scale_shape
         ):
             raise ValueError(f"artifact scale shape mismatch for {name}")
-        if not set(q2_codes.unique().tolist()) <= {-1, 0, 1}:
+        q2_mask = ~(q4_mask | q8_mask)
+        if torch.any(nz4_mask & ~q2_mask):
+            raise ValueError(f"NZ4 mask overlaps a higher-precision format in {name}")
+        if torch.any(nz4_mask & source_mask):
+            raise ValueError(f"NZ4 mask overwrites an accepted ternary group in {name}")
+        real_positions = (
+            torch.arange(groups * group_size).view(1, groups, group_size) < columns
+        )
+        ternary_positions = (
+            (q2_mask & ~nz4_mask).unsqueeze(-1) & real_positions
+        )
+        nz4_positions = nz4_mask.unsqueeze(-1) & real_positions
+        if ternary_positions.any() and not set(
+            q2_codes[ternary_positions].unique().tolist()
+        ) <= {-1, 0, 1}:
             raise ValueError(f"non-ternary Q2 code in {name}")
+        if nz4_positions.any() and not set(
+            q2_codes[nz4_positions].unique().tolist()
+        ) <= {-3, -1, 1, 3}:
+            raise ValueError(f"invalid no-zero Q2 code in {name}")
         if not set(q4_codes.unique().tolist()) <= set(range(-8, 8)):
             raise ValueError(f"out-of-range signed Q4 code in {name}")
         if not set(q8_codes.unique().tolist()) <= set(range(-128, 128)):
@@ -328,18 +353,21 @@ def install_mixed_q2_q4_artifact(
                 FixedMixedQ2Q4Linear(weight.to(compute_dtype), bias).to(device),
             )
 
-        new_q2_mask = (~source_mask) & (~q4_mask) & (~q8_mask)
-        matrix_new_q2 = valid_group_weight_count(
-            new_q2_mask, columns, group_size
+        new_ternary_mask = q2_mask & (~source_mask) & (~nz4_mask)
+        matrix_new_ternary = valid_group_weight_count(
+            new_ternary_mask, columns, group_size
         )
+        matrix_nz4 = valid_group_weight_count(nz4_mask, columns, group_size)
         matrix_q4 = valid_group_weight_count(q4_mask, columns, group_size)
         matrix_q8 = valid_group_weight_count(q8_mask, columns, group_size)
-        new_q2_weights += matrix_new_q2
+        new_q2_weights += matrix_new_ternary + matrix_nz4
+        nz4_weights += matrix_nz4
         q4_weights += matrix_q4
         q8_weights += matrix_q8
         matrix_statistics[name] = {
             "source_ternary_weights": source_ternary_weights,
-            "new_ternary_weights": matrix_new_q2,
+            "new_ternary_weights": matrix_new_ternary,
+            "nz4_weights": matrix_nz4,
             "q4_weights": matrix_q4,
             "q8_weights": matrix_q8,
         }
@@ -362,6 +390,7 @@ def install_mixed_q2_q4_artifact(
 
     return MixedArtifactInstallResult(
         new_q2_weights=new_q2_weights,
+        nz4_weights=nz4_weights,
         q4_weights=q4_weights,
         q8_weights=q8_weights,
         matrix_statistics=matrix_statistics,

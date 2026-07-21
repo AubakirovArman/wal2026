@@ -55,25 +55,28 @@ def global_lowest_masks(
     if not names or set(eligible) != set(names):
         raise ValueError("damage and eligible maps must have the same keys")
     values = []
-    locations = []
-    for matrix_index, name in enumerate(names):
+    flat_indices_by_name = {}
+    for name in names:
         if damage[name].shape != eligible[name].shape:
             raise ValueError(f"shape mismatch for {name}")
         flat_indices = torch.where(eligible[name].reshape(-1))[0]
+        flat_indices_by_name[name] = flat_indices
         values.append(damage[name].reshape(-1).index_select(0, flat_indices))
-        locations.extend(
-            (matrix_index, int(index)) for index in flat_indices.tolist()
-        )
     joined = torch.cat(values) if values else torch.empty(0)
     if not 0 <= count <= joined.numel():
         raise ValueError("selection count is outside eligible groups")
     result = {name: torch.zeros_like(eligible[name]) for name in names}
     if count == 0:
         return result
-    chosen = torch.topk(joined, count, largest=False, sorted=False).indices.tolist()
-    for joined_index in chosen:
-        matrix_index, flat_index = locations[joined_index]
-        result[names[matrix_index]].view(-1)[flat_index] = True
+    chosen = torch.topk(joined, count, largest=False, sorted=False).indices
+    offset = 0
+    for name in names:
+        flat_indices = flat_indices_by_name[name]
+        local = chosen[(chosen >= offset) & (chosen < offset + flat_indices.numel())]
+        if local.numel():
+            selected = flat_indices.index_select(0, local - offset)
+            result[name].view(-1)[selected] = True
+        offset += flat_indices.numel()
     return result
 
 
@@ -265,7 +268,7 @@ def main() -> None:
         )
         if passed:
             selection_candidates.append(
-                {"count": count, "masks": masks, "candidate": candidate, **attempt}
+                {"count": count, "masks": masks, **attempt}
             )
 
     final_metrics = None
@@ -279,9 +282,12 @@ def main() -> None:
     for selection in sorted(
         selection_candidates, key=lambda item: item["count"], reverse=True
     ):
+        candidate = build_candidate(
+            parent_artifact, selection["masks"], ternary_codes, ternary_scales
+        )
         install_mixed_q2_q4_artifact(
             model,
-            selection["candidate"],
+            candidate,
             source,
             device=args.device,
             expected_source_sha256=source_hash,
@@ -313,6 +319,7 @@ def main() -> None:
         )
         if passed:
             accepted = selection
+            accepted["candidate"] = candidate
             final_metrics = metrics
             final_ratios = absolute
             final_incremental = incremental

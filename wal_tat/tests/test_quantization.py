@@ -17,6 +17,7 @@ from wal_tat import (
     sensitivity_decile_mask,
     transaction_schedule,
     weighted_symmetric_odd_level_project,
+    weighted_symmetric_nz4_project,
     weighted_symmetric_q4_project,
     weighted_symmetric_q8_project,
 )
@@ -68,6 +69,23 @@ def test_weighted_q8_project_uses_full_signed_int8_range():
     reconstructed = codes.float() * scales.unsqueeze(-1)
     assert torch.allclose(reconstructed.reshape_as(weight), weight, atol=1e-4)
     assert error.item() == pytest.approx(0.0, abs=1e-6)
+
+
+def test_weighted_nz4_project_uses_exactly_four_no_zero_symbols():
+    weight = torch.tensor([[-3.0, -1.0, 1.0, 3.0]])
+    codes, scales, error = weighted_symmetric_nz4_project(
+        weight, torch.ones(4), group_size=4
+    )
+    assert set(codes.unique().tolist()) == {-3, -1, 1, 3}
+    assert scales.item() == pytest.approx(1.0, abs=1e-5)
+    assert error.item() == pytest.approx(0.0, abs=1e-7)
+
+
+def test_weighted_nz4_project_rejects_bad_moment_shape():
+    with pytest.raises(ValueError, match="input features"):
+        weighted_symmetric_nz4_project(
+            torch.ones(1, 4), torch.ones(3), group_size=4
+        )
 
 
 def test_weighted_odd_level_projection_supports_progressive_collapse():

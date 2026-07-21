@@ -1,4 +1,4 @@
-"""Find a safe Q8-to-Q4 fraction inside an accepted mixed artifact."""
+"""Move the safest decoder Q4/Q8 groups to physical two-bit NZ4."""
 from __future__ import annotations
 
 import argparse
@@ -26,54 +26,12 @@ from reverse_q4_to_q2_fraction import (
     grouped_moment,
     parse_fractions,
 )
+from reverse_q8_to_q4_fraction import PROJECTION_MAP, parse_layers
 from wal_tat import (
     install_mixed_q2_q4_artifact,
     valid_group_weight_count,
-    weighted_symmetric_q4_project,
+    weighted_symmetric_nz4_project,
 )
-
-
-PROJECTION_MAP = {
-    "q_proj": "self_attn.q_proj",
-    "k_proj": "self_attn.k_proj",
-    "v_proj": "self_attn.v_proj",
-    "o_proj": "self_attn.o_proj",
-    "up_proj": "mlp.up_proj",
-    "gate_proj": "mlp.gate_proj",
-    "down_proj": "mlp.down_proj",
-}
-
-
-def build_candidate(
-    parent: dict,
-    masks: dict[str, torch.Tensor],
-    q4_codes: dict[str, torch.Tensor],
-    q4_scales: dict[str, torch.Tensor],
-) -> dict:
-    """Move only selected Q8 groups to their supplied Q4 projections."""
-    candidate = dict(parent)
-    candidate["matrices"] = dict(parent["matrices"])
-    for name, selected in masks.items():
-        entry = dict(parent["matrices"][name])
-        q8_mask = entry.get("q8_mask")
-        if q8_mask is None:
-            raise ValueError(f"parent artifact lacks Q8 state in {name}")
-        if torch.logical_and(selected, ~q8_mask.bool()).any():
-            raise ValueError(f"selection leaves Q8 eligibility in {name}")
-        entry["q4_codes_int8"] = entry["q4_codes_int8"].clone()
-        entry["q4_scales_fp16"] = entry["q4_scales_fp16"].clone()
-        entry["q4_mask"] = entry["q4_mask"].bool().clone()
-        entry["q8_mask"] = q8_mask.bool().clone()
-        entry["q4_codes_int8"][selected] = q4_codes[name][selected].to(
-            entry["q4_codes_int8"].dtype
-        )
-        entry["q4_scales_fp16"][selected] = q4_scales[name][selected].to(
-            entry["q4_scales_fp16"].dtype
-        )
-        entry["q4_mask"][selected] = True
-        entry["q8_mask"][selected] = False
-        candidate["matrices"][name] = entry
-    return candidate
 
 
 def parse_args() -> argparse.Namespace:
@@ -83,52 +41,62 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
+    parser.add_argument("--source-precision", choices=("q4", "q8"), required=True)
     target = parser.add_mutually_exclusive_group(required=True)
     target.add_argument("--target-layer", type=int)
-    target.add_argument(
-        "--target-layers",
-        help="comma-separated decoder layers and inclusive ranges, e.g. 0-27",
-    )
+    target.add_argument("--target-layers")
     parser.add_argument(
         "--target-projections",
         default="q_proj,k_proj,v_proj,o_proj,up_proj,gate_proj,down_proj",
     )
     parser.add_argument(
-        "--fractions", default="0.001,0.002,0.005,0.01,0.02,0.05,0.1,0.2,0.4,1"
+        "--fractions", default="0.001,0.0025,0.005,0.01,0.025,0.05"
     )
     parser.add_argument("--moment-sequences", type=int, default=64)
-    parser.add_argument("--selection-gate-sequences", type=int, default=64)
-    parser.add_argument("--gate-ratio", type=float, default=1.02)
-    parser.add_argument("--incremental-gate-ratio", type=float, default=1.005)
+    parser.add_argument("--selection-gate-sequences", type=int, default=16)
+    parser.add_argument("--gate-ratio", type=float, default=1.1)
+    parser.add_argument("--incremental-gate-ratio", type=float, default=1.1)
     parser.add_argument("--write-artifact", action="store_true")
-    parser.add_argument("--seed", type=int, default=853)
+    parser.add_argument("--seed", type=int, default=919)
     parser.add_argument(
         "--device", default="cuda" if torch.cuda.is_available() else "cpu"
     )
     return parser.parse_args()
 
 
-def parse_layers(single: int | None, multiple: str | None) -> tuple[int, ...]:
-    if single is not None:
-        layers = (int(single),)
-    else:
-        parsed = set()
-        for item in (multiple or "").split(","):
-            item = item.strip()
-            if not item:
-                continue
-            if "-" in item:
-                left, right = item.split("-", 1)
-                start, stop = int(left), int(right)
-                if stop < start:
-                    raise ValueError("target layer range must be increasing")
-                parsed.update(range(start, stop + 1))
-            else:
-                parsed.add(int(item))
-        layers = tuple(sorted(parsed))
-    if not layers or any(layer < 0 for layer in layers):
-        raise ValueError("target layers must be non-negative")
-    return layers
+def build_candidate(
+    parent: dict,
+    masks: dict[str, torch.Tensor],
+    nz4_codes: dict[str, torch.Tensor],
+    nz4_scales: dict[str, torch.Tensor],
+    *,
+    source_precision: str,
+) -> dict:
+    candidate = dict(parent)
+    candidate["matrices"] = dict(parent["matrices"])
+    source_mask_name = f"{source_precision}_mask"
+    for name, selected in masks.items():
+        entry = dict(parent["matrices"][name])
+        source_mask = entry[source_mask_name].bool()
+        if torch.logical_and(selected, ~source_mask).any():
+            raise ValueError(f"selection leaves {source_precision.upper()} eligibility in {name}")
+        entry["q2_codes_int8"] = entry["q2_codes_int8"].clone()
+        entry["q2_scales_fp16"] = entry["q2_scales_fp16"].clone()
+        entry["q4_mask"] = entry["q4_mask"].bool().clone()
+        entry["q8_mask"] = entry["q8_mask"].bool().clone()
+        entry["nz4_mask"] = entry.get(
+            "nz4_mask", torch.zeros_like(entry["q4_mask"])
+        ).bool().clone()
+        entry["q2_codes_int8"][selected] = nz4_codes[name][selected].to(
+            entry["q2_codes_int8"].dtype
+        )
+        entry["q2_scales_fp16"][selected] = nz4_scales[name][selected].to(
+            entry["q2_scales_fp16"].dtype
+        )
+        entry[source_mask_name][selected] = False
+        entry["nz4_mask"][selected] = True
+        candidate["matrices"][name] = entry
+    return candidate
 
 
 def main() -> None:
@@ -146,8 +114,6 @@ def main() -> None:
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
     calibration = suite["calibration"]
     gates = suite["gates"]
-    if not 1 <= args.moment_sequences <= len(calibration):
-        raise ValueError("moment sequences are outside calibration")
     selection_gates = {
         domain: chunks[: args.selection_gate_sequences]
         for domain, chunks in gates.items()
@@ -168,19 +134,15 @@ def main() -> None:
         for layer in target_layers
         for item in requested
     )
-    missing_names = tuple(
-        name for name in requested_names if name not in parent_artifact["matrices"]
-    )
-    if len(target_layers) == 1 and missing_names:
-        raise ValueError("parent artifact lacks a target matrix")
+    mask_name = f"{args.source_precision}_mask"
     names = tuple(
         name
         for name in requested_names
         if name in parent_artifact["matrices"]
-        and bool(parent_artifact["matrices"][name]["q8_mask"].bool().any())
+        and bool(parent_artifact["matrices"][name][mask_name].bool().any())
     )
     if not names:
-        raise ValueError("requested target layers contain no Q8 groups")
+        raise ValueError("requested decoder scope contains no eligible groups")
 
     seed_everything(args.seed)
     started = time.time()
@@ -198,15 +160,11 @@ def main() -> None:
     parent = evaluate_domains(model, gates, args.device)
     parent_selection = evaluate_domains(model, selection_gates, args.device)
     moments = collect_input_second_moments(
-        model,
-        names,
-        calibration,
-        args.device,
-        args.moment_sequences,
+        model, names, calibration, args.device, args.moment_sequences
     )
 
-    q4_codes = {}
-    q4_scales = {}
+    nz4_codes = {}
+    nz4_scales = {}
     damage = {}
     eligible = {}
     total_eligible_groups = 0
@@ -214,39 +172,39 @@ def main() -> None:
     for name in names:
         entry = parent_artifact["matrices"][name]
         weight = model.get_submodule(name).weight.detach().float()
-        codes, scales, _ = weighted_symmetric_q4_project(
+        codes, scales, error = weighted_symmetric_nz4_project(
             weight, moments[name], group_size=128
         )
         rows, columns = map(int, entry["shape"])
-        padding = (-columns) % 128
-        grouped = F.pad(weight, (0, padding)).view(rows, -1, 128)
-        reconstructed = codes.float() * scales.unsqueeze(-1)
-        local_damage = (
-            grouped_moment(moments[name], (rows, columns))
-            * (grouped - reconstructed).square()
-        ).sum(-1)
         if len(target_layers) > 1:
+            padding = (-columns) % 128
+            grouped = F.pad(weight, (0, padding)).view(rows, -1, 128)
             row_energy = (
-                grouped_moment(moments[name], (rows, columns))
-                * grouped.square()
+                grouped_moment(moments[name], (rows, columns)) * grouped.square()
             ).sum((-1, -2)).clamp_min(1e-12)
-            local_damage = local_damage / row_energy.unsqueeze(-1)
-        q8_mask = entry["q8_mask"].bool().to(local_damage.device)
-        q4_codes[name] = codes.cpu()
-        q4_scales[name] = scales.cpu()
-        damage[name] = local_damage.cpu()
-        eligible[name] = q8_mask.cpu()
-        total_eligible_groups += int(q8_mask.sum())
-        total_eligible_weights += valid_group_weight_count(q8_mask.cpu(), columns, 128)
+            error = error / row_energy.unsqueeze(-1)
+        local_eligible = entry[mask_name].bool().cpu()
+        nz4_codes[name] = codes.cpu()
+        nz4_scales[name] = scales.half().cpu()
+        damage[name] = error.cpu()
+        eligible[name] = local_eligible
+        total_eligible_groups += int(local_eligible.sum())
+        total_eligible_weights += valid_group_weight_count(
+            local_eligible, columns, 128
+        )
 
-    if total_eligible_groups == 0:
-        raise ValueError("target contains no Q8 groups")
     attempts = []
-    selection_candidates = []
+    passing = []
     for fraction in fractions:
         count = max(1, min(total_eligible_groups, round(total_eligible_groups * fraction)))
         masks = global_lowest_masks(damage, eligible, count)
-        candidate = build_candidate(parent_artifact, masks, q4_codes, q4_scales)
+        candidate = build_candidate(
+            parent_artifact,
+            masks,
+            nz4_codes,
+            nz4_scales,
+            source_precision=args.source_precision,
+        )
         install_mixed_q2_q4_artifact(
             model,
             candidate,
@@ -282,23 +240,18 @@ def main() -> None:
             flush=True,
         )
         if passed:
-            selection_candidates.append(
-                {"count": count, "masks": masks, **attempt}
-            )
+            passing.append({"count": count, "masks": masks, **attempt})
 
-    final_metrics = None
-    final_ratios = None
-    final_incremental = None
-    final_passed = False
-    artifact_path = None
-    artifact_sha256 = None
     accepted = None
+    final_candidate = None
     full_evaluations = []
-    for selection in sorted(
-        selection_candidates, key=lambda item: item["count"], reverse=True
-    ):
+    for selection in sorted(passing, key=lambda item: item["count"], reverse=True):
         candidate = build_candidate(
-            parent_artifact, selection["masks"], q4_codes, q4_scales
+            parent_artifact,
+            selection["masks"],
+            nz4_codes,
+            nz4_scales,
+            source_precision=args.source_precision,
         )
         install_mixed_q2_q4_artifact(
             model,
@@ -310,117 +263,90 @@ def main() -> None:
         metrics = evaluate_domains(model, gates, args.device)
         absolute = ratios(metrics, baseline)
         incremental = ratios(metrics, parent)
-        passed = all(
-            value <= args.gate_ratio for value in absolute.values()
-        ) and all(
-            value <= args.incremental_gate_ratio
-            for value in incremental.values()
+        passed = all(value <= args.gate_ratio for value in absolute.values()) and all(
+            value <= args.incremental_gate_ratio for value in incremental.values()
         )
-        full_evaluations.append(
-            {
-                "fraction": selection["fraction"],
-                "selected_groups": selection["selected_groups"],
-                "selected_weights": selection["selected_weights"],
-                "metrics": metrics,
-                "ratios": absolute,
-                "incremental_ratios_vs_parent": incremental,
-                "passed": passed,
-            }
-        )
+        evaluation = {
+            "fraction": selection["fraction"],
+            "selected_groups": selection["selected_groups"],
+            "selected_weights": selection["selected_weights"],
+            "metrics": metrics,
+            "ratios": absolute,
+            "incremental_ratios_vs_parent": incremental,
+            "passed": passed,
+        }
+        full_evaluations.append(evaluation)
         print(
             f"full fraction={selection['fraction']:.6f} passed={passed} "
             f"ratios={absolute} incremental={incremental}",
             flush=True,
         )
         if passed:
-            accepted = selection
-            accepted["candidate"] = candidate
-            final_metrics = metrics
-            final_ratios = absolute
-            final_incremental = incremental
-            final_passed = True
+            accepted = evaluation
+            final_candidate = candidate
             break
 
+    artifact_path = None
+    artifact_sha256 = None
     if accepted is not None and args.write_artifact:
-        artifact = accepted["candidate"]
-        artifact["parent_artifact_sha256"] = sha256_file(parent_path)
-        artifact["reverse_q8_to_q4"] = {
-            "selected_groups": accepted["selected_groups"],
-            "selected_weights": accepted["selected_weights"],
-            "development_ratios": final_ratios,
-            "development_incremental_ratios_vs_parent": final_incremental,
+        final_candidate["parent_artifact_sha256"] = sha256_file(parent_path)
+        final_candidate["reverse_high_precision_to_nz4"] = {
+            "source_precision": args.source_precision,
+            **accepted,
         }
         artifact_path = (
             source_path.parents[1]
             / "artifacts"
             / f"wal-tat-{args.tag}-mixed-q2-q4-q8.pt"
         )
-        torch.save(artifact, artifact_path)
+        torch.save(final_candidate, artifact_path)
         artifact_sha256 = sha256_file(artifact_path)
 
     result = {
-        "schema": "wal-tat-reverse-q8-to-q4-fraction-v1",
+        "schema": "wal-tat-reverse-high-precision-to-nz4-fraction-v1",
         "tag": args.tag,
+        "source_precision": args.source_precision,
         "source_checkpoint": str(source_path),
         "source_checkpoint_sha256": source_hash,
         "parent_artifact": str(parent_path),
         "parent_artifact_sha256": sha256_file(parent_path),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
-        "target_layer": args.target_layer,
         "target_layers": target_layers,
         "target_projections": requested,
+        "eligible_matrices": names,
+        "total_eligible_groups": total_eligible_groups,
+        "total_eligible_weights": total_eligible_weights,
         "fractions": fractions,
         "moment_sequences": args.moment_sequences,
         "selection_gate_sequences": args.selection_gate_sequences,
-        "total_eligible_groups": total_eligible_groups,
-        "total_eligible_weights": total_eligible_weights,
         "baseline": baseline,
         "parent": parent,
         "parent_ratios": ratios(parent, baseline),
         "attempts": attempts,
-        "largest_selection_pass": (
-            {
-                key: value
-                for key, value in max(
-                    selection_candidates, key=lambda item: item["count"]
-                ).items()
-                if key not in {"masks", "candidate"}
-            }
-            if selection_candidates
-            else None
-        ),
         "full_evaluations": full_evaluations,
-        "accepted_selection": (
-            {
-                key: value
-                for key, value in accepted.items()
-                if key not in {"masks", "candidate"}
-            }
-            if accepted is not None
-            else None
-        ),
-        "final_metrics": final_metrics,
-        "final_ratios": final_ratios,
-        "final_incremental_ratios_vs_parent": final_incremental,
+        "accepted": accepted,
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
-        "passed": final_passed,
+        "passed": accepted is not None,
         "artifact": str(artifact_path) if artifact_path is not None else None,
         "artifact_sha256": artifact_sha256,
         "artifact_written": artifact_path is not None,
-        "checkpoint_written": False,
-        "sealed_audit_opened": False,
         "elapsed_seconds": time.time() - started,
+        "peak_cuda_allocated_bytes": (
+            int(torch.cuda.max_memory_allocated())
+            if torch.cuda.is_available() and str(args.device).startswith("cuda")
+            else None
+        ),
     }
     output = PROJECT / f"results/{args.tag}.json"
     output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(
-        f"wrote {output}; passed={final_passed} artifact={artifact_path} "
-        f"ratios={final_ratios}",
+        f"wrote {output}; passed={result['passed']} accepted={accepted} "
+        f"artifact={artifact_path}",
         flush=True,
     )
-    del model
+    del model, source, parent_artifact, nz4_codes, nz4_scales
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

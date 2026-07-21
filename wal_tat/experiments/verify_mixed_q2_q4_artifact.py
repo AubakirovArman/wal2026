@@ -117,6 +117,8 @@ def main() -> None:
         expected_source_sha256=sha256_file(source_path),
     )
     new_q2_weights = install_result.new_q2_weights
+    nz4_weights = install_result.nz4_weights
+    new_ternary_weights = new_q2_weights - nz4_weights
     q4_weights = install_result.q4_weights
     q8_weights = install_result.q8_weights
     matrix_statistics = install_result.matrix_statistics
@@ -155,8 +157,14 @@ def main() -> None:
         parent_gate_metric, parent_gate_limit
     )
     passed = cumulative_passed and incremental_passed and parent_incremental_passed
-    strict_ternary_weights = source_ternary_weights + new_q2_weights
-    low_bit_weights = strict_ternary_weights + q4_weights + q8_weights
+    strict_ternary_weights = source_ternary_weights + new_ternary_weights
+    physical_q2_weights = strict_ternary_weights + nz4_weights
+    low_bit_weights = physical_q2_weights + q4_weights + q8_weights
+    physical_average_bpw = (
+        physical_q2_weights * 2.125
+        + q4_weights * 4.125
+        + q8_weights * 8.125
+    ) / args.total_major_weights
     result = {
         "schema": "wal-tat-verify-mixed-q2-q4-v1",
         "tag": args.tag,
@@ -198,20 +206,27 @@ def main() -> None:
         "incremental_passed": incremental_passed,
         "parent_incremental_passed": parent_incremental_passed,
         "passed": passed,
-        "strict_q2_codes_only": True,
+        "strict_q2_codes_only": nz4_weights == 0,
+        "no_zero_q2_codes_only": True,
         "signed_q4_codes_only": True,
         "signed_q8_codes_only": True,
         "source_ternary_weights": source_ternary_weights,
-        "new_ternary_weights": new_q2_weights,
+        "new_q2_weights": new_q2_weights,
+        "new_ternary_weights": new_ternary_weights,
         "strict_ternary_weights": strict_ternary_weights,
+        "nz4_weights": nz4_weights,
+        "physical_q2_weights": physical_q2_weights,
         "q4_weights": q4_weights,
         "q8_weights": q8_weights,
         "low_bit_weights": low_bit_weights,
         "strict_ternary_coverage": strict_ternary_weights / args.total_major_weights,
+        "nz4_coverage": nz4_weights / args.total_major_weights,
+        "physical_q2_coverage": physical_q2_weights / args.total_major_weights,
         "q4_coverage": q4_weights / args.total_major_weights,
         "q8_coverage": q8_weights / args.total_major_weights,
         "low_bit_coverage": low_bit_weights / args.total_major_weights,
         "remaining_non_low_bit_weights": args.total_major_weights - low_bit_weights,
+        "physical_average_bpw": physical_average_bpw,
         "matrix_statistics": matrix_statistics,
         "checkpoint_written": False,
     }

@@ -201,6 +201,43 @@ def test_installer_supports_disjoint_q8_rescue():
     assert torch.equal(model.new.weight[0, 128:], torch.tensor([1.25, -1.25]))
 
 
+def test_installer_supports_explicit_no_zero_q2_groups():
+    model = TinyModel()
+    entry = artifact_entry(torch.zeros((2, 2), dtype=torch.bool))
+    entry["q4_mask"] = torch.zeros((2, 2), dtype=torch.bool)
+    entry["nz4_mask"] = torch.tensor([[True, False], [False, False]])
+    entry["q2_codes_int8"][0, 0] = torch.tensor([-3, -1, 1, 3]).repeat(32)
+    entry["q2_scales_fp16"][0, 0] = 0.5
+    payload = artifact({"new": entry})
+
+    result = install_mixed_q2_q4_artifact(
+        model,
+        payload,
+        {"matrices": {}},
+        device="cpu",
+        expected_source_sha256="source-sha",
+    )
+
+    assert result.new_q2_weights == 260
+    assert result.nz4_weights == 128
+    assert torch.equal(model.new.weight[0, :4], torch.tensor([-1.5, -0.5, 0.5, 1.5]))
+
+
+def test_installer_rejects_zero_inside_no_zero_q2_group():
+    model = TinyModel()
+    entry = artifact_entry(torch.zeros((2, 2), dtype=torch.bool))
+    entry["q4_mask"] = torch.zeros((2, 2), dtype=torch.bool)
+    entry["nz4_mask"] = torch.tensor([[True, False], [False, False]])
+    with pytest.raises(ValueError, match="invalid no-zero Q2 code"):
+        install_mixed_q2_q4_artifact(
+            model,
+            artifact({"new": entry}),
+            {"matrices": {}},
+            device="cpu",
+            expected_source_sha256="source-sha",
+        )
+
+
 def test_installer_preserves_one_shared_tied_embedding_head_weight():
     model = TinyTiedModel()
     entry = artifact_entry(torch.zeros((2, 2), dtype=torch.bool))

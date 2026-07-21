@@ -248,6 +248,51 @@ def weighted_symmetric_q8_project(
     )
 
 
+@torch.no_grad()
+def weighted_symmetric_nz4_project(
+    weight: torch.Tensor,
+    input_second_moment: torch.Tensor,
+    *,
+    group_size: int = 128,
+    iterations: int = 6,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Project to the two-bit no-zero codebook ``{-3, -1, +1, +3}``.
+
+    The four symbols fit in exactly two code bits.  Alternating nearest-symbol
+    assignment and diagonal weighted least-squares scale fitting keeps the
+    representation deployable while offering a useful fallback for groups
+    whose distribution is poorly matched by ternary's explicit zero.
+    """
+    if input_second_moment.ndim != 1 or input_second_moment.numel() != weight.shape[1]:
+        raise ValueError("input_second_moment must match weight input features")
+    if iterations < 1:
+        raise ValueError("iterations must be positive")
+    grouped, padding, size = padded_grouped(weight.detach(), group_size)
+    moment = input_second_moment.detach().float().clamp_min(0)
+    if padding:
+        moment = F.pad(moment, (0, padding))
+    moment = moment.view(1, -1, size).expand_as(grouped)
+    scale = grouped.abs().mean(-1).div(2.0).clamp_min(1e-5)
+    for _ in range(iterations):
+        normalized = grouped / scale.unsqueeze(-1)
+        magnitude = torch.where(normalized.abs() < 2.0, 1.0, 3.0)
+        codes = torch.where(normalized < 0, -magnitude, magnitude)
+        denominator = (moment * codes.square()).sum(-1)
+        fitted = (moment * codes * grouped).sum(-1).div(
+            denominator.clamp_min(1e-12)
+        )
+        scale = torch.where(
+            denominator > 0, fitted.abs().clamp_min(1e-5), scale
+        )
+    normalized = grouped / scale.unsqueeze(-1)
+    magnitude = torch.where(normalized.abs() < 2.0, 1.0, 3.0)
+    codes = torch.where(normalized < 0, -magnitude, magnitude).to(torch.int8)
+    error = (
+        moment * (grouped - codes.float() * scale.unsqueeze(-1)).square()
+    ).sum(-1)
+    return codes, scale, error
+
+
 def q8_g128_physical_bpw(group_size: int = 128, scale_bits: int = 16) -> float:
     """Physical bpw for eight-bit codes plus one group scale."""
     return 8.0 + scale_bits / group_size
