@@ -1,0 +1,28 @@
+{
+  "schema": "wal-tat-exact-cleanup-policy-v1",
+  "evidence_id": "v220",
+  "declared_before_deletion": true,
+  "objective": "Retire exact superseded s0051/s0051r1/s0051r2 checkpoints and frozen intermediate artifacts only after s0052 passed fresh-process verification.",
+  "retained_frontier": {
+    "path": "wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt",
+    "sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+    "fresh_verify": "wal_tat/results/block24_down_d1_absmean_s0052_fresh_verify.json",
+    "fresh_verify_sha256": "115f1f0b02dc24e271b8685cb911adc9dd8184779f0c6f488fda18ef33fa52fe"
+  },
+  "delete_exact": [
+    {"path": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt", "sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8", "bytes": 304658894},
+    {"path": "wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt", "sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843", "bytes": 304660797},
+    {"path": "wal2/checkpoints/wal-tat-block24_mlp_multirange_s0051r2.pt", "sha256": "1d38c5800aed5a2da22fa77e0211e0ec50cc8caff410974b39714fba03f4490e", "bytes": 304661825},
+    {"path": "wal2/artifacts/wal-tat-block24_mlp_s0051_train_fallback_recovery_v1.pt", "sha256": "b2ef04b8191132853950038e81395e07e2bcabca33523818a8a82b8f0c880c23", "bytes": 114137641},
+    {"path": "wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v1.pt", "sha256": "a975caead0c51eef1000562999191fac316a3347539f0495ff43ad0b4c28f069", "bytes": 114137895},
+    {"path": "wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v3.pt", "sha256": "fba5fac4d5fca80db9bd91ede17c9594f547d5952e9c293fb44e2c77b5f25604", "bytes": 114137959},
+    {"path": "wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v4.pt", "sha256": "b8197a8af9bc41652a70b72be2faf1bb2597755052043097b0b2a342d1e30875", "bytes": 114137959},
+    {"path": "wal2/artifacts/wal-tat-block24_down_s0051r1_d1g4096_absmean_fixed_v1.pt", "sha256": "96ee7de090c88ec57435b927a4cb044d42ccc509c4507896a5fd92ee4aa9f372", "bytes": 568959},
+    {"path": "wal2/artifacts/wal-tat-block24_down_s0051r1_d1g4096_absmean_proxy_v1.pt", "sha256": "e279382ae51de70426b6413f5a68b48a68bafa154e1ba55980774cc6dff9a9e2", "bytes": 569407},
+    {"path": "wal2/artifacts/wal-tat-block24_down_s0051r2_d1g4096_absmean_fixed_v1.pt", "sha256": "9950ed7e6f70987df7b8eb49b873dc7388708643edc2bc9138d14130d7b9f1b8", "bytes": 568959},
+    {"path": "wal2/artifacts/wal-tat-block24_down_s0051r2_d1g4096_absmean_proxy_v1.pt", "sha256": "871cebc3d767c30aecd2c793f21824c38e1d0928d8cfc090fad92e40dac10751", "bytes": 569407}
+  ],
+  "total_bytes": 1372809702,
+  "recovery": "not recoverable from the local filesystem after deletion; hashes, policies, results and the verified descendant checkpoint remain",
+  "scope_guard": "No globs, directories, caches, user experiment results or unrelated processes may be removed."
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "wal-tat-sealed-mixed-audit-policy-v1",
+  "evidence_id": "v257",
+  "declared_before_execution": true,
+  "objective": "open sealed audit-v26 exactly once for the fresh-verified fixed mixed Q2/Q4 artifact",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "artifact_sha256": "dd49a9f5969683bf410a951f818e6118acee56b3e197f56d688770bc39da92fb",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened_by_this_run": true,
+  "suite_role": "sealed milestone audit; becomes disclosed after this run and is never reused as sealed evidence",
+  "acceptance": {
+    "cumulative_nll_ratio_limit_vs_raw_bf16": 1.02,
+    "incremental_nll_ratio_limit_vs_source_s0053": 1.005,
+    "every_domain_must_pass_both_gates": true,
+    "strict_q2_codes_only": true,
+    "signed_q4_codes_only": true,
+    "source_committed_groups_must_be_identical": true,
+    "checkpoint_written_by_this_step": false
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_mixed_q2_q4_artifact.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --artifact wal2/artifacts/wal-tat-block24_mlp_macro_q4_rescue95_artifact_s0053_v1-mixed-q2-q4.pt --suite wal2/cache/wal-tat-audit-holdout-v26-l256-g512.pt --tag block24_mlp_macro_q4_rescue95_artifact_s0053_sealed_audit_v26 --gate-ratio 1.02 --incremental-gate-ratio 1.005 --device cuda"
+}

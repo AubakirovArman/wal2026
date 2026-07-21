@@ -1,0 +1,73 @@
+{
+  "schema": "wal-tat-predeclared-candidate-policy-v1",
+  "policy_id": "evidence-v241-block24-down-s0052r1-d1g8192-thresholdls-proxy-v1",
+  "declared_before_execution": true,
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt",
+    "sha256": "9a7fb038694f2b850eb95b83fd96204aa882c064fbe89df30e8f1f7f9ed67411",
+    "accepted_weights": 75624448
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.down_proj",
+    "sensitivity_decile": 1,
+    "groups": 8192,
+    "group_size": 128,
+    "weights": 1048576,
+    "initializer": "threshold_ls",
+    "initializer_artifact": "wal2/artifacts/wal-tat-block24_down_s0052r1_d1g8192_initializer_v1.pt",
+    "initializer_artifact_sha256": "6e68be32e13aa392869a450c184d0d604899537602c7cb30897fce32b8326611",
+    "new_recovery_tag": "block24_down_s0052r1_d1g8192_thresholdls_proxy_v1"
+  },
+  "development": {
+    "suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+    "recovery": {
+      "script": "wal_tat/experiments/partial_initializer_proxy_recovery.py",
+      "script_sha256": "c84c1292cfd799ca1a1a51bb6ddd73820cf92386608f17997740c4b715c54db0",
+      "steps": 512,
+      "calibration_sequences": 128,
+      "selection_sequences_per_domain": 64,
+      "selection_every": 64,
+      "batch_size": 8,
+      "proxy_lr": 0.0001,
+      "scale_lr": 0.000005,
+      "initial_temperature": 0.25,
+      "final_temperature": 0.08,
+      "ce_weight": 1.0,
+      "kd_weight": 1.0,
+      "kd_temperature": 1.0,
+      "block_weight": 0.02,
+      "proxy_anchor_weight": 0.001,
+      "seed": 569,
+      "norm_parameters_trained": 0,
+      "previously_committed_groups_trainable": 0
+    },
+    "go_no_go_before_audit": {
+      "maximum_final_full_incremental_ratio": 1.0013063945294842,
+      "maximum_candidate_code_churn": 0.15,
+      "checkpoint_mutated": false,
+      "candidate_groups": 8192,
+      "failure_action": "do not evaluate audit-v24; preserve s0052r1"
+    }
+  },
+  "reserved_audit": {
+    "suite": "wal2/cache/wal-tat-audit-holdout-v24-l256-g512.pt",
+    "sha256": "1a33c555760c80aa5659d969ffa495d307ce4181a2f2af867686bb56b994ce12",
+    "must_remain_unopened_until_artifact_is_frozen": true
+  },
+  "prospective_if_accepted": {
+    "accepted_weights": 76673024,
+    "remaining_weights": 1643778048,
+    "coverage_percent": 4.456565214078927,
+    "remaining_percent": 95.54343478592108,
+    "layer24_down_proj_coverage_percent": 22.94921875,
+    "full_major_matrices": 11,
+    "full_decoder_blocks": 1
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/partial_initializer_proxy_recovery.py wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt wal2/artifacts/wal-tat-block24_down_s0052r1_d1g8192_initializer_v1.pt wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_down_s0052r1_d1g8192_thresholdls_proxy_v1 --steps 512 --calibration-sequences 128 --selection-sequences-per-domain 64 --selection-every 64 --batch-size 8 --proxy-lr 0.0001 --scale-lr 0.000005 --initial-temperature 0.25 --final-temperature 0.08 --ce-weight 1 --kd-weight 1 --kd-temperature 1 --block-weight 0.02 --proxy-anchor-weight 0.001 --seed 569 --device cuda"
+}

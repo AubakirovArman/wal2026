@@ -1,0 +1,587 @@
+{
+  "schema": "wal-tat-compensation-window-v1",
+  "tag": "block24_down_growth_s0002",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0001-candidate_bf16_mlp.pt",
+  "source_sha256": "cdd33bbf09384828aef48cde1d21d6fed7c13d86526b91612bd52e99f8b2432b",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+  "suite_sha256": "79655f83fbb6560d9391a7cc0400ee426648b401ae866385440d467c543daf0b",
+  "seed": 109,
+  "device": "cuda",
+  "gpu": "NVIDIA H200",
+  "steps": 240,
+  "lr": 1e-05,
+  "gate_ratio": 1.001950565671187,
+  "teacher_source": "bf16",
+  "kd_weight": 0.2,
+  "hidden_kd_weight": 0.1,
+  "hidden_module": "model.layers.24.mlp",
+  "candidate_name": "model.layers.24.mlp.down_proj",
+  "baseline": {
+    "c4_train": {
+      "nll": 3.49814032856375,
+      "ppl": 33.05392532597879,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.2139557041227818,
+      "ppl": 9.15184688361069,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 1.9793194299563766,
+      "ppl": 7.237815468202056,
+      "tokens": 65536
+    }
+  },
+  "starting": {
+    "c4_train": {
+      "nll": 3.4841800620779395,
+      "ppl": 32.59568970776532,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.2176018869504333,
+      "ppl": 9.18527709986231,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 1.9437307778280228,
+      "ppl": 6.984761013145374,
+      "tokens": 65536
+    }
+  },
+  "starting_ratios": {
+    "c4_train": 0.9960092319991228,
+    "squad_train": 1.0016469086625635,
+    "vendor_code_train": 0.982019753057677
+  },
+  "selection": {
+    "new_candidate_groups": 192,
+    "new_candidate_fraction": 0.001953125,
+    "candidate_projection": "down_proj",
+    "linked_down_groups": 192,
+    "linked_down_fraction": 0.001953125,
+    "linked_up_groups": 2048,
+    "linked_up_fraction": 0.02083333395421505,
+    "bf16_up_groups": 0,
+    "bf16_up_fraction": 0.0,
+    "bf16_gate_groups": 2048,
+    "bf16_gate_fraction": 0.02083333395421505,
+    "selected_channel_blocks": [
+      25
+    ],
+    "selected_score_mean": 7.555700754998968e-15,
+    "selected_score_p95": 8.47843473081528e-15,
+    "candidate_mask_sha256": "4130833b4256c05febdb20a499177d51aada9162ec98d6462345c991dd1a8aa4",
+    "down_mask_sha256": "4130833b4256c05febdb20a499177d51aada9162ec98d6462345c991dd1a8aa4",
+    "bf16_up_mask_sha256": "3a3ed164e42500a1c5b2d0093f0a813d27dc50d038f330cc100a7e70ece2e6e4",
+    "gate_mask_sha256": "084bc1dc22e185db980464589d70cdf2f516b45fcae778da84ccf3442c124f85"
+  },
+  "arms": {
+    "candidate_only": {
+      "arm": "candidate_only",
+      "passed": true,
+      "starting": {
+        "c4_train": {
+          "nll": 3.4841800620779395,
+          "ppl": 32.59568970776532,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.2176018869504333,
+          "ppl": 9.18527709986231,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437307778280228,
+          "ppl": 6.984761013145374,
+          "tokens": 65536
+        }
+      },
+      "attempted": {
+        "c4_train": {
+          "nll": 3.48418718483299,
+          "ppl": 32.595921879705664,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.21753394510597,
+          "ppl": 9.18465305639381,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437962844967842,
+          "ppl": 6.985218576558004,
+          "tokens": 65536
+        }
+      },
+      "attempted_ratios": {
+        "c4_train": 0.9960112681538741,
+        "squad_train": 1.0016162206752939,
+        "vendor_code_train": 0.9820528486094964
+      },
+      "deployed": {
+        "c4_train": {
+          "nll": 3.48418718483299,
+          "ppl": 32.595921879705664,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.21753394510597,
+          "ppl": 9.18465305639381,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437962844967842,
+          "ppl": 6.985218576558004,
+          "tokens": 65536
+        }
+      },
+      "deployed_ratios": {
+        "c4_train": 0.9960112681538741,
+        "squad_train": 1.0016162206752939,
+        "vendor_code_train": 0.9820528486094964
+      },
+      "code_churn": {
+        "candidate": 0.00850423239171505
+      },
+      "scale_changes": {
+        "candidate": {
+          "changed_groups": 192,
+          "groups": 192,
+          "absolute_mean": 0.0005526015884242952,
+          "relative_mean": 0.017730437219142914,
+          "relative_p95": 0.041164517402648926,
+          "relative_max": 0.0751262977719307
+        }
+      },
+      "continuous_changes": {},
+      "history": [
+        {
+          "step": 1,
+          "loss": 3.51020884513855,
+          "ce": 3.2955827713012695,
+          "kd": 1.048958659172058,
+          "hidden_kd": 0.04834476485848427,
+          "pressure": 0.016666666666666666,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.1001603826880455,
+          "code_churn": {
+            "candidate": 8.138021075865254e-05
+          }
+        },
+        {
+          "step": 60,
+          "loss": 3.3411638736724854,
+          "ce": 3.124737501144409,
+          "kd": 1.0544471740722656,
+          "hidden_kd": 0.055370304733514786,
+          "pressure": 1.0,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.186371311545372,
+          "code_churn": {
+            "candidate": 0.0014241536846384406
+          }
+        },
+        {
+          "step": 120,
+          "loss": 2.8380675315856934,
+          "ce": 2.4155755043029785,
+          "kd": 2.0841403007507324,
+          "hidden_kd": 0.056637849658727646,
+          "pressure": 1.0,
+          "temperature": 0.26316417051114066,
+          "gradient_norm": 0.16496184468269348,
+          "code_churn": {
+            "candidate": 0.0029703776817768812
+          }
+        },
+        {
+          "step": 180,
+          "loss": 3.0586230754852295,
+          "ce": 2.67116117477417,
+          "kd": 1.9133074283599854,
+          "hidden_kd": 0.048002939671278,
+          "pressure": 1.0,
+          "temperature": 0.08772139017038026,
+          "gradient_norm": 0.24459245800971985,
+          "code_churn": {
+            "candidate": 0.005777995102107525
+          }
+        },
+        {
+          "step": 240,
+          "loss": 2.432253837585449,
+          "ce": 1.7525277137756348,
+          "kd": 3.3694894313812256,
+          "hidden_kd": 0.05828211084008217,
+          "pressure": 1.0,
+          "temperature": 0.0,
+          "gradient_norm": 0.20114262402057648,
+          "code_churn": {
+            "candidate": 0.00850423239171505
+          }
+        }
+      ],
+      "elapsed_seconds": 56.70612359046936,
+      "peak_cuda_allocated_bytes": 5500320768,
+      "coverage": {
+        "model.layers.27.mlp.down_proj": 1.0,
+        "model.layers.27.mlp.up_proj": 1.0,
+        "model.layers.27.mlp.gate_proj": 1.0,
+        "model.layers.27.self_attn.v_proj": 1.0,
+        "model.layers.27.self_attn.o_proj": 1.0,
+        "model.layers.27.self_attn.k_proj": 1.0,
+        "model.layers.27.self_attn.q_proj": 1.0,
+        "model.layers.24.self_attn.v_proj": 1.0,
+        "model.layers.24.self_attn.o_proj": 1.0,
+        "model.layers.24.self_attn.q_proj": 1.0,
+        "model.layers.24.self_attn.k_proj": 1.0,
+        "model.layers.24.mlp.up_proj": 0.3251953125,
+        "model.layers.24.mlp.down_proj": 0.0068359375,
+        "model.layers.24.mlp.gate_proj": 0.001953125
+      },
+      "projected_bpw": {
+        "model.layers.27.mlp.down_proj": 2.125,
+        "model.layers.27.mlp.up_proj": 2.125,
+        "model.layers.27.mlp.gate_proj": 2.125,
+        "model.layers.27.self_attn.v_proj": 2.125,
+        "model.layers.27.self_attn.o_proj": 2.125,
+        "model.layers.27.self_attn.k_proj": 2.125,
+        "model.layers.27.self_attn.q_proj": 2.125,
+        "model.layers.24.self_attn.v_proj": 2.125,
+        "model.layers.24.self_attn.o_proj": 2.125,
+        "model.layers.24.self_attn.q_proj": 2.125,
+        "model.layers.24.self_attn.k_proj": 2.125,
+        "model.layers.24.mlp.up_proj": 11.4879150390625,
+        "model.layers.24.mlp.down_proj": 15.9051513671875,
+        "model.layers.24.mlp.gate_proj": 15.972900390625
+      },
+      "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_only.pt"
+    },
+    "candidate_bf16_mlp": {
+      "arm": "candidate_bf16_mlp",
+      "passed": true,
+      "starting": {
+        "c4_train": {
+          "nll": 3.4841800620779395,
+          "ppl": 32.59568970776532,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.2176018869504333,
+          "ppl": 9.18527709986231,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437307778280228,
+          "ppl": 6.984761013145374,
+          "tokens": 65536
+        }
+      },
+      "attempted": {
+        "c4_train": {
+          "nll": 3.4841925613582134,
+          "ppl": 32.59609713297295,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.217662968672812,
+          "ppl": 9.185838169543471,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437519183848053,
+          "ppl": 6.9849086764430215,
+          "tokens": 65536
+        }
+      },
+      "attempted_ratios": {
+        "c4_train": 0.9960128051205817,
+        "squad_train": 1.001674498068379,
+        "vendor_code_train": 0.9820304337777581
+      },
+      "deployed": {
+        "c4_train": {
+          "nll": 3.4841925613582134,
+          "ppl": 32.59609713297295,
+          "tokens": 65536
+        },
+        "squad_train": {
+          "nll": 2.217662968672812,
+          "ppl": 9.185838169543471,
+          "tokens": 65536
+        },
+        "vendor_code_train": {
+          "nll": 1.9437519183848053,
+          "ppl": 6.9849086764430215,
+          "tokens": 65536
+        }
+      },
+      "deployed_ratios": {
+        "c4_train": 0.9960128051205817,
+        "squad_train": 1.001674498068379,
+        "vendor_code_train": 0.9820304337777581
+      },
+      "code_churn": {
+        "candidate": 0.00838216207921505
+      },
+      "scale_changes": {
+        "candidate": {
+          "changed_groups": 192,
+          "groups": 192,
+          "absolute_mean": 0.0005590410437434912,
+          "relative_mean": 0.017927136272192,
+          "relative_p95": 0.04166007041931152,
+          "relative_max": 0.07593905180692673
+        }
+      },
+      "continuous_changes": {
+        "bf16_gate": {
+          "groups": 2048,
+          "weights": 262144,
+          "absolute_mean": 0.0002065954904537648,
+          "absolute_max": 0.0025244103744626045,
+          "relative_to_weight_absmean": 0.007315855155445031
+        }
+      },
+      "history": [
+        {
+          "step": 1,
+          "loss": 3.51020884513855,
+          "ce": 3.2955827713012695,
+          "kd": 1.048958659172058,
+          "hidden_kd": 0.04834476485848427,
+          "pressure": 0.016666666666666666,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.11963415890932083,
+          "code_churn": {
+            "candidate": 8.138021075865254e-05
+          }
+        },
+        {
+          "step": 60,
+          "loss": 3.3408679962158203,
+          "ce": 3.1244471073150635,
+          "kd": 1.0544235706329346,
+          "hidden_kd": 0.055360399186611176,
+          "pressure": 1.0,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.20615951716899872,
+          "code_churn": {
+            "candidate": 0.00146484375
+          }
+        },
+        {
+          "step": 120,
+          "loss": 2.8368782997131348,
+          "ce": 2.4138131141662598,
+          "kd": 2.087026357650757,
+          "hidden_kd": 0.05659932643175125,
+          "pressure": 1.0,
+          "temperature": 0.26316417051114066,
+          "gradient_norm": 0.18089956045150757,
+          "code_churn": {
+            "candidate": 0.0030110678635537624
+          }
+        },
+        {
+          "step": 180,
+          "loss": 3.0589823722839355,
+          "ce": 2.6727614402770996,
+          "kd": 1.907080054283142,
+          "hidden_kd": 0.048048004508018494,
+          "pressure": 1.0,
+          "temperature": 0.08772139017038026,
+          "gradient_norm": 0.25382882356643677,
+          "code_churn": {
+            "candidate": 0.005859375
+          }
+        },
+        {
+          "step": 240,
+          "loss": 2.432656764984131,
+          "ce": 1.752236247062683,
+          "kd": 3.3729512691497803,
+          "hidden_kd": 0.058302853256464005,
+          "pressure": 1.0,
+          "temperature": 0.0,
+          "gradient_norm": 0.2244809865951538,
+          "code_churn": {
+            "candidate": 0.00838216207921505
+          }
+        }
+      ],
+      "elapsed_seconds": 59.41624355316162,
+      "peak_cuda_allocated_bytes": 5601934336,
+      "coverage": {
+        "model.layers.27.mlp.down_proj": 1.0,
+        "model.layers.27.mlp.up_proj": 1.0,
+        "model.layers.27.mlp.gate_proj": 1.0,
+        "model.layers.27.self_attn.v_proj": 1.0,
+        "model.layers.27.self_attn.o_proj": 1.0,
+        "model.layers.27.self_attn.k_proj": 1.0,
+        "model.layers.27.self_attn.q_proj": 1.0,
+        "model.layers.24.self_attn.v_proj": 1.0,
+        "model.layers.24.self_attn.o_proj": 1.0,
+        "model.layers.24.self_attn.q_proj": 1.0,
+        "model.layers.24.self_attn.k_proj": 1.0,
+        "model.layers.24.mlp.up_proj": 0.3251953125,
+        "model.layers.24.mlp.down_proj": 0.0068359375,
+        "model.layers.24.mlp.gate_proj": 0.001953125
+      },
+      "projected_bpw": {
+        "model.layers.27.mlp.down_proj": 2.125,
+        "model.layers.27.mlp.up_proj": 2.125,
+        "model.layers.27.mlp.gate_proj": 2.125,
+        "model.layers.27.self_attn.v_proj": 2.125,
+        "model.layers.27.self_attn.o_proj": 2.125,
+        "model.layers.27.self_attn.k_proj": 2.125,
+        "model.layers.27.self_attn.q_proj": 2.125,
+        "model.layers.24.self_attn.v_proj": 2.125,
+        "model.layers.24.self_attn.o_proj": 2.125,
+        "model.layers.24.self_attn.q_proj": 2.125,
+        "model.layers.24.self_attn.k_proj": 2.125,
+        "model.layers.24.mlp.up_proj": 11.4879150390625,
+        "model.layers.24.mlp.down_proj": 15.9051513671875,
+        "model.layers.24.mlp.gate_proj": 15.972900390625
+      },
+      "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_bf16_mlp.pt"
+    }
+  },
+  "chosen_arm": "candidate_only",
+  "fresh_verify": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_growth_s0002-candidate_only.pt",
+    "checkpoint_sha256": "dc9a9204c2fa37b6006e5eb16f34bba4fe582a2a27a453dcfa37ac7dec82597a",
+    "baseline": {
+      "c4_train": {
+        "nll": 3.49814032856375,
+        "ppl": 33.05392532597879,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.2139557041227818,
+        "ppl": 9.15184688361069,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 1.9793194299563766,
+        "ppl": 7.237815468202056,
+        "tokens": 65536
+      }
+    },
+    "metrics": {
+      "c4_train": {
+        "nll": 3.4842648841440678,
+        "ppl": 32.59845465877597,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.217528977897018,
+        "ppl": 9.184607434416238,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 1.9438209331128746,
+        "ppl": 6.985390754650972,
+        "tokens": 65536
+      }
+    },
+    "ratios": {
+      "c4_train": 0.9960334797588355,
+      "squad_train": 1.0016139770852608,
+      "vendor_code_train": 0.982065301685901
+    },
+    "passed": true,
+    "coverage": {
+      "model.layers.27.mlp.down_proj": 1.0,
+      "model.layers.27.mlp.up_proj": 1.0,
+      "model.layers.27.mlp.gate_proj": 1.0,
+      "model.layers.27.self_attn.v_proj": 1.0,
+      "model.layers.27.self_attn.o_proj": 1.0,
+      "model.layers.27.self_attn.k_proj": 1.0,
+      "model.layers.27.self_attn.q_proj": 1.0,
+      "model.layers.24.self_attn.v_proj": 1.0,
+      "model.layers.24.self_attn.o_proj": 1.0,
+      "model.layers.24.self_attn.q_proj": 1.0,
+      "model.layers.24.self_attn.k_proj": 1.0,
+      "model.layers.24.mlp.up_proj": 0.3251953125,
+      "model.layers.24.mlp.down_proj": 0.0068359375,
+      "model.layers.24.mlp.gate_proj": 0.001953125
+    },
+    "codes": {
+      "model.layers.27.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.v_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.o_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.k_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.q_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.self_attn.v_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.self_attn.o_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.self_attn.q_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.self_attn.k_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.24.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block24_down_growth_s0002.wal.jsonl"
+}

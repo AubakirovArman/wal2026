@@ -1,0 +1,31 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v215",
+  "declared_before_execution": true,
+  "objective": "seal audit-v19 before the first s0051r2 coverage-growth candidate",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "671aa28911afb6d5096b4ef348f097c92dc2f8846ac93d9961de2a53d69be1f7",
+  "output": "wal2/cache/wal-tat-audit-holdout-v19-l256-g512.pt",
+  "role": "one-shot audit-only; never training, selection, confirmation, or retuning",
+  "configuration": {
+    "sequence_length": 256,
+    "sequences_per_domain": 512,
+    "c4_split": "train",
+    "c4_train_shard": 1,
+    "c4_text_start": 16000,
+    "c4_text_count": 4000,
+    "c4_offset": 100003,
+    "squad_split": "train",
+    "squad_offset": 9000003,
+    "code_source": "numpy",
+    "code_offset": 1500003
+  },
+  "requirements": {
+    "output_must_not_exist_before_build": true,
+    "exact_window_overlap_with_every_retained_suite": 0,
+    "declared_range_overlap_on_identical_stream_views": 0,
+    "model_evaluations_before_candidate_freeze": 0,
+    "one_shot_only": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v19-l256-g512.pt --length 256 --sequences 512 --c4-split train --c4-train-shard 1 --c4-text-start 16000 --c4-text-count 4000 --c4-offset 100003 --squad-split train --squad-offset 9000003 --code-source numpy --code-offset 1500003 --policy 'audit-only v19; sealed before s0051r2 coverage growth; never use for training or model selection'"
+}

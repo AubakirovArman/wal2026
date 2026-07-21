@@ -1,0 +1,29 @@
+{
+  "schema": "wal-tat-fresh-verification-policy-v1",
+  "evidence_id": "v243",
+  "declared_before_execution": true,
+  "objective": "independently reload and verify s0053 after atomic publication",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "commit_result": "wal_tat/results/block24_down_d1_thresholdls_s0053_commit.json",
+  "commit_result_sha256": "2424d05b191e7daa1523a3e0756184fad8689b53fc82991f96f54a4db0785232",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "script": "wal_tat/experiments/verify_checkpoint.py",
+  "script_sha256": "0d11b56ffc3f73db4187794c206f458d9f16b3f9312df0d2453637b39877e8cb",
+  "tag": "block24_down_d1_thresholdls_s0053_fresh_verify",
+  "acceptance": {
+    "gate_ratio": 1.02,
+    "strict_ternary_codes_only": true,
+    "accepted_weights": 76673024,
+    "accepted_coverage_fraction": 0.04456565214078927,
+    "layer24_down_proj_coverage_fraction": 0.2294921875
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "retain s0052r1, s0053 and candidate artifacts; do not treat s0053 as current frontier",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_checkpoint.py wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt --tag block24_down_d1_thresholdls_s0053_fresh_verify --gate-ratio 1.02 --seed 587 --device cuda"
+}

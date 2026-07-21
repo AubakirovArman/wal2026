@@ -1,0 +1,113 @@
+{
+  "schema": "wal-tat-predeclared-candidate-policy-v1",
+  "policy_id": "evidence-v159-block24-gate-d1-thresholdls-s0051",
+  "date_utc": "2026-07-20",
+  "created_before_candidate_run": true,
+  "git_parent": "f7fdb85",
+  "purpose": "Recover and one-shot audit the next 2048-group gate_proj threshold-LS candidate selected prospectively on development data; audit-v11 has never evaluated a model.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt",
+    "sha256": "e1210d5ca1192ec82aaef56ae24adbd3207134eacc572fa264a485da5bf6f934",
+    "accepted_weights": 74838016,
+    "total_major_weights": 1720451072,
+    "coverage_percent": 4.349906673777236
+  },
+  "candidate": {
+    "target_name": "model.layers.24.mlp.gate_proj",
+    "sensitivity_decile": 1,
+    "groups": 2048,
+    "group_size": 128,
+    "weights": 262144,
+    "initializer": "threshold_ls",
+    "initializer_selection": "minimum worst incremental development ratio across the nine feasible arms declared in evidence_v158_policy.json",
+    "initializer_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_gate_s0050_d1g2048_initializers_v1.pt",
+    "initializer_artifact_sha256": "b53b2866d161d85f5849f2435372c982cb82d35968e572c5de9b700869f1ac29",
+    "mask_sha256": "4d0e62b2acb2b19092ae50bc3a629e16bbea0ae7501fb72c8453c998d538ba08",
+    "new_recovery_tag": "block24_gate_s0050_d1g2048_thresholdls_proxy_v1"
+  },
+  "development": {
+    "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+    "sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+    "recovery": {
+      "script": "wal_tat/experiments/partial_initializer_proxy_recovery.py",
+      "script_sha256": "c84c1292cfd799ca1a1a51bb6ddd73820cf92386608f17997740c4b715c54db0",
+      "steps": 256,
+      "calibration_sequences": 96,
+      "selection_sequences_per_domain": 64,
+      "selection_every": 64,
+      "batch_size": 8,
+      "proxy_lr": 0.0001,
+      "scale_lr": 0.000005,
+      "initial_temperature": 0.25,
+      "final_temperature": 0.08,
+      "ce_weight": 1.0,
+      "kd_weight": 1.0,
+      "kd_temperature": 1.0,
+      "block_weight": 0.02,
+      "proxy_anchor_weight": 0.001,
+      "seed": 317,
+      "norm_parameters_trained": 0,
+      "previously_committed_groups_trainable": 0
+    },
+    "go_no_go_before_audit": {
+      "maximum_final_full_incremental_ratio": 1.0009237604307033,
+      "derivation": "1 + 0.0002 * sqrt(2048 / 96)",
+      "maximum_candidate_code_churn": 0.15,
+      "checkpoint_mutated": false,
+      "candidate_groups": 2048,
+      "failure_action": "do not evaluate audit-v11; preserve s0050"
+    }
+  },
+  "recurring_validation": [
+    {
+      "name": "audit_v11",
+      "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v11-l256-g512.pt",
+      "sha256": "d460938298353a5307666d88e46599a30f602fedf3a462f59dcb2509bf28808b",
+      "role": "one-shot audit-only; frozen before candidate selection; zero overlap with 20 retained suites"
+    }
+  ],
+  "acceptance": {
+    "all_conditions_required": true,
+    "cumulative_point_ratio_max_each_domain": 1.0021825718040531,
+    "cumulative_limit_derivation": "1 + 0.05 * prospective accepted-weight fraction",
+    "incremental_paired_upper_ratio_max_each_domain": 1.0009237604307033,
+    "incremental_limit_derivation": "1 + 0.0002 * sqrt(2048 / 96)",
+    "confidence": 0.95,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "validation_suites_required": [
+      "audit_v11"
+    ],
+    "no_hyperparameter_retuning_on_recurring_validation": true,
+    "checkpoint_and_artifact_hashes_must_match": true,
+    "checkpoint_source_must_remain_unmodified": true,
+    "norm_parameters_trained_must_equal": 0,
+    "previously_committed_groups_trainable_must_equal": 0,
+    "failure_action": "do not commit candidate; preserve s0050 and close audit-v11 after this one-shot decision"
+  },
+  "prospective_if_accepted": {
+    "accepted_weights": 75100160,
+    "remaining_weights": 1645350912,
+    "coverage_percent": 4.365143608106049,
+    "remaining_percent": 95.63485639189395,
+    "layer24_gate_proj_coverage_percent": 10.611979166666666,
+    "full_major_matrices": 11,
+    "full_decoder_blocks": 1
+  },
+  "audit": {
+    "script": "wal_tat/experiments/partial_initializer_artifact_audit.py",
+    "script_sha256": "81b1f842fe5a6c9e87cf3ea71444aba4f27eefadb73849c84fda08ce26154dd3",
+    "suite_must_remain_unopened_until_recovered_artifact_frozen": true
+  },
+  "commit": {
+    "script": "wal_tat/experiments/commit_partial_initializer_artifact.py",
+    "script_sha256": "d6afdefb6f12744b90be0679d63023d40b8d2b371879831bab8406462deb749d",
+    "output_checkpoint": "wal2/checkpoints/wal-tat-block24_gate_d1_thresholdls_s0051.pt",
+    "fresh_process_verification_required": true
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "recovery_command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/partial_initializer_proxy_recovery.py ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt ../wal2/artifacts/wal-tat-block24_gate_s0050_d1g2048_initializers_v1.pt ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_gate_s0050_d1g2048_thresholdls_proxy_v1 --steps 256 --calibration-sequences 96 --selection-sequences-per-domain 64 --selection-every 64 --batch-size 8 --proxy-lr 0.0001 --scale-lr 0.000005 --initial-temperature 0.25 --final-temperature 0.08 --ce-weight 1.0 --kd-weight 1.0 --kd-temperature 1.0 --block-weight 0.02 --proxy-anchor-weight 0.001 --seed 317 --device cuda"
+}

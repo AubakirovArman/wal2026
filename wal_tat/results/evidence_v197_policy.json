@@ -1,0 +1,66 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-policy-v3",
+  "evidence_id": "v197",
+  "declared_before_execution": true,
+  "objective": "recover s0051 generalization through only its uncommitted layer-24 MLP BF16 groups while preserving every accepted hard ternary code, scale, mask, and committed master value",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+  "source_checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "starting_artifact": "derived exactly in memory from the source checkpoint",
+  "starting_artifact_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "suite": "wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt",
+  "suite_sha256": "3f17ac29a69144181536b2b8588bad58c36859f4c5cea6251bf7715ecc11a8ca",
+  "suite_role": "fresh training and development selection/confirmation only; never audit",
+  "reserved_unopened_audit_v16_sha256": "6119468737a20497bf21c36610ea684752b8c5bd991b522fff99e0f33ef5bde9",
+  "script": "wal_tat/experiments/mlp_fallback_compensation_recovery.py",
+  "script_sha256": "a1aa4a63113bc0a665d9360c079433b8f0737b05221fcf3c33252002c616579a",
+  "tag": "block24_mlp_s0051_train_fallback_recovery_v1",
+  "teacher": {
+    "mode": "target_counterfactual_mlp",
+    "restored_for_teacher_only": "committed groups of layer-24 up/gate/down",
+    "all_other_checkpoint_state_held_fixed": true,
+    "exact_source_restoration_required": true
+  },
+  "training": {
+    "steps": 1536,
+    "learning_rate": 0.000002,
+    "ce_weight": 1.0,
+    "block_weight": 0.25,
+    "kd_weight": 0.5,
+    "delta_anchor_weight": 0.01,
+    "selection_every": 64,
+    "seed": 383
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.0005,
+    "minimum_confirmation_worst_ratio_improvement": 0.0005,
+    "maximum_weighted_relative_fallback_delta": 0.1,
+    "ternary_codes_unchanged": true,
+    "g128_fp16_scales_unchanged": true,
+    "committed_masks_unchanged": true,
+    "committed_master_values_unchanged": true,
+    "coverage_unchanged": true,
+    "accepted_weights": 75100160,
+    "persistent_bf16_residual_on_committed_groups": false
+  },
+  "audit_firewall": {
+    "audit_v15_is_closed_and_not_reused": true,
+    "audit_v16_is_not_used_for_training_or_selection": true,
+    "audit_v16_remains_unopened_until_artifact_is_frozen": true,
+    "passing_run_writes_only_an_artifact": true,
+    "checkpoint_publication_requires_a_separate_predeclared_v16_audit": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "do not open audit-v16; preserve s0051 and diagnose only from development data",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/mlp_fallback_compensation_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt --tag block24_mlp_s0051_train_fallback_recovery_v1 --target-layer 24 --steps 1536 --lr 0.000002 --ce-weight 1 --block-weight 0.25 --kd-weight 0.5 --delta-anchor-weight 0.01 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 64 --min-selection-improvement 0.0005 --min-confirmation-improvement 0.0005 --max-relative-delta 0.1 --seed 383 --device cuda"
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "wal-tat-predeclared-diagnostic-policy-v1",
+  "policy_id": "evidence-v91-matched-bf16-up-residual-recovery-v1",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "purpose": "Test whether the frozen recovery corpus/objective can repair the localized layer-24 up_proj damage when given matched continuous capacity over exactly the committed groups.",
+  "source_checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "runner": {
+    "path": "wal_tat/experiments/matched_bf16_residual_recovery.py",
+    "sha256": "9c4b908132826a07ec523aa92dda8e114002a8d74dc3d7dcafe63580b0bb99df",
+    "tag": "block24_up_matched_bf16_residual_v1",
+    "physical_gpu": 2
+  },
+  "training": {
+    "target": "model.layers.24.mlp.up_proj committed groups only",
+    "steps": 512,
+    "lr": 0.00002,
+    "block_weight": 0.1,
+    "kd_weight": 0.5,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "residual_anchor_weight": 0.0,
+    "selection_gate_sequences": 256,
+    "selection_every": 128,
+    "seed": 157
+  },
+  "acceptance": {
+    "minimum_worst_nll_ratio_improvement": 0.0002,
+    "save_training_only_residual_artifact_if_passed": true,
+    "checkpoint_written": false,
+    "coverage_must_not_change": true,
+    "codes_scales_fallback_norms_frozen": true,
+    "v5_v6_must_not_be_opened": true
+  },
+  "interpretation": {
+    "passes": "The data/objective can find a correction; the remaining problem is distilling that correction into a deployable ternary representation.",
+    "fails": "The current data/objective cannot exploit even continuous capacity and must be replaced before more ternary QAT."
+  }
+}

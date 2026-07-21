@@ -1,0 +1,308 @@
+{
+  "schema": "wal-tat-block-code-recovery-v1",
+  "tag": "block27_diverse_code_recovery",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block27_diverse_recovery_ce-fixed-scales.pt",
+  "source_sha256": "661aeedd46f08b7809039d747514119abd01fb04344c310b709453137f8ba7ce",
+  "suite": "wal2/cache/wal-tat-diverse-recovery-v1-l256.pt",
+  "suite_sha256": "511ad90746456601ce257330fa7e24d7083684f82726347278b76d692fc568cf",
+  "steps": 1024,
+  "lr": 2e-06,
+  "teacher_source": "frontier",
+  "kd_weight": 0.0,
+  "hidden_kd_weight": 0.0,
+  "baseline": {
+    "c4_train": {
+      "nll": 3.49814032856375,
+      "ppl": 33.05392532597879,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.2139557041227818,
+      "ppl": 9.15184688361069,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 1.9793194299563766,
+      "ppl": 7.237815468202056,
+      "tokens": 65536
+    }
+  },
+  "starting": {
+    "c4_train": {
+      "nll": 3.6279177209362388,
+      "ppl": 37.634369711224004,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.301003174157813,
+      "ppl": 9.984193317378473,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.041875791735947,
+      "ppl": 7.705048718590626,
+      "tokens": 65536
+    }
+  },
+  "starting_ratios": {
+    "c4_train": 1.0370989669318875,
+    "squad_train": 1.0393176204351937,
+    "vendor_code_train": 1.0316049854474219
+  },
+  "starting_objective": 1.0393176204351937,
+  "attempted": {
+    "c4_train": {
+      "nll": 3.582667333073914,
+      "ppl": 35.96935525670715,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.270785100525245,
+      "ppl": 9.687003100625116,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.00433972873725,
+      "ppl": 7.421192278740146,
+      "tokens": 65536
+    }
+  },
+  "attempted_ratios": {
+    "c4_train": 1.0241634115761356,
+    "squad_train": 1.0256687142821497,
+    "vendor_code_train": 1.0126408594803846
+  },
+  "attempted_objective": 1.0256687142821497,
+  "passed": true,
+  "deployed": {
+    "c4_train": {
+      "nll": 3.5826098257675767,
+      "ppl": 35.96728681545146,
+      "tokens": 65536
+    },
+    "squad_train": {
+      "nll": 2.270813508424908,
+      "ppl": 9.687278291946019,
+      "tokens": 65536
+    },
+    "vendor_code_train": {
+      "nll": 2.004310817224905,
+      "ppl": 7.420977723949531,
+      "tokens": 65536
+    }
+  },
+  "deployed_ratios": {
+    "c4_train": 1.0241469721823617,
+    "squad_train": 1.0256815455685255,
+    "vendor_code_train": 1.0126262526857928
+  },
+  "code_churn": {
+    "model.layers.27.mlp.down_proj": 1.7642974853515625e-05,
+    "model.layers.27.mlp.up_proj": 0.0,
+    "model.layers.27.mlp.gate_proj": 0.0,
+    "model.layers.27.self_attn.v_proj": 0.0,
+    "model.layers.27.self_attn.o_proj": 3.8623809814453125e-05,
+    "model.layers.27.self_attn.k_proj": 0.0,
+    "model.layers.27.self_attn.q_proj": 0.0
+  },
+  "coverage": {
+    "model.layers.27.mlp.down_proj": 1.0,
+    "model.layers.27.mlp.up_proj": 1.0,
+    "model.layers.27.mlp.gate_proj": 1.0,
+    "model.layers.27.self_attn.v_proj": 1.0,
+    "model.layers.27.self_attn.o_proj": 1.0,
+    "model.layers.27.self_attn.k_proj": 1.0,
+    "model.layers.27.self_attn.q_proj": 1.0
+  },
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.497910976409912,
+      "ce": 3.497910976409912,
+      "kd": -3.92150686820969e-05,
+      "hidden_kd": 0.0,
+      "pressure": 0.00390625,
+      "temperature": 0.3508855606815209,
+      "gradient_norm": 3.2927122116088867,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 0.0,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 0.0,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 256,
+      "loss": 3.571432590484619,
+      "ce": 3.571432590484619,
+      "kd": 0.00786503590643406,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.3508855606815209,
+      "gradient_norm": 2.01414155960083,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 8.742014870222192e-06,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 8.821487426757812e-06,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 512,
+      "loss": 3.0591633319854736,
+      "ce": 3.0591633319854736,
+      "kd": 0.004090446978807449,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.26316417051114066,
+      "gradient_norm": 1.729323148727417,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 1.4781951904296875e-05,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 1.2874603271484375e-05,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 768,
+      "loss": 1.8449211120605469,
+      "ce": 1.8449211120605469,
+      "kd": 0.010936440899968147,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.08772139017038026,
+      "gradient_norm": 1.7226639986038208,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 1.6371410310966894e-05,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 2.3126602172851562e-05,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    },
+    {
+      "step": 1024,
+      "loss": 3.5111327171325684,
+      "ce": 3.5111327171325684,
+      "kd": 0.0062261102721095085,
+      "hidden_kd": 0.0,
+      "pressure": 1.0,
+      "temperature": 0.0,
+      "gradient_norm": 3.853391647338867,
+      "code_churn": {
+        "model.layers.27.mlp.down_proj": 1.7642974853515625e-05,
+        "model.layers.27.mlp.up_proj": 0.0,
+        "model.layers.27.mlp.gate_proj": 0.0,
+        "model.layers.27.self_attn.v_proj": 0.0,
+        "model.layers.27.self_attn.o_proj": 3.8623809814453125e-05,
+        "model.layers.27.self_attn.k_proj": 0.0,
+        "model.layers.27.self_attn.q_proj": 0.0
+      }
+    }
+  ],
+  "elapsed_seconds": 163.5397334098816,
+  "peak_cuda_allocated_bytes": 7950922752,
+  "fresh_verify": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block27_diverse_code_recovery-all-codes.pt",
+    "checkpoint_sha256": "a6e2563c0cb865cf4f7c3a680892d96c1cc8aec9d45b128b0afa1b696817dce9",
+    "baseline": {
+      "c4_train": {
+        "nll": 3.49814032856375,
+        "ppl": 33.05392532597879,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.2139557041227818,
+        "ppl": 9.15184688361069,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 1.9793194299563766,
+        "ppl": 7.237815468202056,
+        "tokens": 65536
+      }
+    },
+    "metrics": {
+      "c4_train": {
+        "nll": 3.582710888236761,
+        "ppl": 35.97092194195123,
+        "tokens": 65536
+      },
+      "squad_train": {
+        "nll": 2.2707774927839637,
+        "ppl": 9.686929404692064,
+        "tokens": 65536
+      },
+      "vendor_code_train": {
+        "nll": 2.0042914447840303,
+        "ppl": 7.420833962889848,
+        "tokens": 65536
+      }
+    },
+    "ratios": {
+      "c4_train": 1.0241758625239983,
+      "squad_train": 1.0256652780158924,
+      "vendor_code_train": 1.0126164652605891
+    },
+    "passed": true,
+    "coverage": {
+      "model.layers.27.mlp.down_proj": 1.0,
+      "model.layers.27.mlp.up_proj": 1.0,
+      "model.layers.27.mlp.gate_proj": 1.0,
+      "model.layers.27.self_attn.v_proj": 1.0,
+      "model.layers.27.self_attn.o_proj": 1.0,
+      "model.layers.27.self_attn.k_proj": 1.0,
+      "model.layers.27.self_attn.q_proj": 1.0
+    },
+    "codes": {
+      "model.layers.27.mlp.down_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.up_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.mlp.gate_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.v_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.o_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.k_proj": [
+        -1,
+        0,
+        1
+      ],
+      "model.layers.27.self_attn.q_proj": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "accepted_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block27_diverse_code_recovery-all-codes.pt",
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/block27_diverse_code_recovery.wal.jsonl"
+}

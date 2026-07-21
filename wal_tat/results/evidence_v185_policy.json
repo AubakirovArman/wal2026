@@ -1,0 +1,47 @@
+{
+  "schema": "wal-tat-development-scan-policy-v1",
+  "evidence_id": "v185",
+  "declared_before_execution": true,
+  "git_parent": "2bddce8",
+  "objective": "select one 8192-group D1 atom across down_proj and gate_proj after the common three-target scan proved infeasible, while keeping audit-v14 sealed",
+  "infeasibility_evidence": "wal_tat/results/evidence_v184.json",
+  "source_frontier": {
+    "path": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+    "sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+    "accepted_weights": 75100160
+  },
+  "development_suite": {
+    "path": "wal2/cache/wal-tat-matched-train-recovery-v3-squadx4-l256.pt",
+    "sha256": "a12d9dc3063c6d093ac28ba41f4f239e6e992a4217c0f1bdf8e9cfc313570bca"
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v14-l256-g512.pt",
+    "sha256": "16e6243acf080e898e4ec374b66a30374146a3bd2a7e481f1b599d50b8db330f",
+    "must_remain_unopened": true
+  },
+  "scan": {
+    "script": "wal_tat/experiments/tail_initializer_ablation.py",
+    "script_sha256": "e06474839a440cb5fe8a95c457711fbcc1d76a5b609d701d317d8b1bc50f80d2",
+    "targets": [
+      "model.layers.24.mlp.down_proj",
+      "model.layers.24.mlp.gate_proj"
+    ],
+    "initializers": ["absmean_round", "threshold_ls", "activation_wls"],
+    "deciles": [1],
+    "groups_per_decile": 8192,
+    "weights_per_candidate": 1048576,
+    "samples_per_domain": 8,
+    "sequences_per_domain": 64,
+    "seed": 349,
+    "selection_rule": "minimum worst incremental development NLL ratio across all six feasible arms"
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "run_targets_sequentially": true
+  },
+  "commands": [
+    "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v3-squadx4-l256.pt --candidate-name model.layers.24.mlp.down_proj --tag block24_down_s0051_d1g8192_initializers_v1 --deciles 1 --groups-per-decile 8192 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --seed 349 --device cuda",
+    "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/tail_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v3-squadx4-l256.pt --candidate-name model.layers.24.mlp.gate_proj --tag block24_gate_s0051_d1g8192_initializers_v1 --deciles 1 --groups-per-decile 8192 --samples-per-domain 8 --domain-offset 0 --sequences-per-domain 64 --seed 349 --device cuda"
+  ]
+}

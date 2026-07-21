@@ -1,0 +1,41 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v96-fixed-code-residual-gain4-v1-passed-development",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v96_policy.json",
+    "sha256": "fad48c5577482e9433bd7478055ebe2339fd9d11bc77f4f4586948b614c0f01a"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_residual_gain4_v1.json",
+    "sha256": "35778c40e002afe6b56aae2bc590c8839d7fbc365888e3b19febac701b39b558",
+    "passed": true,
+    "chosen_candidate": "fixed_code_ls@4x",
+    "source_restoration_exact": true,
+    "coverage_changed": false,
+    "checkpoint_written": false
+  },
+  "artifact": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_up_residual_gain4_v1.pt",
+    "sha256": "7ee31395bb4c3b45e9342f73e9271d3c56a337af841117956c058c804f9c8bc4",
+    "strict_ternary_codes": true,
+    "persistent_bf16_residual": false,
+    "packed": false,
+    "status": "frozen development candidate; not accepted into frontier"
+  },
+  "worst_ratio_improvement": {
+    "selection": 0.00005184791141177314,
+    "confirmation": 0.000024567536752284624
+  },
+  "representation": {
+    "code_churn": 0.0,
+    "scale_relative_change_mean": 0.009813999757170677,
+    "scale_relative_change_max": 0.19312171638011932,
+    "residual_energy_captured_fraction": 0.00857686996459961
+  },
+  "conclusion": {
+    "result": "A fixed-code FP16-scale update can transfer a small but repeatable portion of the counterfactual-teacher residual into strict Q2-g128 state.",
+    "next_step": "Run a fresh-process paired audit on recurring audit-v3 before any checkpoint mutation."
+  },
+  "frontier_changed": false
+}

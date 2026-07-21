@@ -1,0 +1,42 @@
+{
+  "schema": "wal-tat-recovery-suite-build-policy-v1",
+  "evidence_id": "v195",
+  "declared_before_execution": true,
+  "objective": "build fresh source-specific development data for coverage-neutral s0051 recovery without reusing any closed audit or prior recovery window",
+  "builder": "wal_tat/experiments/build_matched_validation_recovery_suite.py",
+  "builder_sha256": "c6f4588be5d9d2fdb2c77e4ccf92d22ed3efa7614831caac798dd172352da505",
+  "output": "wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt",
+  "role": "training plus disjoint development selection and confirmation only; never final audit",
+  "configuration": {
+    "sequence_length": 256,
+    "calibration_per_domain": 64,
+    "c4_calibration_repeat": 1,
+    "squad_calibration_repeat": 4,
+    "code_calibration_repeat": 1,
+    "gates_per_domain": 256,
+    "c4_split": "train",
+    "c4_train_shard": 1,
+    "squad_split": "train",
+    "code_source": "torch",
+    "interleave_calibration": true,
+    "ranges": {
+      "calibration": {
+        "c4_train": [800003, 816387],
+        "squad_train_context": [3000003, 3065539],
+        "torch_code": [1840003, 1856387]
+      },
+      "gates": {
+        "c4_train": [900003, 965539],
+        "squad_train_context": [3100003, 3165539],
+        "torch_code": [1900003, 1965539]
+      }
+    }
+  },
+  "requirements": {
+    "output_must_not_exist_before_build": true,
+    "exact_window_overlap_with_every_retained_suite": 0,
+    "declared_range_overlap_on_identical_sources": 0,
+    "audit_data_use": false
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_matched_validation_recovery_suite.py --output ../wal2/cache/wal-tat-matched-train-recovery-v4-squadx4-l256.pt --length 256 --calibration-per-domain 64 --c4-calibration-repeat 1 --squad-calibration-repeat 4 --code-calibration-repeat 1 --gates-per-domain 256 --c4-split train --c4-train-shard 1 --squad-split train --code-source torch --c4-calibration-offset 800003 --c4-gate-offset 900003 --squad-calibration-offset 3000003 --squad-gate-offset 3100003 --code-calibration-offset 1840003 --code-gate-offset 1900003 --interleave-calibration --policy 'fresh train-domain s0051 recovery/development v4; source-specific disjoint ranges; never final audit'"
+}

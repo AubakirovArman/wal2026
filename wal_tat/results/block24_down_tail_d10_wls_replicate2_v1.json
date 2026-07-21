@@ -1,0 +1,231 @@
+{
+  "schema": "wal-tat-tail-initializer-ablation-v1",
+  "status": "checkpoint_neutral_development_ablation",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0047-candidate_only.pt",
+  "source_checkpoint_sha256": "d9f4e33a87cc8de8f2fe4e94c2873b1dc3109836bafe8a3b1f3922236fa3c674",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+  "suite_sha256": "79655f83fbb6560d9391a7cc0400ee426648b401ae866385440d467c543daf0b",
+  "suite_role": "development-only initializer and tail selection",
+  "candidate_name": "model.layers.24.mlp.down_proj",
+  "group_size": 128,
+  "deciles": [
+    10
+  ],
+  "groups_per_decile": 96,
+  "samples_per_domain": 8,
+  "domain_offset": 0,
+  "sequences_per_domain": 64,
+  "threshold_multipliers": [
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0,
+    1.125,
+    1.25,
+    1.375,
+    1.5,
+    1.625,
+    1.75,
+    1.875,
+    2.0,
+    2.125,
+    2.25,
+    2.375,
+    2.5,
+    2.625,
+    2.75,
+    2.875,
+    3.0
+  ],
+  "forced_initializer": "activation_wls",
+  "excluded_artifacts": [
+    {
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_down_tail_d8d10_proxy_recovery_v1.pt",
+      "sha256": "b147729b860f007edf70a29c6c46f77698dfe4fd8b6513d878e1045107953d8d",
+      "newly_excluded_groups": 288,
+      "artifact_groups": 288
+    }
+  ],
+  "excluded_groups": 288,
+  "baseline_raw_bf16": {
+    "c4_train": {
+      "nll": 3.3037547655403614,
+      "ppl": 27.214631882988645,
+      "tokens": 16384
+    },
+    "squad_train": {
+      "nll": 2.280874853953719,
+      "ppl": 9.78523731951693,
+      "tokens": 16384
+    },
+    "vendor_code_train": {
+      "nll": 1.8160957973450422,
+      "ppl": 6.147809240778609,
+      "tokens": 16384
+    }
+  },
+  "frontier": {
+    "c4_train": {
+      "nll": 3.2927964255213737,
+      "ppl": 26.918032778333696,
+      "tokens": 16384
+    },
+    "squad_train": {
+      "nll": 2.311057372018695,
+      "ppl": 10.085082703516372,
+      "tokens": 16384
+    },
+    "vendor_code_train": {
+      "nll": 1.7744942121207714,
+      "ppl": 5.897297600218028,
+      "tokens": 16384
+    }
+  },
+  "frontier_ratios_to_raw_bf16": {
+    "c4_train": 0.9966830649377224,
+    "squad_train": 1.0132328689637033,
+    "vendor_code_train": 0.9770928464869043
+  },
+  "experiments": {
+    "D10": {
+      "mask_sha256": "4bc13f92f20205bd51e36808f7c11c91bc8dc3827085ee9b6d77ce8ae51b87f7",
+      "groups": 96,
+      "weights": 12288,
+      "score_min": 7.555497297685038e-14,
+      "score_mean": 3.549962786838362e-13,
+      "score_max": 1.677125105459254e-11,
+      "initializers": {
+        "absmean_round": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.292927958071232,
+              "ppl": 26.921573608684312,
+              "tokens": 16384
+            },
+            "squad_train": {
+              "nll": 2.311056373640895,
+              "ppl": 10.085072634798715,
+              "tokens": 16384
+            },
+            "vendor_code_train": {
+              "nll": 1.7743348339572549,
+              "ppl": 5.89635777465262,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9967228779865691,
+            "squad_train": 1.013232431246659,
+            "vendor_code_train": 0.9770050878104349
+          },
+          "ratios_to_frontier": {
+            "c4_train": 1.0000399455456277,
+            "squad_train": 0.9999995679995607,
+            "vendor_code_train": 0.9999101838921605
+          },
+          "relative_weight_mse": 0.2778131663799286,
+          "relative_activation_weighted_mse": 0.3640133738517761,
+          "code_histogram": {
+            "-1": 4172,
+            "0": 3892,
+            "1": 4224
+          },
+          "zero_fraction": 0.3167317807674408,
+          "scale_mean": 0.0225418359041214,
+          "scale_p95": 0.03440936654806137
+        },
+        "threshold_ls": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.2928143329918385,
+              "ppl": 26.91851481652667,
+              "tokens": 16384
+            },
+            "squad_train": {
+              "nll": 2.3111459854990244,
+              "ppl": 10.085976417391105,
+              "tokens": 16384
+            },
+            "vendor_code_train": {
+              "nll": 1.7746217316016555,
+              "ppl": 5.898049668497285,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9966884852766202,
+            "squad_train": 1.0132717196179495,
+            "vendor_code_train": 0.9771630627613269
+          },
+          "ratios_to_frontier": {
+            "c4_train": 1.0000054383776433,
+            "squad_train": 1.0000383432628728,
+            "vendor_code_train": 1.0000718624383291
+          },
+          "relative_weight_mse": 0.1984669417142868,
+          "relative_activation_weighted_mse": 0.2725524604320526,
+          "code_histogram": {
+            "-1": 3268,
+            "0": 5802,
+            "1": 3218
+          },
+          "zero_fraction": 0.47216796875,
+          "scale_mean": 0.03545985370874405,
+          "scale_p95": 0.056153133511543274
+        },
+        "activation_wls": {
+          "metrics": {
+            "c4_train": {
+              "nll": 3.2924708239734173,
+              "ppl": 26.90926965191431,
+              "tokens": 16384
+            },
+            "squad_train": {
+              "nll": 2.311476342380047,
+              "ppl": 10.089308939532922,
+              "tokens": 16384
+            },
+            "vendor_code_train": {
+              "nll": 1.7743563177064061,
+              "ppl": 5.896484451884703,
+              "tokens": 16384
+            }
+          },
+          "ratios_to_raw_bf16": {
+            "c4_train": 0.9965845099386187,
+            "squad_train": 1.0134165574114171,
+            "vendor_code_train": 0.9770169174447432
+          },
+          "ratios_to_frontier": {
+            "c4_train": 0.9999011170124479,
+            "squad_train": 1.00018128946794,
+            "vendor_code_train": 0.9999222908627013
+          },
+          "relative_weight_mse": 0.325809508562088,
+          "relative_activation_weighted_mse": 0.14755047857761383,
+          "code_histogram": {
+            "-1": 3041,
+            "0": 6254,
+            "1": 2993
+          },
+          "zero_fraction": 0.5089518427848816,
+          "scale_mean": 0.04152296483516693,
+          "scale_p95": 0.09287659078836441
+        }
+      },
+      "chosen_initializer": "activation_wls"
+    }
+  },
+  "frozen_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_down_tail_d10_wls_replicate2_v1.pt",
+  "frozen_artifact_sha256": "3c3251ec17e4db7226436c3ac192dfb99667b025747f658fb4af36533033004d",
+  "checkpoint_mutated": false,
+  "checkpoint_files_written": 0,
+  "elapsed_seconds": 32.92064582183957,
+  "peak_cuda_allocated_bytes": 5058464256
+}

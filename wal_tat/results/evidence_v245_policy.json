@@ -1,0 +1,44 @@
+{
+  "schema": "wal-tat-block24-macro-recovery-policy-v1",
+  "evidence_id": "v245",
+  "declared_before_execution": true,
+  "objective": "repeat the full 23.99M-weight block24 MLP completion with a proxy trajectory capable of crossing ternary code boundaries",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "failed_predecessor": {
+    "result": "wal_tat/results/block24_mlp_macro_complete_s0053_v1.json",
+    "diagnosis": "zero code churn at proxy_lr=1e-4; scale-only movement did not recover the hard initialization"
+  },
+  "development_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened": false,
+  "candidate_new_weights": 23990272,
+  "prospective_accepted_weights": 100663296,
+  "prospective_coverage_fraction": 0.05850982782264209,
+  "training": {
+    "steps": 2048,
+    "proxy_lr": 0.001,
+    "scale_lr": 0.000001,
+    "initial_temperature": 0.5,
+    "final_temperature": 0.2,
+    "block_weight": 0.5,
+    "attention_weight": 0.0,
+    "proxy_anchor_weight": 0.0001,
+    "kd_weight": 2.0,
+    "selection_gate_sequences": 64,
+    "selection_every": 128,
+    "previously_committed_groups_trainable": 0,
+    "norm_parameters_trainable": 0
+  },
+  "acceptance": {
+    "development_cumulative_nll_ratio_limit": 1.02,
+    "must_improve_over_hard_initializer": true,
+    "strict_ternary_codes_only": true,
+    "audit_is_run_only_after_a_development_pass": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/block_proxy_recovery.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --selection-suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_complete_s0053_v2 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --complete-target-projections --steps 2048 --proxy-lr 1e-3 --scale-lr 1e-6 --initial-temperature 0.5 --final-temperature 0.2 --block-weight 0.5 --attention-weight 0 --proxy-anchor-weight 0.0001 --kd-weight 2 --selection-gate-sequences 64 --selection-every 128 --gate-ratio 1.02 --seed 607 --device cuda"
+}

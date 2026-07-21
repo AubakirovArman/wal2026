@@ -1,0 +1,44 @@
+{
+  "schema": "wal-tat-predeclared-diagnostic-policy-v1",
+  "policy_id": "evidence-v92-counterfactual-teacher-up-residual-v2",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "purpose": "Learn the localized up_proj correction from a target-local counterfactual teacher while preserving every other recovered/ternary part of s0048.",
+  "source_checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "runner": {
+    "path": "wal_tat/experiments/matched_bf16_residual_recovery.py",
+    "sha256": "2f0b4a53160ca227dc353930f20d89e27233023d01e10ad32f5071cf97b6ac55",
+    "tag": "block24_up_counterfactual_teacher_residual_v2",
+    "physical_gpu": 2
+  },
+  "teacher": {
+    "source": "target_counterfactual",
+    "definition": "s0048 with only committed model.layers.24.mlp.up_proj groups restored to original BF16; fallback, all other matrices and norms unchanged"
+  },
+  "training": {
+    "target": "continuous residual on committed layer24 up_proj groups only",
+    "steps": 768,
+    "lr": 0.00005,
+    "ce_weight": 0.0,
+    "block_weight": 0.2,
+    "kd_weight": 1.0,
+    "kd_topk": 64,
+    "kd_stride": 4,
+    "kd_temperature": 2.0,
+    "residual_anchor_weight": 0.0,
+    "selection_gate_sequences": 256,
+    "selection_every": 128,
+    "seed": 163
+  },
+  "acceptance": {
+    "minimum_worst_nll_ratio_improvement": 0.0002,
+    "save_training_only_residual_artifact_if_passed": true,
+    "checkpoint_written": false,
+    "coverage_must_not_change": true,
+    "codes_scales_fallback_norms_frozen": true,
+    "source_must_restore_exactly_after_teacher_cache": true,
+    "v5_v6_must_not_be_opened": true
+  }
+}

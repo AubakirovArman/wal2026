@@ -1,0 +1,365 @@
+{
+  "schema": "wal-tat-compensation-window-v1",
+  "tag": "gate_window_v3",
+  "model": "/mnt/hf_model_weights/arman/3bit/wal/.hf_cache/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-gate_window_v2-linked_down.pt",
+  "source_sha256": "d888d8a6c9a0c191968f157fab2d089cb2e05a049acef9cad5c19ecdee9e2d84",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "seed": 109,
+  "device": "cuda",
+  "gpu": "NVIDIA H200",
+  "steps": 120,
+  "lr": 2e-05,
+  "gate_ratio": 1.02,
+  "candidate_name": "model.layers.27.mlp.gate_proj",
+  "baseline": {
+    "wiki": {
+      "nll": 3.575825622305274,
+      "ppl": 35.72410325978659,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.3886028062552214,
+      "ppl": 29.624532130142402,
+      "tokens": 32768
+    }
+  },
+  "starting": {
+    "wiki": {
+      "nll": 3.4987875474616885,
+      "ppl": 33.07532537561207,
+      "tokens": 32768
+    },
+    "code": {
+      "nll": 3.450538738630712,
+      "ppl": 31.517367359114367,
+      "tokens": 32768
+    }
+  },
+  "starting_ratios": {
+    "wiki": 0.9784558636296363,
+    "code": 1.0182777197319082
+  },
+  "selection": {
+    "new_candidate_groups": 24576,
+    "new_candidate_fraction": 0.25,
+    "linked_down_groups": 40960,
+    "linked_down_fraction": 0.4166666865348816,
+    "selected_channel_blocks": [
+      0,
+      5,
+      7,
+      8,
+      12,
+      17,
+      18,
+      20,
+      22,
+      23,
+      26,
+      28,
+      29,
+      31,
+      32,
+      40,
+      42,
+      44,
+      45,
+      47
+    ],
+    "selected_score_mean": 5.36208230594859e-13,
+    "selected_score_p95": 2.3322127649244573e-12,
+    "candidate_mask_sha256": "80c64b5273a7dbf2e11df1f7897e7b14561169f0101c92580d460cd5a882b8ec",
+    "down_mask_sha256": "d944fff663960cf5203517215e6ef444955779bfda23f2df53cc5a54a74d710e"
+  },
+  "arms": {
+    "candidate_only": {
+      "arm": "candidate_only",
+      "passed": false,
+      "starting": {
+        "wiki": {
+          "nll": 3.4987875474616885,
+          "ppl": 33.07532537561207,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.450538738630712,
+          "ppl": 31.517367359114367,
+          "tokens": 32768
+        }
+      },
+      "attempted": {
+        "wiki": {
+          "nll": 3.5118694053962827,
+          "ppl": 33.51085463811125,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.463095630519092,
+          "ppl": 31.915622725525576,
+          "tokens": 32768
+        }
+      },
+      "attempted_ratios": {
+        "wiki": 0.982114279703673,
+        "code": 1.0219833449132367
+      },
+      "deployed": {
+        "wiki": {
+          "nll": 3.4987875474616885,
+          "ppl": 33.07532537561207,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.450538738630712,
+          "ppl": 31.517367359114367,
+          "tokens": 32768
+        }
+      },
+      "deployed_ratios": {
+        "wiki": 0.9784558636296363,
+        "code": 1.0182777197319082
+      },
+      "code_churn": {
+        "candidate": 0.016861915588378906
+      },
+      "scale_changes": {
+        "candidate": {
+          "changed_groups": 24576,
+          "groups": 24576,
+          "absolute_mean": 0.0006248292047530413,
+          "relative_mean": 0.023062076419591904,
+          "relative_p95": 0.05434079468250275,
+          "relative_max": 0.1387474685907364
+        }
+      },
+      "history": [
+        {
+          "step": 1,
+          "loss": 3.2535576820373535,
+          "ce": 3.2535624504089355,
+          "kd": -4.847480158787221e-05,
+          "pressure": 0.03333333333333333,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.3093474507331848,
+          "code_churn": {
+            "candidate": 0.0004011790151707828
+          }
+        },
+        {
+          "step": 30,
+          "loss": 2.572646379470825,
+          "ce": 2.572315216064453,
+          "kd": 0.003312810091301799,
+          "pressure": 1.0,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.28924617171287537,
+          "code_churn": {
+            "candidate": 0.0033070247154682875
+          }
+        },
+        {
+          "step": 60,
+          "loss": 4.893878936767578,
+          "ce": 4.893821716308594,
+          "kd": 0.0005727107054553926,
+          "pressure": 1.0,
+          "temperature": 0.26316417051114066,
+          "gradient_norm": 0.42153075337409973,
+          "code_churn": {
+            "candidate": 0.006745974533259869
+          }
+        },
+        {
+          "step": 90,
+          "loss": 4.731875419616699,
+          "ce": 4.731208324432373,
+          "kd": 0.0066708726808428764,
+          "pressure": 1.0,
+          "temperature": 0.08772139017038026,
+          "gradient_norm": 0.6806765198707581,
+          "code_churn": {
+            "candidate": 0.011160215362906456
+          }
+        },
+        {
+          "step": 120,
+          "loss": 3.496119737625122,
+          "ce": 3.4960598945617676,
+          "kd": 0.0005979385459795594,
+          "pressure": 1.0,
+          "temperature": 0.0,
+          "gradient_norm": 0.44571366906166077,
+          "code_churn": {
+            "candidate": 0.016861915588378906
+          }
+        }
+      ],
+      "elapsed_seconds": 34.80288505554199,
+      "peak_cuda_allocated_bytes": 4608939520,
+      "coverage": {
+        "model.layers.27.mlp.down_proj": 1.0,
+        "model.layers.27.mlp.up_proj": 1.0,
+        "model.layers.27.mlp.gate_proj": 0.5
+      },
+      "projected_bpw": {
+        "model.layers.27.mlp.down_proj": 2.125,
+        "model.layers.27.mlp.up_proj": 2.125,
+        "model.layers.27.mlp.gate_proj": 9.0625
+      }
+    },
+    "linked_down": {
+      "arm": "linked_down",
+      "passed": false,
+      "starting": {
+        "wiki": {
+          "nll": 3.4987875474616885,
+          "ppl": 33.07532537561207,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.450538738630712,
+          "ppl": 31.517367359114367,
+          "tokens": 32768
+        }
+      },
+      "attempted": {
+        "wiki": {
+          "nll": 3.508425537496805,
+          "ppl": 33.3956461767664,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.459718824364245,
+          "ppl": 31.80803161367142,
+          "tokens": 32768
+        }
+      },
+      "attempted_ratios": {
+        "wiki": 0.9811511824323756,
+        "code": 1.0209868261862223
+      },
+      "deployed": {
+        "wiki": {
+          "nll": 3.4987875474616885,
+          "ppl": 33.07532537561207,
+          "tokens": 32768
+        },
+        "code": {
+          "nll": 3.450538738630712,
+          "ppl": 31.517367359114367,
+          "tokens": 32768
+        }
+      },
+      "deployed_ratios": {
+        "wiki": 0.9784558636296363,
+        "code": 1.0182777197319082
+      },
+      "code_churn": {
+        "candidate": 0.017264684662222862,
+        "down": 0.0
+      },
+      "scale_changes": {
+        "candidate": {
+          "changed_groups": 24576,
+          "groups": 24576,
+          "absolute_mean": 0.0006339666433632374,
+          "relative_mean": 0.023414816707372665,
+          "relative_p95": 0.05532766878604889,
+          "relative_max": 0.14261719584465027
+        },
+        "down": {
+          "changed_groups": 40960,
+          "groups": 40960,
+          "absolute_mean": 0.0006532530533149838,
+          "relative_mean": 0.023358946666121483,
+          "relative_p95": 0.052820123732089996,
+          "relative_max": 0.16875074803829193
+        }
+      },
+      "history": [
+        {
+          "step": 1,
+          "loss": 3.2533559799194336,
+          "ce": 3.2533607482910156,
+          "kd": -4.711187648354098e-05,
+          "pressure": 0.03333333333333333,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 1.5238925218582153,
+          "code_churn": {
+            "candidate": 0.00040213268948718905,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 30,
+          "loss": 2.5735769271850586,
+          "ce": 2.5731778144836426,
+          "kd": 0.003990493714809418,
+          "pressure": 1.0,
+          "temperature": 0.3508855606815209,
+          "gradient_norm": 0.6058021187782288,
+          "code_churn": {
+            "candidate": 0.0033769607543945312,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 60,
+          "loss": 4.877200126647949,
+          "ce": 4.877140045166016,
+          "kd": 0.0005987503682263196,
+          "pressure": 1.0,
+          "temperature": 0.26316417051114066,
+          "gradient_norm": 0.7781859636306763,
+          "code_churn": {
+            "candidate": 0.006977399345487356,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 90,
+          "loss": 4.718660354614258,
+          "ce": 4.717979431152344,
+          "kd": 0.006808755919337273,
+          "pressure": 1.0,
+          "temperature": 0.08772139017038026,
+          "gradient_norm": 0.8848820328712463,
+          "code_churn": {
+            "candidate": 0.011533737182617188,
+            "down": 0.0
+          }
+        },
+        {
+          "step": 120,
+          "loss": 3.483225107192993,
+          "ce": 3.483166217803955,
+          "kd": 0.0005898384843021631,
+          "pressure": 1.0,
+          "temperature": 0.0,
+          "gradient_norm": 1.356226921081543,
+          "code_churn": {
+            "candidate": 0.017264684662222862,
+            "down": 0.0
+          }
+        }
+      ],
+      "elapsed_seconds": 35.237781286239624,
+      "peak_cuda_allocated_bytes": 5121259520,
+      "coverage": {
+        "model.layers.27.mlp.down_proj": 1.0,
+        "model.layers.27.mlp.up_proj": 1.0,
+        "model.layers.27.mlp.gate_proj": 0.5
+      },
+      "projected_bpw": {
+        "model.layers.27.mlp.down_proj": 2.125,
+        "model.layers.27.mlp.up_proj": 2.125,
+        "model.layers.27.mlp.gate_proj": 9.0625
+      }
+    }
+  },
+  "chosen_arm": null,
+  "fresh_verify": null,
+  "wal": "/mnt/hf_model_weights/arman/3bit/wal/wal_tat/results/gate_window_v3.wal.jsonl"
+}

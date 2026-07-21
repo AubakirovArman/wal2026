@@ -1,0 +1,28 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v185",
+  "title": "Feasible 8192-group scan selects down_proj absmean-round",
+  "policy": "wal_tat/results/evidence_v185_policy.json",
+  "policy_sha256": "8a70823b950f393567a90abc93afeb7ee7856745d678381a87401a10c3ebf9e3",
+  "source_checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "development_suite_sha256": "a12d9dc3063c6d093ac28ba41f4f239e6e992a4217c0f1bdf8e9cfc313570bca",
+  "arms": {
+    "down_proj_absmean_round": {
+      "worst_incremental_ratio": 1.0004158111986998,
+      "result_sha256": "8b476a89bdb348e733be54d4bfcf94f184865dda9926eb40b910020771f818e4",
+      "artifact_sha256": "73082ae5ed84e9f6059da638d77a61fb60774e28c9daee4cb6a4a50d3373b95b"
+    },
+    "gate_proj_threshold_ls": {
+      "worst_incremental_ratio": 1.0006462403361063,
+      "result_sha256": "de5d7e38873ec77603efc1df3b28b3a8676be38e4119f00845c0b6c1d7fb657a",
+      "artifact_sha256": "4fe9e2b42e7d98538d93d7d605b5686dd7044c5b28622a577ebdd92a108a649c"
+    }
+  },
+  "selected_target": "model.layers.24.mlp.down_proj",
+  "selected_initializer": "absmean_round",
+  "selected_groups": 8192,
+  "selected_weights": 1048576,
+  "checkpoint_mutated": false,
+  "audit_v14_opened": false,
+  "next_required_action": "run development-only proxy recovery of the exact frozen down_proj artifact before one-shot audit-v14"
+}

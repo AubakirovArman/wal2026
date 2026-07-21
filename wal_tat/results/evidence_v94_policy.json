@@ -1,0 +1,44 @@
+{
+  "schema": "wal-tat-predeclared-distillation-policy-v1",
+  "policy_id": "evidence-v94-distill-up-residual-to-ternary-v2",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "supersedes_execution_only": "evidence-v93",
+  "source_checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+  "residual_artifact_sha256": "ebc0e033c03f0348855b07d4d4147cf6a5bccda2c90592e1815e4d24e6db9b66",
+  "suite_sha256": "a1e851fc4743a856d819220afb96784ab6b3aee8c6fe851b07175bee466350f7",
+  "runner": {
+    "path": "wal_tat/experiments/distill_residual_to_ternary.py",
+    "sha256": "ec5f164b5507412ecca2a1d305091c5953137d5799d07e3aa5c2f7692d49b6f7",
+    "tag": "block24_up_residual_to_ternary_v2",
+    "physical_gpu": 2,
+    "only_change_from_v93": "candidate codes/scales copy operations are protected by torch.no_grad"
+  },
+  "fixed_recipes": [
+    "fixed_code_ls",
+    "fixed_scale_recode",
+    "absmean_recode",
+    "lloyd_recode",
+    "threshold_search"
+  ],
+  "selection": {
+    "gate_window_indices": [0, 127],
+    "sequences_each_domain": 128
+  },
+  "confirmation": {
+    "gate_window_indices": [128, 255],
+    "sequences_each_domain": 128
+  },
+  "acceptance": {
+    "minimum_selection_worst_nll_ratio_improvement": 0.00005,
+    "minimum_confirmation_worst_nll_ratio_improvement": 0.0,
+    "maximum_code_churn": 0.005,
+    "strict_ternary_codes": true,
+    "persistent_bf16_residual": false,
+    "coverage_must_not_change": true,
+    "checkpoint_written": false,
+    "v5_v6_must_not_be_opened": true
+  },
+  "seed": 173
+}

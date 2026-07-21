@@ -1,0 +1,190 @@
+{
+  "schema": "wal-tat-evidence-v69",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_round_robin_cycles_17_19_and_up_steps_23_25",
+  "representation": {
+    "states": [
+      -1,
+      0,
+      1
+    ],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [
+      27
+    ],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.7314453125,
+      "gate_proj_coverage": 0.0390625,
+      "down_proj_coverage": 0.0810546875
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 73629696,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1646821376,
+    "weight_coverage_fraction": 0.04279673929605363
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0019-candidate_bf16_mlp.pt",
+    "bytes": 304659816,
+    "sha256": "49210f7ad73b22bb7a0beec96cf516ad33fcce6aab0e36cc3869bc2defef1930",
+    "kind": "mixed BF16/ternary training checkpoint after accepted gate step 19"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0021398369648027,
+    "policy_is_external_standard": false,
+    "worst_observed_ratio": 1.0011268018193926,
+    "normalized_headroom": 0.47341697618700546
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9969065123073991,
+        "squad_context": 1.0011268018193926,
+        "torch_code": 0.9806132700820956
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9969065123073991,
+        "squad_context": 0.9974428841167513,
+        "transformers_code": 0.9807272592932975
+      },
+      "passed": true
+    }
+  },
+  "recent_transactions": [
+    {
+      "projection": "down_proj",
+      "campaign_step": 17,
+      "result": "block24_down_after_recovery_s0017.json",
+      "fraction": 0.00390625,
+      "new_weights": 49152,
+      "coverage_after": 0.0732421875,
+      "holdout_chosen_arm": "candidate_bf16_mlp",
+      "worst_holdout_ratio": 1.0008287360438877,
+      "normalized_headroom": 0.6102388780805775
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 17,
+      "result": "block24_gate_after_recovery_s0017.json",
+      "fraction": 0.001953125,
+      "new_weights": 24576,
+      "coverage_after": 0.03515625,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0008600302801363,
+      "normalized_headroom": 0.5956567734204316
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 23,
+      "result": "block24_up_headroom_growth_s0023.json",
+      "fraction": 0.0078125,
+      "new_weights": 98304,
+      "coverage_after": 0.7158203125,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0009125893713293,
+      "normalized_headroom": 0.5715216422778996
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 24,
+      "result": "block24_up_headroom_growth_s0024.json",
+      "fraction": 0.0078125,
+      "new_weights": 98304,
+      "coverage_after": 0.7236328125,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0008875996327082,
+      "normalized_headroom": 0.583813073313573
+    },
+    {
+      "projection": "down_proj",
+      "campaign_step": 18,
+      "result": "block24_down_after_recovery_s0018.json",
+      "fraction": 0.00390625,
+      "new_weights": 49152,
+      "coverage_after": 0.0771484375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0008816790081938,
+      "normalized_headroom": 0.5868659112342082
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 18,
+      "result": "block24_gate_after_recovery_s0018.json",
+      "fraction": 0.001953125,
+      "new_weights": 24576,
+      "coverage_after": 0.037109375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0008999296905647,
+      "normalized_headroom": 0.5784551491164222
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 25,
+      "result": "block24_up_headroom_growth_s0025.json",
+      "fraction": 0.0078125,
+      "new_weights": 98304,
+      "coverage_after": 0.7314453125,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0010390932741067,
+      "normalized_headroom": 0.5139186701084818
+    },
+    {
+      "projection": "down_proj",
+      "campaign_step": 19,
+      "result": "block24_down_after_recovery_s0019.json",
+      "fraction": 0.00390625,
+      "new_weights": 49152,
+      "coverage_after": 0.0810546875,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.001121902814239,
+      "normalized_headroom": 0.4755313490589995
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 19,
+      "result": "block24_gate_after_recovery_s0019.json",
+      "fraction": 0.001953125,
+      "new_weights": 24576,
+      "coverage_after": 0.0390625,
+      "holdout_chosen_arm": "candidate_bf16_mlp",
+      "worst_holdout_ratio": 1.0011268018193926,
+      "normalized_headroom": 0.47341697618700546
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 140.4375,
+    "accepted_weights_q2_g128_mib": 18.65185546875,
+    "projected_saving_mib": 121.78564453125
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [
+      -1,
+      0,
+      1
+    ],
+    "independent_audit_suites": 2,
+    "all_campaign_frontiers_synchronized": true
+  },
+  "next": "run up_proj campaign step 26 at fraction 0.0078125 from the synchronized frontier"
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "wal-tat-audit-execution-policy-v1",
+  "policy_id": "evidence-v193-audit-v15-execution",
+  "date_utc": "2026-07-20",
+  "created_before_audit_run": true,
+  "candidate_policy": "wal_tat/results/evidence_v192_policy.json",
+  "candidate_policy_sha256": "8e991633bf24a5907923fbd624efa64dabd889cd16e6c1364b50cf911b53bf4a",
+  "development_evidence": "wal_tat/results/evidence_v192.json",
+  "development_evidence_sha256": "b0dfa2fd2f573c5daa3cab0fd52890805bc906ec30e7bc62be1425a69b58d7d4",
+  "source_checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "frozen_artifact_sha256": "259a28ddaf178235aace2f65f02f36e402350ee37f31f68856dd4dc2b1554d2e",
+  "audit_suite_sha256": "82142cd4b97d0755cc7f829da1677ce40746a4804f9741175830342a53824b96",
+  "audit_script_sha256": "81b1f842fe5a6c9e87cf3ea71444aba4f27eefadb73849c84fda08ce26154dd3",
+  "audit_seed": 379,
+  "acceptance": {
+    "cumulative_point_ratio_max_each_domain": 1.0021978087383818,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0013063945294842,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size_windows": 8,
+    "confidence": 0.95,
+    "all_domains_must_pass": true,
+    "no_retuning_after_audit": true
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "failure_action": "close audit-v15, do not commit the candidate, and preserve s0051",
+  "success_action": "commit the exact frozen artifact into s0052 and require fresh-process verification",
+  "audit_command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/partial_initializer_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt ../wal2/artifacts/wal-tat-block24_down_s0051_d1g4096_absmean_proxy_v1.pt ../wal2/cache/wal-tat-audit-holdout-v15-l256-g512.pt --tag block24_down_s0051_d1g4096_absmean_proxy_v1_audit_v15 --gate-ratio 1.0021978087383818 --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 379 --entry-decile 1 --suite-role 'one-shot audit-only v15; frozen 4096-group artifact; no gradient updates or retuning' --device cuda"
+}

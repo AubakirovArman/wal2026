@@ -1,0 +1,54 @@
+{
+  "schema": "wal-tat-recovery-suite-build-policy-v1",
+  "evidence_id": "v168",
+  "declared_before_execution": true,
+  "objective": "replace rejected development suite v2 using ranges after audit-v8 while remaining inside every source token stream",
+  "replaces_rejected_suite_sha256": "eb73e892729f16ed1744ae3f0b9811511a4dbd1d79d90890e19e61431bc04551",
+  "builder": "wal_tat/experiments/build_matched_validation_recovery_suite.py",
+  "builder_sha256": "b6a71c222b251035c674b3577962d742ac19da4551dc480dab0cd5a5640c6aaf",
+  "output": "wal2/cache/wal-tat-matched-train-recovery-v3-squadx4-l256.pt",
+  "sequence_length": 256,
+  "calibration_per_domain": 64,
+  "calibration_repeats": {
+    "c4_train": 1,
+    "squad_train_context": 4,
+    "torch_code": 1
+  },
+  "gates_per_domain": 256,
+  "data_splits": {
+    "c4": "train shard 00000",
+    "squad": "train",
+    "code": "torch"
+  },
+  "declared_ranges": {
+    "calibration": {
+      "c4_train": [1650003, 1666387],
+      "squad_train_context": [1650003, 1715539],
+      "torch_code": [1650003, 1666387]
+    },
+    "gates": {
+      "c4_train": [1750003, 1815539],
+      "squad_train_context": [1750003, 1815539],
+      "torch_code": [1750003, 1815539]
+    }
+  },
+  "source_token_counts_checked_read_only": {
+    "c4_train": 1923392,
+    "squad_train_context": 14417935,
+    "torch_code": 2001894
+  },
+  "role": "development-only recovery data; never final audit or candidate acceptance evidence",
+  "acceptance": {
+    "suite_file_created": true,
+    "calibration_sequences": 384,
+    "gate_tokens_per_domain": 65536,
+    "zero_exact_and_declared_range_overlap_required_before_recovery": true,
+    "audit_v11_and_v12_reuse_forbidden": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_matched_validation_recovery_suite.py --output ../wal2/cache/wal-tat-matched-train-recovery-v3-squadx4-l256.pt --length 256 --calibration-per-domain 64 --c4-calibration-repeat 1 --squad-calibration-repeat 4 --code-calibration-repeat 1 --gates-per-domain 256 --calibration-offset 1650003 --gate-offset 1750003 --c4-split train --squad-split train --code-source torch --interleave-calibration --policy 'replacement matched train-domain recovery/development suite after v167; never final audit'"
+}

@@ -1,0 +1,366 @@
+{
+  "schema": "wal-tat-macro-mlp-q4-rescue-v1",
+  "tag": "block23_full_q4_projection_ablation_parent_block24_v2",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "source_checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "parent_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_mlp_macro_q4_rescue95_artifact_s0053_v1-mixed-q2-q4.pt",
+  "parent_artifact_sha256": "dd49a9f5969683bf410a951f818e6118acee56b3e197f56d688770bc39da92fb",
+  "parent_new_ternary_weights": 1199488,
+  "parent_q4_weights": 22790784,
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "suite_role": "development rate-distortion diagnostic; sealed audit not opened",
+  "target_layer": 23,
+  "target_projections": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "up_proj",
+    "gate_proj",
+    "down_proj"
+  ],
+  "moment_sequences": 128,
+  "selection_gate_sequences": 64,
+  "gate_ratio": 1.03,
+  "incremental_gate_ratio": 1.005,
+  "source_metrics": {
+    "c4_train": {
+      "nll": 3.509682571515441,
+      "ppl": 33.43765203595066,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.199067431734875,
+      "ppl": 9.016600981485542,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7213855960872024,
+      "ppl": 5.592271728344381,
+      "tokens": 65536
+    }
+  },
+  "selection_source_metrics": {
+    "c4_train": {
+      "nll": 3.3576494865119457,
+      "ppl": 28.721600964393136,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.5338791366666555,
+      "ppl": 12.602297475570834,
+      "tokens": 16384
+    },
+    "scipy_code": {
+      "nll": 1.6941876634955406,
+      "ppl": 5.4422232524771,
+      "tokens": 16384
+    }
+  },
+  "source_ratios": {
+    "c4_train": 0.9940237340434184,
+    "squad_train_context": 0.999487002880311,
+    "scipy_code": 1.0186908600244926
+  },
+  "full_ternary_selection_metrics": {
+    "c4_train": {
+      "nll": 3.3995849788188934,
+      "ppl": 29.951666891394552,
+      "tokens": 16384
+    },
+    "squad_train_context": {
+      "nll": 2.5784821659326553,
+      "ppl": 13.17712228799687,
+      "tokens": 16384
+    },
+    "scipy_code": {
+      "nll": 1.7659999188035727,
+      "ppl": 5.84741637741476,
+      "tokens": 16384
+    }
+  },
+  "full_ternary_selection_ratios": {
+    "c4_train": 1.0028554698049361,
+    "squad_train_context": 1.0238126881123386,
+    "scipy_code": 1.0622641583718404
+  },
+  "full_ternary_metrics": {
+    "c4_train": {
+      "nll": 3.550656941719353,
+      "ppl": 34.8361953221279,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.2478372352197766,
+      "ppl": 9.467238269145678,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7901651617139578,
+      "ppl": 5.990441776313943,
+      "tokens": 65536
+    }
+  },
+  "full_ternary_ratios": {
+    "c4_train": 1.0056286286856662,
+    "squad_train_context": 1.0216531193043676,
+    "scipy_code": 1.0593936026404946
+  },
+  "projection_ablation": {
+    "q4_only": {
+      "model.layers.23.self_attn.q_proj": {
+        "ratios": {
+          "c4_train": 0.9905706122971535,
+          "squad_train_context": 1.0062931552319787,
+          "scipy_code": 1.0192108238354693
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0000866647566884,
+          "squad_train_context": 1.0001893997640574,
+          "scipy_code": 1.0001396917074008
+        }
+      },
+      "model.layers.23.self_attn.k_proj": {
+        "ratios": {
+          "c4_train": 0.9904472709699735,
+          "squad_train_context": 1.0060576626172326,
+          "scipy_code": 1.0188533689845483
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 0.9999621385341306,
+          "squad_train_context": 0.9999553355495021,
+          "scipy_code": 0.9997889254321228
+        }
+      },
+      "model.layers.23.self_attn.v_proj": {
+        "ratios": {
+          "c4_train": 0.9907908369582209,
+          "squad_train_context": 1.0063900087095354,
+          "scipy_code": 1.018717420000835
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0003090050361696,
+          "squad_train_context": 1.0002856657687291,
+          "scipy_code": 0.9996555202803339
+        }
+      },
+      "model.layers.23.self_attn.o_proj": {
+        "ratios": {
+          "c4_train": 0.9906999483225147,
+          "squad_train_context": 1.0061850571453304,
+          "scipy_code": 1.0191464715874266
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0002172432663177,
+          "squad_train_context": 1.0000819573554132,
+          "scipy_code": 1.0000765435971049
+        }
+      },
+      "model.layers.23.mlp.up_proj": {
+        "ratios": {
+          "c4_train": 0.9905009276397071,
+          "squad_train_context": 1.0062481442539926,
+          "scipy_code": 1.020170701640122
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0000163106640219,
+          "squad_train_context": 1.0001446618039307,
+          "scipy_code": 1.0010816085995402
+        }
+      },
+      "model.layers.23.mlp.gate_proj": {
+        "ratios": {
+          "c4_train": 0.9907215556104413,
+          "squad_train_context": 1.006726417327341,
+          "scipy_code": 1.0213052101382512
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0002390581276195,
+          "squad_train_context": 1.0006200338718696,
+          "scipy_code": 1.0021948885540135
+        }
+      },
+      "model.layers.23.mlp.down_proj": {
+        "ratios": {
+          "c4_train": 0.9906418959070937,
+          "squad_train_context": 1.0062795676262022,
+          "scipy_code": 1.0195930853985087
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0001586331624053,
+          "squad_train_context": 1.0001758945750425,
+          "scipy_code": 1.0005148005198945
+        }
+      }
+    },
+    "q4_except": {
+      "model.layers.23.self_attn.q_proj": {
+        "ratios": {
+          "c4_train": 0.9912541507515489,
+          "squad_train_context": 1.0079746007385177,
+          "scipy_code": 1.0221095969930298
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.000776769717004,
+          "squad_train_context": 1.001860646321959,
+          "scipy_code": 1.0029842239909394
+        }
+      },
+      "model.layers.23.self_attn.k_proj": {
+        "ratios": {
+          "c4_train": 0.9913342313475461,
+          "squad_train_context": 1.008342335843253,
+          "scipy_code": 1.0227596121746345
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.000857619618231,
+          "squad_train_context": 1.0022261508985975,
+          "scipy_code": 1.0036220763058206
+        }
+      },
+      "model.layers.23.self_attn.v_proj": {
+        "ratios": {
+          "c4_train": 0.9910879333209337,
+          "squad_train_context": 1.007854296585805,
+          "scipy_code": 1.022584192721602
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0006089554958424,
+          "squad_train_context": 1.001741071884167,
+          "scipy_code": 1.0034499392429357
+        }
+      },
+      "model.layers.23.self_attn.o_proj": {
+        "ratios": {
+          "c4_train": 0.991160558732245,
+          "squad_train_context": 1.0081792224490227,
+          "scipy_code": 1.0225385555866622
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.000682278593129,
+          "squad_train_context": 1.0020640268823302,
+          "scipy_code": 1.0034051560548047
+        }
+      },
+      "model.layers.23.mlp.up_proj": {
+        "ratios": {
+          "c4_train": 0.9913576485837594,
+          "squad_train_context": 1.0082366413990376,
+          "scipy_code": 1.0210230336478596
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0008812618153362,
+          "squad_train_context": 1.0021210975528914,
+          "scipy_code": 1.001917992055755
+        }
+      },
+      "model.layers.23.mlp.gate_proj": {
+        "ratios": {
+          "c4_train": 0.9910210553471087,
+          "squad_train_context": 1.0075763719165078,
+          "scipy_code": 1.0203917627096828
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.0005414350495885,
+          "squad_train_context": 1.0014648329902434,
+          "scipy_code": 1.0012985332482864
+        }
+      },
+      "model.layers.23.mlp.down_proj": {
+        "ratios": {
+          "c4_train": 0.9911056261973256,
+          "squad_train_context": 1.0079426914607457,
+          "scipy_code": 1.0218337597094116
+        },
+        "incremental_ratios_vs_parent": {
+          "c4_train": 1.000626818341278,
+          "squad_train_context": 1.0018289305925856,
+          "scipy_code": 1.0027135480823368
+        }
+      }
+    }
+  },
+  "total_target_groups": 393216,
+  "eligible_groups": 393216,
+  "candidate_results": {
+    "q4_1.00000000": {
+      "requested_fraction": 1.0,
+      "rescued_groups": 393216,
+      "eligible_groups": 393216,
+      "eligible_q4_fraction": 1.0,
+      "all_target_q4_fraction": 1.0,
+      "target_physical_bpw": 4.125,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.360797293484211,
+          "ppl": 28.81215346629052,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5392322558909655,
+          "ppl": 12.669939964081056,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.700013853609562,
+          "ppl": 5.474023226182417,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9914133547699198,
+        "squad_train_context": 1.0082281103173572,
+        "scipy_code": 1.0225729719446786
+      },
+      "selection_incremental_ratios": {
+        "c4_train": 1.000937503150615,
+        "squad_train_context": 1.002112618217202,
+        "scipy_code": 1.0034389284254381
+      },
+      "selection_worst_ratio": 1.0225729719446786,
+      "selection_passed": true
+    }
+  },
+  "full_evaluations": {
+    "q4_1.00000000": {
+      "metrics": {
+        "c4_train": {
+          "nll": 3.5129764322191477,
+          "ppl": 33.54797259454877,
+          "tokens": 65536
+        },
+        "squad_train_context": {
+          "nll": 2.2026773046236485,
+          "ppl": 9.049208584158299,
+          "tokens": 65536
+        },
+        "scipy_code": {
+          "nll": 1.72609510156326,
+          "ppl": 5.618670676876146,
+          "tokens": 65536
+        }
+      },
+      "ratios": {
+        "c4_train": 0.9949566320048154,
+        "squad_train_context": 1.0011277079275105,
+        "scipy_code": 1.02147787659684
+      },
+      "incremental_ratios_vs_parent": {
+        "c4_train": 1.0009385067272007,
+        "squad_train_context": 1.0016415471561624,
+        "scipy_code": 1.002735880610807
+      },
+      "passed": true
+    }
+  },
+  "first_full_pass": "q4_1.00000000",
+  "development_passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block23_full_q4_projection_ablation_parent_block24_v2-mixed-q2-q4.pt",
+  "artifact_sha256": "81fdc09dc1be402d83c885530d22757fd4776b1ff777596fa25b517c37176bbb",
+  "artifact_written": true,
+  "checkpoint_written": false,
+  "sealed_audit_opened": false,
+  "elapsed_seconds": 188.2345461845398,
+  "peak_cuda_allocated_bytes": 5350633984
+}

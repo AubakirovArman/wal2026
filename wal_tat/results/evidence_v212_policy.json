@@ -1,0 +1,66 @@
+{
+  "schema": "wal-tat-fallback-compensation-commit-policy-v1",
+  "evidence_id": "v212",
+  "declared_before_execution": true,
+  "objective": "atomically publish audited multi-range recovery as coverage-neutral checkpoint s0051r2",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt",
+  "source_checkpoint_sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+  "artifact": "wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v4.pt",
+  "artifact_sha256": "b8197a8af9bc41652a70b72be2faf1bb2597755052043097b0b2a342d1e30875",
+  "development_result": "wal_tat/results/block24_mlp_s0051r1_multirange_fallback_recovery_v4.json",
+  "development_result_sha256": "9619248701538dbb70b8bdfb859d486a9a27c3be4627b4610e6818f4cae53631",
+  "audit_result": "wal_tat/results/block24_mlp_s0051r1_multirange_fallback_recovery_v4_audit_v18.json",
+  "audit_result_sha256": "d6d62447eb5e72a7f54d7755bf999755f46cfd7bd5e5a63f5e766b2f9f2795a0",
+  "script": "wal_tat/experiments/commit_fallback_compensation_artifact.py",
+  "script_sha256": "f55a9ad8f982617411db6ad8ac30eb39b721a8bcc57f644d9edddba885575bbd",
+  "output_checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_multirange_s0051r2.pt",
+  "accepted_weights": 75100160,
+  "target_names": [
+    "model.layers.24.mlp.up_proj",
+    "model.layers.24.mlp.gate_proj",
+    "model.layers.24.mlp.down_proj"
+  ],
+  "expected_changes": {
+    "model.layers.24.mlp.up_proj": {
+      "changed_code_values": 0,
+      "changed_scale_groups": 0,
+      "changed_fallback_weights": 1810132,
+      "max_code_churn": 0.0,
+      "max_fallback_relative_delta": 0.0056
+    },
+    "model.layers.24.mlp.gate_proj": {
+      "changed_code_values": 0,
+      "changed_scale_groups": 0,
+      "changed_fallback_weights": 6660937,
+      "max_code_churn": 0.0,
+      "max_fallback_relative_delta": 0.0055
+    },
+    "model.layers.24.mlp.down_proj": {
+      "changed_code_values": 0,
+      "changed_scale_groups": 0,
+      "changed_fallback_weights": 6520504,
+      "max_code_churn": 0.0,
+      "max_fallback_relative_delta": 0.0051
+    }
+  },
+  "publication_invariants": {
+    "coverage_before": 75100160,
+    "coverage_after": 75100160,
+    "committed_masks_unchanged": true,
+    "artifact_codes_strict_ternary": true,
+    "artifact_scales_positive_finite_fp16": true,
+    "compensated_master_bf16": true,
+    "compensated_master_changes_only_uncommitted_groups": true,
+    "actual_aggregate_relative_fallback_delta_to_s0051r1": 0.005273602038270922,
+    "persistent_bf16_residual_on_committed_groups": false,
+    "source_checkpoint_immutable": true,
+    "atomic_no_overwrite_save": true
+  },
+  "post_commit": {
+    "status_before_fresh_verification": "published_pending_fresh_verification",
+    "old_checkpoint_deletion_forbidden": true,
+    "artifact_deletion_forbidden": true,
+    "fresh_process_verification_required": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/commit_fallback_compensation_artifact.py ../wal2/checkpoints/wal-tat-block24_mlp_train_fallback_s0051r1.pt ../wal2/artifacts/wal-tat-block24_mlp_s0051r1_multirange_fallback_recovery_v4.pt results/block24_mlp_s0051r1_multirange_fallback_recovery_v4.json results/block24_mlp_s0051r1_multirange_fallback_recovery_v4_audit_v18.json results/evidence_v212_policy.json ../wal2/checkpoints/wal-tat-block24_mlp_multirange_s0051r2.pt --tag block24_mlp_multirange_s0051r2"
+}

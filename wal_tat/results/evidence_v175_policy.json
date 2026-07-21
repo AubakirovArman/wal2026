@@ -1,0 +1,34 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v175",
+  "declared_before_execution": true,
+  "objective": "freeze audit-only v13 before any s0050r1 coverage candidate using a new C4 train shard and unused SQuAD/Transformers-code ranges",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "d480e06f818f24c9f85880d92faa501eadbcfe573da174d91558309767b1b8c7",
+  "output": "wal2/cache/wal-tat-audit-holdout-v13-l256-g512.pt",
+  "sequence_length": 256,
+  "sequences_per_domain": 512,
+  "tokens_per_domain": 131072,
+  "sources": {
+    "c4": "train shard 00001-of-00002",
+    "squad": "train",
+    "code": "transformers"
+  },
+  "declared_ranges": {
+    "c4_train": [100003, 231075],
+    "squad_train_context": [2000003, 2131075],
+    "transformers_code": [900003, 1031075]
+  },
+  "source_capacity_checked_read_only": {
+    "transformers_code_tokens": 2224088,
+    "squad_train_context_tokens": 14417935
+  },
+  "role": "audit-only; never training, rollback, hyperparameter selection or candidate selection",
+  "acceptance": {
+    "suite_file_created": true,
+    "domains_have_exactly_512_windows": true,
+    "zero_overlap_proof_required_before_candidate_work": true,
+    "model_evaluation_forbidden_before_candidate_is_frozen": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v13-l256-g512.pt --length 256 --sequences 512 --c4-split train --c4-train-shard 1 --squad-split train --c4-offset 100003 --squad-offset 2000003 --code-offset 900003 --code-source transformers --policy 'audit-only v13; built before s0050r1 coverage growth; never use for training or model selection'"
+}

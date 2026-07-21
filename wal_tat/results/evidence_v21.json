@@ -1,0 +1,122 @@
+{
+  "schema": "wal-tat-evidence-v21",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_second_round_robin_down_transaction",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.4501953125,
+      "gate_proj_coverage": 0.00390625,
+      "down_proj_coverage": 0.0146484375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 68812800,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1651638272,
+    "weight_coverage_fraction": 0.03999695261313424
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_after_recovery_s0002-candidate_bf16_mlp.pt",
+    "bytes": 304659816,
+    "sha256": "58e4ac640c72570c67d7d391561c789fd29326c18d8fe84b58aaa35cbfbc4838",
+    "kind": "mixed BF16/ternary training checkpoint after linked round-robin down transaction"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0019998476306566,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9967635481125173,
+        "squad_context": 1.000459294822251,
+        "torch_code": 0.978364531938711
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9967635481125173,
+        "squad_context": 0.9964856043375951,
+        "transformers_code": 0.9770218398564701
+      },
+      "passed": true
+    }
+  },
+  "down_projection_growth": {
+    "campaign_state": "block24_down_after_recovery_campaign_v2.json",
+    "campaign_step": 2,
+    "transaction_fraction": 0.00390625,
+    "new_groups": 384,
+    "new_weights": 49152,
+    "selected_channel_blocks": [2, 25, 33, 35],
+    "coverage_before": 0.0107421875,
+    "coverage_after": 0.0146484375,
+    "development_worst": {
+      "candidate_only": 0.9998475787969726,
+      "candidate_bf16_mlp": 0.9998212291812997
+    },
+    "holdout_worst": {
+      "candidate_only": 1.0004783737392693,
+      "candidate_bf16_mlp": 1.000459294822251
+    },
+    "holdout_chosen": "candidate_bf16_mlp",
+    "next_fraction": 0.00390625,
+    "next_fraction_reason": "safe_streak_hold",
+    "normalized_headroom": 0.7703350919288598
+  },
+  "automation": {
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "campaign_frontiers_synchronized": ["up", "down", "gate"],
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_up_frontier",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0005-candidate_bf16_mlp.pt",
+      "bytes": 304659641,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_candidate_only_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_after_recovery_s0002-candidate_only.pt",
+      "bytes": 304659052,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 131.25,
+    "accepted_weights_q2_g128_mib": 17.431640625,
+    "projected_saving_mib": 113.818359375
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "continue round-robin with gate, then up; run masked recovery when normalized headroom contracts"
+}

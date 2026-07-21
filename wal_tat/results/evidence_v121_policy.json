@@ -1,0 +1,28 @@
+{
+  "schema": "wal-tat-counterfactual-restore-policy-v1",
+  "evidence_id": "v121",
+  "declared_before_execution": true,
+  "objective": "localize current validation-domain damage by temporarily restoring committed ternary groups to original BF16 weights, without mutating the checkpoint",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "development diagnosis only; never sealed audit",
+  "script": "wal_tat/experiments/counterfactual_bf16_restore_audit.py",
+  "script_sha256": "50d529b766e981726208c03635908cf9960b2597158b50eaf31af9570c103d22",
+  "tag": "s0048r2_matchedval_counterfactual_restore_v1",
+  "arm_set": "committed",
+  "gate_sequences_per_domain": 128,
+  "seed": 229,
+  "required_invariants": {
+    "source_restoration_exact": true,
+    "checkpoint_mutated": false,
+    "artifact_written": false,
+    "coverage_changed": false
+  },
+  "selection_rule_after_diagnosis": "prefer a strict-Q2 recovery parameterization for the smallest arm that materially reduces the SQuAD source gap without creating a new C4 or code worst domain",
+  "audit_firewall": {
+    "v3_v4_v5_v6_are_not_used": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/counterfactual_bf16_restore_audit.py --checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag s0048r2_matchedval_counterfactual_restore_v1 --arm-set committed --gate-sequences 128 --seed 229 --device cuda"
+}

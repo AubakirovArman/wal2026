@@ -1,0 +1,52 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v155",
+  "declared_before_execution": true,
+  "objective": "build audit-only v11 from previously unused C4-train and SQuAD-train ranges after the validation streams no longer contain a free 512x256 interval",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "ef10ec1da42ad2c80d80fb58d8063b51b2363977e6177a25a5eb0af25139afe8",
+  "output": "wal2/cache/wal-tat-audit-holdout-v11-l256-g512.pt",
+  "sequence_length": 256,
+  "sequences_per_domain": 512,
+  "data_splits": {
+    "c4": "train shard 00000",
+    "squad": "train",
+    "code": "torch"
+  },
+  "offsets": {
+    "c4_train": 500003,
+    "squad_train_context": 500003,
+    "torch_code": 800003
+  },
+  "declared_ranges": {
+    "c4_train": [
+      500003,
+      631075
+    ],
+    "squad_train_context": [
+      500003,
+      631075
+    ],
+    "torch_code": [
+      800003,
+      931075
+    ]
+  },
+  "range_rationale": {
+    "c4_train": "starts after the last retained C4-train range ending at 465539",
+    "squad_train_context": "starts after the last retained SQuAD-train range ending at 465539",
+    "torch_code": "lies between audit-v9 ending at 731075 and matched development starting at 1100003"
+  },
+  "role": "audit-only v11; never use for training, candidate selection, rollback selection or hyperparameter tuning",
+  "audit_firewall": {
+    "built_before_next_s0050_candidate": true,
+    "v11_model_evaluation_forbidden_until_a_new_candidate_is_frozen": true,
+    "one_shot_candidate_decision": true
+  },
+  "acceptance": {
+    "suite_file_created": true,
+    "tokens_per_domain": 131072,
+    "zero_exact_and_declared_range_overlap_required_before_development": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v11-l256-g512.pt --length 256 --sequences 512 --c4-split train --squad-split train --c4-offset 500003 --squad-offset 500003 --code-offset 800003 --code-source torch --policy 'audit-only v11; built before s0050 coverage growth; never use for training or model selection'"
+}

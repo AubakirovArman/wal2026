@@ -1,0 +1,71 @@
+{
+  "schema": "wal-tat-evidence-v80",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "fixed_randomized_hadamard_transform_ablation_incremental_only",
+  "superseded_interpretation_by": "wal_tat/results/evidence_v81.json",
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0044-candidate_only.pt",
+    "sha256": "e46c6299a572218fdf8830dccdaffd47c3f84870a5268c3b0e65966d5423ceb1"
+  },
+  "target": {
+    "name": "model.layers.23.self_attn.q_proj",
+    "shape": [2048, 2048],
+    "weights": 4194304,
+    "state_before_experiment": "untouched BF16",
+    "group_size": 128
+  },
+  "development_ablation": {
+    "result": "wal_tat/results/layer23_qproj_fixed_rht_ablation_v1.json",
+    "rht_seeds": [109, 211, 307, 401],
+    "selected_seed": 307,
+    "identity_worst_ratio": 1.0287829893693714,
+    "selected_rht_worst_ratio": 1.0020916590459714,
+    "identity_relative_weight_mse": 0.28199363826773327,
+    "selected_rht_relative_weight_mse": 0.26096930689628667
+  },
+  "fixed_seed_holdout_v3": {
+    "result": "wal_tat/results/layer23_qproj_fixed_rht_seed307_holdout_v3.json",
+    "identity_worst_ratio": 1.0171270471045037,
+    "rht_worst_ratio": 1.0017790085078828,
+    "rht_ratios": {
+      "c4_validation": 1.0007284851723404,
+      "squad_context": 1.0017790085078828,
+      "torch_code": 1.0012005971055213
+    }
+  },
+  "fixed_seed_holdout_v4": {
+    "result": "wal_tat/results/layer23_qproj_fixed_rht_seed307_holdout_v4.json",
+    "identity_worst_ratio": 1.0254583782382725,
+    "rht_worst_ratio": 1.0025474631735063,
+    "rht_ratios": {
+      "c4_validation": 1.0007284851723404,
+      "squad_context": 1.001423004051675,
+      "transformers_code": 1.0025474631735063
+    }
+  },
+  "interpretation": {
+    "rht_beats_identity_incrementally_on_development_and_both_recurring_validation_suites": true,
+    "ratio_scope": "candidate with target replacement divided by the existing s0044 frontier; not cumulative candidate divided by raw BF16",
+    "identity_to_rht_worst_ratio_damage_reduction_v3_fraction": 0.8961309509528101,
+    "identity_to_rht_worst_ratio_damage_reduction_v4_fraction": 0.8999369400729512,
+    "strict_guide_ratio": 1.0021634065975926,
+    "strict_guide_applies_to_these_incremental_ratios": false,
+    "historical_v3_comparison_to_cumulative_guide_was_invalid": true,
+    "historical_v4_comparison_to_cumulative_guide_was_invalid": true,
+    "checkpoint_mutated": false,
+    "accepted_coverage_changed": false,
+    "conclusion": "fixed RHT is a strong incremental initialization result, but cumulative BF16 comparison and paired uncertainty are required before any frontier transaction"
+  },
+  "runtime_contract": {
+    "logical_codes": "ternary {-1,0,+1}",
+    "transform": "blockwise randomized Hadamard, g128",
+    "requirement": "the transform must remain in the runtime path; inverse materialization would destroy compact ternary storage"
+  },
+  "next_action": "completed in evidence_v81: hard-forward proxy/scale recovery was frozen after development and rejected by cumulative recurring-validation audit-v3",
+  "verification": {
+    "transform_unit_tests_passed": 6,
+    "checkpoint_files_written": 0,
+    "maximum_concurrent_experiments": 1
+  }
+}

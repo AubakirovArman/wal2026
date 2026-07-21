@@ -1,0 +1,29 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v201",
+  "declared_before_execution": true,
+  "objective": "seal audit-v17 before the first coverage-growth candidate based on recovered s0051r1",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "d480e06f818f24c9f85880d92faa501eadbcfe573da174d91558309767b1b8c7",
+  "output": "wal2/cache/wal-tat-audit-holdout-v17-l256-g512.pt",
+  "role": "one-shot audit-only; never training, selection, confirmation, or retuning",
+  "configuration": {
+    "sequence_length": 256,
+    "sequences_per_domain": 512,
+    "c4_split": "train",
+    "c4_train_shard": 1,
+    "c4_offset": 1400003,
+    "squad_split": "train",
+    "squad_offset": 3600003,
+    "code_source": "transformers",
+    "code_offset": 2060003
+  },
+  "requirements": {
+    "output_must_not_exist_before_build": true,
+    "exact_window_overlap_with_every_retained_suite": 0,
+    "declared_range_overlap_on_identical_sources": 0,
+    "model_evaluations_before_candidate_freeze": 0,
+    "one_shot_only": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v17-l256-g512.pt --length 256 --sequences 512 --c4-split train --c4-train-shard 1 --c4-offset 1400003 --squad-split train --squad-offset 3600003 --code-source transformers --code-offset 2060003 --policy 'audit-only v17; sealed before s0051r1 coverage growth; never use for training or model selection'"
+}

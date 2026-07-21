@@ -1,0 +1,23 @@
+{
+  "schema": "wal-tat-overlap-audit-policy-v1",
+  "evidence_id": "v117",
+  "declared_before_execution": true,
+  "new_suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "new_suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "auditor": "wal_tat/experiments/recovery_suite_overlap_audit.py",
+  "auditor_sha256": "1c1c199589462560c286cee5d985f4529e431b2a4f62b3e31e6152d724c10139",
+  "prior_suites": [
+    "wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt",
+    "wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt",
+    "wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt",
+    "wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt"
+  ],
+  "acceptance": {
+    "exact_window_overlap_each": 0,
+    "declared_range_overlap_each": 0,
+    "all_comparisons_pass": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/recovery_suite_overlap_audit.py --new ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v1-squadx2-l256.pt --prior ../wal2/cache/wal-tat-diverse-recovery-v2-squadx4-interleaved-l256.pt --prior ../wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v4-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v5-l256-g512.pt --prior ../wal2/cache/wal-tat-audit-holdout-v6-l256-g512.pt --tag matched_validation_recovery_v1_overlap_v1"
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "wal-tat-fallback-compensation-audit-policy-v2",
+  "evidence_id": "v198",
+  "declared_before_execution": true,
+  "objective": "evaluate the exact frozen s0051 coverage-neutral recovery once on sealed audit-v16 without training or retuning",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+  "checkpoint_sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8",
+  "artifact": "wal2/artifacts/wal-tat-block24_mlp_s0051_train_fallback_recovery_v1.pt",
+  "artifact_sha256": "b2ef04b8191132853950038e81395e07e2bcabca33523818a8a82b8f0c880c23",
+  "development_result": "wal_tat/results/block24_mlp_s0051_train_fallback_recovery_v1.json",
+  "development_result_sha256": "65d4ff4406e1f6ea5343931020650bdbf5cec660d3d843a319289d100da33002",
+  "suite": "wal2/cache/wal-tat-audit-holdout-v16-l256-g512.pt",
+  "suite_sha256": "6119468737a20497bf21c36610ea684752b8c5bd991b522fff99e0f33ef5bde9",
+  "script": "wal_tat/experiments/ternary_recode_artifact_audit.py",
+  "script_sha256": "0d736f0e168a6b9be5707727a83a7856a92988ce217075697a8647ef4471eacb",
+  "tag": "block24_mlp_s0051_train_fallback_recovery_v1_audit_v16",
+  "acceptance": {
+    "cumulative_observed_ratio_max_each_domain": 1.0021978087383818,
+    "cumulative_confidence_required": false,
+    "incremental_observed_ratio_max_each_domain": 1.0005,
+    "incremental_paired_upper95_ratio_max_each_domain": 1.0005,
+    "source_restoration_exact": true,
+    "checkpoint_mutated": false,
+    "compensated_master_changes_only_uncommitted_groups": true,
+    "accepted_coverage_changed": false
+  },
+  "bootstrap": {
+    "samples": 4096,
+    "block_size": 8,
+    "confidence": 0.95,
+    "batch_size": 8,
+    "seed": 389
+  },
+  "audit_firewall": {
+    "suite_never_used_for_training_or_model_selection": true,
+    "artifact_frozen_before_first_model_evaluation": true,
+    "one_shot_only": true,
+    "failure_closes_audit_v16_and_forbids_retuning_against_it": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/ternary_recode_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt ../wal2/artifacts/wal-tat-block24_mlp_s0051_train_fallback_recovery_v1.pt ../wal2/cache/wal-tat-audit-holdout-v16-l256-g512.pt --tag block24_mlp_s0051_train_fallback_recovery_v1_audit_v16 --gate-ratio 1.0021978087383818 --incremental-gate-ratio 1.0005 --cumulative-point-only --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 389 --suite-role 'one-shot audit-only v16; frozen coverage-neutral artifact; no gradient updates or retuning' --device cuda"
+}

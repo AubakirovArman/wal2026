@@ -1,0 +1,509 @@
+{
+  "schema": "wal-tat-macro-q8-rescue-v1",
+  "tag": "block21_kupdown_q8_rescue_parent_v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "source_checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "parent_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block26_q4q8_codeheavy_scaleonly_headroom_v7_lr5e5_256-mixed-q2-q4-q8.pt",
+  "parent_artifact_sha256": "148908dbc2f43d72d73402904e68a6642c8d1e1817c6400cd4209d0b30f7c76a",
+  "candidate_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block21_full_q4_projection_ablation_parent_v1-mixed-q2-q4-q8.pt",
+  "candidate_artifact_sha256": "ecb8f4a3917b5aac607bf16a3da26322802cb4deee6e48a26c9d469b75630167",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "target_layer": 21,
+  "target_projections": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "up_proj",
+    "gate_proj",
+    "down_proj"
+  ],
+  "rescue_projections": [
+    "k_proj",
+    "up_proj",
+    "down_proj"
+  ],
+  "moment_sequences": 64,
+  "selection_gate_sequences": 64,
+  "gate_ratio": 1.02,
+  "incremental_gate_ratio": 1.005,
+  "parent_metrics": {
+    "c4_train": {
+      "nll": 3.5143822887912393,
+      "ppl": 33.59516940049763,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.204722922993824,
+      "ppl": 9.067738757843738,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7217213730327785,
+      "ppl": 5.594149799553017,
+      "tokens": 65536
+    }
+  },
+  "parent_ratios": {
+    "c4_train": 0.995354803284082,
+    "squad_train_context": 1.0020574515744483,
+    "scipy_code": 1.0188895679178565
+  },
+  "candidate_metrics": {
+    "c4_train": {
+      "nll": 3.518091155216098,
+      "ppl": 33.72000074461999,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.2090648231096566,
+      "ppl": 9.107195570589726,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7267974813003093,
+      "ppl": 5.622618503583178,
+      "tokens": 65536
+    }
+  },
+  "candidate_ratios": {
+    "c4_train": 0.9964052405181006,
+    "squad_train_context": 1.0040308666098188,
+    "scipy_code": 1.0218935346690494
+  },
+  "candidate_incremental_ratios_vs_parent": {
+    "c4_train": 1.0010553394935684,
+    "squad_train_context": 1.001969363166024,
+    "scipy_code": 1.0029482751082943
+  },
+  "total_target_groups": 393216,
+  "eligible_q4_groups": 212992,
+  "candidate_results": {
+    "q8_0.01000038": {
+      "requested_fraction": 0.01,
+      "rescued_groups": 2130,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.010000375600961538,
+      "all_target_q8_fraction": 0.0054168701171875,
+      "target_physical_bpw": 4.14666748046875,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3680704571306705,
+          "ppl": 29.02247289011331,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5437764450907707,
+          "ppl": 12.727645581750245,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6961500700563192,
+          "ppl": 5.452913593059487,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9935588907665439,
+        "squad_train_context": 1.010032427066727,
+        "scipy_code": 1.0202488728659556
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0013120627034253,
+        "squad_train_context": 1.0009627966586645,
+        "scipy_code": 1.0016356687746477
+      },
+      "selection_passed": false
+    },
+    "q8_0.02000075": {
+      "requested_fraction": 0.02,
+      "rescued_groups": 4260,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.020000751201923076,
+      "all_target_q8_fraction": 0.010833740234375,
+      "target_physical_bpw": 4.1683349609375,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.367822464555502,
+          "ppl": 29.015276424695408,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5435792803764343,
+          "ppl": 12.725136386515453,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6960642971098423,
+          "ppl": 5.452445900651691,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9934857345689408,
+        "squad_train_context": 1.0099541408024848,
+        "scipy_code": 1.0201972797000498
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0012383356362105,
+        "squad_train_context": 1.0008852133693604,
+        "scipy_code": 1.0015850168635203
+      },
+      "selection_passed": false
+    },
+    "q8_0.05000188": {
+      "requested_fraction": 0.05,
+      "rescued_groups": 10650,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.050001878004807696,
+      "all_target_q8_fraction": 0.0270843505859375,
+      "target_physical_bpw": 4.23333740234375,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3672814406454563,
+          "ppl": 28.999582712112744,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.543955907225609,
+          "ppl": 12.729929917167533,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6958350148051977,
+          "ppl": 5.451195894597251,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9933261360323945,
+        "squad_train_context": 1.0101036843409135,
+        "scipy_code": 1.020059364419432
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.001077491682904,
+        "squad_train_context": 1.0010334140750372,
+        "scipy_code": 1.001449617680037
+      },
+      "selection_passed": false
+    },
+    "q8_0.09999906": {
+      "requested_fraction": 0.1,
+      "rescued_groups": 21299,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.09999906099759616,
+      "all_target_q8_fraction": 0.054166158040364586,
+      "target_physical_bpw": 4.341664632161458,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3674820214509964,
+          "ppl": 29.00540005517764,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.544144695624709,
+          "ppl": 12.732333407125626,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6960137095302343,
+          "ppl": 5.4521700815872025,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9933853060661565,
+        "squad_train_context": 1.010178644703611,
+        "scipy_code": 1.0201668508353006
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0011371234461615,
+        "squad_train_context": 1.0011077013278753,
+        "scipy_code": 1.0015551431365273
+      },
+      "selection_passed": false
+    },
+    "q8_0.19999812": {
+      "requested_fraction": 0.2,
+      "rescued_groups": 42598,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.19999812199519232,
+      "all_target_q8_fraction": 0.10833231608072917,
+      "target_physical_bpw": 4.558329264322917,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.366836041212082,
+          "ppl": 28.98666919045577,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.544718664139509,
+          "ppl": 12.739643463291609,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6960533820092678,
+          "ppl": 5.452386386981108,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9931947460948607,
+        "squad_train_context": 1.0104065447665989,
+        "scipy_code": 1.020190714173063
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.000945076452571,
+        "squad_train_context": 1.001333554952268,
+        "scipy_code": 1.0015785711166159
+      },
+      "selection_passed": false
+    },
+    "q8_0.40000094": {
+      "requested_fraction": 0.4,
+      "rescued_groups": 85197,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.40000093900240385,
+      "all_target_q8_fraction": 0.21666717529296875,
+      "target_physical_bpw": 4.991668701171875,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3668775632977486,
+          "ppl": 28.987872802405153,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.544987265020609,
+          "ppl": 12.743065802351813,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.694883881136775,
+          "ppl": 5.446013543593679,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9932069948402188,
+        "squad_train_context": 1.0105131954907114,
+        "scipy_code": 1.0194872493275635
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0009574207802137,
+        "squad_train_context": 1.001439248001533,
+        "scipy_code": 1.0008879401345867
+      },
+      "selection_passed": true
+    },
+    "q8_0.59999906": {
+      "requested_fraction": 0.6,
+      "rescued_groups": 127795,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.5999990609975961,
+      "all_target_q8_fraction": 0.32499949137369794,
+      "target_physical_bpw": 5.424997965494792,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3664957024157047,
+          "ppl": 28.97680558093221,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5449810177087784,
+          "ppl": 12.742986192694742,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6939513441175222,
+          "ppl": 5.440937301616576,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9930943483622963,
+        "squad_train_context": 1.010510714931721,
+        "scipy_code": 1.0189263202803083
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.000843895272855,
+        "squad_train_context": 1.0014367897168306,
+        "scipy_code": 1.0003372445579237
+      },
+      "selection_passed": true
+    },
+    "q8_0.80000188": {
+      "requested_fraction": 0.8,
+      "rescued_groups": 170394,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 0.8000018780048077,
+      "all_target_q8_fraction": 0.4333343505859375,
+      "target_physical_bpw": 5.85833740234375,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.3658842109143734,
+          "ppl": 28.959091927010117,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.5443483013659716,
+          "ppl": 12.734926047236234,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6921026408672333,
+          "ppl": 5.430887915171303,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.992913962344394,
+        "squad_train_context": 1.0102594884434015,
+        "scipy_code": 1.017814309355881
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0006621016244392,
+        "squad_train_context": 1.0011878191277641,
+        "scipy_code": 0.9992455209249981
+      },
+      "selection_passed": true
+    },
+    "q8_1.00000000": {
+      "requested_fraction": 1.0,
+      "rescued_groups": 212992,
+      "eligible_groups": 212992,
+      "eligible_q8_fraction": 1.0,
+      "all_target_q8_fraction": 0.5416666666666666,
+      "target_physical_bpw": 6.291666666666666,
+      "selection_metrics": {
+        "c4_train": {
+          "nll": 3.365629855543375,
+          "ppl": 28.951726963138015,
+          "tokens": 16384
+        },
+        "squad_train_context": {
+          "nll": 2.544342389330268,
+          "ppl": 12.734850758121317,
+          "tokens": 16384
+        },
+        "scipy_code": {
+          "nll": 1.6922142654657364,
+          "ppl": 5.431494169690179,
+          "tokens": 16384
+        }
+      },
+      "selection_ratios": {
+        "c4_train": 0.9928389291633825,
+        "squad_train_context": 1.0102571410092225,
+        "scipy_code": 1.0178814525130917
+      },
+      "selection_incremental_ratios_vs_parent": {
+        "c4_train": 1.0005864829268984,
+        "squad_train_context": 1.0011854927724733,
+        "scipy_code": 0.9993114391366866
+      },
+      "selection_passed": true
+    }
+  },
+  "full_evaluations": {
+    "q8_0.40000094": {
+      "metrics": {
+        "c4_train": {
+          "nll": 3.517260579392314,
+          "ppl": 33.69200535497984,
+          "tokens": 65536
+        },
+        "squad_train_context": {
+          "nll": 2.2082354365848005,
+          "ppl": 9.099645316776442,
+          "tokens": 65536
+        },
+        "scipy_code": {
+          "nll": 1.7250902426894754,
+          "ppl": 5.613027541539766,
+          "tokens": 65536
+        }
+      },
+      "ratios": {
+        "c4_train": 0.9961700021268955,
+        "squad_train_context": 1.0036539063402088,
+        "scipy_code": 1.020883215788323
+      },
+      "incremental_ratios_vs_parent": {
+        "c4_train": 1.0008190032741329,
+        "squad_train_context": 1.0015931768814772,
+        "scipy_code": 1.001956686900368
+      },
+      "passed": false
+    },
+    "q8_0.59999906": {
+      "metrics": {
+        "c4_train": {
+          "nll": 3.516868193168193,
+          "ppl": 33.678787669603956,
+          "tokens": 65536
+        },
+        "squad_train_context": {
+          "nll": 2.2078513253945857,
+          "ppl": 9.096150712384576,
+          "tokens": 65536
+        },
+        "scipy_code": {
+          "nll": 1.7245737530756742,
+          "ppl": 5.610129219653586,
+          "tokens": 65536
+        }
+      },
+      "ratios": {
+        "c4_train": 0.9960588692219277,
+        "squad_train_context": 1.0034793259081856,
+        "scipy_code": 1.020577564776677
+      },
+      "incremental_ratios_vs_parent": {
+        "c4_train": 1.0007073517257592,
+        "squad_train_context": 1.0014189549027384,
+        "scipy_code": 1.0016567024650866
+      },
+      "passed": false
+    },
+    "q8_0.80000188": {
+      "metrics": {
+        "c4_train": {
+          "nll": 3.5166880525648594,
+          "ppl": 33.672721298889854,
+          "tokens": 65536
+        },
+        "squad_train_context": {
+          "nll": 2.207687980029732,
+          "ppl": 9.09466501967151,
+          "tokens": 65536
+        },
+        "scipy_code": {
+          "nll": 1.7225023917853832,
+          "ppl": 5.598520642084158,
+          "tokens": 65536
+        }
+      },
+      "ratios": {
+        "c4_train": 0.9960078492132717,
+        "squad_train_context": 1.0034050846335452,
+        "scipy_code": 1.0193517634111815
+      },
+      "incremental_ratios_vs_parent": {
+        "c4_train": 1.0006560936130864,
+        "squad_train_context": 1.0013448660622994,
+        "scipy_code": 1.0004536266813189
+      },
+      "passed": true
+    }
+  },
+  "first_full_pass": "q8_0.80000188",
+  "development_passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block21_kupdown_q8_rescue_parent_v1-mixed-q2-q4-q8.pt",
+  "artifact_sha256": "39e9a34f8c33e58192e8f069baff0e5062c23a6ca56c530057b43f86ee821187",
+  "artifact_written": true,
+  "checkpoint_written": false,
+  "sealed_audit_opened": false,
+  "elapsed_seconds": 236.4230182170868,
+  "peak_cuda_allocated_bytes": 5571228160
+}

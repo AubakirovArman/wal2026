@@ -1,0 +1,323 @@
+{
+  "schema": "wal-tat-partial-initializer-proxy-recovery-v1",
+  "status": "development_only_recovered_artifact",
+  "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0050.pt",
+  "checkpoint_sha256": "e1210d5ca1192ec82aaef56ae24adbd3207134eacc572fa264a485da5bf6f934",
+  "input_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_gate_s0050_d1g2048_initializers_v1.pt",
+  "input_artifact_sha256": "b53b2866d161d85f5849f2435372c982cb82d35968e572c5de9b700869f1ac29",
+  "output_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_gate_s0050_d1g2048_thresholdls_proxy_v1.pt",
+  "output_artifact_sha256": "17a5c84c75fd695f4d7628b23d55e18bf0a672b47009fd53902184b70e2d9863",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "target_name": "model.layers.24.mlp.gate_proj",
+  "candidate_groups": 2048,
+  "candidate_weights": 262144,
+  "steps": 256,
+  "best_step": 128,
+  "hyperparameters": {
+    "proxy_lr": 0.0001,
+    "scale_lr": 5e-06,
+    "initial_temperature": 0.25,
+    "final_temperature": 0.08,
+    "ce_weight": 1.0,
+    "kd_weight": 1.0,
+    "kd_temperature": 1.0,
+    "block_weight": 0.02,
+    "proxy_anchor_weight": 0.001
+  },
+  "bf16_selection": {
+    "c4_validation": {
+      "nll": 3.2209969758987427,
+      "ppl": 25.053085056571057,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.2482968270778656,
+      "ppl": 9.471590334783128,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.4969522953033447,
+      "ppl": 12.145421837779415,
+      "tokens": 16384
+    }
+  },
+  "frontier_selection": {
+    "c4_validation": {
+      "nll": 3.202943831682205,
+      "ppl": 24.60485624236767,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.2719947695732117,
+      "ppl": 9.698728258794175,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.4630706906318665,
+      "ppl": 11.740808634810234,
+      "tokens": 16384
+    }
+  },
+  "initial_selection": {
+    "c4_validation": {
+      "nll": 3.203224003314972,
+      "ppl": 24.611750790898444,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.272405683994293,
+      "ppl": 9.70271442503237,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.463150441646576,
+      "ppl": 11.741745013550451,
+      "tokens": 16384
+    }
+  },
+  "initial_ratios_to_bf16": {
+    "c4_validation": 0.9944821517322873,
+    "squad_context": 1.0107231645866628,
+    "torch_code": 0.9864627555278694
+  },
+  "initial_ratios_to_frontier": {
+    "c4_validation": 1.0000874731645293,
+    "squad_context": 1.0001808606369103,
+    "torch_code": 1.000032378695022
+  },
+  "best_selection": {
+    "c4_validation": {
+      "nll": 3.2030458450317383,
+      "ppl": 24.607366394200056,
+      "tokens": 16384
+    },
+    "squad_context": {
+      "nll": 2.272177964448929,
+      "ppl": 9.700505178868514,
+      "tokens": 16384
+    },
+    "torch_code": {
+      "nll": 2.4632303416728973,
+      "ppl": 11.742683216766824,
+      "tokens": 16384
+    }
+  },
+  "best_selection_ratios_to_bf16": {
+    "c4_validation": 0.9944268401984464,
+    "squad_context": 1.010621879230289,
+    "torch_code": 0.9864947545478234
+  },
+  "best_selection_ratios_to_frontier": {
+    "c4_validation": 1.0000318498715226,
+    "squad_context": 1.000080631733035,
+    "torch_code": 1.0000648178883529
+  },
+  "final_full_development": {
+    "c4_validation": {
+      "nll": 3.3410186171531677,
+      "ppl": 28.24788583670372,
+      "tokens": 65536
+    },
+    "squad_context": {
+      "nll": 2.1509571075439453,
+      "ppl": 8.593078963268905,
+      "tokens": 65536
+    },
+    "torch_code": {
+      "nll": 2.165644694119692,
+      "ppl": 8.72022198087895,
+      "tokens": 65536
+    }
+  },
+  "final_full_ratios_to_bf16": {
+    "c4_validation": 0.9954905772975823,
+    "squad_context": 1.0041807144211727,
+    "torch_code": 0.980606626302844
+  },
+  "final_full_ratios_to_frontier": {
+    "c4_validation": 1.0000277223043637,
+    "squad_context": 1.0001058177853488,
+    "torch_code": 1.0000220342214838
+  },
+  "candidate_code_churn": 0.0,
+  "norm_parameters_trained": 0,
+  "previously_committed_groups_trainable": 0,
+  "checkpoint_mutated": false,
+  "accepted_coverage_changed": false,
+  "history": [
+    {
+      "step": 1,
+      "loss": 2.644685983657837,
+      "ce": 2.644348621368408,
+      "kd": 0.0003369759942870587,
+      "block_loss": 2.2431677280110307e-05,
+      "anchor_loss": 0.0,
+      "temperature": 0.24999359965632728,
+      "gradient_norm": 0.015504367649555206,
+      "candidate_code_churn": 0.0,
+      "selection_metrics": null,
+      "ratios_to_bf16": null,
+      "ratios_to_frontier": null,
+      "best_step": 0
+    },
+    {
+      "step": 64,
+      "loss": 1.8668632507324219,
+      "ce": 1.8666585683822632,
+      "kd": 0.0002043689164565876,
+      "block_loss": 1.9219854948460124e-05,
+      "anchor_loss": 1.5509613149333745e-06,
+      "temperature": 0.2251040764008565,
+      "gradient_norm": 0.017049875110387802,
+      "candidate_code_churn": 0.0,
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.20331871509552,
+          "ppl": 24.6140819240294,
+          "tokens": 16384
+        },
+        "squad_context": {
+          "nll": 2.272439807653427,
+          "ppl": 9.703045522801187,
+          "tokens": 16384
+        },
+        "torch_code": {
+          "nll": 2.4631188213825226,
+          "ppl": 11.741373742342553,
+          "tokens": 16384
+        }
+      },
+      "ratios_to_bf16": {
+        "c4_validation": 0.9945115562245165,
+        "squad_context": 1.0107383421462817,
+        "torch_code": 0.9864500919843517
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.0001170433928959,
+        "squad_context": 1.0001958798876545,
+        "torch_code": 1.0000195409538342
+      },
+      "best_step": 0
+    },
+    {
+      "step": 128,
+      "loss": 2.2397263050079346,
+      "ce": 2.2393524646759033,
+      "kd": 0.0003729699528776109,
+      "block_loss": 4.568943040794693e-05,
+      "anchor_loss": 3.841191755782347e-06,
+      "temperature": 0.16499999999999998,
+      "gradient_norm": 0.03157661855220795,
+      "candidate_code_churn": 0.0,
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.2030458450317383,
+          "ppl": 24.607366394200056,
+          "tokens": 16384
+        },
+        "squad_context": {
+          "nll": 2.272177964448929,
+          "ppl": 9.700505178868514,
+          "tokens": 16384
+        },
+        "torch_code": {
+          "nll": 2.4632303416728973,
+          "ppl": 11.742683216766824,
+          "tokens": 16384
+        }
+      },
+      "ratios_to_bf16": {
+        "c4_validation": 0.9944268401984464,
+        "squad_context": 1.010621879230289,
+        "torch_code": 0.9864947545478234
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.0000318498715226,
+        "squad_context": 1.000080631733035,
+        "torch_code": 1.0000648178883529
+      },
+      "best_step": 128
+    },
+    {
+      "step": 192,
+      "loss": 2.191092014312744,
+      "ce": 2.1907646656036377,
+      "kd": 0.00032639538403600454,
+      "block_loss": 4.5464450522558764e-05,
+      "anchor_loss": 6.044931069482118e-06,
+      "temperature": 0.10489592359914346,
+      "gradient_norm": 0.04047383368015289,
+      "candidate_code_churn": 0.0,
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.2033183574676514,
+          "ppl": 24.614073121349314,
+          "tokens": 16384
+        },
+        "squad_context": {
+          "nll": 2.2722532749176025,
+          "ppl": 9.701235755969615,
+          "tokens": 16384
+        },
+        "torch_code": {
+          "nll": 2.46310555934906,
+          "ppl": 11.741218028883628,
+          "tokens": 16384
+        }
+      },
+      "ratios_to_bf16": {
+        "c4_validation": 0.9945114451943382,
+        "squad_context": 1.0106553759055352,
+        "torch_code": 0.9864447806960714
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.0001169317369045,
+        "squad_context": 1.0001137790226688,
+        "torch_code": 1.0000141566043257
+      },
+      "best_step": 128
+    },
+    {
+      "step": 256,
+      "loss": 1.8665839433670044,
+      "ce": 1.8663694858551025,
+      "kd": 0.0002141058794222772,
+      "block_loss": 1.9195642380509526e-05,
+      "anchor_loss": 6.96727283866494e-06,
+      "temperature": 0.08,
+      "gradient_norm": 0.01700502820312977,
+      "candidate_code_churn": 0.0,
+      "selection_metrics": {
+        "c4_validation": {
+          "nll": 3.20319864153862,
+          "ppl": 24.611126601094572,
+          "tokens": 16384
+        },
+        "squad_context": {
+          "nll": 2.2722567319869995,
+          "ppl": 9.70126929387283,
+          "tokens": 16384
+        },
+        "torch_code": {
+          "nll": 2.463211417198181,
+          "ppl": 11.742460994757913,
+          "tokens": 16384
+        }
+      },
+      "ratios_to_bf16": {
+        "c4_validation": 0.9944742778421404,
+        "squad_context": 1.010656913544763,
+        "torch_code": 0.9864871755184796
+      },
+      "ratios_to_frontier": {
+        "c4_validation": 1.000079554893812,
+        "squad_context": 1.0001153006236176,
+        "torch_code": 1.0000571346030993
+      },
+      "best_step": 128
+    }
+  ],
+  "elapsed_seconds": 32.70854498445988,
+  "peak_cuda_allocated_bytes": 11340685824
+}

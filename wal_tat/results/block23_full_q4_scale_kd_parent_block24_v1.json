@@ -1,0 +1,208 @@
+{
+  "schema": "wal-tat-mixed-q4-scale-recovery-v1",
+  "tag": "block23_full_q4_scale_kd_parent_block24_v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+  "source_checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "parent_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_mlp_macro_q4_rescue95_artifact_s0053_v1-mixed-q2-q4.pt",
+  "parent_artifact_sha256": "dd49a9f5969683bf410a951f818e6118acee56b3e197f56d688770bc39da92fb",
+  "candidate_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block23_full_q4_projection_ablation_parent_block24_v2-mixed-q2-q4.pt",
+  "candidate_artifact_sha256": "81fdc09dc1be402d83c885530d22757fd4776b1ff777596fa25b517c37176bbb",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+  "suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "target_layer": 23,
+  "target_projections": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "up_proj",
+    "gate_proj",
+    "down_proj"
+  ],
+  "steps": 256,
+  "train_sequences": 256,
+  "lr": 0.0002,
+  "weights": {
+    "ce": 0.0,
+    "kd": 1.0,
+    "block": 0.1
+  },
+  "baseline": {
+    "c4_train": {
+      "nll": 3.530783472582698,
+      "ppl": 34.15071328367444,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.200196126010269,
+      "ppl": 9.026783712911167,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.689801748143509,
+      "ppl": 5.418406389516249,
+      "tokens": 65536
+    }
+  },
+  "parent": {
+    "c4_train": {
+      "nll": 3.509682571515441,
+      "ppl": 33.43765203595066,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.199067431734875,
+      "ppl": 9.016600981485542,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7213855960872024,
+      "ppl": 5.592271728344381,
+      "tokens": 65536
+    }
+  },
+  "parent_ratios": {
+    "c4_train": 0.9940237340434184,
+    "squad_train_context": 0.999487002880311,
+    "scipy_code": 1.0186908600244926
+  },
+  "candidate": {
+    "c4_train": {
+      "nll": 3.5128572126850486,
+      "ppl": 33.543973259290254,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.202618340961635,
+      "ppl": 9.048675025412297,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.726114303106442,
+      "ppl": 5.61877856505958,
+      "tokens": 65536
+    }
+  },
+  "candidate_ratios": {
+    "c4_train": 0.9949228662598966,
+    "squad_train_context": 1.0011009086520657,
+    "scipy_code": 1.0214892397897135
+  },
+  "candidate_incremental_ratios_vs_parent": {
+    "c4_train": 1.0009045379759904,
+    "squad_train_context": 1.0016147341257102,
+    "scipy_code": 1.0027470353127088
+  },
+  "attempted": {
+    "c4_train": {
+      "nll": 3.5141336508095264,
+      "ppl": 33.58681740373743,
+      "tokens": 65536
+    },
+    "squad_train_context": {
+      "nll": 2.202562758233398,
+      "ppl": 9.048172089344865,
+      "tokens": 65536
+    },
+    "scipy_code": {
+      "nll": 1.7269470333121717,
+      "ppl": 5.623459440372651,
+      "tokens": 65536
+    }
+  },
+  "attempted_ratios": {
+    "c4_train": 0.9952843832247259,
+    "squad_train_context": 1.0010756460277115,
+    "scipy_code": 1.0219820373659052
+  },
+  "attempted_incremental_ratios_vs_parent": {
+    "c4_train": 1.0012682284518293,
+    "squad_train_context": 1.0015894585350509,
+    "scipy_code": 1.0032307910776126
+  },
+  "candidate_selection_ratios": {
+    "c4_train": 0.9913392479923119,
+    "squad_train_context": 1.0082544712488122,
+    "scipy_code": 1.0227396231700325
+  },
+  "attempted_selection_ratios": {
+    "c4_train": 0.9915821568989992,
+    "squad_train_context": 1.0083274606247148,
+    "scipy_code": 1.0227202761529668
+  },
+  "selection_improvement": 1.93470170657406e-05,
+  "best_step": 64,
+  "history": [
+    {
+      "step": 1,
+      "ce": 3.499992847442627,
+      "kd": 0.3989027142524719,
+      "block": 0.0016834656707942486,
+      "gradient_norm": 0.030396228656172752,
+      "selection_ratios": null,
+      "best_step": 0
+    },
+    {
+      "step": 64,
+      "ce": 1.7478805780410767,
+      "kd": 2.4698476791381836,
+      "block": 0.002696657320484519,
+      "gradient_norm": 0.21221110224723816,
+      "selection_ratios": {
+        "c4_train": 0.9915821568989992,
+        "squad_train_context": 1.0083274606247148,
+        "scipy_code": 1.0227202761529668
+      },
+      "best_step": 64
+    },
+    {
+      "step": 128,
+      "ce": 1.834317922592163,
+      "kd": 2.6420414447784424,
+      "block": 0.003401272464543581,
+      "gradient_norm": 0.27618178725242615,
+      "selection_ratios": {
+        "c4_train": 0.9917944417444187,
+        "squad_train_context": 1.0083492709063582,
+        "scipy_code": 1.0234077596542792
+      },
+      "best_step": 64
+    },
+    {
+      "step": 192,
+      "ce": 0.9477863907814026,
+      "kd": 3.483006000518799,
+      "block": 0.003499435493722558,
+      "gradient_norm": 0.38454630970954895,
+      "selection_ratios": {
+        "c4_train": 0.9921962150981226,
+        "squad_train_context": 1.0084979728001442,
+        "scipy_code": 1.0241194213249383
+      },
+      "best_step": 64
+    },
+    {
+      "step": 256,
+      "ce": 3.143319606781006,
+      "kd": 1.2131407260894775,
+      "block": 0.002891095355153084,
+      "gradient_norm": 0.12777096033096313,
+      "selection_ratios": {
+        "c4_train": 0.9925837484336721,
+        "squad_train_context": 1.0088902368910095,
+        "scipy_code": 1.0248008087456477
+      },
+      "best_step": 64
+    }
+  ],
+  "gate_ratio": 1.02,
+  "incremental_gate_ratio": 1.005,
+  "passed": false,
+  "artifact": null,
+  "artifact_sha256": null,
+  "artifact_written": false,
+  "checkpoint_written": false,
+  "sealed_audit_opened": false,
+  "elapsed_seconds": 161.39481401443481,
+  "peak_cuda_allocated_bytes": 5227831296
+}

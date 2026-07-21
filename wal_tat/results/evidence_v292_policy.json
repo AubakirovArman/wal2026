@@ -1,0 +1,98 @@
+{
+  "schema": "wal-tat-layer21-all-q8-sealed-policy-v1",
+  "evidence_id": "v292",
+  "declared_before_execution": true,
+  "objective": "open sealed audit-v44 exactly once for the fresh-verified fully low-bit layer 21 candidate",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+    "accepted_parent_artifact": "wal2/artifacts/wal-tat-block26_q4q8_codeheavy_scaleonly_headroom_v7_lr5e5_256-mixed-q2-q4-q8.pt",
+    "accepted_parent_artifact_sha256": "148908dbc2f43d72d73402904e68a6642c8d1e1817c6400cd4209d0b30f7c76a"
+  },
+  "candidate": {
+    "artifact": "wal2/artifacts/wal-tat-block21_global_q8_rescue_sourcegate_v2-mixed-q2-q4-q8.pt",
+    "sha256": "b68c29189b676a4d195ecb939e1c17d80b1f80328b000c2f5be620e1d8dff0c0",
+    "target_layer": 21,
+    "q8_projections": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "up_proj",
+      "gate_proj",
+      "down_proj"
+    ],
+    "layer21_q8_weights": 50331648,
+    "layer21_low_bit_weights": 50331648,
+    "layer21_physical_bpw": 8.125,
+    "strict_q2_weights": 81250048,
+    "q4_weights": 75278080,
+    "q8_weights": 195793408,
+    "total_low_bit_weights": 352321536,
+    "strict_q2_coverage_fraction": 0.04722601492267256,
+    "low_bit_coverage_fraction": 0.2047843973792473,
+    "remaining_high_precision_weights": 1368129536,
+    "projected_low_bit_payload_mib": 247.24005126953125,
+    "bf16_equivalent_mib": 672.0,
+    "projected_savings_mib": 424.75994873046875
+  },
+  "development": {
+    "selection_suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "selection_result": "wal_tat/results/block21_global_q8_rescue_sourcegate_v2.json",
+    "selection_result_sha256": "6e2c593b8ab01b5c4ae16610c38d190126f756604d7347a655c16a99a1111191",
+    "selected_candidate": "q8_1.00000000",
+    "fresh_confirmation_result": "wal_tat/results/block21_global_q8_rescue_sourcegate_v2_fresh_strict_v8.json",
+    "fresh_confirmation_result_sha256": "0db44a4ce144d8dd13a1ebc3115c603ac023adc4ded70bfec75a9b933216dccc",
+    "fresh_confirmation_ratios": {
+      "c4_train": 0.995375306298296,
+      "squad_train_context": 1.0020317992051753,
+      "scipy_code": 1.018926714825041
+    },
+    "fresh_incremental_ratios_vs_source": {
+      "c4_train": 1.0021248347429597,
+      "squad_train_context": 1.0043391794580947,
+      "scipy_code": 1.0030558894455186
+    },
+    "fresh_incremental_ratios_vs_parent": {
+      "c4_train": 1.0000205986992239,
+      "squad_train_context": 0.9999744003008683,
+      "scipy_code": 1.000036458227029
+    }
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v44-l256-g512.pt",
+    "sha256": "b8ffe5d15b3907c83037b9033e0a73f965a03d9e1b223917d45236a3ebcd856b",
+    "domains": [
+      "c4_train",
+      "wikitext103_train",
+      "sklearn_code"
+    ],
+    "predicted_tokens_per_domain": 131072,
+    "overlap_result": "wal_tat/results/audit_v44_overlap_v1.json",
+    "overlap_result_sha256": "3bfaac366d884f8740ae8e068097636ed7211aa0769acdb921149ed362842eac",
+    "overlap_passed": true,
+    "comparison_count": 51,
+    "opened_during_training_or_selection": false
+  },
+  "acceptance": {
+    "absolute_nll_ratio_limit_per_domain": 1.02,
+    "incremental_vs_strict_nll_ratio_limit_per_domain": 1.005,
+    "incremental_vs_accepted_parent_nll_ratio_limit_per_domain": 1.005,
+    "all_layer21_major_matrix_weights_must_be_q8": true,
+    "candidate_artifact_sha256_must_match": true
+  },
+  "selector": {
+    "script": "wal_tat/experiments/macro_q8_rescue.py",
+    "script_sha256": "c17b9403eff8eb3d4fcc878131f7d80df8742e953b179f9c16ba43b2f2348d8b"
+  },
+  "verifier": {
+    "script": "wal_tat/experiments/verify_mixed_q2_q4_artifact.py",
+    "script_sha256": "6f8651dd1c21d18416b2581772e0d0c1343ef3d45fc65d59d1c9c960a1359305"
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_mixed_q2_q4_artifact.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --parent-artifact wal2/artifacts/wal-tat-block26_q4q8_codeheavy_scaleonly_headroom_v7_lr5e5_256-mixed-q2-q4-q8.pt --artifact wal2/artifacts/wal-tat-block21_global_q8_rescue_sourcegate_v2-mixed-q2-q4-q8.pt --suite wal2/cache/wal-tat-audit-holdout-v44-l256-g512.pt --tag block21_global_q8_rescue_sourcegate_v2_sealed_audit_v44 --gate-ratio 1.02 --incremental-gate-ratio 1.005 --device cuda"
+}

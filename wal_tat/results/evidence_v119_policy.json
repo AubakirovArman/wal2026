@@ -1,0 +1,48 @@
+{
+  "schema": "wal-tat-counterfactual-scale-recovery-policy-v1",
+  "evidence_id": "v119",
+  "declared_before_execution": true,
+  "objective": "coverage-neutral recovery by training only deployed FP16 g128 scales while keeping all ternary codes and committed masks fixed",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "training and development selection/confirmation only; never sealed audit",
+  "target": "model.layers.24.mlp.up_proj",
+  "script": "wal_tat/experiments/counterfactual_scale_recovery.py",
+  "script_sha256": "31f7663c88e4bc02c1e70235f2ee73b46ccae71f53b4360f4fa1cb8ce818d533",
+  "tag": "block24_up_matchedval_scale_fp16ste_v1",
+  "training": {
+    "steps": 768,
+    "learning_rate": 0.00025,
+    "ce_weight": 0.0,
+    "block_weight": 0.2,
+    "kd_weight": 1.0,
+    "scale_anchor_weight": 0.0,
+    "max_abs_log_scale_delta": 0.25,
+    "fake_fp16_scale": true,
+    "selection_every": 128,
+    "seed": 227
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.0001,
+    "minimum_confirmation_worst_ratio_improvement": 0.0,
+    "codes_unchanged": true,
+    "committed_mask_unchanged": true,
+    "coverage_unchanged": true,
+    "persistent_bf16_residual": false,
+    "forward_scales_rounded_to_fp16": true
+  },
+  "audit_firewall": {
+    "v3_v4_v5_v6_are_not_used_for_training_or_step_selection": true,
+    "frozen_artifact_only_may_be_audited_after_development_acceptance": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/counterfactual_scale_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_up_matchedval_scale_fp16ste_v1 --target-layer 24 --target-projection up_proj --steps 768 --lr 0.00025 --ce-weight 0 --block-weight 0.2 --kd-weight 1 --scale-anchor-weight 0 --max-abs-log-scale-delta 0.25 --fake-fp16-scale --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 128 --min-improvement 0.0001 --min-confirmation-improvement 0 --seed 227 --device cuda"
+}

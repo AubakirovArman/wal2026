@@ -1,0 +1,40 @@
+{
+  "schema": "wal-tat-layer26-all-except-o-q8-sealed-outcome-v1",
+  "evidence_id": "v289",
+  "policy": "wal_tat/results/evidence_v288_policy.json",
+  "sealed_audit": "wal_tat/results/block26_all_except_o_full_q8_rescue_parent_v4_sealed_audit_v42.json",
+  "sealed_audit_sha256": "60e6a0a5db03344c958d12efb3494a87b2afcfd0bcf0208cc021dceb415f39d5",
+  "sealed_suite": "wal2/cache/wal-tat-audit-holdout-v42-l256-g512.pt",
+  "sealed_suite_sha256": "7b57d2b793061fd61a163830fd5bb943237237d0b1793161f051eb9aabfa2fc8",
+  "opened_exactly_once": true,
+  "passed": false,
+  "cumulative_passed": true,
+  "incremental_vs_source_passed": false,
+  "incremental_vs_parent_passed": true,
+  "ratios": {
+    "c4_train": 0.9947484232743836,
+    "wikitext103_train": 0.9414399304565794,
+    "pandas_code": 0.9680935545648313
+  },
+  "incremental_ratios_vs_source": {
+    "c4_train": 1.0027921574102303,
+    "wikitext103_train": 1.0032487436177553,
+    "pandas_code": 1.0067248524818377
+  },
+  "incremental_ratios_vs_parent": {
+    "c4_train": 1.0001176865137897,
+    "wikitext103_train": 1.0001563751127156,
+    "pandas_code": 0.9999448755606191
+  },
+  "failure": {
+    "domain": "pandas_code",
+    "observed_incremental_ratio_vs_source": 1.0067248524818377,
+    "declared_limit": 1.005,
+    "excess": 0.0017248524818377,
+    "candidate_vs_parent_ratio_on_same_domain": 0.9999448755606191,
+    "interpretation": "the proposed layer 26 is neutral to slightly beneficial versus the accepted parent on this code slice, while the parent-to-strict-source domain shift already exceeds the cumulative source gate"
+  },
+  "frontier_changed": false,
+  "next_predeclared_direction": "coverage-neutral code recovery without changing any Q2/Q4/Q8 masks, followed by a new nonoverlapping sealed audit",
+  "audit_reclassified_after_opening": "exposed validation evidence; never sealed again and never rerun for candidate acceptance"
+}

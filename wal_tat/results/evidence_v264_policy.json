@@ -1,0 +1,78 @@
+{
+  "schema": "wal-tat-layer23-reverse-q4-to-q2-sealed-policy-v1",
+  "evidence_id": "v264",
+  "declared_before_execution": true,
+  "objective": "open sealed audit-v30 exactly once for the fresh-verified layer-23 partial Q4-to-Q2 reverse-compression candidate",
+  "source_frontier": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "checkpoint_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+    "parent_artifact": "wal2/artifacts/wal-tat-block22_reverse_q4_to_q2_fraction_refine_v2-mixed-q2-q4-q8.pt",
+    "parent_artifact_sha256": "b16392f87c84d5facbbef3dec195c142a45187ffdb7ef652090fac4c5bf433db"
+  },
+  "candidate": {
+    "artifact": "wal2/artifacts/wal-tat-block23_reverse_q4_to_q2_fraction_refine_v2-mixed-q2-q4-q8.pt",
+    "sha256": "f7394ff69e348c89ba424369c004c719df05c55e8d23315687758f3b7d573eeb",
+    "target_layer": 23,
+    "q4_groups_replaced_fraction": 0.019,
+    "q4_weights_replaced_by_strict_q2": 597632,
+    "strict_q2_weights": 79426432,
+    "q4_weights": 62760448,
+    "q8_weights": 59139712,
+    "total_low_bit_weights": 201326592,
+    "low_bit_coverage_fraction": 0.11701965564528417,
+    "remaining_high_precision_weights": 1519124480,
+    "fully_low_bit_decoder_blocks_if_accepted": 4,
+    "fully_low_bit_major_matrices_if_accepted": 28
+  },
+  "development": {
+    "suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "selection_result": "wal_tat/results/block23_reverse_q4_to_q2_fraction_refine_v2.json",
+    "selection_result_sha256": "34ae37d4b42f21aaeb9aa091ca8d0562be2c47f7bc184dadf71d8b11421aa999",
+    "fresh_verify_result": "wal_tat/results/block23_reverse_q4_to_q2_fraction_refine_v2_fresh_dev.json",
+    "fresh_verify_result_sha256": "4b2b874f08774d08df54c978daf7f7d18e4841fddd6ec94eaf83601e77d1354b",
+    "fresh_ratios": {
+      "c4_train": 0.9948843904664338,
+      "squad_train_context": 1.001022356267393,
+      "scipy_code": 1.0198570235729463
+    },
+    "fresh_incremental_ratios_vs_strict_source": {
+      "c4_train": 1.0016305900658367,
+      "squad_train_context": 1.003327412074419,
+      "scipy_code": 1.0039717076834862
+    }
+  },
+  "sealed_audit": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v30-l256-g512.pt",
+    "sha256": "70e66aa067483e8beab4e91247de8754c52bd35071455592dd01c7ab1eaede6f",
+    "domains": [
+      "c4_train",
+      "squad_train_context",
+      "sklearn_code"
+    ],
+    "predicted_tokens_per_domain": 131072,
+    "overlap_result": "wal_tat/results/audit_v30_overlap_v1.json",
+    "overlap_result_sha256": "6f9db6dee9b8d0244dfaa00298e41e1227d2c3c3653c19383d70b864e56ddb99",
+    "overlap_passed": true,
+    "opened_during_training_or_selection": false
+  },
+  "acceptance": {
+    "absolute_nll_ratio_limit_per_domain": 1.02,
+    "incremental_nll_ratio_limit_per_domain": 1.005,
+    "source_and_parent_low_bit_codes_must_remain_immutable": true,
+    "candidate_artifact_sha256_must_match": true
+  },
+  "selector": {
+    "script": "wal_tat/experiments/reverse_q4_to_q2_fraction.py",
+    "script_sha256": "b4e1e9445faecb9198d7ae5c3b7697bbca85f8bf0f360a0d3568276b5e48757b"
+  },
+  "verifier": {
+    "script": "wal_tat/experiments/verify_mixed_q2_q4_artifact.py",
+    "script_sha256": "a2c08363d41949b823e40b36afb8112308be4575e02766a28b35fa8a3730f633"
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/verify_mixed_q2_q4_artifact.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --artifact wal2/artifacts/wal-tat-block23_reverse_q4_to_q2_fraction_refine_v2-mixed-q2-q4-q8.pt --suite wal2/cache/wal-tat-audit-holdout-v30-l256-g512.pt --tag block23_reverse_q4_to_q2_fraction_refine_v2_sealed_audit_v30 --gate-ratio 1.02 --incremental-gate-ratio 1.005 --device cuda"
+}

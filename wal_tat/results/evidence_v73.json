@@ -1,0 +1,125 @@
+{
+  "schema": "wal-tat-evidence-v73",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_single_session_round_robin_cycle_25",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.744140625,
+      "gate_proj_coverage": 0.0458984375,
+      "down_proj_coverage": 0.08984375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 73986048,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1646465024,
+    "weight_coverage_fraction": 0.04300386637208593
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0033-candidate_only.pt",
+    "bytes": 304658813,
+    "sha256": "491fdf27f6b149637358d9b94454deb2ac03e92c6322a05165e1b112f57e4ff8",
+    "kind": "mixed BF16/ternary training checkpoint after accepted up step 33"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0021501933186043,
+    "policy_is_external_standard": false,
+    "worst_observed_ratio": 1.0011475149263604,
+    "normalized_headroom": 0.4663201134373867
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9967343773960743,
+        "squad_context": 1.0011475149263604,
+        "torch_code": 0.9804256030227154
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9967343773960743,
+        "squad_context": 0.997362040013751,
+        "transformers_code": 0.9808775193385642
+      },
+      "passed": true
+    }
+  },
+  "transactions_since_v72": [
+    {
+      "projection": "down_proj",
+      "campaign_step": 25,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.08984375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011329774310096,
+      "normalized_headroom": 0.47290604607427683
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 24,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.0458984375,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011330518440218,
+      "normalized_headroom": 0.47295898986914064
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 33,
+      "fraction": 0.0009765625,
+      "new_weights": 12288,
+      "accepted": true,
+      "coverage_after": 0.744140625,
+      "holdout_chosen_arm": "candidate_only",
+      "worst_holdout_ratio": 1.0011475149263604,
+      "normalized_headroom": 0.4663201134373867
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 141.1171875,
+    "accepted_weights_q2_g128_mib": 18.74212646484375,
+    "projected_saving_mib": 122.37506103515625
+  },
+  "process_control": {
+    "maximum_concurrent_wal_tat_campaigns": 1,
+    "active_wal_tat_processes_after_cycle": 0,
+    "launch_policy": "verify zero active WAL-TAT processes before each campaign"
+  },
+  "cleanup": {
+    "superseded_or_unchosen_checkpoint_bytes_deleted_since_v72": 1827956190,
+    "recoverable_without_rerun": false,
+    "results_and_commands_preserved": true
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "count_source": "accepted_weight_counts over checkpoint committed_mask tensors",
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2,
+    "all_campaign_frontiers_synchronized": true
+  },
+  "next": "continue down_proj step 26 at the minimum transaction size with one active campaign at a time"
+}

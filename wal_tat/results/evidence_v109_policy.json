@@ -1,0 +1,31 @@
+{
+  "schema": "wal-tat-sparse-recode-commit-policy-v1",
+  "evidence_id": "v109",
+  "declared_before_execution": true,
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt",
+  "source_checkpoint_sha256": "c1f6a052278062553b977084b4dcb8ea516c6248b40752003a23a8daebd3790d",
+  "artifact": "wal2/artifacts/wal-tat-block24_up_boundary_sparse_recode_128ls_v2.pt",
+  "artifact_sha256": "3c1d64eda485c111bb520473fbdf4fa6ee8a120a3e888ba34cd21d893b167531",
+  "development_result": "wal_tat/results/block24_up_boundary_sparse_recode_128ls_v2.json",
+  "development_result_sha256": "7fb8602555ba50b437a206d5d9a069e8800a9885d630a1f451739b15bad4cc42",
+  "audit_result": "wal_tat/results/block24_up_boundary_sparse_recode_128ls_v2_frozen_audit_v3.json",
+  "audit_result_sha256": "dc95c75f3eaa95c7c3113ee670de8a79758991e5bd0a4e6a73557a313cef74bd",
+  "commit_script": "wal_tat/experiments/commit_sparse_ternary_recode_artifact.py",
+  "commit_script_sha256": "ba754ef70fb23a8335177d3621dd5f3fe14a3c9bca18232cc97b01ed4a5a570d",
+  "target_name": "model.layers.24.mlp.up_proj",
+  "expected_changes": {
+    "changed_code_values": 128,
+    "changed_scale_groups": 128,
+    "max_code_churn": 0.0002,
+    "accepted_coverage_changed": false,
+    "persistent_bf16_residual": false
+  },
+  "output_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "publication_policy": {
+    "atomic_new_file": true,
+    "refuse_overwrite": true,
+    "parent_retained_until_fresh_verification": true,
+    "fresh_verification_required": true
+  },
+  "command": "PYTHONPATH=src python experiments/commit_sparse_ternary_recode_artifact.py ../wal2/checkpoints/wal-tat-block24_up_counterfactual_scale_recovery_s0048r1.pt ../wal2/artifacts/wal-tat-block24_up_boundary_sparse_recode_128ls_v2.pt results/block24_up_boundary_sparse_recode_128ls_v2.json results/block24_up_boundary_sparse_recode_128ls_v2_frozen_audit_v3.json results/evidence_v109_policy.json ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --tag block24_up_boundary_sparse_recode_s0048r2"
+}

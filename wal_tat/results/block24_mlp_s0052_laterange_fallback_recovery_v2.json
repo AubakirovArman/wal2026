@@ -1,0 +1,191 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-recovery-v1",
+  "source_checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt",
+  "source_checkpoint_sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+  "starting_artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_mlp_s0052_laterange_fallback_recovery_v1.pt",
+  "starting_artifact_sha256": "aa866ec4385a6aab84b079c06bb3a82d584b4285ad0ac71f235d667187b03a25",
+  "starting_artifact_role": "external_frozen_artifact",
+  "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-matched-train-recovery-v7-coverage-l256.pt",
+  "suite_sha256": "ff621a07e0795647d9bb80c06ce3b4c17b41d6390cbc5a5e98ed57062a853129",
+  "suite_role": "development training, selection and disjoint confirmation; never audit",
+  "target_layer": 24,
+  "target_names": [
+    "model.layers.24.mlp.up_proj",
+    "model.layers.24.mlp.gate_proj",
+    "model.layers.24.mlp.down_proj"
+  ],
+  "teacher_source": "target_counterfactual_mlp",
+  "teacher_selection_ratios": {
+    "c4_train": 0.9872712538662218,
+    "squad_train_context": 0.9559179432978607,
+    "datasets_code": 0.9607907882924842
+  },
+  "teacher_confirmation_ratios": {
+    "c4_train": 0.9967163902833691,
+    "squad_train_context": 0.9913342876101241,
+    "datasets_code": 0.9674064579287105
+  },
+  "source_restoration_exact": true,
+  "steps": 2048,
+  "lr": 5e-07,
+  "loss_weights": {
+    "ce": 1.0,
+    "block": 0.25,
+    "kd": 0.5,
+    "delta_anchor": 0.02
+  },
+  "selection_slice": [
+    0,
+    128
+  ],
+  "confirmation_slice": [
+    128,
+    128
+  ],
+  "source_selection_ratios": {
+    "c4_train": 0.9896374245916234,
+    "squad_train_context": 0.9612131506168671,
+    "datasets_code": 0.9624332049429912
+  },
+  "source_confirmation_ratios": {
+    "c4_train": 0.9987132445222121,
+    "squad_train_context": 0.9947880957139955,
+    "datasets_code": 0.9684278493534618
+  },
+  "best_step": 2048,
+  "best_selection_ratios": {
+    "c4_train": 0.9892228379866953,
+    "squad_train_context": 0.9606819017430217,
+    "datasets_code": 0.9579231487592675
+  },
+  "attempted_selection_ratios": {
+    "c4_train": 0.9892228379866953,
+    "squad_train_context": 0.9606819017430217,
+    "datasets_code": 0.9579231487592675
+  },
+  "attempted_confirmation_ratios": {
+    "c4_train": 0.9983591443560275,
+    "squad_train_context": 0.994441849527708,
+    "datasets_code": 0.965823930689399
+  },
+  "selection_worst_ratio_improvement": 0.0004145866049281022,
+  "confirmation_worst_ratio_improvement": 0.00035410016618464546,
+  "min_selection_improvement": 0.00025,
+  "min_confirmation_improvement": 0.00025,
+  "max_relative_delta": 0.05,
+  "fallback_change": {
+    "model.layers.24.mlp.up_proj": {
+      "fallback_groups": 23808,
+      "fallback_weights": 3047424,
+      "changed_fallback_weights": 1252311,
+      "absolute_delta_mean": 4.080687358509749e-05,
+      "absolute_delta_p95": 0.00012969970703125,
+      "absolute_delta_max": 0.00048828125,
+      "relative_delta_to_source_absmean": 0.0013999216025695205,
+      "committed_master_values_unchanged": true
+    },
+    "model.layers.24.mlp.gate_proj": {
+      "fallback_groups": 87872,
+      "fallback_weights": 11247616,
+      "changed_fallback_weights": 4629501,
+      "absolute_delta_mean": 3.96443901991006e-05,
+      "absolute_delta_p95": 0.0001220703125,
+      "absolute_delta_max": 0.00048828125,
+      "relative_delta_to_source_absmean": 0.0014145099557936192,
+      "committed_master_values_unchanged": true
+    },
+    "model.layers.24.mlp.down_proj": {
+      "fallback_groups": 83936,
+      "fallback_weights": 10743808,
+      "changed_fallback_weights": 4321059,
+      "absolute_delta_mean": 3.904766708728857e-05,
+      "absolute_delta_p95": 0.0001220703125,
+      "absolute_delta_max": 0.00048828125,
+      "relative_delta_to_source_absmean": 0.001304359408095479,
+      "committed_master_values_unchanged": true
+    }
+  },
+  "aggregate_relative_delta": 0.0013654704299616298,
+  "committed_master_values_unchanged": true,
+  "ternary_codes_unchanged": true,
+  "scales_unchanged": true,
+  "committed_masks_unchanged": true,
+  "codes_strict_ternary": true,
+  "persistent_bf16_residual_on_committed_groups": false,
+  "coverage_changed": false,
+  "passed": true,
+  "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_mlp_s0052_laterange_fallback_recovery_v2.pt",
+  "artifact_sha256": "1e92b97ba88f2b9772e5189f4a6ecb893e56db0077baab6532f45adf96142955",
+  "checkpoint_written": false,
+  "final_restoration_exact": true,
+  "history": [
+    {
+      "step": 1,
+      "ce": 2.965972423553467,
+      "block_loss": 0.0062642889097332954,
+      "kd_loss": 0.005321680102497339,
+      "anchor_loss": 0.0,
+      "gradient_norm": 1.1933552026748657,
+      "selection_ratios": null,
+      "best_step": 0
+    },
+    {
+      "step": 512,
+      "ce": 1.5763347148895264,
+      "block_loss": 0.005257382057607174,
+      "kd_loss": 0.005798995029181242,
+      "anchor_loss": 2.4885167704269406e-07,
+      "gradient_norm": 0.8959663510322571,
+      "selection_ratios": {
+        "c4_train": 0.9896198425669478,
+        "squad_train_context": 0.9611595788947767,
+        "datasets_code": 0.9618509803501026
+      },
+      "best_step": 512
+    },
+    {
+      "step": 1024,
+      "ce": 1.5757184028625488,
+      "block_loss": 0.005251533351838589,
+      "kd_loss": 0.0057330261915922165,
+      "anchor_loss": 9.700866030470934e-07,
+      "gradient_norm": 0.8908814787864685,
+      "selection_ratios": {
+        "c4_train": 0.9895297725143237,
+        "squad_train_context": 0.9610163774303048,
+        "datasets_code": 0.9607799143250375
+      },
+      "best_step": 768
+    },
+    {
+      "step": 1536,
+      "ce": 1.571902871131897,
+      "block_loss": 0.0052451565861701965,
+      "kd_loss": 0.00531015545129776,
+      "anchor_loss": 2.157784365408588e-06,
+      "gradient_norm": 0.8878374695777893,
+      "selection_ratios": {
+        "c4_train": 0.9893962141029887,
+        "squad_train_context": 0.9608072162553246,
+        "datasets_code": 0.9594245918716385
+      },
+      "best_step": 1536
+    },
+    {
+      "step": 2048,
+      "ce": 1.5678417682647705,
+      "block_loss": 0.005240143276751041,
+      "kd_loss": 0.0055451057851314545,
+      "anchor_loss": 3.7975237319187727e-06,
+      "gradient_norm": 0.8859511017799377,
+      "selection_ratios": {
+        "c4_train": 0.9892228379866953,
+        "squad_train_context": 0.9606819017430217,
+        "datasets_code": 0.9579231487592675
+      },
+      "best_step": 2048
+    }
+  ],
+  "elapsed_seconds": 424.247435092926,
+  "peak_cuda_allocated_bytes": 5541010944
+}

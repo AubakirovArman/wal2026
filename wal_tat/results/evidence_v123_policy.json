@@ -1,0 +1,50 @@
+{
+  "schema": "wal-tat-committed-initializer-policy-v1",
+  "evidence_id": "v123",
+  "declared_before_execution": true,
+  "objective": "test whether the localized layer24 up_proj gap is caused by committed codes/scales drifting away from direct original-BF16 ternary geometry",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "source_checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "suite": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "suite_sha256": "b1ccba29882ceafbab288daf2aa89f28514fc3d7833ec39db5db910a478d392a",
+  "suite_role": "development selection and confirmation only; never sealed audit",
+  "target": "model.layers.24.mlp.up_proj",
+  "script": "wal_tat/experiments/committed_initializer_ablation.py",
+  "script_sha256": "c794a3fea7f609552f013ec0499e07e20f4e261bb924009d00e27723ed38b656",
+  "tag": "block24_up_committed_initializer_matchedval_v1",
+  "candidate_initializers": [
+    "absmean_round",
+    "threshold_ls",
+    "activation_wls"
+  ],
+  "initializer_search": {
+    "threshold_step": 0.125,
+    "threshold_max": 3.0,
+    "moment_samples_per_domain": 8,
+    "moment_domain_offset": 0,
+    "moment_source": "current frontier inputs on balanced matched-validation calibration"
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.001,
+    "minimum_confirmation_worst_ratio_improvement": 0.0,
+    "codes_strict_ternary": true,
+    "scales_fp16_per_g128": true,
+    "committed_mask_unchanged": true,
+    "coverage_unchanged": true,
+    "persistent_bf16_residual": false
+  },
+  "selection_rule": "minimum worst-domain selection ratio, then minimum sum of selection ratios",
+  "audit_firewall": {
+    "v3_v4_v5_v6_are_not_used_for_initializer_selection": true,
+    "passing_run_writes_only_a_frozen_artifact": true,
+    "checkpoint_publication_requires_separate_predeclared_audit_and_commit": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src python experiments/committed_initializer_ablation.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt --suite ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --tag block24_up_committed_initializer_matchedval_v1 --target-layer 24 --target-projection up_proj --moment-samples-per-domain 8 --moment-domain-offset 0 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --threshold-step 0.125 --threshold-max 3 --min-selection-improvement 0.001 --min-confirmation-improvement 0 --seed 239 --device cuda"
+}

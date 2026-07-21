@@ -1,0 +1,47 @@
+{
+  "schema": "wal-tat-relaxed-full-model-policy-v1",
+  "evidence_id": "v303",
+  "declared_before_first_relaxed_block_conversion": true,
+  "objective": "convert every major matrix weight to the lowest practical hard low-bit representation under the user-requested cumulative NLL-ratio ceiling 1.10",
+  "branch_role": "experimental relaxed frontier; never replaces or rewrites the official strict frontier",
+  "starting_parent": {
+    "artifact": "wal2/artifacts/wal-tat-block19_sourceteacher_q8scale_stage2_v25_lr1e5_512-mixed-q2-q4-q8.pt",
+    "sha256": "49bf1286aacea33bb273f10701d1449550477005ada22031852226641c79f08c",
+    "fully_low_bit_decoder_blocks": 9,
+    "low_bit_coverage_fraction": 0.2632942252018894
+  },
+  "quality_policy": {
+    "metric": "candidate_mean_nll_divided_by_reference_mean_nll",
+    "cumulative_ratio_limit_vs_raw_bf16_per_domain": 1.10,
+    "cumulative_ratio_limit_vs_immutable_strict_source_per_domain": 1.10,
+    "incremental_ratio_limit_vs_relaxed_parent_per_domain": 1.10,
+    "every_domain_must_pass": true,
+    "warning": "1.10 NLL ratio is not 10 percent PPL; the PPL change is exp(candidate_nll-reference_nll)-1"
+  },
+  "conversion_order": {
+    "decoder_layers": [18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+    "per_block_strategy": [
+      "try exact activation-weighted strict Q2 ternary for every unconverted group",
+      "if Q2 fails, add the minimum sensitivity-ranked Q4 rescue fraction",
+      "use Q8 only if no Q2/Q4 mixture passes",
+      "save a new immutable artifact and verify it in a fresh process before advancing"
+    ],
+    "after_decoder_blocks": [
+      "convert tied embedding and LM head without storing the tied weights twice",
+      "convert every remaining major matrix",
+      "verify zero BF16 major matrix weights remain",
+      "lower Q8 to Q4 and Q4 to Q2 while the cumulative 1.10 gate holds"
+    ]
+  },
+  "first_stage": {
+    "target_layer": 18,
+    "parent_sha256": "49bf1286aacea33bb273f10701d1449550477005ada22031852226641c79f08c",
+    "development_suite": "wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt",
+    "candidate_q4_rescue_fractions": [0.0, 0.01, 0.05, 0.1, 0.2, 0.4, 1.0]
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v143",
+  "title": "Post-QAT remaining-MLP scan selects a 96-group gate_proj candidate",
+  "policy_sha256": "37d5491bc0cd5af9108e29ce5280210d96f6074df2dd6ce39f6e372405f69668",
+  "source_checkpoint_sha256_after_scan": "50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca",
+  "results": {
+    "up_proj": {
+      "path": "wal_tat/results/block24_up_s0048r3_d1g96_initializers_v1.json",
+      "sha256": "31e565595ad09cdb544744dbeed9ea46a2c4de770867e7341d5d38b0a065ab43",
+      "best_initializer": "absmean_round",
+      "best_worst_incremental_ratio": 1.0001265486467021
+    },
+    "down_proj": {
+      "path": "wal_tat/results/block24_down_s0048r3_d1g96_initializers_v1.json",
+      "sha256": "d47a6416fe9e8008ec07866fd053e3a2e2ecff0060ce2391fb302f52c456af44",
+      "best_initializer": "threshold_ls",
+      "best_worst_incremental_ratio": 1.0000898087170145
+    },
+    "gate_proj": {
+      "path": "wal_tat/results/block24_gate_s0048r3_d1g96_initializers_v1.json",
+      "sha256": "3875e25814e89b6b289515cc7f815a1df965bcc0063a0aaf667f97cc1764f268",
+      "best_initializer": "threshold_ls",
+      "best_worst_incremental_ratio": 1.0000530060189317,
+      "best_sum_incremental_ratios": 3.0000811141854835
+    }
+  },
+  "selected_candidate": {
+    "target_name": "model.layers.24.mlp.gate_proj",
+    "decile": 1,
+    "groups": 96,
+    "weights": 12288,
+    "initializer": "threshold_ls",
+    "mask_sha256": "9b10be86650fc45328c0376f7815ad4c210ef42df55e22cf5181d335c1f71de2",
+    "artifact": "wal2/artifacts/wal-tat-block24_gate_s0048r3_d1g96_initializers_v1.pt",
+    "artifact_sha256": "67309c1c763950ef0a53d1baffe323fc37007b389862d89ee9d19becb259d75b"
+  },
+  "selection_limit": 1.00025,
+  "selection_passed": true,
+  "source_checkpoint_mutated": false,
+  "checkpoint_files_written": 0,
+  "audit_v9_opened": false,
+  "maximum_concurrent_wal_gpu_processes_observed": 1,
+  "status": "candidate initializer frozen; declare recovery policy before training"
+}

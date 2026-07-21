@@ -1,0 +1,33 @@
+{
+  "schema": "wal-tat-suite-build-policy-v1",
+  "evidence_id": "v116",
+  "declared_before_execution": true,
+  "purpose": "matched validation-domain recovery/development suite for s0048r2 coverage-neutral recovery",
+  "builder": "wal_tat/experiments/build_matched_validation_recovery_suite.py",
+  "builder_sha256": "a7409eae44a53a752a2152f3c13c63275d462f7b357a49362740e538e823bca9",
+  "output": "wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt",
+  "source_domains": {
+    "c4_validation": "cached C4 validation Arrow split",
+    "squad_context": "cached SQuAD validation Arrow split",
+    "torch_code": "first 400 sorted installed PyTorch Python files"
+  },
+  "sequence_length": 256,
+  "calibration_per_domain": 64,
+  "calibration_repeats": {
+    "c4_validation": 1,
+    "squad_context": 4,
+    "torch_code": 1
+  },
+  "gates_per_domain": 256,
+  "calibration_offset": 1100003,
+  "gate_offset": 1200003,
+  "known_audit_offsets": {
+    "v3": {"c4": 500003, "squad": 400003, "code": 50003},
+    "v4": {"c4": 500003, "squad": 300011, "code": 250003},
+    "v5": {"c4": 700003, "squad": 700003, "code": 250003},
+    "v6": {"c4": 900003, "squad": 900003, "code": 450003}
+  },
+  "role": "gradient training and development selection only; never sealed audit",
+  "required_followup": "exact-window overlap audit against recovery v1/v2 and audit v3-v6 before model use",
+  "command": "PYTHONPATH=src:experiments python experiments/build_matched_validation_recovery_suite.py --output ../wal2/cache/wal-tat-matched-validation-recovery-v1-squadx4-l256.pt --length 256 --calibration-per-domain 64 --c4-calibration-repeat 1 --squad-calibration-repeat 4 --code-calibration-repeat 1 --gates-per-domain 256 --calibration-offset 1100003 --gate-offset 1200003 --code-source torch --interleave-calibration --policy 'matched validation-domain recovery/development data; disjoint declared ranges from audit v3-v6; never final audit'"
+}

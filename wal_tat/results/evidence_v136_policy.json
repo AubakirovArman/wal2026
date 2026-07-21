@@ -1,0 +1,49 @@
+{
+  "schema": "wal-tat-fallback-compensation-audit-retry-policy-v1",
+  "evidence_id": "v136",
+  "declared_before_execution": true,
+  "objective": "technical retry of v135 after fixing optional churn serialization; evaluate the identical frozen candidate under the identical v8 acceptance policy",
+  "retry_of": "v135",
+  "retry_reason": "v135 raised KeyError after evaluation while serializing an optional non-gating code_churn field and wrote no result",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt",
+  "checkpoint_sha256": "2514b1b293ef40e2284ebb0ba71967ccd79460bbe28409965b80c070ecc11e8a",
+  "artifact": "wal2/artifacts/wal-tat-block24_mlp_local_fallback_compensation_matchedval_v2.pt",
+  "artifact_sha256": "e0b89e6a44fce6d09ae355ba9b100c50768caae4126bf3b1e64bb9d31f3bd0b0",
+  "suite": "wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt",
+  "suite_sha256": "b6aba897e452c345ac50807ae9d660938eb68c43a25d9ddbbbc7c917d7e99984",
+  "script": "wal_tat/experiments/ternary_recode_artifact_audit.py",
+  "script_sha256": "0d736f0e168a6b9be5707727a83a7856a92988ce217075697a8647ef4471eacb",
+  "only_code_change": "read absent optional code_churn metadata as null",
+  "tag": "block24_mlp_local_fallback_compensation_audit_v8_retry1",
+  "acceptance": {
+    "cumulative_observed_ratio_max_each_domain": 1.002166978,
+    "cumulative_confidence_required": false,
+    "incremental_observed_ratio_max_each_domain": 1.0001,
+    "incremental_paired_upper95_ratio_max_each_domain": 1.0001,
+    "source_restoration_exact": true,
+    "checkpoint_mutated": false,
+    "compensated_master_changes_only_uncommitted_groups": true
+  },
+  "bootstrap": {
+    "samples": 4096,
+    "block_size": 8,
+    "confidence": 0.95,
+    "batch_size": 8,
+    "seed": 283
+  },
+  "scientific_invariants": {
+    "same_checkpoint": true,
+    "same_artifact": true,
+    "same_suite": true,
+    "same_thresholds": true,
+    "same_bootstrap": true,
+    "same_seed": true,
+    "no_training_or_candidate_tuning_between_attempts": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/ternary_recode_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_up_boundary_sparse_recode_s0048r2.pt ../wal2/artifacts/wal-tat-block24_mlp_local_fallback_compensation_matchedval_v2.pt ../wal2/cache/wal-tat-audit-holdout-v8-l256-g512.pt --tag block24_mlp_local_fallback_compensation_audit_v8_retry1 --gate-ratio 1.002166978 --incremental-gate-ratio 1.0001 --cumulative-point-only --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 283 --suite-role 'technical retry of one-shot audit-only v8 after non-gating serialization failure; frozen artifact; no gradient updates' --device cuda"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "wal-tat-predeclared-frozen-artifact-audit-policy-v1",
+  "policy_id": "evidence-v97-gain4-frozen-audit-v3",
+  "date_utc": "2026-07-20",
+  "created_before_run": true,
+  "git_parent": "be73e7a",
+  "source_checkpoint_sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+  "artifact_sha256": "7ee31395bb4c3b45e9342f73e9271d3c56a337af841117956c058c804f9c8bc4",
+  "suite": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v3-l256-g512.pt",
+    "sha256": "be51ba13b438ca9635ba7b36276ed64ca29365526f74c1b8931d4df16c7cda0e",
+    "role": "recurring validation; previously exposed; independent of v2 gain selection"
+  },
+  "runner": {
+    "path": "wal_tat/experiments/ternary_recode_artifact_audit.py",
+    "sha256": "388e1980ca4df313cc5ca90a3e1614d8d286e167be4a1fa073896d28daedc42a",
+    "tag": "block24_up_residual_gain4_frozen_audit_v3",
+    "physical_gpu": 2
+  },
+  "acceptance": {
+    "cumulative_nll_ratio_gate": 1.02,
+    "incremental_nll_ratio_gate_each_domain": 1.0001,
+    "paired_bootstrap_samples": 4096,
+    "moving_block_size": 8,
+    "one_sided_confidence": 0.95,
+    "require_cumulative_point_and_confidence": true,
+    "require_incremental_point_and_confidence": true,
+    "strict_ternary_codes": true,
+    "persistent_bf16_residual": false,
+    "coverage_must_not_change": true,
+    "checkpoint_must_not_change": true,
+    "v5_v6_must_not_be_opened": true
+  },
+  "batch_size": 8,
+  "seed": 191
+}

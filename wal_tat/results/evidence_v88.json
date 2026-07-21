@@ -1,0 +1,54 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v88-block24-staged-down-recovery-v11-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v88_policy.json",
+    "sha256": "f7566137731603fb8096cd0680bf1f75754540ff862b22a9863d7fd34c3c129a"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_staged_down_recovery_v11.json",
+    "sha256": "c1fcd57eb96051b9d0ebf9f42c1049a1fdbe29a9d4767330610ec07b85257448",
+    "wal_sha256": "ef2deae50b62f0cada3ba50f51ea7f0a8261b58e86a857992ea042784f9f717e",
+    "passed": false,
+    "best_selection_step": 256,
+    "best_deployed_state_was_identical_to_source": true,
+    "accepted_checkpoint": null
+  },
+  "stages": {
+    "proxy_end_step_576": {
+      "down_code_churn": 0.00011560552229639143,
+      "selection_ratios": {
+        "c4_train": 0.9980330754333048,
+        "squad_train": 1.0135680188702236,
+        "library_code_train": 0.989771515939813
+      }
+    },
+    "scale_polish_end_step_768": {
+      "down_code_churn": 0.00011560552229639143,
+      "selection_ratios": {
+        "c4_train": 0.9980668283507511,
+        "squad_train": 1.0135616740762514,
+        "library_code_train": 0.9898601583074691
+      }
+    }
+  },
+  "decision": {
+    "accepted": false,
+    "reason": "Frozen-code scale polish recovered only a small fraction of the SQuAD loss and worsened C4/code; no trained deployable state beat the source by the predeclared margin.",
+    "coverage_changed": false,
+    "source_checkpoint_preserved": true,
+    "rotating_validation_opened": false,
+    "next_required_control": "matched BF16 recovery before any further hyperparameter search"
+  },
+  "frontier_after_decision": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "remaining_weights": 1645887488,
+    "coverage_percent": 4.33395550815176,
+    "remaining_percent": 95.66604449184824,
+    "full_major_matrices": "11/197",
+    "full_decoder_blocks": "1/28"
+  }
+}

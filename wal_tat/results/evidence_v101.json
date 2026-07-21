@@ -1,0 +1,33 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v101-direct-counterfactual-scale-recovery-v1-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v101_policy.json",
+    "sha256": "6107e55a68f7ac115bc596a94e7c389d00b17dc4912f0b0f9ea2b4093d1447e6"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_direct_counterfactual_scale_v1.json",
+    "sha256": "e65b5ec444cc67f1777c081a22808788c5dfa73cbe0a77b49e44c9a2a57ee33f",
+    "passed": false,
+    "best_step": 256,
+    "codes_unchanged": true,
+    "committed_mask_unchanged": true,
+    "coverage_changed": false,
+    "artifact_created": false
+  },
+  "ratios": {
+    "source_worst": 1.0134387858196596,
+    "best_fp32_selection_worst": 1.0134176829636699,
+    "fp16_deploy_worst": 1.0134699365935083,
+    "final_improvement": -0.00003115077384863163,
+    "required_improvement": 0.0001
+  },
+  "diagnosis": {
+    "fp32_training_improvement": 0.00002110285598977324,
+    "fp16_rounding_penalty_from_best_selection": 0.00005225362983838257,
+    "root_cause": "Scale optimization did not expose FP16 rounding in forward; the tiny FP32 improvement was smaller than the deploy rounding error."
+  },
+  "next_step": "Use FP16-rounded scales in every forward with an STE gradient and a predeclared learning rate large enough to reach the already validated percent-scale movement regime.",
+  "frontier_changed": false
+}

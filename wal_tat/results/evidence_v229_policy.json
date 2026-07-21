@@ -1,0 +1,66 @@
+{
+  "schema": "wal-tat-mlp-fallback-compensation-policy-v3",
+  "evidence_id": "v229",
+  "declared_before_execution": true,
+  "objective": "broaden verified s0052 generalization on later development ranges while preserving every accepted strict ternary value",
+  "source_checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt",
+  "source_checkpoint_sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+  "starting_artifact": "derived exactly in memory from the source checkpoint",
+  "starting_artifact_sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+  "suite": "wal2/cache/wal-tat-matched-train-recovery-v7-coverage-l256.pt",
+  "suite_sha256": "ff621a07e0795647d9bb80c06ce3b4c17b41d6390cbc5a5e98ed57062a853129",
+  "suite_role": "segmented late-range training and development selection/confirmation only; never audit",
+  "reserved_unopened_audit_v21_sha256": "2ca52d5f5477356fef0fbb1734ba04ab3fd9a68ec63de77d032eee6ecf18cb50",
+  "script": "wal_tat/experiments/mlp_fallback_compensation_recovery.py",
+  "script_sha256": "162c09811948422b8c16bb92194e12b62ecf979a5b5f28cdfd49dfc050fc9463",
+  "tag": "block24_mlp_s0052_laterange_fallback_recovery_v1",
+  "teacher": {
+    "mode": "target_counterfactual_mlp",
+    "restored_for_teacher_only": "committed groups of layer-24 up/gate/down",
+    "all_other_checkpoint_state_held_fixed": true,
+    "exact_source_restoration_required": true
+  },
+  "training": {
+    "steps": 2048,
+    "learning_rate": 0.000001,
+    "ce_weight": 1.0,
+    "block_weight": 0.25,
+    "kd_weight": 0.5,
+    "delta_anchor_weight": 0.02,
+    "selection_every": 128,
+    "seed": 529
+  },
+  "development_slices": {
+    "selection_start": 0,
+    "selection_count_per_domain": 128,
+    "confirmation_start": 128,
+    "confirmation_count_per_domain": 128,
+    "overlap": 0
+  },
+  "development_acceptance": {
+    "minimum_selection_worst_ratio_improvement": 0.00025,
+    "minimum_confirmation_worst_ratio_improvement": 0.00025,
+    "maximum_weighted_relative_fallback_delta": 0.1,
+    "ternary_codes_unchanged": true,
+    "g128_fp16_scales_unchanged": true,
+    "committed_masks_unchanged": true,
+    "committed_master_values_unchanged": true,
+    "coverage_unchanged": true,
+    "accepted_weights": 75624448,
+    "persistent_bf16_residual_on_committed_groups": false
+  },
+  "audit_firewall": {
+    "audit_v20_is_closed_and_not_reused": true,
+    "audit_v21_is_not_used_for_training_or_selection": true,
+    "audit_v21_remains_unopened_until_artifact_is_frozen": true,
+    "passing_run_writes_only_an_artifact": true,
+    "checkpoint_publication_requires_a_separate_predeclared_v21_audit": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "do not open audit-v21; preserve s0052 and diagnose only from development-v7",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/mlp_fallback_compensation_recovery.py --source-checkpoint ../wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt --suite ../wal2/cache/wal-tat-matched-train-recovery-v7-coverage-l256.pt --tag block24_mlp_s0052_laterange_fallback_recovery_v1 --target-layer 24 --steps 2048 --lr 0.000001 --ce-weight 1 --block-weight 0.25 --kd-weight 0.5 --delta-anchor-weight 0.02 --selection-gate-start 0 --selection-gate-sequences 128 --confirmation-gate-start 128 --confirmation-gate-sequences 128 --selection-every 128 --min-selection-improvement 0.00025 --min-confirmation-improvement 0.00025 --max-relative-delta 0.1 --seed 529 --device cuda"
+}

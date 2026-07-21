@@ -1,0 +1,62 @@
+{
+  "schema": "wal-tat-recovery-suite-build-policy-v1",
+  "evidence_id": "v161",
+  "declared_before_execution": true,
+  "objective": "build train-domain recovery/development data after audit-v11 exposed a pre-existing s0050 SQuAD-train gap; never train on audit-v11",
+  "builder": "wal_tat/experiments/build_matched_validation_recovery_suite.py",
+  "builder_sha256": "b6a71c222b251035c674b3577962d742ac19da4551dc480dab0cd5a5640c6aaf",
+  "output": "wal2/cache/wal-tat-matched-train-recovery-v1-squadx4-l256.pt",
+  "sequence_length": 256,
+  "calibration_per_domain": 64,
+  "calibration_repeats": {
+    "c4_train": 1,
+    "squad_train_context": 4,
+    "torch_code": 1
+  },
+  "gates_per_domain": 256,
+  "data_splits": {
+    "c4": "train shard 00000",
+    "squad": "train",
+    "code": "torch"
+  },
+  "declared_ranges": {
+    "calibration": {
+      "c4_train": [
+        950003,
+        966387
+      ],
+      "squad_train_context": [
+        950003,
+        1015539
+      ],
+      "torch_code": [
+        950003,
+        966387
+      ]
+    },
+    "gates": {
+      "c4_train": [
+        1020003,
+        1085539
+      ],
+      "squad_train_context": [
+        1020003,
+        1085539
+      ],
+      "torch_code": [
+        1020003,
+        1085539
+      ]
+    }
+  },
+  "range_rationale": "all train-development ranges start after audit-v11; torch ranges end before the older validation-development calibration at 1100003",
+  "role": "development-only recovery data; never final audit or candidate acceptance evidence",
+  "acceptance": {
+    "suite_file_created": true,
+    "calibration_sequences": 384,
+    "gate_tokens_per_domain": 65536,
+    "zero_exact_and_declared_range_overlap_required_before_recovery": true,
+    "audit_v11_reuse_forbidden": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_matched_validation_recovery_suite.py --output ../wal2/cache/wal-tat-matched-train-recovery-v1-squadx4-l256.pt --length 256 --calibration-per-domain 64 --c4-calibration-repeat 1 --squad-calibration-repeat 4 --code-calibration-repeat 1 --gates-per-domain 256 --calibration-offset 950003 --gate-offset 1020003 --c4-split train --squad-split train --code-source torch --interleave-calibration --policy 'matched train-domain recovery/development data after audit-v11; never final audit'"
+}

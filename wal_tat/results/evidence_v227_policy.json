@@ -1,0 +1,67 @@
+{
+  "schema": "wal-tat-predeclared-one-shot-audit-policy-v1",
+  "policy_id": "evidence-v227-block24-down-d1-thresholdls-s0053-audit-v20",
+  "date_utc": "2026-07-20",
+  "created_before_audit_run": true,
+  "purpose": "Evaluate the exact frozen 8192-group threshold-LS down_proj candidate once on sealed audit-v20, without gradient updates or retuning.",
+  "source_frontier": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt",
+    "sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+    "accepted_weights": 75624448
+  },
+  "frozen_candidate": {
+    "artifact": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_down_s0052_d1g8192_thresholdls_proxy_v1.pt",
+    "sha256": "34ad862e72df7838d13ee27fb71eb4f4f33989c49d21e97cb4801d234183ee4f",
+    "development_result": "wal_tat/results/block24_down_s0052_d1g8192_thresholdls_proxy_v1.json",
+    "development_result_sha256": "8c6c6aab1f8ac575205edc3779e3c6891f1daf5083050d5124176df2dbb732f0",
+    "target_name": "model.layers.24.mlp.down_proj",
+    "groups": 8192,
+    "group_size": 128,
+    "weights": 1048576,
+    "initializer": "threshold_ls",
+    "candidate_code_churn": 0.0,
+    "checkpoint_mutated": false,
+    "norm_parameters_trained": 0,
+    "previously_committed_groups_trainable": 0
+  },
+  "sealed_audit": {
+    "suite": "/mnt/hf_model_weights/arman/3bit/wal/wal2/cache/wal-tat-audit-holdout-v20-l256-g512.pt",
+    "sha256": "1867990b981f3f804e42d463363d85687bf9b1c66cd35baba6ab5dce9b035f4c",
+    "overlap_evidence": "wal_tat/results/evidence_v222.json",
+    "role": "one-shot audit-only v20; frozen 8192-group artifact; no gradient updates or retuning"
+  },
+  "audit": {
+    "script": "wal_tat/experiments/partial_initializer_artifact_audit.py",
+    "script_sha256": "81b1f842fe5a6c9e87cf3ea71444aba4f27eefadb73849c84fda08ce26154dd3",
+    "gate_ratio": 1.0021978087383818,
+    "bootstrap_samples": 4096,
+    "bootstrap_block_size": 8,
+    "confidence": 0.95,
+    "batch_size": 8,
+    "seed": 521,
+    "entry_decile": 1
+  },
+  "acceptance": {
+    "all_conditions_required": true,
+    "cumulative_point_ratio_max_each_domain": 1.0021978087383818,
+    "incremental_paired_upper_ratio_max_each_domain": 1.0013063945294842,
+    "candidate_and_checkpoint_hashes_must_match": true,
+    "no_hyperparameter_retuning": true,
+    "pass_action": "atomically commit as s0053 and verify in a fresh process",
+    "failure_action": "do not commit candidate; preserve s0052 and close audit-v20"
+  },
+  "prospective_if_accepted": {
+    "accepted_weights": 76673024,
+    "remaining_weights": 1643778048,
+    "coverage_percent": 4.456565214078927,
+    "remaining_percent": 95.54343478592108,
+    "layer24_down_proj_coverage_percent": 22.94921875,
+    "full_major_matrices": 11,
+    "full_decoder_blocks": 1
+  },
+  "resource_policy": {
+    "cuda_visible_devices": "2",
+    "maximum_concurrent_wal_gpu_processes": 1
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/partial_initializer_artifact_audit.py ../wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt ../wal2/artifacts/wal-tat-block24_down_s0052_d1g8192_thresholdls_proxy_v1.pt ../wal2/cache/wal-tat-audit-holdout-v20-l256-g512.pt --tag block24_down_s0052_d1g8192_thresholdls_proxy_v1_audit_v20 --gate-ratio 1.0021978087383818 --bootstrap-samples 4096 --bootstrap-block-size 8 --confidence 0.95 --batch-size 8 --seed 521 --entry-decile 1 --suite-role 'one-shot audit-only v20; frozen 8192-group artifact; no gradient updates or retuning' --device cuda"
+}

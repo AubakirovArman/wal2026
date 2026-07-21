@@ -1,0 +1,48 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v92-counterfactual-teacher-up-residual-v2-accepted-control",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v92_policy.json",
+    "sha256": "613525b8426ca3d60151fc64f82a16ac143b9ea2e1a263fd8123fd705b91ca31"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_counterfactual_teacher_residual_v2.json",
+    "sha256": "eecff3ba4a8b4c1a4aa4ac471338e6a29875d302fcaa9b72aaba5b6e53ec5bcf",
+    "passed": true,
+    "best_step": 384,
+    "source_restoration_exact": true,
+    "coverage_changed": false
+  },
+  "artifact": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/artifacts/wal-tat-block24_up_counterfactual_teacher_residual_v2.pt",
+    "sha256": "ebc0e033c03f0348855b07d4d4147cf6a5bccda2c90592e1815e4d24e6db9b66",
+    "size_class": "25 MiB training-only BF16 residual",
+    "deployable": false
+  },
+  "ratios": {
+    "source": {
+      "c4_train": 0.9978488271120265,
+      "squad_train": 1.0134932970709492,
+      "library_code_train": 0.9894682468283958
+    },
+    "best_residual": {
+      "c4_train": 0.997556083162337,
+      "squad_train": 1.012963111948531,
+      "library_code_train": 0.9891352452262879
+    },
+    "worst_improvement": 0.000530185122418203
+  },
+  "residual": {
+    "active_weights": 9535488,
+    "learned_to_original_bf16_oracle_l2_ratio": 0.043298691511154175,
+    "cosine_to_original_bf16_correction": 0.028457611799240112,
+    "mean_abs": 0.000690570508595556,
+    "max_abs": 0.006579885724931955
+  },
+  "conclusion": {
+    "new_process_supported": "Target-local counterfactual teacher distillation preserves beneficial ternary/recovered regions and finds a useful correction where raw-BF16 distillation failed.",
+    "next_step": "Project the frozen residual into strict ternary codes/scales and reject any variant that needs persistent BF16 residual storage."
+  },
+  "frontier_changed": false
+}

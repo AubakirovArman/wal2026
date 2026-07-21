@@ -1,0 +1,64 @@
+{
+  "schema": "wal-tat-evidence-v283",
+  "status": "accepted_layer24_q4_scale_only_headroom_after_second_layer25_collapse",
+  "policy": "wal_tat/results/evidence_v282_policy.json",
+  "policy_sha256": "a0a78794cd0e745105f9972f06a97c25091c7e2b53e7d8000a55e60485fbd648",
+  "artifact": "wal2/artifacts/wal-tat-block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_512-mixed-q2-q4-q8.pt",
+  "artifact_sha256": "5f35a9e7ac28138b358bb22762563faaf037a00d8bc52826712c6ce90d3f0ea7",
+  "parent_artifact_sha256": "411c8d337405c8f2e2f48288ffa33a9b7d4ca647c63fd611304be0ec5c054588",
+  "negative_layer25_scale_recovery": "wal_tat/results/block25_q4_codeheavy_v8gate_scaleonly_headroom_v1_512.json",
+  "negative_layer25_scale_recovery_sha256": "8d46f8039f05a42ce5a3eed6016200f95576fc2625782c6dd58fefae3bc9a749",
+  "selection_result": "wal_tat/results/block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_512.json",
+  "fresh_confirmation": "wal_tat/results/block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_fresh_v10.json",
+  "sealed_audit": "wal_tat/results/block24_q4_codeheavy_v8gate_scaleonly_headroom_v6_after_second_l25_sealed_audit_v39.json",
+  "sealed_audit_sha256": "1265a3ff9ec2858001e0e7e96214309a43762b5e10711a28d557f920633437a1",
+  "sealed_suite": "wal2/cache/wal-tat-audit-holdout-v39-l256-g512.pt",
+  "sealed_suite_sha256": "a206590d784561433257c9684d187294bdb65f80824c74f43f5455b1a55d2b7d",
+  "sealed_ratios": {
+    "c4_train": 0.9927928037156032,
+    "wikitext103_train": 0.9405187861343541,
+    "pandas_code": 0.9647512573246659
+  },
+  "sealed_incremental_ratios_vs_source": {
+    "c4_train": 1.0020989554609214,
+    "wikitext103_train": 1.0035429292592248,
+    "pandas_code": 1.0044259666696151
+  },
+  "sealed_incremental_ratios_vs_parent": {
+    "c4_train": 0.9999861511598869,
+    "wikitext103_train": 1.000003028774531,
+    "pandas_code": 0.9999769155189914
+  },
+  "strict_q2_weights": 81228672,
+  "q4_weights": 71105152,
+  "q8_weights": 99324416,
+  "total_low_bit_weights": 251658240,
+  "strict_q2_coverage_fraction": 0.04721359027407435,
+  "low_bit_coverage_fraction": 0.1462745695566052,
+  "remaining_high_precision_weights": 1468792832,
+  "recovery": {
+    "target_layer": 24,
+    "target_projections": ["up_proj", "gate_proj", "down_proj"],
+    "best_step": 448,
+    "changed_q4_scales": 35378,
+    "changed_q4_scales_by_matrix": {
+      "model.layers.24.mlp.up_proj": 4600,
+      "model.layers.24.mlp.gate_proj": 16515,
+      "model.layers.24.mlp.down_proj": 14263
+    },
+    "changed_q4_codes": 0,
+    "changed_q2_values": 0,
+    "changed_q8_values": 0,
+    "changed_masks": 0,
+    "coverage_neutral": true
+  },
+  "projected_payload": {
+    "low_bit_payload_mib": 151.74514770507812,
+    "bf16_payload_mib": 480.0,
+    "savings_mib": 328.2548522949219,
+    "reduction_vs_parent_mib": 0.0
+  },
+  "tests": "169 passed; result-only changes after the test run",
+  "sealed_audit_opened_once": true,
+  "passed": true
+}

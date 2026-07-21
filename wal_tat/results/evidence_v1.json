@@ -1,0 +1,69 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "date_utc": "2026-07-18",
+  "status": "mechanism_proven_full_model_incomplete",
+  "model": "Qwen/Qwen3-1.7B",
+  "quantization": {
+    "codebook": [-1, 0, 1],
+    "logical_bits_per_weight": 1.584962500721156,
+    "deployed_layout": "Q2_g128_with_FP16_scale",
+    "physical_bits_per_weight": 2.125
+  },
+  "frozen_evaluation": {
+    "tokens_per_domain": 1024,
+    "gate_metric": "candidate_nll / bf16_nll",
+    "maximum_ratio_per_domain": 1.02,
+    "baseline": {
+      "wiki": {"ppl": 36.6371, "nll_ratio": 1.0},
+      "code": {"ppl": 42.2820, "nll_ratio": 1.0}
+    },
+    "full_down_proj": {
+      "wiki": {"ppl": 32.0655, "nll_ratio": 0.962989},
+      "code": {"ppl": 44.7475, "nll_ratio": 1.015135},
+      "passed": true
+    },
+    "fresh_composed_verify": {
+      "wiki": {"ppl": 32.27952101530052, "nll_ratio": 0.964836},
+      "code": {"ppl": 45.536735947916824, "nll_ratio": 1.019805},
+      "passed": true
+    }
+  },
+  "coverage": {
+    "layer": 27,
+    "down_proj": {
+      "shape": [2048, 6144],
+      "groups": 98304,
+      "committed_fraction": 1.0,
+      "committed_parameters": 12582912,
+      "projected_matrix_bpw": 2.125
+    },
+    "up_proj": {
+      "shape": [6144, 2048],
+      "groups": 98304,
+      "committed_fraction": 0.375,
+      "committed_parameters": 4718592,
+      "projected_matrix_bpw": 10.796875
+    },
+    "total_committed_parameters": 17301504,
+    "approximate_whole_model_fraction": 0.0102
+  },
+  "packed_weight_memory_projection": {
+    "bf16_matrix_mib": 24.0,
+    "full_q2_g128_matrix_mib": 3.1875,
+    "current_total_saving_mib": 28.6171875,
+    "training_vram_saving": false,
+    "full_1_7b_q2_g128_raw_projection_bytes": 451562500,
+    "full_model_projection_achieved": false
+  },
+  "rejected_continuations": [
+    {"additional_up_proj_fraction": 0.03125, "code_nll_ratio": 1.020141},
+    {"additional_up_proj_fraction": 0.015625, "code_nll_ratio": 1.020115}
+  ],
+  "limitations": [
+    "small 1024-token per-domain gate suite",
+    "approximately one percent whole-model coverage",
+    "no packed full-model checkpoint",
+    "no clean peak-VRAM or throughput benchmark",
+    "no full task benchmark"
+  ]
+}

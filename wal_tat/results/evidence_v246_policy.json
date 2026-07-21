@@ -1,0 +1,39 @@
+{
+  "schema": "wal-tat-exact-support-macro-shock-policy-v1",
+  "evidence_id": "v246",
+  "declared_before_execution": true,
+  "objective": "measure whether the exact diagonal weighted support optimum reduces the full layer24 MLP hard-ternary initialization shock",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "development_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened": false,
+  "candidate_new_weights": 23990272,
+  "projector": {
+    "implementation": "wal_tat/src/wal_tat/scoring.py:exact_diagonal_ternary_project",
+    "implementation_sha256": "827a8341e7ae023d1982bc2fdb735295be0608c62d638d73de46c0ca55af3904",
+    "support_sizes_evaluated_per_group": 128,
+    "diagonal_moment": "uniform for this isolated initializer ablation",
+    "global_optimum_for_declared_diagonal_objective": true
+  },
+  "baselines": {
+    "coarse_threshold_result": "wal_tat/results/block24_mlp_macro_complete_s0053_v1.json",
+    "coarse_threshold_result_sha256": "3032bbf93556e693e9ffaed5571a721107eed15c6193e840fe9d669e1f66060d",
+    "coarse_threshold_hard_ratios": {
+      "c4_train": 1.00450515464004,
+      "squad_train_context": 1.0202319971582174,
+      "scipy_code": 1.049596815777351
+    }
+  },
+  "acceptance": {
+    "primary": "strict reduction of worst-domain hard-initializer NLL ratio versus coarse threshold_ls",
+    "strict_ternary_codes_only": true,
+    "no_checkpoint_publication": true,
+    "no_sealed_audit": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/block_proxy_recovery.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --selection-suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_exact_support_shock_s0053_v1 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --complete-target-projections --completion-initializer exact_support --steps 1 --proxy-lr 1e-12 --scale-lr 1e-12 --block-weight 0 --attention-weight 0 --proxy-anchor-weight 0 --kd-weight 0 --selection-gate-sequences 64 --selection-every 1 --gate-ratio 1.02 --seed 613 --device cuda"
+}

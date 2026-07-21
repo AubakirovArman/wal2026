@@ -1,0 +1,175 @@
+{
+  "schema": "wal-tat-evidence-v68",
+  "date_utc": "2026-07-19",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "partial_layer24_after_round_robin_down_gate_up_cycle_16_16_22",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.7080078125,
+      "gate_proj_coverage": 0.033203125,
+      "down_proj_coverage": 0.0693359375
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 73113600,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1647337472,
+    "weight_coverage_fraction": 0.04249676215145513
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0022-candidate_only.pt",
+    "bytes": 304658813,
+    "sha256": "09effb690206d038327e4d63ee37fb42bf8b7a4f11e6f11b1e591d9b2a197cdf",
+    "kind": "mixed BF16/ternary training checkpoint after accepted down/gate/up round-robin cycle"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0021248381075727,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9966679632673033,
+        "squad_context": 1.0007836408674313,
+        "torch_code": 0.9800859219044006
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9966679632673033,
+        "squad_context": 0.9970900041444922,
+        "transformers_code": 0.9801554154403164
+      },
+      "passed": true
+    }
+  },
+  "round_robin_cycle": [
+    {
+      "projection": "down_proj",
+      "campaign_step": 16,
+      "result": "block24_down_after_recovery_s0016.json",
+      "fraction": 0.00390625,
+      "new_groups": 384,
+      "new_weights": 49152,
+      "coverage_before": 0.0654296875,
+      "coverage_after": 0.0693359375,
+      "development_chosen_arm": "candidate_only",
+      "holdout_chosen_arm": "candidate_only",
+      "holdout_worst_by_arm": {
+        "candidate_only": 1.0006530143946708,
+        "candidate_bf16_mlp": 1.0007634075461562
+      },
+      "normalized_headroom": 0.6921583140040856
+    },
+    {
+      "projection": "gate_proj",
+      "campaign_step": 16,
+      "result": "block24_gate_after_recovery_s0016.json",
+      "fraction": 0.001953125,
+      "new_groups": 192,
+      "new_weights": 24576,
+      "coverage_before": 0.03125,
+      "coverage_after": 0.033203125,
+      "development_chosen_arm": "candidate_only",
+      "holdout_chosen_arm": "candidate_only",
+      "holdout_worst_by_arm": {
+        "candidate_only": 1.000688123188959,
+        "candidate_bf16_mlp": 1.0007252569529066
+      },
+      "normalized_headroom": 0.6757166393976687
+    },
+    {
+      "projection": "up_proj",
+      "campaign_step": 22,
+      "result": "block24_up_headroom_growth_s0022.json",
+      "fraction": 0.0078125,
+      "new_groups": 768,
+      "new_weights": 98304,
+      "coverage_before": 0.7001953125,
+      "coverage_after": 0.7080078125,
+      "development_chosen_arm": "candidate_only",
+      "holdout_chosen_arm": "candidate_only",
+      "holdout_worst_by_arm": {
+        "candidate_only": 1.0007836408674313,
+        "candidate_bf16_mlp": 1.0009705321548248
+      },
+      "normalized_headroom": 0.6311997301636708,
+      "next_fraction": 0.0078125,
+      "next_fraction_reason": "middle_headroom_hold"
+    }
+  ],
+  "execution_notes": {
+    "first_down_attempt": "aborted before any commit because GPU 0 was occupied by an unrelated 132 GiB process",
+    "frontier_changed_by_failed_attempt": false,
+    "retry_train_visible_device": "2",
+    "retry_audit_visible_devices": ["2", "3"]
+  },
+  "checkpoint_cleanup": [
+    {
+      "reason": "superseded_before_down",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0021-candidate_only.pt",
+      "bytes": 304658813,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_down_linked_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_after_recovery_s0016-candidate_bf16_mlp.pt",
+      "bytes": 304659816,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "superseded_before_gate",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_after_recovery_s0016-candidate_only.pt",
+      "bytes": 304659052,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_gate_linked_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0016-candidate_bf16_mlp.pt",
+      "bytes": 304659816,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "superseded_before_up",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_after_recovery_s0016-candidate_only.pt",
+      "bytes": 304659052,
+      "recoverable_without_rerun": false
+    },
+    {
+      "reason": "unchosen_up_linked_arm",
+      "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_up_headroom_growth_s0022-candidate_bf16_mlp.pt",
+      "bytes": 304659641,
+      "recoverable_without_rerun": false
+    }
+  ],
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 139.453125,
+    "accepted_weights_q2_g128_mib": 18.5211181640625,
+    "projected_saving_mib": 120.9320068359375
+  },
+  "verification": {
+    "unit_tests_passed": 48,
+    "committed_code_alphabet": [-1, 0, 1],
+    "independent_audit_suites": 2
+  },
+  "next": "run down_proj campaign step 17 at fraction 0.00390625 from the synchronized frontier"
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v85-block24-kd-proxy-recovery-v8-rejected",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v85_policy.json",
+    "sha256": "af3b7050182bd580eeec0b5db46a3affe8991b6b0b29d4d0f1a3ba54ac49b409"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_kd_proxy_recovery_v8.json",
+    "sha256": "6671d995dbfd3f1639df3cc9f17a758382bba34aeeff65d6b1c0353e30adbb37",
+    "wal_sha256": "1e9c7a739bcb1111a17e9ff621e8d926bfbf96359a7fbb6d32acd3cc696e2143",
+    "passed": false,
+    "best_selection_step": 0,
+    "source_frontier_ratios": {
+      "c4_train": 0.9954138489550486,
+      "squad_train": 1.0020627475692334,
+      "vendor_code_train": 0.9837822769030569
+    },
+    "attempted_ratios": {
+      "c4_train": 0.9954138489550486,
+      "squad_train": 1.0020627475692334,
+      "vendor_code_train": 0.9837822769030569
+    },
+    "code_churn_each_matrix": 0.0,
+    "accepted_checkpoint": null
+  },
+  "decision": {
+    "accepted": false,
+    "reason": "Every trained selection snapshot was worse than the immutable step-0 source; the runner restored step 0 and published no checkpoint.",
+    "coverage_changed": false,
+    "source_checkpoint_preserved": true
+  },
+  "frontier_after_decision": {
+    "checkpoint": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_d10_wls_replicate2_s0048.pt",
+    "sha256": "6d99c77c242336f6b1cd6c004b42744b0a46d6aff7debce506f6e2a047977887",
+    "accepted_weights": 74563584,
+    "coverage_percent": 4.33395550815176
+  }
+}

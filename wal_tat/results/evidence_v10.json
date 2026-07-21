@@ -1,0 +1,97 @@
+{
+  "schema": "wal-tat-evidence-v10",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_layer24_attention_three_partial_mlp_matrices",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.3251953125,
+      "gate_proj_coverage": 0.001953125,
+      "down_proj_coverage": 0.0009765625
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 67043328,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1653407744,
+    "weight_coverage_fraction": 0.03896845954593936
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_down_auto_s0001-candidate_only.pt",
+    "bytes": 304657174,
+    "sha256": "1289304fec2f1b8ae92022d877feb679f8e861da87786c47c41b6b26db7724f8",
+    "kind": "training checkpoint with three partial layer-24 MLP matrices"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.001948422977297,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9975499698118474,
+        "squad_context": 1.0015279067802132,
+        "torch_code": 0.9786288482711069
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9975499698118474,
+        "squad_context": 0.9978363988323532,
+        "transformers_code": 0.9766483839043469
+      },
+      "passed": true
+    }
+  },
+  "down_projection_transaction": {
+    "selector": "column-structured g128 input-channel block",
+    "selected_channel_blocks": [2],
+    "new_groups": 96,
+    "new_weights": 12288,
+    "development_chosen": "candidate_bf16_mlp",
+    "holdout_worst": {
+      "candidate_only": 1.0015279067802132,
+      "candidate_bf16_mlp": 1.0015504445655297
+    },
+    "holdout_chosen": "candidate_only"
+  },
+  "automation": {
+    "state": "block24_down_auto_campaign_v1.json",
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 127.875,
+    "accepted_weights_q2_g128_mib": 16.9833984375,
+    "projected_saving_mib": 110.8916015625
+  },
+  "verification": {
+    "unit_tests_passed": 46,
+    "committed_code_alphabet": [-1, 0, 1]
+  },
+  "next": "continue adaptive gate/down transactions and test a larger down atom under the unchanged cumulative gate"
+}

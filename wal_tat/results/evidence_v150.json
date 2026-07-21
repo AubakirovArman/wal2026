@@ -1,0 +1,52 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v150",
+  "title": "A prospective 2048-group MLP scan selects gate_proj activation-WLS without opening audit-v10",
+  "policy_sha256": "7781e3db9f7b98fce44cb6d2184d6a9464b1c72e570b87c60fbbe3019469837f",
+  "source_checkpoint_sha256_after_scan": "e643a500102ac277b66e8399b6b31811063af2dd337dbbdff9fdf036374d5f70",
+  "results": {
+    "up_proj": {
+      "path": "wal_tat/results/block24_up_s0049_d1g2048_initializers_v1.json",
+      "sha256": "462fb1915fda6891f9d78d1f1e8af61f79ef70239a649b27bddc45bdb1841822",
+      "best_initializer": "threshold_ls",
+      "best_worst_incremental_ratio": 1.0005057791000305,
+      "best_sum_incremental_ratios": 3.0009009930380115,
+      "artifact_sha256": "db1a9cc71326810b5e1a9949dbefa836a04d05751b46456a954178441e1c9600"
+    },
+    "down_proj": {
+      "path": "wal_tat/results/block24_down_s0049_d1g2048_initializers_v1.json",
+      "sha256": "9d50080eb1474d224560e95a5339a0d33e5bd9cbe24238bc62b8333b1cb06b9d",
+      "best_initializer": "absmean_round",
+      "best_worst_incremental_ratio": 1.000263185911776,
+      "best_sum_incremental_ratios": 3.0004012272790703,
+      "artifact_sha256": "71a3b5a2eb8e7a0ae24fb8a5e41fc63d0a61dc65ee1a62d2aeb10dc09eb20118"
+    },
+    "gate_proj": {
+      "path": "wal_tat/results/block24_gate_s0049_d1g2048_initializers_v1.json",
+      "sha256": "838e824acca17c649c37d6ce47b1f1abbce7743c7805e0c4b78c2862f7e1fd4e",
+      "best_initializer": "activation_wls",
+      "best_worst_incremental_ratio": 1.000140888994229,
+      "best_sum_incremental_ratios": 3.000294355351423,
+      "artifact_sha256": "1389222c8641c485784437c7d4ed1b8ff6ea0dd88bc0b0aee2bf2ccfc9df314d"
+    }
+  },
+  "selected_candidate": {
+    "target_name": "model.layers.24.mlp.gate_proj",
+    "decile": 1,
+    "groups": 2048,
+    "group_size": 128,
+    "weights": 262144,
+    "initializer": "activation_wls",
+    "mask_sha256": "9bf9a179ba12a3567cdbc7fbfbaa61c726ece7104c12652eebf2c9a693c9b237",
+    "artifact": "wal2/artifacts/wal-tat-block24_gate_s0049_d1g2048_initializers_v1.pt",
+    "artifact_sha256": "1389222c8641c485784437c7d4ed1b8ff6ea0dd88bc0b0aee2bf2ccfc9df314d"
+  },
+  "selection_limit": 1.0015,
+  "selection_passed": true,
+  "scale_up_from_previous_accepted_atom": 21.333333333333332,
+  "source_checkpoint_mutated": false,
+  "checkpoint_files_written": 0,
+  "audit_v10_opened": false,
+  "maximum_concurrent_wal_gpu_processes_observed": 1,
+  "status": "candidate initializer frozen; recovery and audit thresholds must be declared before training"
+}

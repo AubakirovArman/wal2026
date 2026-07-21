@@ -1,0 +1,27 @@
+{
+  "schema": "wal-tat-fresh-verification-policy-v1",
+  "evidence_id": "v219",
+  "declared_before_execution": true,
+  "objective": "independently reload and verify s0052 after atomic publication",
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt",
+  "checkpoint_sha256": "3f5488bc9248ca13728fe7e71df16ebcd076720ec04ab1344aae57e104be1504",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "script": "wal_tat/experiments/verify_checkpoint.py",
+  "script_sha256": "0d11b56ffc3f73db4187794c206f458d9f16b3f9312df0d2453637b39877e8cb",
+  "tag": "block24_down_d1_absmean_s0052_fresh_verify",
+  "acceptance": {
+    "gate_ratio": 1.02,
+    "strict_ternary_codes_only": true,
+    "accepted_weights": 75624448,
+    "accepted_coverage_fraction": 0.04395617476763675,
+    "coverage_unchanged": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "failure_action": "retain s0051, s0051r1, s0051r2, s0052 and recovery artifacts; do not treat s0052 as current frontier",
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/verify_checkpoint.py ../wal2/checkpoints/wal-tat-block24_down_d1_absmean_s0052.pt ../wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt --tag block24_down_d1_absmean_s0052_fresh_verify --gate-ratio 1.02 --seed 499 --device cuda"
+}

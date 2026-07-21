@@ -1,0 +1,30 @@
+{
+  "schema": "wal-tat-macro-q4-rescue-policy-v1",
+  "evidence_id": "v253",
+  "declared_before_execution": true,
+  "objective": "measure the minimum activation-ranked signed-Q4-g128 rescue fraction required for the full block24 MLP candidate to pass development",
+  "source_frontier_sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce",
+  "development_suite_sha256": "3fd773fd6bf878191c6b0df934fa6e4a1e8002aeee020bd38db7349a82763218",
+  "sealed_audit_sha256": "dc92017faa2750203c029fc274d163289f32fd48054f79cf45ac660fb5dca4ce",
+  "sealed_audit_opened": false,
+  "candidate_new_weights": 23990272,
+  "formats": {
+    "ternary": {"codes": [-1, 0, 1], "group_size": 128, "physical_bpw": 2.125},
+    "q4_rescue": {"codes": "signed integers [-8,7]", "group_size": 128, "physical_bpw": 4.125}
+  },
+  "ranking": "activation-weighted ternary error minus activation-weighted Q4 error",
+  "rescue_fractions": [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.4, 1.0],
+  "acceptance": {
+    "development_cumulative_nll_ratio_limit": 1.02,
+    "selection_uses_64_sequences_per_domain": true,
+    "first_selection_pass_is_rechecked_on_256_sequences_per_domain": true,
+    "checkpoint_written_by_this_diagnostic": false,
+    "sealed_audit_is_not_opened": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=wal_tat/src:wal_tat/experiments python wal_tat/experiments/macro_mlp_q4_rescue.py --source-checkpoint wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt --suite wal2/cache/wal-tat-matched-train-recovery-v8-coverage-l256.pt --tag block24_mlp_macro_q4_rescue_s0053_v1 --target-layer 24 --target-projections up_proj,gate_proj,down_proj --moment-sequences 128 --selection-gate-sequences 64 --rescue-fractions 0.005,0.01,0.02,0.05,0.1,0.2,0.4,1.0 --gate-ratio 1.02 --seed 647 --device cuda"
+}

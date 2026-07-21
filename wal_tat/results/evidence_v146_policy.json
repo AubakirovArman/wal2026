@@ -1,0 +1,31 @@
+{
+  "schema": "wal-tat-fresh-verify-policy-v1",
+  "evidence_id": "v146",
+  "declared_before_execution": true,
+  "checkpoint": "wal2/checkpoints/wal-tat-block24_gate_d1_thresholdls_s0049.pt",
+  "checkpoint_sha256": "e643a500102ac277b66e8399b6b31811063af2dd337dbbdff9fdf036374d5f70",
+  "parent_checkpoint": "wal2/checkpoints/wal-tat-block24_mlp_local_fallback_compensation_s0048r3.pt",
+  "parent_checkpoint_sha256": "50b5ef503ddc9f8ca1bb3e9c77cba39b26a87c710d09f0e7765dbfbe4b0f21ca",
+  "commit_result": "wal_tat/results/block24_gate_d1_thresholdls_s0049_commit.json",
+  "commit_result_sha256": "2b5afcc9a92439876a334b1f0512b3a7bb72ce5848b5b71e88add228fad62cbb",
+  "suite": "wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt",
+  "suite_sha256": "8102091d99595a43276e11fb26e40212a5c05bcaa9ae29ada4bf9ac7196b76e0",
+  "script": "wal_tat/experiments/verify_checkpoint.py",
+  "script_sha256": "0d11b56ffc3f73db4187794c206f458d9f16b3f9312df0d2453637b39877e8cb",
+  "gate_ratio": 1.02,
+  "required_invariants": {
+    "all_domain_ratios_at_most_gate": true,
+    "codes_subset": [-1, 0, 1],
+    "accepted_weights": 74575872,
+    "coverage_fraction": 0.04334669739448423,
+    "layer24_gate_proj_coverage": 0.064453125,
+    "parent_retained_until_pass": true,
+    "artifact_retained_until_pass": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  },
+  "command": "CUDA_VISIBLE_DEVICES=2 PYTHONPATH=src:experiments python experiments/verify_checkpoint.py ../wal2/checkpoints/wal-tat-block24_gate_d1_thresholdls_s0049.pt ../wal2/cache/wal-tat-suite-v1-l128-wc8-cc8-g256.pt --tag block24_gate_d1_thresholdls_s0049_fresh_verify --gate-ratio 1.02 --seed 109 --device cuda"
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v97-gain4-frozen-audit-v3-accepted",
+  "date_utc": "2026-07-20",
+  "policy": {
+    "path": "wal_tat/results/evidence_v97_policy.json",
+    "sha256": "ca9421ec048ee638ee031da3e39fc19781886ceac1efec979372fea7b518c5b6"
+  },
+  "result": {
+    "path": "wal_tat/results/block24_up_residual_gain4_frozen_audit_v3.json",
+    "sha256": "4088854f3d9cd5c6c212dbec68c0ac370af6c32ff3bdf1c30c02022c7c5bb82d",
+    "accepted": true,
+    "source_restoration_exact": true,
+    "checkpoint_mutated": false,
+    "coverage_changed": false
+  },
+  "incremental_candidate_vs_frontier": {
+    "c4_validation": {
+      "observed_ratio": 0.9999883056574909,
+      "upper_95_ratio": 1.0000316830484484
+    },
+    "squad_context": {
+      "observed_ratio": 0.9999313574542972,
+      "upper_95_ratio": 0.9999897354287146
+    },
+    "torch_code": {
+      "observed_ratio": 0.9999708789125126,
+      "upper_95_ratio": 1.000039381098391
+    }
+  },
+  "acceptance": {
+    "incremental_upper_ratio_limit": 1.0001,
+    "all_incremental_confidence_passed": true,
+    "all_cumulative_confidence_passed": true
+  },
+  "conclusion": {
+    "result": "The frozen strict-Q2 scale recovery improves every audit-v3 point estimate and stays below the predeclared per-domain incremental confidence limit.",
+    "next_step": "Publish a lineage-linked checkpoint with identical coverage, fresh-load it, and retain the old checkpoint until verification passes."
+  },
+  "frontier_changed": false
+}

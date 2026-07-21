@@ -1,0 +1,25 @@
+{
+  "schema": "wal-tat-evidence-v1",
+  "evidence_id": "v208",
+  "title": "Invalid continuation run is stopped after exposing ignored fallback master weights",
+  "policy_sha256": "7cbfa856788940aabab6ec0cdac7a049ff57325cf21dbae1e66dbe757d0d7194",
+  "source_checkpoint_sha256": "f0ee05a8062585396376362d69675cacbe411bfe9c91a242a3368f4e7b361843",
+  "requested_starting_artifact_sha256": "a975caead0c51eef1000562999191fac316a3347539f0495ff43ad0b4c28f069",
+  "detected_at_step": 1024,
+  "diagnosis": "apply_strict_recode_artifact transferred committed codes and scales but ignored fp_master_bf16, so the run restarted from s0051r1 instead of the declared v1 compensation",
+  "action": "the owned process was interrupted before artifact publication",
+  "result_written": false,
+  "artifact_written": false,
+  "audit_v18_opened": false,
+  "checkpoint_mutated": false,
+  "fix": {
+    "script": "wal_tat/experiments/mlp_fallback_compensation_recovery.py",
+    "fixed_script_sha256": "162c09811948422b8c16bb92194e12b62ecf979a5b5f28cdfd49dfc050fc9463",
+    "loads_fp_master_bf16": true,
+    "rejects_non_bf16_or_nonfinite_master": true,
+    "rejects_committed_group_master_changes": true,
+    "new_tests": 2,
+    "targeted_tests_passed": 6
+  },
+  "next_required_action": "predeclare and run a fresh continuation policy against the fixed script"
+}

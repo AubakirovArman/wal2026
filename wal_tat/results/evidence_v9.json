@@ -1,0 +1,89 @@
+{
+  "schema": "wal-tat-evidence-v9",
+  "date_utc": "2026-07-18",
+  "model": "Qwen/Qwen3-1.7B",
+  "status": "one_full_block_layer24_attention_two_partial_mlp_matrices",
+  "representation": {
+    "states": [-1, 0, 1],
+    "logical_bpw": 1.584962500721156,
+    "physical_layout": "Q2-g128 with one FP16 scale per group",
+    "physical_bpw": 2.125,
+    "runtime_packed": false
+  },
+  "progress": {
+    "decoder_blocks_complete": 1,
+    "decoder_blocks_total": 28,
+    "complete_block_ids": [27],
+    "partial_block": {
+      "id": 24,
+      "accepted_full_matrices": [
+        "self_attn.q_proj",
+        "self_attn.k_proj",
+        "self_attn.v_proj",
+        "self_attn.o_proj"
+      ],
+      "up_proj_coverage": 0.3251953125,
+      "gate_proj_coverage": 0.001953125,
+      "down_proj_coverage": 0.0
+    },
+    "major_full_matrices_accepted": 11,
+    "major_matrices_total": 197,
+    "major_weights_accepted": 67031040,
+    "major_weights_total": 1720451072,
+    "major_weights_remaining": 1653420032,
+    "weight_coverage_fraction": 0.03896131723297273
+  },
+  "checkpoint": {
+    "path": "/mnt/hf_model_weights/arman/3bit/wal/wal2/checkpoints/wal-tat-block24_gate_auto_s0001-candidate_bf16_mlp.pt",
+    "bytes": 304657874,
+    "sha256": "88123c0963b6eb817edb1709c84ce6793189a86460cd7a528b96c272f0f41ae4",
+    "kind": "training checkpoint with two partial layer-24 MLP matrices"
+  },
+  "quality_gate": {
+    "policy": "1 + 0.05 * exact committed major weight coverage",
+    "effective_ratio": 1.0019480658616486,
+    "policy_is_external_standard": false
+  },
+  "audits": {
+    "v3": {
+      "nll_ratios": {
+        "c4_validation": 0.9975070458418317,
+        "squad_context": 1.0014756383230743,
+        "torch_code": 0.9786244153518399
+      },
+      "passed": true
+    },
+    "v4": {
+      "nll_ratios": {
+        "c4_validation": 0.9975070458418317,
+        "squad_context": 0.9978612656838693,
+        "transformers_code": 0.9766222581465498
+      },
+      "passed": true
+    }
+  },
+  "holdout_arm_selection": {
+    "development_chosen": "candidate_bf16_mlp",
+    "holdout_worst": {
+      "candidate_only": 1.0015152980077517,
+      "candidate_bf16_mlp": 1.0014756383230743
+    },
+    "chosen": "candidate_bf16_mlp"
+  },
+  "automation": {
+    "state": "block24_gate_auto_campaign_v1.json",
+    "development_recovery": true,
+    "fresh_checkpoint_reload": true,
+    "all_passing_arms_audited": true,
+    "parallel_independent_audits": true,
+    "coverage_aware_gate": true,
+    "state_before_cleanup": true,
+    "exact_cleanup_targets_only": true
+  },
+  "storage_projection": {
+    "accepted_weights_bf16_mib": 127.8515625,
+    "accepted_weights_q2_g128_mib": 16.98028564453125,
+    "projected_saving_mib": 110.87127685546875
+  },
+  "next": "continue gate campaign at 1/1024 and implement column-structured down_proj atomic conversion"
+}

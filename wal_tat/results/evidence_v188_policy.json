@@ -1,0 +1,31 @@
+{
+  "schema": "wal-tat-cleanup-policy-v1",
+  "evidence_id": "v188",
+  "declared_before_deletion": true,
+  "objective": "remove only the rejected 8192-group scan and recovery binaries after audit-v14 closes",
+  "retained": {
+    "path": "wal2/checkpoints/wal-tat-block24_gate_d1_activationwls_s0051.pt",
+    "sha256": "287f8c84ba22152b9742450a7e65000c4dc33159bf4cd6b5efdf06e6d6dc93e8"
+  },
+  "rejection_evidence": "wal_tat/results/evidence_v187.json",
+  "delete_after_exact_hash_check": [
+    {
+      "path": "wal2/artifacts/wal-tat-block24_down_s0051_d1g8192_initializers_v1.pt",
+      "sha256": "73082ae5ed84e9f6059da638d77a61fb60774e28c9daee4cb6a4a50d3373b95b",
+      "bytes": 1134180
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_gate_s0051_d1g8192_initializers_v1.pt",
+      "sha256": "4fe9e2b42e7d98538d93d7d605b5686dd7044c5b28622a577ebdd92a108a649c",
+      "bytes": 1134180
+    },
+    {
+      "path": "wal2/artifacts/wal-tat-block24_down_s0051_d1g8192_absmean_proxy_v1.pt",
+      "sha256": "82be588871c2d14ea2cd177d623947cde0363c322fcba199118b6f0c2d9f88dc",
+      "bytes": 1134637
+    }
+  ],
+  "expected_deleted_bytes": 3402997,
+  "preserve_json_and_sha_evidence": true,
+  "recoverability": "deleted binaries are not directly recoverable; their hashes, commands, development metrics and sealed rejection audit remain"
+}

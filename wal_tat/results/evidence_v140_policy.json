@@ -1,0 +1,41 @@
+{
+  "schema": "wal-tat-audit-suite-build-policy-v1",
+  "evidence_id": "v140",
+  "declared_before_execution": true,
+  "objective": "build audit-only v9 before any s0048r3 coverage candidate, outside every previously declared C4, SQuAD and torch token interval",
+  "builder": "wal_tat/experiments/build_audit_holdout.py",
+  "builder_sha256": "fa77c4949e336a1b6e1469ff736479644f803d3411ef3a6112f34eebd3fdee00",
+  "output": "wal2/cache/wal-tat-audit-holdout-v9-l256-g512.pt",
+  "sequence_length": 256,
+  "sequences_per_domain": 512,
+  "offsets": {
+    "c4_validation": 1700003,
+    "squad_context": 1700003,
+    "torch_code": 1700003
+  },
+  "declared_ranges": {
+    "c4_validation": [1700003, 1831075],
+    "squad_context": [1700003, 1831075],
+    "torch_code": [1700003, 1831075]
+  },
+  "code_source": "torch",
+  "role": "audit-only v9; never use for training, candidate selection, rollback selection or hyperparameter tuning",
+  "audit_firewall": {
+    "built_before_next_candidate": true,
+    "v8_results_must_not_select_the_next_coverage_candidate": true,
+    "v9_model_evaluation_forbidden_until_a_new_candidate_is_frozen": true,
+    "one_shot_candidate_decision": true
+  },
+  "required_metadata": {
+    "full_token_stream_sha256_each_domain": true,
+    "declared_gate_ranges": true,
+    "source_file_sha256": true,
+    "selected_window_sha256": true
+  },
+  "acceptance": {
+    "suite_file_created": true,
+    "tokens_per_domain": 131072,
+    "zero_overlap_proof_required_before_development": true
+  },
+  "command": "PYTHONPATH=src:experiments python experiments/build_audit_holdout.py --output ../wal2/cache/wal-tat-audit-holdout-v9-l256-g512.pt --length 256 --sequences 512 --c4-offset 1700003 --squad-offset 1700003 --code-offset 1700003 --code-source torch --policy 'audit-only v9; built before s0048r3 coverage growth; never use for training or model selection'"
+}
