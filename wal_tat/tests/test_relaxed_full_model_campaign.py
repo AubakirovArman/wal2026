@@ -6,7 +6,7 @@ from pathlib import Path
 EXPERIMENTS = Path(__file__).resolve().parents[1] / "experiments"
 sys.path.insert(0, str(EXPERIMENTS))
 
-from relaxed_full_model_campaign import generation_command  # noqa: E402
+from relaxed_full_model_campaign import generation_command, q8_command  # noqa: E402
 
 
 def _args() -> argparse.Namespace:
@@ -52,3 +52,16 @@ def test_q4_generation_materializes_candidate_before_fresh_gate():
     assert _flag_value(command, "--gate-ratio") == "1000.0"
     assert _flag_value(command, "--incremental-gate-ratio") == "1000.0"
     assert "--allow-zero-rescue" not in command
+
+
+def test_q8_generation_materializes_candidate_before_fresh_gate():
+    command = q8_command(
+        _args(),
+        parent=Path("parent.pt"),
+        q4_candidate=Path("q4.pt"),
+        layer=12,
+        tag="q8",
+    )
+
+    assert _flag_value(command, "--gate-ratio") == "1000.0"
+    assert _flag_value(command, "--incremental-gate-ratio") == "1000.0"

@@ -165,9 +165,9 @@ def q8_command(
         "--rescue-fractions",
         "1",
         "--gate-ratio",
-        str(args.gate_ratio),
+        str(args.q4_candidate_generation_gate_ratio),
         "--incremental-gate-ratio",
-        str(args.incremental_gate_ratio),
+        str(args.q4_candidate_generation_gate_ratio),
         "--write-artifact",
         "--device",
         args.device,
@@ -242,11 +242,10 @@ def verify(
     layer: int,
     precision: str,
 ) -> tuple[bool, Path, dict]:
-    suffix = (
-        "q4candidate_v2_fresh"
-        if precision == "q4"
-        else f"{precision}first_v1_fresh"
-    )
+    if precision in {"q4", "q8"}:
+        suffix = f"{precision}candidate_v2_fresh"
+    else:
+        suffix = f"{precision}first_v1_fresh"
     tag = f"{args.tag_prefix}_block{layer}_{suffix}"
     result_path = PROJECT / f"results/{tag}.json"
     if not result_path.exists():
@@ -269,7 +268,7 @@ def generate_q8(
     q4_candidate: Path,
     layer: int,
 ) -> tuple[Path | None, Path]:
-    tag = f"{args.tag_prefix}_block{layer}_q8fallback_v1"
+    tag = f"{args.tag_prefix}_block{layer}_q8candidate_v2"
     result_path = PROJECT / f"results/{tag}.json"
     if not result_path.exists():
         run_child(
