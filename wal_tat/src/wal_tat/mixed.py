@@ -102,6 +102,9 @@ def install_mixed_q2_q4_artifact(
     if artifact.get("q4_physical_bpw") != q4_g128_physical_bpw():
         raise ValueError("mixed artifact Q4 format mismatch")
     has_q8 = artifact_format == "wal-tat-mixed-q2-q4-q8-v1"
+    allow_source_q2_scale_recovery = bool(
+        artifact.get("allow_source_q2_scale_recovery", False)
+    )
     if has_q8 and artifact.get("q8_physical_bpw") != q8_g128_physical_bpw():
         raise ValueError("mixed artifact Q8 format mismatch")
 
@@ -200,7 +203,15 @@ def install_mixed_q2_q4_artifact(
                 raise ValueError(f"source scale shape mismatch for {name}")
             if not torch.equal(q2_codes[source_mask], source_codes[source_mask]):
                 raise ValueError(f"accepted source codes changed in {name}")
-            if not torch.equal(q2_scales[source_mask], source_scales[source_mask]):
+            source_scales_changed = not torch.equal(
+                q2_scales[source_mask], source_scales[source_mask]
+            )
+            entry_allows_scale_recovery = bool(
+                entry.get("source_q2_scale_recovery", False)
+            )
+            if source_scales_changed and not (
+                allow_source_q2_scale_recovery and entry_allows_scale_recovery
+            ):
                 raise ValueError(f"accepted source scales changed in {name}")
             source_ternary_weights = valid_group_weight_count(
                 source_mask, columns, group_size
@@ -237,6 +248,22 @@ def install_mixed_q2_q4_artifact(
             "q4_weights": matrix_q4,
             "q8_weights": matrix_q8,
         }
+
+    norm_extras = artifact.get("norm_extras", {})
+    if norm_extras:
+        if not artifact.get("allow_norm_recovery", False):
+            raise ValueError("mixed artifact norm recovery is not explicitly enabled")
+        parameters = dict(model.named_parameters())
+        for name, value in norm_extras.items():
+            if "norm" not in name:
+                raise ValueError(f"mixed artifact extra is not a norm parameter: {name}")
+            parameter = parameters.get(name)
+            tensor = torch.as_tensor(value)
+            if parameter is None or tuple(parameter.shape) != tuple(tensor.shape):
+                raise ValueError(f"mixed artifact norm shape mismatch for {name}")
+            if not torch.isfinite(tensor).all():
+                raise ValueError(f"non-finite mixed artifact norm for {name}")
+            parameter.copy_(tensor.to(parameter.device, parameter.dtype))
 
     return MixedArtifactInstallResult(
         new_q2_weights=new_q2_weights,

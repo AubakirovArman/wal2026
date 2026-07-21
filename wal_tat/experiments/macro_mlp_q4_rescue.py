@@ -89,6 +89,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--rescue-fractions", default="0.005,0.01,0.02,0.05,0.1,0.2,0.4,1.0"
     )
+    parser.add_argument(
+        "--allow-zero-rescue",
+        action="store_true",
+        help=(
+            "allow a 0 rescue fraction so the first candidate is a fully "
+            "strict ternary block"
+        ),
+    )
     parser.add_argument("--gate-ratio", type=float, default=1.02)
     parser.add_argument("--incremental-gate-ratio", type=float, default=1.005)
     parser.add_argument(
@@ -108,12 +116,18 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def parse_fractions(value: str) -> tuple[float, ...]:
+def parse_fractions(value: str, *, allow_zero: bool = False) -> tuple[float, ...]:
     fractions = tuple(
         sorted({float(item.strip()) for item in value.split(",") if item.strip()})
     )
-    if not fractions or any(not 0 < item <= 1 for item in fractions):
-        raise ValueError("rescue fractions must be in (0, 1]")
+    outside_interval = (
+        (lambda item: not 0 <= item <= 1)
+        if allow_zero
+        else (lambda item: not 0 < item <= 1)
+    )
+    if not fractions or any(outside_interval(item) for item in fractions):
+        interval = "[0, 1]" if allow_zero else "(0, 1]"
+        raise ValueError(f"rescue fractions must be in {interval}")
     return fractions
 
 
@@ -150,7 +164,9 @@ def global_rescue_masks(
 
 def main() -> None:
     args = parse_args()
-    fractions = parse_fractions(args.rescue_fractions)
+    fractions = parse_fractions(
+        args.rescue_fractions, allow_zero=args.allow_zero_rescue
+    )
     model_path = (args.model_path or default_model_path()).resolve()
     source_path = args.source_checkpoint.resolve()
     parent_path = args.parent_artifact.resolve() if args.parent_artifact else None
@@ -322,7 +338,11 @@ def main() -> None:
     candidates = {}
     candidate_masks = {}
     for fraction in fractions:
-        count = min(eligible_groups, max(1, round(eligible_groups * fraction)))
+        count = (
+            0
+            if fraction == 0
+            else min(eligible_groups, max(1, round(eligible_groups * fraction)))
+        )
         masks = global_rescue_masks(benefit, eligible, count)
         install_rescue(masks)
         selection_metrics = evaluate_domains(model, selection_gates, args.device)

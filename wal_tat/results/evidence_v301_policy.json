@@ -1,0 +1,55 @@
+{
+  "schema": "wal-tat-layer19-provisional-ppl-policy-v1",
+  "evidence_id": "v301",
+  "declared_before_suite_construction": true,
+  "declared_before_candidate_evaluation": true,
+  "objective": "evaluate the fixed stage-2 fully low-bit layer 19 artifact exactly once on a new non-overlapping v49 suite under interpretable PPL budgets",
+  "frontier_roles": {
+    "strict_frontier_remains_unchanged_until_v49_passes": true,
+    "strict_parent_artifact": "wal2/artifacts/wal-tat-block20_global_q8_rescue_sourcegate_v1-mixed-q2-q4-q8.pt",
+    "strict_parent_sha256": "2c825896e9a64b5c9265a8cd61f86b87a127a6c7434f0170558aff658b98b764",
+    "candidate_artifact": "wal2/artifacts/wal-tat-block19_sourceteacher_q8scale_stage2_v25_lr1e5_512-mixed-q2-q4-q8.pt",
+    "candidate_sha256": "49bf1286aacea33bb273f10701d1449550477005ada22031852226641c79f08c",
+    "candidate_is_fixed_before_v49": true
+  },
+  "suite_contract": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v49-l256-g512.pt",
+    "role": "one-shot prospective confirmation; never use for training, recovery, checkpoint selection, or hyperparameter selection",
+    "domains": [
+      "c4_train",
+      "wikitext103_train",
+      "sklearn_code"
+    ],
+    "sequence_length": 256,
+    "sequences_per_domain": 512,
+    "c4_train_shard": 0,
+    "c4_text_start": 151000,
+    "c4_text_count": 5000,
+    "c4_offset": 100003,
+    "wikitext_train_shard": 0,
+    "prose_text_start": 270000,
+    "prose_text_count": 10000,
+    "prose_offset": 100003,
+    "code_source": "sklearn",
+    "code_offset": 1700003,
+    "must_pass_overlap_audit_against_all_retained_suites": true
+  },
+  "acceptance": {
+    "absolute_nll_ratio_limit_vs_raw_bf16_per_domain": 1.02,
+    "cumulative_ppl_ratio_limit_vs_strict_source_per_domain": 1.01,
+    "incremental_ppl_ratio_limit_vs_accepted_parent_per_domain": 1.001,
+    "every_domain_must_pass_every_gate": true,
+    "candidate_artifact_sha256_must_match": true,
+    "no_training_or_parameter_change_after_v49_is_opened": true
+  },
+  "interpretation": {
+    "old_1_005_nll_ratio_is_not_retroactively_declared_passed": true,
+    "v48_remains_disclosed_validation_evidence": true,
+    "promotion_requires_a_fresh_process_reload": true
+  },
+  "terminal_policy": {
+    "maximum_concurrent_wal_gpu_processes": 1,
+    "visible_device": 2,
+    "unrelated_processes_are_not_modified": true
+  }
+}

@@ -45,8 +45,73 @@ PROJECTION_MAP = {
 }
 
 
+def strict_source_matrix_as_mixed_q2(entry: dict) -> dict:
+    """Convert a fully committed strict-checkpoint matrix without FP fallback."""
+    rows, columns = map(int, entry["shape"])
+    group_size = int(entry["group_size"])
+    if group_size != 128:
+        raise ValueError("mixed recovery currently requires source group size 128")
+    committed = entry["committed_mask"].bool()
+    if not committed.all():
+        raise ValueError("source matrix must be fully committed before Q2 recovery")
+    codes = entry["ternary_codes_int8"]
+    if int(codes.min()) < -1 or int(codes.max()) > 1:
+        raise ValueError("strict source matrix contains non-ternary codes")
+    padded = F.pad(codes, (0, (-columns) % group_size))
+    grouped_codes = padded.view(rows, -1, group_size).contiguous()
+    scales = entry["scales_fp16"].contiguous()
+    if scales.shape != grouped_codes.shape[:-1]:
+        raise ValueError("strict source scale shape does not match grouped codes")
+    return {
+        "shape": (rows, columns),
+        "source_committed_mask": committed.clone(),
+        "q2_codes_int8": grouped_codes,
+        "q2_scales_fp16": scales,
+        "q4_codes_int8": torch.zeros_like(grouped_codes),
+        "q4_scales_fp16": torch.ones_like(scales),
+        "q4_mask": torch.zeros_like(committed),
+        "q8_codes_int8": torch.zeros_like(grouped_codes),
+        "q8_scales_fp16": torch.ones_like(scales),
+        "q8_mask": torch.zeros_like(committed),
+    }
+
+
+class RecoverableRMSNorm(nn.Module):
+    """Accumulate tiny norm updates in FP32 while keeping BF16 hard-forward."""
+
+    def __init__(self, module: nn.Module):
+        super().__init__()
+        if not hasattr(module, "weight") or not hasattr(
+            module, "variance_epsilon"
+        ):
+            raise TypeError("recoverable norm must expose weight and variance_epsilon")
+        base_weight = module.weight.detach().clone()
+        self.register_buffer("base_weight", base_weight)
+        self.delta = nn.Parameter(torch.zeros_like(base_weight, dtype=torch.float32))
+        self.variance_epsilon = float(module.variance_epsilon)
+
+    def effective_weight(self) -> torch.Tensor:
+        return self.base_weight.float() + self.delta
+
+    def hard_forward_weight(self) -> torch.Tensor:
+        effective = self.effective_weight()
+        deployed = effective.to(self.base_weight.dtype).float()
+        return effective + (deployed - effective).detach()
+
+    @torch.no_grad()
+    def deploy_weight(self) -> torch.Tensor:
+        return self.effective_weight().to(self.base_weight.dtype).detach().cpu()
+
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        input_dtype = hidden_states.dtype
+        normalized = hidden_states.float()
+        variance = normalized.square().mean(-1, keepdim=True)
+        normalized = normalized * torch.rsqrt(variance + self.variance_epsilon)
+        return self.hard_forward_weight().to(input_dtype) * normalized.to(input_dtype)
+
+
 class FixedCodeMixedScaleLinear(nn.Module):
-    """Keep Q2 fixed while training positive Q4 scales and optional code proxies."""
+    """Keep codes fixed while recovering selected Q2/Q4/Q8 group scales."""
 
     def __init__(
         self,
@@ -55,6 +120,8 @@ class FixedCodeMixedScaleLinear(nn.Module):
         max_abs_log_scale_delta: float,
         bias: torch.Tensor | None,
         train_codes: bool = False,
+        train_q8_codes: bool = False,
+        train_q2_scales: bool = False,
         train_q8_scales: bool = False,
         progressive_mask: torch.Tensor | None = None,
     ):
@@ -65,7 +132,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
         self.rows = rows
         self.columns = columns
         self.register_buffer("q2_codes", entry["q2_codes_int8"].float())
-        self.register_buffer("q2_scales", entry["q2_scales_fp16"].float())
+        self.register_buffer("base_q2_scales", entry["q2_scales_fp16"].float())
         self.register_buffer("base_q4_codes", entry["q4_codes_int8"].float())
         self.proxy_code = nn.Parameter(
             self.base_q4_codes.clone(), requires_grad=bool(train_codes)
@@ -83,10 +150,13 @@ class FixedCodeMixedScaleLinear(nn.Module):
             raise ValueError("progressive mask must be a subset of Q4 groups")
         self.register_buffer("progressive_mask", progressive_mask)
         self.register_buffer(
-            "q8_codes",
+            "base_q8_codes",
             entry.get(
                 "q8_codes_int8", torch.zeros_like(entry["q4_codes_int8"])
             ).float(),
+        )
+        self.q8_proxy_code = nn.Parameter(
+            self.base_q8_codes.clone(), requires_grad=bool(train_q8_codes)
         )
         self.register_buffer(
             "base_q8_scales",
@@ -100,6 +170,11 @@ class FixedCodeMixedScaleLinear(nn.Module):
         )
         if torch.logical_and(self.q4_mask, self.q8_mask).any():
             raise ValueError("Q4 and Q8 masks overlap")
+        self.register_buffer("q2_mask", ~(self.q4_mask | self.q8_mask))
+        self.q2_log_scale_delta = nn.Parameter(
+            torch.zeros_like(self.base_q2_scales),
+            requires_grad=bool(train_q2_scales),
+        )
         self.log_scale_delta = nn.Parameter(torch.zeros_like(self.base_q4_scales))
         self.q8_log_scale_delta = nn.Parameter(
             torch.zeros_like(self.base_q8_scales),
@@ -111,6 +186,14 @@ class FixedCodeMixedScaleLinear(nn.Module):
         )
         self.in_features = columns
         self.out_features = rows
+
+    def effective_q2_scales(self) -> torch.Tensor:
+        bounded = self.q2_log_scale_delta.clamp(
+            -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
+        )
+        scales = self.base_q2_scales * bounded.exp()
+        rounded = scales.half().float()
+        return scales + (rounded - scales).detach()
 
     def effective_q4_scales(self) -> torch.Tensor:
         bounded = self.log_scale_delta.clamp(
@@ -129,7 +212,7 @@ class FixedCodeMixedScaleLinear(nn.Module):
         return scales + (rounded - scales).detach()
 
     def effective_weight(self) -> torch.Tensor:
-        q2 = self.q2_codes * self.q2_scales.unsqueeze(-1)
+        q2 = self.q2_codes * self.effective_q2_scales().unsqueeze(-1)
         hard = self.proxy_code.round().clamp(self.code_lower, self.code_upper)
         codes = hard.detach() + self.proxy_code - self.proxy_code.detach()
         progressive_q4 = codes * self.effective_q4_scales().unsqueeze(-1)
@@ -138,7 +221,13 @@ class FixedCodeMixedScaleLinear(nn.Module):
             self.progressive_mask.unsqueeze(-1), progressive_q4, fallback_q4
         )
         grouped = torch.where(self.q4_mask.unsqueeze(-1), q4, q2)
-        q8 = self.q8_codes * self.effective_q8_scales().unsqueeze(-1)
+        q8_hard = self.q8_proxy_code.round().clamp(-128, 127)
+        q8_codes = (
+            q8_hard.detach()
+            + self.q8_proxy_code
+            - self.q8_proxy_code.detach()
+        )
+        q8 = q8_codes * self.effective_q8_scales().unsqueeze(-1)
         grouped = torch.where(self.q8_mask.unsqueeze(-1), q8, grouped)
         return grouped.reshape(self.rows, -1)[:, : self.columns]
 
@@ -147,6 +236,10 @@ class FixedCodeMixedScaleLinear(nn.Module):
 
     @torch.no_grad()
     def constrain_(self) -> None:
+        self.q2_log_scale_delta.clamp_(
+            -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
+        )
+        self.q2_log_scale_delta.masked_fill_(~self.q2_mask, 0)
         self.log_scale_delta.clamp_(
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
@@ -155,11 +248,20 @@ class FixedCodeMixedScaleLinear(nn.Module):
             -self.max_abs_log_scale_delta, self.max_abs_log_scale_delta
         )
         self.q8_log_scale_delta.masked_fill_(~self.q8_mask, 0)
+        q8_active = self.q8_mask.unsqueeze(-1).expand_as(self.q8_proxy_code)
+        self.q8_proxy_code[q8_active] = self.q8_proxy_code[q8_active].clamp(
+            -128, 127
+        )
+        self.q8_proxy_code[~q8_active] = self.base_q8_codes[~q8_active]
         active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
         self.proxy_code[active] = self.proxy_code[active].clamp(
             self.code_lower, self.code_upper
         )
         self.proxy_code[~active] = self.base_q4_codes[~active]
+
+    @torch.no_grad()
+    def deploy_q2_scales(self) -> torch.Tensor:
+        return self.effective_q2_scales().half().cpu()
 
     @torch.no_grad()
     def deploy_scales(self) -> torch.Tensor:
@@ -168,6 +270,13 @@ class FixedCodeMixedScaleLinear(nn.Module):
     @torch.no_grad()
     def deploy_q8_scales(self) -> torch.Tensor:
         return self.effective_q8_scales().half().cpu()
+
+    @torch.no_grad()
+    def deploy_q8_codes(self) -> torch.Tensor:
+        active = self.q8_mask.unsqueeze(-1).expand_as(self.q8_proxy_code)
+        result = self.base_q8_codes.clone()
+        result[active] = self.q8_proxy_code[active].round().clamp(-128, 127)
+        return result.to(torch.int8).cpu()
 
     @torch.no_grad()
     def deploy_codes(self) -> torch.Tensor:
@@ -219,11 +328,37 @@ class FixedCodeMixedScaleLinear(nn.Module):
         )
         return float(changed[active].float().mean())
 
+    @torch.no_grad()
+    def q8_code_churn(self) -> float:
+        active = self.q8_mask.unsqueeze(-1).expand_as(self.q8_proxy_code)
+        if not active.any():
+            return 0.0
+        changed = self.deploy_q8_codes().to(self.base_q8_codes.device).ne(
+            self.base_q8_codes.to(torch.int8)
+        )
+        return float(changed[active].float().mean())
+
     def code_anchor_loss(self) -> torch.Tensor:
         active = self.progressive_mask.unsqueeze(-1).expand_as(self.proxy_code)
-        if not active.any():
-            return self.proxy_code.sum() * 0
-        return (self.proxy_code[active] - self.base_q4_codes[active]).float().square().mean()
+        q8_active = self.q8_mask.unsqueeze(-1).expand_as(self.q8_proxy_code)
+        losses = []
+        if active.any():
+            losses.append(
+                (self.proxy_code[active] - self.base_q4_codes[active])
+                .float()
+                .square()
+                .mean()
+            )
+        if self.q8_proxy_code.requires_grad and q8_active.any():
+            losses.append(
+                (self.q8_proxy_code[q8_active] - self.base_q8_codes[q8_active])
+                .float()
+                .square()
+                .mean()
+            )
+        if not losses:
+            return (self.proxy_code.sum() + self.q8_proxy_code.sum()) * 0
+        return torch.stack(losses).mean()
 
     @torch.no_grad()
     def proxy_statistics(self) -> dict[str, float]:
@@ -253,7 +388,20 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="optional accepted mixed artifact used instead of raw BF16 as teacher",
     )
+    parser.add_argument(
+        "--teacher-source",
+        action="store_true",
+        help="use the strict source checkpoint, without a mixed overlay, as teacher",
+    )
     parser.add_argument("--suite", type=Path, required=True)
+    parser.add_argument(
+        "--calibration-suite",
+        type=Path,
+        help=(
+            "optional suite providing calibration sequences while --suite "
+            "continues to provide selection and full gates"
+        ),
+    )
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
     parser.add_argument("--target-layer", type=int, required=True)
@@ -265,10 +413,33 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train-sequences", type=int, default=256)
     parser.add_argument("--lr", type=float, default=2e-4)
     parser.add_argument(
+        "--norm-lr",
+        type=float,
+        default=0.0,
+        help="recover both target-layer RMSNorms and final model RMSNorm",
+    )
+    parser.add_argument(
+        "--norm-scope",
+        choices=("target", "tail"),
+        default="target",
+        help="recover target norms only or every norm from target through the tail",
+    )
+    parser.add_argument(
         "--proxy-lr",
         type=float,
         default=0.0,
         help="positive value enables hard-forward Q4 code proxy updates",
+    )
+    parser.add_argument(
+        "--q8-proxy-lr",
+        type=float,
+        default=0.0,
+        help="positive value enables hard-forward Q8 code proxy updates",
+    )
+    parser.add_argument(
+        "--train-q2-scales",
+        action="store_true",
+        help="recover FP16 Q2 group scales while keeping ternary codes fixed",
     )
     parser.add_argument(
         "--train-q8-scales",
@@ -303,9 +474,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--selection-gate-sequences", type=int, default=64)
     parser.add_argument("--selection-every", type=int, default=64)
     parser.add_argument("--gate-ratio", type=float, default=1.02)
+    parser.add_argument("--source-gate-ratio", type=float, default=1.005)
     parser.add_argument("--incremental-gate-ratio", type=float, default=1.005)
     parser.add_argument("--min-selection-improvement", type=float, default=1e-4)
     parser.add_argument("--write-artifact", action="store_true")
+    parser.add_argument(
+        "--write-improved-artifact",
+        action="store_true",
+        help="write an explicitly experimental artifact when selection improves but a gate still fails",
+    )
     parser.add_argument("--seed", type=int, default=727)
     parser.add_argument(
         "--device", default="cuda" if torch.cuda.is_available() else "cpu"
@@ -397,6 +574,12 @@ def main() -> None:
     progressive_levels = parse_progressive_levels(args.progressive_levels)
     if args.steps < 1 or args.train_sequences < 1:
         raise ValueError("steps and train sequences must be positive")
+    if args.norm_lr < 0:
+        raise ValueError("norm lr must be non-negative")
+    if args.proxy_lr < 0 or args.q8_proxy_lr < 0:
+        raise ValueError("proxy learning rates must be non-negative")
+    if args.teacher_source and args.teacher_artifact is not None:
+        raise ValueError("teacher source and teacher artifact are mutually exclusive")
     if not 1 <= args.moment_sequences <= args.train_sequences:
         raise ValueError("moment sequences must be within train sequences")
     if progressive_levels and args.proxy_lr <= 0:
@@ -410,6 +593,9 @@ def main() -> None:
     candidate_path = args.candidate_artifact.resolve()
     teacher_path = args.teacher_artifact.resolve() if args.teacher_artifact else None
     suite_path = args.suite.resolve()
+    calibration_suite_path = (
+        args.calibration_suite.resolve() if args.calibration_suite else suite_path
+    )
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(source_path)
     source_payload = torch.load(source_path, map_location="cpu", weights_only=False)
@@ -418,7 +604,16 @@ def main() -> None:
         candidate_path, map_location="cpu", weights_only=False
     )
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
-    calibration = suite["calibration"][: args.train_sequences]
+    calibration_suite = (
+        suite
+        if calibration_suite_path == suite_path
+        else torch.load(
+            calibration_suite_path, map_location="cpu", weights_only=False
+        )
+    )
+    if "calibration" not in calibration_suite:
+        raise ValueError("calibration suite lacks calibration sequences")
+    calibration = calibration_suite["calibration"][: args.train_sequences]
     gates = suite["gates"]
     if len(calibration) != args.train_sequences:
         raise ValueError("suite lacks requested train sequences")
@@ -440,36 +635,45 @@ def main() -> None:
         f"model.layers.{args.target_layer}.{PROJECTION_MAP[item]}"
         for item in requested
     )
-    if any(name not in candidate_artifact["matrices"] for name in names):
-        raise ValueError("candidate artifact lacks a target matrix")
+    for name in names:
+        if name in candidate_artifact["matrices"]:
+            continue
+        if name not in source_payload["matrices"]:
+            raise ValueError(f"candidate and source lack target matrix {name}")
+        candidate_artifact["matrices"][name] = strict_source_matrix_as_mixed_q2(
+            source_payload["matrices"][name]
+        )
 
     seed_everything(args.seed)
     started = time.time()
     model = load_model(model_path, args.device)
     baseline = evaluate_domains(model, gates, args.device)
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
-    if teacher_path is not None:
-        teacher_artifact = torch.load(
-            teacher_path, map_location="cpu", weights_only=False
-        )
+    if args.teacher_source or teacher_path is not None:
         install_checkpoint(model, source_payload, args.device)
-        install_mixed_q2_q4_artifact(
-            model,
-            teacher_artifact,
-            source_payload,
-            device=args.device,
-            expected_source_sha256=source_hash,
-        )
+        if teacher_path is not None:
+            teacher_artifact = torch.load(
+                teacher_path, map_location="cpu", weights_only=False
+            )
+            install_mixed_q2_q4_artifact(
+                model,
+                teacher_artifact,
+                source_payload,
+                device=args.device,
+                expected_source_sha256=source_hash,
+            )
     teacher = cache_teacher(
         model, calibration, args.target_layer, args.device, args
     )
-    if teacher_path is not None:
+    if args.teacher_source or teacher_path is not None:
         del model
         gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
         model = load_model(model_path, args.device)
     install_checkpoint(model, source_payload, args.device)
+    source = evaluate_domains(model, gates, args.device)
+    source_selection = evaluate_domains(model, selection_gates, args.device)
     install_mixed_q2_q4_artifact(
         model,
         parent_artifact,
@@ -549,6 +753,8 @@ def main() -> None:
             max_abs_log_scale_delta=args.max_abs_log_scale_delta,
             bias=target.bias,
             train_codes=args.proxy_lr > 0,
+            train_q8_codes=args.q8_proxy_lr > 0,
+            train_q2_scales=args.train_q2_scales,
             train_q8_scales=args.train_q8_scales,
             progressive_mask=(
                 progressive_masks[name] if progressive_masks is not None else None
@@ -569,6 +775,33 @@ def main() -> None:
         set_submodule(model, name, layer)
         layers[name] = layer
 
+    norm_parameters = {}
+    norm_modules = {}
+    initial_norm_values = {}
+    if args.norm_lr > 0:
+        norm_layers = (
+            range(args.target_layer, len(model.model.layers))
+            if args.norm_scope == "tail"
+            else (args.target_layer,)
+        )
+        requested_norm_modules = [
+            name
+            for layer_index in norm_layers
+            for name in (
+                f"model.layers.{layer_index}.input_layernorm",
+                f"model.layers.{layer_index}.post_attention_layernorm",
+            )
+        ]
+        requested_norm_modules.append("model.norm")
+        for module_name in requested_norm_modules:
+            original = model.get_submodule(module_name)
+            recoverable = RecoverableRMSNorm(original).to(args.device)
+            set_submodule(model, module_name, recoverable)
+            weight_name = f"{module_name}.weight"
+            norm_modules[weight_name] = recoverable
+            norm_parameters[weight_name] = recoverable.delta
+            initial_norm_values[weight_name] = recoverable.deploy_weight()
+
     capture = {}
     handle = model.model.layers[args.target_layer].register_forward_hook(
         lambda _module, _inputs, output: capture.__setitem__(
@@ -576,6 +809,9 @@ def main() -> None:
         )
     )
     candidate_selection_ratios = ratios(candidate_selection, selection_baseline)
+    candidate_selection_source_ratios = ratios(
+        candidate_selection, source_selection
+    )
     best_step = 0
     history = []
     stage_summaries = []
@@ -596,11 +832,15 @@ def main() -> None:
 
             model.eval()
             stage_initial = evaluate_domains(model, selection_gates, args.device)
-            stage_initial_ratios = ratios(stage_initial, selection_baseline)
+            stage_initial_ratios = ratios(stage_initial, source_selection)
             stage_best_objective = max(stage_initial_ratios.values())
             stage_best_step = 0
             stage_best_deltas = {
                 name: layer.log_scale_delta.detach().cpu().clone()
+                for name, layer in layers.items()
+            }
+            stage_best_q2_deltas = {
+                name: layer.q2_log_scale_delta.detach().cpu().clone()
                 for name, layer in layers.items()
             }
             stage_best_q8_deltas = {
@@ -611,8 +851,20 @@ def main() -> None:
                 name: layer.proxy_code.detach().cpu().clone()
                 for name, layer in layers.items()
             }
+            stage_best_q8_proxies = {
+                name: layer.q8_proxy_code.detach().cpu().clone()
+                for name, layer in layers.items()
+            }
+            stage_best_norms = {
+                name: parameter.detach().cpu().clone()
+                for name, parameter in norm_parameters.items()
+            }
 
             scale_parameters = [layer.log_scale_delta for layer in layers.values()]
+            if args.train_q2_scales:
+                scale_parameters.extend(
+                    layer.q2_log_scale_delta for layer in layers.values()
+                )
             if args.train_q8_scales:
                 scale_parameters.extend(
                     layer.q8_log_scale_delta for layer in layers.values()
@@ -622,11 +874,25 @@ def main() -> None:
                 if args.proxy_lr > 0
                 else []
             )
-            parameters = scale_parameters + proxy_parameters
+            q8_proxy_parameters = (
+                [layer.q8_proxy_code for layer in layers.values()]
+                if args.q8_proxy_lr > 0
+                else []
+            )
+            parameters = scale_parameters + proxy_parameters + q8_proxy_parameters
             parameter_groups = [{"params": scale_parameters, "lr": args.lr}]
             if proxy_parameters:
                 parameter_groups.append(
                     {"params": proxy_parameters, "lr": args.proxy_lr}
+                )
+            if q8_proxy_parameters:
+                parameter_groups.append(
+                    {"params": q8_proxy_parameters, "lr": args.q8_proxy_lr}
+                )
+            if norm_parameters:
+                parameters.extend(norm_parameters.values())
+                parameter_groups.append(
+                    {"params": list(norm_parameters.values()), "lr": args.norm_lr}
                 )
             optimizer = torch.optim.AdamW(parameter_groups, weight_decay=0.0)
             model.train()
@@ -668,13 +934,17 @@ def main() -> None:
                     selection = evaluate_domains(
                         model, selection_gates, args.device
                     )
-                    selection_ratios = ratios(selection, selection_baseline)
+                    selection_ratios = ratios(selection, source_selection)
                     objective = max(selection_ratios.values())
                     if objective < stage_best_objective:
                         stage_best_objective = objective
                         stage_best_step = stage_step
                         stage_best_deltas = {
                             name: layer.log_scale_delta.detach().cpu().clone()
+                            for name, layer in layers.items()
+                        }
+                        stage_best_q2_deltas = {
+                            name: layer.q2_log_scale_delta.detach().cpu().clone()
                             for name, layer in layers.items()
                         }
                         stage_best_q8_deltas = {
@@ -684,6 +954,14 @@ def main() -> None:
                         stage_best_proxies = {
                             name: layer.proxy_code.detach().cpu().clone()
                             for name, layer in layers.items()
+                        }
+                        stage_best_q8_proxies = {
+                            name: layer.q8_proxy_code.detach().cpu().clone()
+                            for name, layer in layers.items()
+                        }
+                        stage_best_norms = {
+                            name: parameter.detach().cpu().clone()
+                            for name, parameter in norm_parameters.items()
                         }
                     model.train()
                 if (
@@ -703,6 +981,10 @@ def main() -> None:
                         "code_anchor": float(code_anchor.item()),
                         "code_churn": {
                             name: layer.code_churn()
+                            for name, layer in layers.items()
+                        },
+                        "q8_code_churn": {
+                            name: layer.q8_code_churn()
                             for name, layer in layers.items()
                         },
                         "proxy_statistics": {
@@ -727,12 +1009,20 @@ def main() -> None:
                     layer.log_scale_delta.copy_(
                         stage_best_deltas[name].to(args.device)
                     )
+                    layer.q2_log_scale_delta.copy_(
+                        stage_best_q2_deltas[name].to(args.device)
+                    )
                     layer.q8_log_scale_delta.copy_(
                         stage_best_q8_deltas[name].to(args.device)
                     )
                     layer.proxy_code.copy_(
                         stage_best_proxies[name].to(args.device)
                     )
+                    layer.q8_proxy_code.copy_(
+                        stage_best_q8_proxies[name].to(args.device)
+                    )
+                for name, parameter in norm_parameters.items():
+                    parameter.copy_(stage_best_norms[name].to(args.device))
             best_step = stage_index * args.steps + stage_best_step
             stage_summaries.append(
                 {
@@ -750,25 +1040,65 @@ def main() -> None:
     attempted = evaluate_domains(model, gates, args.device)
     attempted_selection = evaluate_domains(model, selection_gates, args.device)
     attempted_ratios = ratios(attempted, baseline)
+    attempted_source_ratios = ratios(attempted, source)
     attempted_incremental = ratios(attempted, parent)
-    selection_improvement = max(candidate_selection_ratios.values()) - max(
-        ratios(attempted_selection, selection_baseline).values()
+    attempted_selection_source_ratios = ratios(
+        attempted_selection, source_selection
+    )
+    selection_improvement = max(candidate_selection_source_ratios.values()) - max(
+        attempted_selection_source_ratios.values()
     )
     passed = (
         selection_improvement >= args.min_selection_improvement
         and all(value <= args.gate_ratio for value in attempted_ratios.values())
         and all(
+            value <= args.source_gate_ratio
+            for value in attempted_source_ratios.values()
+        )
+        and all(
             value <= args.incremental_gate_ratio
             for value in attempted_incremental.values()
         )
     )
+    norm_recovery_statistics = {
+        name: {
+            "changed_elements": int(
+                norm_modules[name]
+                .deploy_weight()
+                .ne(initial_norm_values[name])
+                .sum()
+                .item()
+            ),
+            "mean_abs_delta": float(
+                (norm_modules[name].deploy_weight().float() - initial_norm_values[name].float())
+                .abs()
+                .mean()
+                .item()
+            ),
+            "max_abs_delta": float(
+                (norm_modules[name].deploy_weight().float() - initial_norm_values[name].float())
+                .abs()
+                .max()
+                .item()
+            ),
+        }
+        for name, parameter in norm_parameters.items()
+    }
 
     artifact_path = None
     artifact_sha256 = None
-    if args.write_artifact and passed:
+    write_experimental = (
+        args.write_improved_artifact
+        and selection_improvement >= args.min_selection_improvement
+    )
+    if args.write_artifact and (passed or write_experimental):
         recovered = copy.deepcopy(candidate_artifact)
         for name, layer in layers.items():
             matrix_entry = recovered["matrices"][name]
+            if args.train_q2_scales:
+                matrix_entry["q2_scales_fp16"] = layer.deploy_q2_scales()
+                if matrix_entry["source_committed_mask"].bool().any():
+                    matrix_entry["source_q2_scale_recovery"] = True
             deployed_scales = layer.deploy_scales()
             deployed_codes = layer.deploy_codes()
             if progressive_levels and progressive_levels[-1] == 3:
@@ -795,17 +1125,36 @@ def main() -> None:
                 matrix_entry["q4_codes_int8"] = deployed_codes
             if args.train_q8_scales:
                 matrix_entry["q8_scales_fp16"] = layer.deploy_q8_scales()
+            if args.q8_proxy_lr > 0:
+                matrix_entry["q8_codes_int8"] = layer.deploy_q8_codes()
         recovered["parent_artifact_sha256"] = sha256_file(parent_path)
+        recovered["development_gate_passed"] = passed
+        recovered["experimental_recovery"] = not passed
+        if args.train_q2_scales:
+            recovered["allow_source_q2_scale_recovery"] = True
+        if norm_parameters:
+            recovered["allow_norm_recovery"] = True
+            recovered["norm_extras"] = {
+                name: norm_modules[name].deploy_weight()
+                for name in norm_parameters
+            }
         recovered["scale_recovery"] = {
             "source_candidate_sha256": sha256_file(candidate_path),
+            "teacher_source": args.teacher_source,
             "best_step": best_step,
             "proxy_lr": args.proxy_lr,
+            "q8_proxy_lr": args.q8_proxy_lr,
+            "train_q2_scales": args.train_q2_scales,
             "train_q8_scales": args.train_q8_scales,
+            "norm_lr": args.norm_lr,
+            "norm_scope": args.norm_scope,
+            "norm_recovery_statistics": norm_recovery_statistics,
             "progressive_levels": progressive_levels,
             "progressive_fraction": args.progressive_fraction,
             "progressive_selected_groups": progressive_selected_groups,
             "progressive_selected_weights": progressive_selected_weights,
             "development_ratios": attempted_ratios,
+            "development_source_ratios": attempted_source_ratios,
             "development_incremental_ratios_vs_parent": attempted_incremental,
         }
         suffix = (
@@ -827,18 +1176,26 @@ def main() -> None:
         "candidate_artifact": str(candidate_path),
         "candidate_artifact_sha256": sha256_file(candidate_path),
         "teacher_artifact": str(teacher_path) if teacher_path is not None else None,
+        "teacher_source": args.teacher_source,
         "teacher_artifact_sha256": (
             sha256_file(teacher_path) if teacher_path is not None else None
         ),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
+        "calibration_suite": str(calibration_suite_path),
+        "calibration_suite_sha256": sha256_file(calibration_suite_path),
         "target_layer": args.target_layer,
         "target_projections": requested,
         "steps": args.steps,
         "train_sequences": args.train_sequences,
         "lr": args.lr,
+        "norm_lr": args.norm_lr,
+        "norm_scope": args.norm_scope,
         "proxy_lr": args.proxy_lr,
+        "q8_proxy_lr": args.q8_proxy_lr,
+        "train_q2_scales": args.train_q2_scales,
         "train_q8_scales": args.train_q8_scales,
+        "norm_recovery_statistics": norm_recovery_statistics,
         "progressive_levels": progressive_levels,
         "progressive_fraction": args.progressive_fraction,
         "progressive_selected_groups": progressive_selected_groups,
@@ -852,28 +1209,36 @@ def main() -> None:
             "code_anchor": args.code_anchor_weight,
         },
         "baseline": baseline,
+        "source": source,
+        "source_ratios": ratios(source, baseline),
         "parent": parent,
         "parent_ratios": ratios(parent, baseline),
         "candidate": candidate,
         "candidate_ratios": ratios(candidate, baseline),
+        "candidate_source_ratios": ratios(candidate, source),
         "candidate_incremental_ratios_vs_parent": ratios(candidate, parent),
         "attempted": attempted,
         "attempted_ratios": attempted_ratios,
+        "attempted_source_ratios": attempted_source_ratios,
         "attempted_incremental_ratios_vs_parent": attempted_incremental,
         "candidate_selection_ratios": candidate_selection_ratios,
+        "candidate_selection_source_ratios": candidate_selection_source_ratios,
         "attempted_selection_ratios": ratios(
             attempted_selection, selection_baseline
         ),
+        "attempted_selection_source_ratios": attempted_selection_source_ratios,
         "selection_improvement": selection_improvement,
         "best_step": best_step,
         "stage_summaries": stage_summaries,
         "history": history,
         "gate_ratio": args.gate_ratio,
+        "source_gate_ratio": args.source_gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
         "passed": passed,
         "artifact": str(artifact_path) if artifact_path is not None else None,
         "artifact_sha256": artifact_sha256,
         "artifact_written": artifact_path is not None,
+        "artifact_is_experimental": artifact_path is not None and not passed,
         "checkpoint_written": False,
         "sealed_audit_opened": False,
         "elapsed_seconds": time.time() - started,

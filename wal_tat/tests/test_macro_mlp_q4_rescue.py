@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+import pytest
 import torch
 
 
@@ -12,6 +13,15 @@ from macro_mlp_q4_rescue import global_rescue_masks, parse_fractions  # noqa: E4
 
 def test_parse_rescue_fractions_is_sorted_and_unique():
     assert parse_fractions("0.2,0.01,0.2,1") == (0.01, 0.2, 1.0)
+
+
+def test_parse_rescue_fractions_can_explicitly_include_strict_q2():
+    assert parse_fractions("0.1,0,1", allow_zero=True) == (0.0, 0.1, 1.0)
+
+
+def test_parse_rescue_fractions_rejects_zero_by_default():
+    with pytest.raises(ValueError, match=r"\(0, 1\]"):
+        parse_fractions("0,0.1")
 
 
 def test_global_rescue_masks_selects_largest_eligible_benefits():

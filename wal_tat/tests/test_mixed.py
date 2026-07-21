@@ -17,6 +17,7 @@ class TinyModel(nn.Module):
         super().__init__()
         self.old = nn.Linear(130, 2, bias=False)
         self.new = nn.Linear(130, 2, bias=False)
+        self.norm = nn.LayerNorm(130, elementwise_affine=True, bias=False)
 
 
 def source_entry():
@@ -113,6 +114,45 @@ def test_installer_rejects_source_code_mutation():
         )
 
 
+def test_installer_rejects_source_scale_mutation_by_default():
+    model = TinyModel()
+    source = {"matrices": {"old": source_entry()}}
+    entry = artifact_entry(source["matrices"]["old"]["committed_mask"].clone())
+    entry["q2_scales_fp16"][0, 0] = 0.625
+    payload = artifact({"old": entry})
+    with pytest.raises(ValueError, match="accepted source scales changed"):
+        install_mixed_q2_q4_artifact(
+            model,
+            payload,
+            source,
+            device="cpu",
+            expected_source_sha256="source-sha",
+        )
+
+
+def test_installer_allows_explicit_source_q2_scale_recovery_only():
+    model = TinyModel()
+    source = {"matrices": {"old": source_entry()}}
+    entry = artifact_entry(source["matrices"]["old"]["committed_mask"].clone())
+    entry["q2_scales_fp16"][0, 0] = 0.625
+    entry["source_q2_scale_recovery"] = True
+    payload = artifact({"old": entry})
+    payload["allow_source_q2_scale_recovery"] = True
+
+    install_mixed_q2_q4_artifact(
+        model,
+        payload,
+        source,
+        device="cpu",
+        expected_source_sha256="source-sha",
+    )
+
+    assert torch.equal(
+        model.old.weight[0, :4],
+        torch.tensor([0.625, 0.0, -0.625, 0.625]),
+    )
+
+
 def test_installer_rejects_source_commitment_on_new_matrix():
     model = TinyModel()
     entry = artifact_entry(torch.tensor([[True, False], [False, False]]))
@@ -151,3 +191,34 @@ def test_installer_supports_disjoint_q8_rescue():
     assert result.q8_weights == 2
     assert result.q4_weights == 2
     assert torch.equal(model.new.weight[0, 128:], torch.tensor([1.25, -1.25]))
+
+
+def test_installer_requires_explicit_norm_recovery_flag():
+    model = TinyModel()
+    payload = artifact({})
+    payload["norm_extras"] = {"norm.weight": torch.full((130,), 0.75)}
+    with pytest.raises(ValueError, match="not explicitly enabled"):
+        install_mixed_q2_q4_artifact(
+            model,
+            payload,
+            {"matrices": {}},
+            device="cpu",
+            expected_source_sha256="source-sha",
+        )
+
+
+def test_installer_applies_explicit_finite_norm_recovery():
+    model = TinyModel()
+    payload = artifact({})
+    payload["allow_norm_recovery"] = True
+    payload["norm_extras"] = {"norm.weight": torch.full((130,), 0.75)}
+
+    install_mixed_q2_q4_artifact(
+        model,
+        payload,
+        {"matrices": {}},
+        device="cpu",
+        expected_source_sha256="source-sha",
+    )
+
+    assert torch.equal(model.norm.weight, torch.full((130,), 0.75))

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 import torch
@@ -33,11 +34,44 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tag", required=True)
     parser.add_argument("--gate-ratio", type=float, default=1.02)
     parser.add_argument("--incremental-gate-ratio", type=float, default=1.005)
+    parser.add_argument(
+        "--source-ppl-ratio",
+        type=float,
+        help=(
+            "Optional cumulative perplexity-ratio limit versus the immutable "
+            "strict source. When supplied, this replaces the source-relative "
+            "NLL-ratio acceptance gate."
+        ),
+    )
+    parser.add_argument(
+        "--parent-ppl-ratio",
+        type=float,
+        help=(
+            "Optional perplexity-ratio limit versus the accepted parent. "
+            "When supplied, this replaces the parent-relative NLL-ratio gate."
+        ),
+    )
     parser.add_argument("--total-major-weights", type=int, default=1_720_451_072)
     parser.add_argument(
         "--device", default="cuda" if torch.cuda.is_available() else "cpu"
     )
     return parser.parse_args()
+
+
+def perplexity_ratios(candidate: dict, reference: dict) -> dict[str, float]:
+    """Return exact per-domain PPL ratios from additive mean-NLL changes."""
+    if candidate.keys() != reference.keys():
+        raise ValueError("candidate and reference metric domains must match")
+    return {
+        domain: math.exp(candidate[domain]["nll"] - reference[domain]["nll"])
+        for domain in candidate
+    }
+
+
+def ratio_gate_passed(values: dict[str, float], limit: float) -> bool:
+    if limit < 1.0:
+        raise ValueError("quality-gate ratio must be at least 1.0")
+    return all(value <= limit for value in values.values())
 
 
 def main() -> None:
@@ -90,18 +124,35 @@ def main() -> None:
     metrics = evaluate_domains(model, suite["gates"], args.device)
     metric_ratios = ratios(metrics, baseline)
     incremental_ratios = ratios(metrics, source_metrics)
+    source_ppl_ratios = perplexity_ratios(metrics, source_metrics)
+    parent_ppl_ratios = None
     if parent_metrics is not None:
         parent_incremental_ratios = ratios(metrics, parent_metrics)
-    cumulative_passed = all(
-        value <= args.gate_ratio for value in metric_ratios.values()
+        parent_ppl_ratios = perplexity_ratios(metrics, parent_metrics)
+    cumulative_passed = ratio_gate_passed(metric_ratios, args.gate_ratio)
+    source_gate_metric = (
+        source_ppl_ratios
+        if args.source_ppl_ratio is not None
+        else incremental_ratios
     )
-    incremental_passed = all(
-        value <= args.incremental_gate_ratio
-        for value in incremental_ratios.values()
+    source_gate_limit = (
+        args.source_ppl_ratio
+        if args.source_ppl_ratio is not None
+        else args.incremental_gate_ratio
     )
-    parent_incremental_passed = parent_incremental_ratios is None or all(
-        value <= args.incremental_gate_ratio
-        for value in parent_incremental_ratios.values()
+    incremental_passed = ratio_gate_passed(source_gate_metric, source_gate_limit)
+    parent_gate_metric = (
+        parent_ppl_ratios
+        if args.parent_ppl_ratio is not None
+        else parent_incremental_ratios
+    )
+    parent_gate_limit = (
+        args.parent_ppl_ratio
+        if args.parent_ppl_ratio is not None
+        else args.incremental_gate_ratio
+    )
+    parent_incremental_passed = parent_gate_metric is None or ratio_gate_passed(
+        parent_gate_metric, parent_gate_limit
     )
     passed = cumulative_passed and incremental_passed and parent_incremental_passed
     strict_ternary_weights = source_ternary_weights + new_q2_weights
@@ -129,10 +180,20 @@ def main() -> None:
         "metrics": metrics,
         "ratios": metric_ratios,
         "incremental_ratios_vs_source": incremental_ratios,
+        "ppl_ratios_vs_source": source_ppl_ratios,
         "parent_metrics": parent_metrics,
         "incremental_ratios_vs_parent": parent_incremental_ratios,
+        "ppl_ratios_vs_parent": parent_ppl_ratios,
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
+        "source_gate_metric": (
+            "ppl_ratio" if args.source_ppl_ratio is not None else "nll_ratio"
+        ),
+        "source_gate_limit": source_gate_limit,
+        "parent_gate_metric": (
+            "ppl_ratio" if args.parent_ppl_ratio is not None else "nll_ratio"
+        ),
+        "parent_gate_limit": parent_gate_limit,
         "cumulative_passed": cumulative_passed,
         "incremental_passed": incremental_passed,
         "parent_incremental_passed": parent_incremental_passed,

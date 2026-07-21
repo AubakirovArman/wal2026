@@ -65,12 +65,41 @@ def passes_cumulative_and_incremental_gates(
     )
 
 
+def compose_q8_rescue_groups(
+    q2_value: torch.Tensor,
+    q4_value: torch.Tensor,
+    q4_mask: torch.Tensor,
+    existing_q8_value: torch.Tensor,
+    existing_q8_mask: torch.Tensor,
+    rescue_q8_value: torch.Tensor,
+    rescue_q8_mask: torch.Tensor,
+) -> torch.Tensor:
+    """Compose a rescue without dropping Q8 groups already in the artifact."""
+    if torch.logical_and(existing_q8_mask, rescue_q8_mask).any():
+        raise ValueError("new Q8 rescue mask overlaps existing Q8 groups")
+    if torch.logical_and(rescue_q8_mask, ~q4_mask).any():
+        raise ValueError("new Q8 rescue mask must be a subset of Q4 groups")
+    grouped = torch.where(q4_mask.unsqueeze(-1), q4_value, q2_value)
+    grouped = torch.where(
+        existing_q8_mask.unsqueeze(-1), existing_q8_value, grouped
+    )
+    return torch.where(rescue_q8_mask.unsqueeze(-1), rescue_q8_value, grouped)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
     parser.add_argument("--parent-artifact", type=Path, required=True)
     parser.add_argument("--candidate-artifact", type=Path, required=True)
     parser.add_argument("--suite", type=Path, required=True)
+    parser.add_argument(
+        "--calibration-suite",
+        type=Path,
+        help=(
+            "optional suite providing calibration sequences while --suite "
+            "continues to provide selection and full gates"
+        ),
+    )
     parser.add_argument("--model-path", type=Path)
     parser.add_argument("--tag", required=True)
     parser.add_argument("--target-layer", type=int, required=True)
@@ -104,6 +133,9 @@ def main() -> None:
     parent_path = args.parent_artifact.resolve()
     candidate_path = args.candidate_artifact.resolve()
     suite_path = args.suite.resolve()
+    calibration_suite_path = (
+        args.calibration_suite.resolve() if args.calibration_suite else suite_path
+    )
     model_path = (args.model_path or default_model_path()).resolve()
     source_hash = sha256_file(source_path)
     source_payload = torch.load(source_path, map_location="cpu", weights_only=False)
@@ -112,7 +144,16 @@ def main() -> None:
         candidate_path, map_location="cpu", weights_only=False
     )
     suite = torch.load(suite_path, map_location="cpu", weights_only=False)
-    calibration = suite["calibration"]
+    calibration_suite = (
+        suite
+        if calibration_suite_path == suite_path
+        else torch.load(
+            calibration_suite_path, map_location="cpu", weights_only=False
+        )
+    )
+    if "calibration" not in calibration_suite:
+        raise ValueError("calibration suite lacks calibration sequences")
+    calibration = calibration_suite["calibration"]
     gates = suite["gates"]
     selection_gates = {
         domain: chunks[: args.selection_gate_sequences]
@@ -187,12 +228,16 @@ def main() -> None:
     q2_grouped = {}
     q4_grouped = {}
     q8_grouped = {}
+    existing_q8_grouped = {}
+    existing_q8_masks = {}
     q8_codes = {}
     q8_scales = {}
     benefit = {}
     eligible = {}
     total_groups = 0
     eligible_groups = 0
+    current_q4_groups = 0
+    current_q8_groups = 0
     for name in names:
         entry = candidate_artifact["matrices"][name]
         q2_codes = entry["q2_codes_int8"].to(args.device).float()
@@ -200,6 +245,17 @@ def main() -> None:
         q4_codes = entry["q4_codes_int8"].to(args.device).float()
         q4_scales = entry["q4_scales_fp16"].to(args.device).float()
         q4_mask = entry["q4_mask"].to(args.device).bool()
+        existing_q8_codes = entry.get(
+            "q8_codes_int8", torch.zeros_like(entry["q4_codes_int8"])
+        ).to(args.device).float()
+        existing_q8_scales = entry.get(
+            "q8_scales_fp16", torch.ones_like(entry["q4_scales_fp16"])
+        ).to(args.device).float()
+        existing_q8_mask = entry.get(
+            "q8_mask", torch.zeros_like(entry["q4_mask"])
+        ).to(args.device).bool()
+        if torch.logical_and(q4_mask, existing_q8_mask).any():
+            raise ValueError(f"Q4 and Q8 masks overlap for {name}")
         new_codes, new_scales, q8_error = weighted_symmetric_q8_project(
             original[name], moments[name], group_size=128
         )
@@ -220,22 +276,29 @@ def main() -> None:
         q2_grouped[name] = q2_value
         q4_grouped[name] = q4_value
         q8_grouped[name] = q8_value
+        existing_q8_grouped[name] = existing_q8_codes * existing_q8_scales.unsqueeze(-1)
+        existing_q8_masks[name] = existing_q8_mask
         q8_codes[name] = new_codes.cpu()
         q8_scales[name] = new_scales.half().cpu()
         benefit[name] = q4_error - q8_error
         eligible[name] = q4_mask if name in rescue_names else torch.zeros_like(q4_mask)
         total_groups += q4_mask.numel()
         eligible_groups += int(eligible[name].sum().item())
+        current_q4_groups += int(q4_mask.sum().item())
+        current_q8_groups += int(existing_q8_mask.sum().item())
 
     def install_rescue(mask_map: dict[str, torch.Tensor]) -> None:
         for name in names:
             entry = candidate_artifact["matrices"][name]
             q4_mask = entry["q4_mask"].to(args.device).bool()
-            grouped = torch.where(
-                q4_mask.unsqueeze(-1), q4_grouped[name], q2_grouped[name]
-            )
-            grouped = torch.where(
-                mask_map[name].unsqueeze(-1), q8_grouped[name], grouped
+            grouped = compose_q8_rescue_groups(
+                q2_grouped[name],
+                q4_grouped[name],
+                q4_mask,
+                existing_q8_grouped[name],
+                existing_q8_masks[name],
+                q8_grouped[name],
+                mask_map[name],
             )
             rows, columns = map(int, entry["shape"])
             set_submodule(
@@ -258,10 +321,14 @@ def main() -> None:
         incremental_vs_source = ratios(metrics, source_selection)
         incremental = ratios(metrics, parent_selection)
         actual_fraction = count / eligible_groups
-        q8_fraction_all_target = count / total_groups
-        target_bpw = q4_g128_physical_bpw() + q8_fraction_all_target * (
-            q8_g128_physical_bpw() - q4_g128_physical_bpw()
-        )
+        q8_fraction_all_target = (current_q8_groups + count) / total_groups
+        remaining_q4_groups = current_q4_groups - count
+        remaining_q2_groups = total_groups - current_q8_groups - current_q4_groups
+        target_bpw = (
+            remaining_q2_groups * q2_g128_physical_bpw()
+            + remaining_q4_groups * q4_g128_physical_bpw()
+            + (current_q8_groups + count) * q8_g128_physical_bpw()
+        ) / total_groups
         key = f"q8_{actual_fraction:.8f}"
         candidates[key] = {
             "requested_fraction": fraction,
@@ -338,11 +405,24 @@ def main() -> None:
         }
         for name, entry in recovered["matrices"].items():
             if name in names:
-                q8_mask = candidate_masks[first_full_pass][name].bool()
-                entry["q4_mask"] = entry["q4_mask"].bool() & ~q8_mask
-                entry["q8_mask"] = q8_mask
-                entry["q8_codes_int8"] = q8_codes[name]
-                entry["q8_scales_fp16"] = q8_scales[name]
+                rescue_mask = candidate_masks[first_full_pass][name].bool()
+                existing_mask = entry.get(
+                    "q8_mask", torch.zeros_like(entry["q4_mask"])
+                ).bool()
+                if torch.logical_and(existing_mask, rescue_mask).any():
+                    raise RuntimeError("new Q8 rescue overlaps existing Q8 groups")
+                existing_codes = entry.get(
+                    "q8_codes_int8", torch.zeros_like(entry["q4_codes_int8"])
+                ).clone()
+                existing_scales = entry.get(
+                    "q8_scales_fp16", torch.ones_like(entry["q4_scales_fp16"])
+                ).clone()
+                existing_codes[rescue_mask] = q8_codes[name][rescue_mask]
+                existing_scales[rescue_mask] = q8_scales[name][rescue_mask]
+                entry["q4_mask"] = entry["q4_mask"].bool() & ~rescue_mask
+                entry["q8_mask"] = existing_mask | rescue_mask
+                entry["q8_codes_int8"] = existing_codes
+                entry["q8_scales_fp16"] = existing_scales
             elif "q8_mask" not in entry:
                 entry["q8_mask"] = torch.zeros_like(entry["q4_mask"], dtype=torch.bool)
                 entry["q8_codes_int8"] = torch.zeros_like(
@@ -370,6 +450,8 @@ def main() -> None:
         "candidate_artifact_sha256": sha256_file(candidate_path),
         "suite": str(suite_path),
         "suite_sha256": sha256_file(suite_path),
+        "calibration_suite": str(calibration_suite_path),
+        "calibration_suite_sha256": sha256_file(calibration_suite_path),
         "target_layer": args.target_layer,
         "target_projections": requested,
         "rescue_projections": rescue_requested,

@@ -1,0 +1,43 @@
+{
+  "schema": "wal-tat-saved-frontiers-v1",
+  "evidence_id": "v302",
+  "reason": "freeze all pre-relaxed model states before starting the user-requested NLL-1.10 full-model experiment",
+  "git_head_before_relaxed_campaign": "b30d3cf6df04c5bce0f415b6401420927affa8ef",
+  "strict_source": {
+    "checkpoint": "wal2/checkpoints/wal-tat-block24_down_d1_thresholdls_s0053.pt",
+    "sha256": "70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce"
+  },
+  "official_strict_frontier": {
+    "artifact": "wal2/artifacts/wal-tat-block20_global_q8_rescue_sourcegate_v1-mixed-q2-q4-q8.pt",
+    "sha256": "2c825896e9a64b5c9265a8cd61f86b87a127a6c7434f0170558aff658b98b764",
+    "fully_low_bit_decoder_blocks": 8,
+    "fully_low_bit_decoder_blocks_total": 28,
+    "low_bit_major_matrix_weights": 402653184,
+    "total_major_matrix_weights": 1720451072,
+    "low_bit_coverage_fraction": 0.23403931129056835
+  },
+  "best_pre_relaxed_layer19_candidate": {
+    "artifact": "wal2/artifacts/wal-tat-block19_sourceteacher_q8scale_stage2_v25_lr1e5_512-mixed-q2-q4-q8.pt",
+    "sha256": "49bf1286aacea33bb273f10701d1449550477005ada22031852226641c79f08c",
+    "role": "fixed experimental parent for the relaxed campaign; never relabel as a pass of the old 1.005 NLL gate",
+    "fully_low_bit_decoder_blocks": 9,
+    "fully_low_bit_decoder_blocks_total": 28,
+    "low_bit_major_matrix_weights": 452984832,
+    "total_major_matrix_weights": 1720451072,
+    "low_bit_coverage_fraction": 0.2632942252018894
+  },
+  "unused_prospective_suite": {
+    "path": "wal2/cache/wal-tat-audit-holdout-v49-l256-g512.pt",
+    "sha256": "f22a27574c42c8f00c1d562472436c4e2524350ee5a8971de12fdadfe0e09438",
+    "overlap_result": "wal_tat/results/audit_v49_overlap_v1.json",
+    "overlap_result_sha256": "b942049201903448e299e226ba010f4d7da27cd1935726cf99eb2d0e1d4e4ba7",
+    "candidate_metrics_opened": false,
+    "note": "preserved but not opened because the user chose a separate relaxed NLL-1.10 experiment"
+  },
+  "immutability": {
+    "relaxed_artifacts_use_distinct_names": true,
+    "strict_source_is_never_overwritten": true,
+    "official_strict_frontier_is_never_overwritten": true,
+    "best_pre_relaxed_candidate_is_never_overwritten": true
+  }
+}
