@@ -35,6 +35,16 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--gate-ratio", type=float, default=1.1)
     parser.add_argument("--incremental-gate-ratio", type=float, default=1.1)
+    parser.add_argument(
+        "--q4-candidate-generation-gate-ratio",
+        type=float,
+        default=1000.0,
+        help=(
+            "wide generation-only gate used to materialize a full-Q4 candidate "
+            "for the Q8 fallback; acceptance still uses --gate-ratio in the "
+            "fresh verifier"
+        ),
+    )
     parser.add_argument("--moment-sequences", type=int, default=64)
     parser.add_argument("--selection-gate-sequences", type=int, default=64)
     parser.add_argument("--device", default="cuda")
@@ -79,6 +89,16 @@ def generation_command(
     if precision not in {"q2", "q4"}:
         raise ValueError(f"unsupported projection precision: {precision}")
     fraction = "0" if precision == "q2" else "1"
+    generation_gate_ratio = (
+        args.gate_ratio
+        if precision == "q2"
+        else args.q4_candidate_generation_gate_ratio
+    )
+    generation_incremental_gate_ratio = (
+        args.incremental_gate_ratio
+        if precision == "q2"
+        else args.q4_candidate_generation_gate_ratio
+    )
     command = [
         sys.executable,
         str(PROJECT / "experiments/macro_mlp_q4_rescue.py"),
@@ -101,9 +121,9 @@ def generation_command(
         "--rescue-fractions",
         fraction,
         "--gate-ratio",
-        str(args.gate_ratio),
+        str(generation_gate_ratio),
         "--incremental-gate-ratio",
-        str(args.incremental_gate_ratio),
+        str(generation_incremental_gate_ratio),
         "--write-artifact",
         "--device",
         args.device,
@@ -190,7 +210,8 @@ def generate(
     layer: int,
     precision: str,
 ) -> tuple[Path | None, Path]:
-    tag = f"{args.tag_prefix}_block{layer}_{precision}first_v1"
+    suffix = "q4candidate_v2" if precision == "q4" else "q2first_v1"
+    tag = f"{args.tag_prefix}_block{layer}_{suffix}"
     result_path = PROJECT / f"results/{tag}.json"
     if not result_path.exists():
         run_child(
@@ -221,7 +242,12 @@ def verify(
     layer: int,
     precision: str,
 ) -> tuple[bool, Path, dict]:
-    tag = f"{args.tag_prefix}_block{layer}_{precision}first_v1_fresh"
+    suffix = (
+        "q4candidate_v2_fresh"
+        if precision == "q4"
+        else f"{precision}first_v1_fresh"
+    )
+    tag = f"{args.tag_prefix}_block{layer}_{suffix}"
     result_path = PROJECT / f"results/{tag}.json"
     if not result_path.exists():
         run_child(
@@ -277,6 +303,9 @@ def initial_state(args: argparse.Namespace) -> dict:
         "suite_sha256": sha256_file(args.suite),
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
+        "q4_candidate_generation_gate_ratio": (
+            args.q4_candidate_generation_gate_ratio
+        ),
         "maximum_concurrent_gpu_children": 1,
         "completed_layers": [],
         "stages": [],
@@ -290,6 +319,9 @@ def validate_state(args: argparse.Namespace, state: dict) -> None:
         "suite_sha256": sha256_file(args.suite),
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
+        "q4_candidate_generation_gate_ratio": (
+            args.q4_candidate_generation_gate_ratio
+        ),
     }
     for key, value in expected.items():
         if state.get(key) != value:
@@ -300,6 +332,12 @@ def main() -> None:
     args = parse_args()
     require_ratio("gate ratio", args.gate_ratio)
     require_ratio("incremental gate ratio", args.incremental_gate_ratio)
+    if args.q4_candidate_generation_gate_ratio < max(
+        args.gate_ratio, args.incremental_gate_ratio
+    ):
+        raise ValueError(
+            "Q4 candidate generation gate must be at least both acceptance gates"
+        )
     if not 0 <= args.end_layer <= args.start_layer <= 27:
         raise ValueError("layer range must descend within [0, 27]")
     args.source_checkpoint = args.source_checkpoint.resolve()
@@ -307,6 +345,10 @@ def main() -> None:
     args.suite = args.suite.resolve()
     args.state = args.state.resolve()
     state = load_json(args.state) if args.state.exists() else initial_state(args)
+    state.setdefault(
+        "q4_candidate_generation_gate_ratio",
+        args.q4_candidate_generation_gate_ratio,
+    )
     validate_state(args, state)
     completed = {int(value) for value in state["completed_layers"]}
     parent = args.starting_parent
