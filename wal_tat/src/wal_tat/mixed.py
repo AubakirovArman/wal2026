@@ -56,6 +56,62 @@ def _set_submodule(model: nn.Module, name: str, module: nn.Module) -> None:
     setattr(parent, child_name, module)
 
 
+def _install_tied_embedding_head(
+    model: nn.Module,
+    *,
+    embedding_name: str,
+    head_name: str,
+    weight: torch.Tensor,
+    device: str | torch.device,
+) -> None:
+    """Install one frozen reconstructed tensor in both tied model roles."""
+    embedding = model.get_submodule(embedding_name)
+    head = model.get_submodule(head_name)
+    if not isinstance(embedding, nn.Embedding):
+        raise TypeError(f"{embedding_name} is not an embedding layer")
+    if not isinstance(head, nn.Linear):
+        raise TypeError(f"{head_name} is not a linear layer")
+    if (embedding.num_embeddings, embedding.embedding_dim) != tuple(weight.shape):
+        raise ValueError("tied embedding shape mismatch")
+    if (head.out_features, head.in_features) != tuple(weight.shape):
+        raise ValueError("tied output-head shape mismatch")
+    if embedding.weight is not head.weight:
+        raise ValueError("requested embedding and output head are not tied")
+
+    shared = nn.Parameter(
+        weight.to(device=device, dtype=embedding.weight.dtype), requires_grad=False
+    )
+    replacement_embedding = nn.Embedding(
+        embedding.num_embeddings,
+        embedding.embedding_dim,
+        padding_idx=embedding.padding_idx,
+        max_norm=embedding.max_norm,
+        norm_type=embedding.norm_type,
+        scale_grad_by_freq=embedding.scale_grad_by_freq,
+        sparse=embedding.sparse,
+        device=device,
+        dtype=shared.dtype,
+    )
+    replacement_embedding.weight = shared
+    replacement_head = nn.Linear(
+        head.in_features,
+        head.out_features,
+        bias=head.bias is not None,
+        device=device,
+        dtype=shared.dtype,
+    )
+    replacement_head.weight = shared
+    if head.bias is not None:
+        replacement_head.bias = nn.Parameter(
+            head.bias.detach().to(device=device, dtype=shared.dtype),
+            requires_grad=False,
+        )
+    replacement_embedding.eval()
+    replacement_head.eval()
+    _set_submodule(model, embedding_name, replacement_embedding)
+    _set_submodule(model, head_name, replacement_head)
+
+
 def _source_grouped_codes(
     entry: Mapping, *, rows: int, columns: int, group_size: int
 ) -> torch.Tensor:
@@ -113,12 +169,40 @@ def install_mixed_q2_q4_artifact(
     q4_weights = 0
     q8_weights = 0
     matrix_statistics: dict[str, dict[str, int]] = {}
-    for name, entry in artifact.get("matrices", {}).items():
+    artifact_entries = artifact.get("matrices", {})
+    tied_linear_names = {
+        str(entry["tied_linear_name"])
+        for entry in artifact_entries.values()
+        if entry.get("kind", "linear") == "tied_embedding_head"
+    }
+    if tied_linear_names & set(artifact_entries):
+        raise ValueError("a tied output head must not have a duplicate matrix entry")
+
+    for name, entry in artifact_entries.items():
         target = model.get_submodule(name)
-        if not hasattr(target, "in_features") or not hasattr(target, "out_features"):
-            raise TypeError(f"{name} is not a linear-compatible layer")
+        kind = entry.get("kind", "linear")
+        if kind == "linear":
+            if not hasattr(target, "in_features") or not hasattr(target, "out_features"):
+                raise TypeError(f"{name} is not a linear-compatible layer")
+            target_rows = target.out_features
+            target_columns = target.in_features
+        elif kind == "tied_embedding_head":
+            if not isinstance(target, nn.Embedding):
+                raise TypeError(f"{name} is not an embedding layer")
+            tied_linear_name = str(entry.get("tied_linear_name", ""))
+            if not tied_linear_name:
+                raise ValueError(f"tied output-head name missing for {name}")
+            tied_target = model.get_submodule(tied_linear_name)
+            if not isinstance(tied_target, nn.Linear):
+                raise TypeError(f"{tied_linear_name} is not a linear layer")
+            if target.weight is not tied_target.weight:
+                raise ValueError(f"{name} and {tied_linear_name} are not tied")
+            target_rows = target.num_embeddings
+            target_columns = target.embedding_dim
+        else:
+            raise ValueError(f"unsupported mixed matrix kind for {name}: {kind!r}")
         rows, columns = map(int, entry["shape"])
-        if (rows, columns) != (target.out_features, target.in_features):
+        if (rows, columns) != (target_rows, target_columns):
             raise ValueError(f"artifact matrix shape mismatch for {name}")
         groups = (columns + group_size - 1) // group_size
         code_shape = (rows, groups, group_size)
@@ -169,6 +253,8 @@ def install_mixed_q2_q4_artifact(
             raise ValueError(f"non-ternary Q2 code in {name}")
         if not set(q4_codes.unique().tolist()) <= set(range(-8, 8)):
             raise ValueError(f"out-of-range signed Q4 code in {name}")
+        if not set(q8_codes.unique().tolist()) <= set(range(-128, 128)):
+            raise ValueError(f"out-of-range signed Q8 code in {name}")
         if (
             not torch.isfinite(q2_scales).all()
             or not torch.isfinite(q4_scales).all()
@@ -223,15 +309,24 @@ def install_mixed_q2_q4_artifact(
         grouped = torch.where(q4_mask.unsqueeze(-1), q4_value, q2_value)
         grouped = torch.where(q8_mask.unsqueeze(-1), q8_value, grouped)
         weight = grouped.reshape(rows, -1)[:, :columns]
-        bias = getattr(target, "bias", None)
-        compute_dtype = getattr(
-            getattr(target, "matrix", None), "compute_dtype", weight.dtype
-        )
-        _set_submodule(
-            model,
-            name,
-            FixedMixedQ2Q4Linear(weight.to(compute_dtype), bias).to(device),
-        )
+        if kind == "tied_embedding_head":
+            _install_tied_embedding_head(
+                model,
+                embedding_name=name,
+                head_name=tied_linear_name,
+                weight=weight,
+                device=device,
+            )
+        else:
+            bias = getattr(target, "bias", None)
+            compute_dtype = getattr(
+                getattr(target, "matrix", None), "compute_dtype", weight.dtype
+            )
+            _set_submodule(
+                model,
+                name,
+                FixedMixedQ2Q4Linear(weight.to(compute_dtype), bias).to(device),
+            )
 
         new_q2_mask = (~source_mask) & (~q4_mask) & (~q8_mask)
         matrix_new_q2 = valid_group_weight_count(

@@ -20,6 +20,14 @@ class TinyModel(nn.Module):
         self.norm = nn.LayerNorm(130, elementwise_affine=True, bias=False)
 
 
+class TinyTiedModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.embed = nn.Embedding(2, 130)
+        self.head = nn.Linear(130, 2, bias=False)
+        self.head.weight = self.embed.weight
+
+
 def source_entry():
     codes = torch.zeros((2, 130), dtype=torch.int8)
     codes[0, :4] = torch.tensor([1, 0, -1, 1], dtype=torch.int8)
@@ -191,6 +199,45 @@ def test_installer_supports_disjoint_q8_rescue():
     assert result.q8_weights == 2
     assert result.q4_weights == 2
     assert torch.equal(model.new.weight[0, 128:], torch.tensor([1.25, -1.25]))
+
+
+def test_installer_preserves_one_shared_tied_embedding_head_weight():
+    model = TinyTiedModel()
+    entry = artifact_entry(torch.zeros((2, 2), dtype=torch.bool))
+    entry["kind"] = "tied_embedding_head"
+    entry["tied_linear_name"] = "head"
+    payload = artifact({"embed": entry})
+
+    result = install_mixed_q2_q4_artifact(
+        model,
+        payload,
+        {"matrices": {}},
+        device="cpu",
+        expected_source_sha256="source-sha",
+    )
+
+    assert result.new_q2_weights == 256
+    assert result.q4_weights == 4
+    assert model.embed.weight is model.head.weight
+    tokens = torch.tensor([[0, 1]])
+    hidden = model.embed(tokens)
+    assert torch.equal(hidden, model.head.weight.index_select(0, tokens.reshape(-1)).view_as(hidden))
+
+
+def test_installer_rejects_duplicate_tied_head_entry():
+    model = TinyTiedModel()
+    entry = artifact_entry(torch.zeros((2, 2), dtype=torch.bool))
+    entry["kind"] = "tied_embedding_head"
+    entry["tied_linear_name"] = "head"
+    payload = artifact({"embed": entry, "head": artifact_entry(torch.zeros((2, 2), dtype=torch.bool))})
+    with pytest.raises(ValueError, match="duplicate matrix entry"):
+        install_mixed_q2_q4_artifact(
+            model,
+            payload,
+            {"matrices": {}},
+            device="cpu",
+            expected_source_sha256="source-sha",
+        )
 
 
 def test_installer_requires_explicit_norm_recovery_flag():

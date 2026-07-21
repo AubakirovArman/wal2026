@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import gc
 import json
 import time
@@ -92,9 +91,10 @@ def build_candidate(
     ternary_codes: dict[str, torch.Tensor],
     ternary_scales: dict[str, torch.Tensor],
 ) -> dict:
-    candidate = copy.deepcopy(parent)
+    candidate = dict(parent)
+    candidate["matrices"] = dict(parent["matrices"])
     for name, selected in masks.items():
-        entry = candidate["matrices"][name]
+        entry = dict(parent["matrices"][name])
         if torch.logical_and(selected, ~entry["q4_mask"].bool()).any():
             raise ValueError(f"selection leaves Q4 eligibility in {name}")
         entry["q2_codes_int8"] = entry["q2_codes_int8"].clone()
@@ -103,6 +103,7 @@ def build_candidate(
         entry["q2_codes_int8"][selected] = ternary_codes[name][selected]
         entry["q2_scales_fp16"][selected] = ternary_scales[name][selected].half()
         entry["q4_mask"][selected] = False
+        candidate["matrices"][name] = entry
     return candidate
 
 

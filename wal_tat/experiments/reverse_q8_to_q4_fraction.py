@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import gc
 import json
 import time
@@ -52,9 +51,10 @@ def build_candidate(
     q4_scales: dict[str, torch.Tensor],
 ) -> dict:
     """Move only selected Q8 groups to their supplied Q4 projections."""
-    candidate = copy.deepcopy(parent)
+    candidate = dict(parent)
+    candidate["matrices"] = dict(parent["matrices"])
     for name, selected in masks.items():
-        entry = candidate["matrices"][name]
+        entry = dict(parent["matrices"][name])
         q8_mask = entry.get("q8_mask")
         if q8_mask is None:
             raise ValueError(f"parent artifact lacks Q8 state in {name}")
@@ -72,6 +72,7 @@ def build_candidate(
         )
         entry["q4_mask"][selected] = True
         entry["q8_mask"][selected] = False
+        candidate["matrices"][name] = entry
     return candidate
 
 
