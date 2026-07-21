@@ -58,6 +58,19 @@ immutable `s0053` и `1.000162` против parent. Полный Q4-хвост 
 прошёл: это подтверждает staged codebook как локальный мост Q4→Q2, но не как
 основание схлопывать весь чувствительный хвост одновременно.
 
+Следующие `1%` и `0.5%` layer-25 Q4-групп, а также `1%` layer-24 MLP были
+отклонены без sealed-аудита: code ratios равны соответственно `1.020077`,
+`1.020184` и `1.020546`. Это локализовало новый bottleneck в почти полностью
+исчерпанном code headroom текущего development parent.
+
+Coverage-neutral recovery затем использовал новую 75%-code calibration,
+раскрытые v8 gates только для выбора snapshot и полностью замороженные Q4
+codes. Лучшим стал step 320: изменены `105,060` FP16 scale layer-24 MLP, но
+ни один code, mask, Q2 или Q8 элемент. Fresh v10 прошёл, а одноразовый
+audit-v37 дал `0.993252 / 0.938675 / 0.935348`; incremental worst равен
+`1.003535` против strict source и `1.000078` против parent. Coverage и bpw не
+изменились, но этот artifact стал новым quality-recovered parent.
+
 ## Какой это quant
 
 У каждого принятого веса ровно три состояния:
@@ -113,8 +126,9 @@ packed deploy-файлом. Расчётный packed payload этих low-bit �
 Актуальный strict parent — `s0053`, SHA-256
 `70383ef1b732190c602b8fe1caefc19fa19898df7ada5b15c15994c1d703d0ce`.
 Актуальный accepted mixed artifact имеет SHA-256
-`01a3176b1971c76868bcd55de068ba5a3058278ad849df4ee7e496a9b98780f4`.
-Он прошёл fresh development и sealed audit-v36. Ни Q4/Q8-веса, ни mixed
+`f5f50147edcf6bf912fbfb476dc8c50ca494316bd1d52268f55982b6c900f0c9`.
+Он прошёл fresh development, fresh v10 confirmation и sealed audit-v37.
+Ни Q4/Q8-веса, ни mixed
 coverage не прибавляются к strict ternary счётчику.
 
 Две checkpoint-neutral попытки обратно заменить полный Q4 `layer 22` вместо

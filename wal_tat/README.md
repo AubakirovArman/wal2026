@@ -32,7 +32,7 @@ There are now two independently tracked frontiers on `Qwen/Qwen3-1.7B`:
 
 - strict checkpoint `s0053`: 76,673,024 ternary weights (`4.456565%`), one
   complete ternary decoder block, and 11 complete ternary major matrices;
-- sealed-audited mixed artifact `01a3176...`: 81,142,144 ternary, 71,191,680
+- sealed-audited mixed artifact `f5f5014...`: 81,142,144 ternary, 71,191,680
   signed-Q4 and 99,324,416 signed-Q8 weights, for 251,658,240 low-bit weights
   (`14.627457%`), five complete low-bit decoder blocks and 35 complete low-bit
   major matrices.
@@ -49,6 +49,13 @@ remaining Q4 groups. It converted another 683 groups (87,424 weights) to
 strict Q2 and passed sealed audit-v36 at
 `0.992109 / 0.943986 / 0.957007`; incremental worst was `1.003765` versus
 the strict source and `1.000022` versus its accepted mixed parent.
+A subsequent coverage-neutral recovery froze every code and mask and trained
+only layer-24 MLP Q4 scales on code-heavy calibration. It changed 105,060
+FP16 scales, selected step 320, and passed sealed audit-v37 at
+`0.993252 / 0.938675 / 0.935348`; incremental worst was `1.003535` versus
+the strict source and `1.000078` versus the previous mixed parent. Coverage
+and projected payload are unchanged, but this artifact is the new parent for
+the next reverse-compression transaction.
 After its first accepted reverse-compression step,
 layer 23 is `1.187388%` Q2, `61.312612%` Q4 and `37.5%` Q8 at
 `5.601252 bpw`. Sealed audit-v30 ratios are

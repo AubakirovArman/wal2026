@@ -208,6 +208,21 @@ one-shot audit-v36 — `0.992109 / 0.943986 / 0.957007`; incremental worst
 Новый accepted artifact SHA-256:
 `01a3176b1971c76868bcd55de068ba5a3058278ad849df4ee7e496a9b98780f4`.
 
+Непосредственно следующий `1%` layer 25 не прошёл code gate (`1.020077`),
+а уменьшение до `0.5%` не помогло (`1.020184`). Masked `1%` layer-24 MLP
+также отклонён при `1.020546`. Вместо дальнейшего дробления атомов построена
+новая 75%-code calibration с отдельными recurring-v8 gates. Proxy-recovery
+почти прошёл заранее заданный improvement, но после step 288 стал дискретно
+нестабилен. Финальный scale-only arm заморозил все Q4 codes и выбрал step 320.
+
+Полученный coverage-neutral artifact изменяет ровно `105,060` FP16 Q4-scale
+layer-24 MLP и сохраняет побитно все codes, masks, Q2 и Q8. Fresh v10 дал
+`0.991672 / 0.997713 / 0.988142`; one-shot audit-v37 —
+`0.993252 / 0.938675 / 0.935348`. Incremental worst равен `1.003535` против
+strict source и `1.000078` против accepted parent. Coverage и projected bpw
+не изменились. Новый quality-recovered parent SHA-256:
+`f5f50147edcf6bf912fbfb476dc8c50ca494316bd1d52268f55982b6c900f0c9`.
+
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила
 `19.999949%` групп Q4 и перевела `80.000051%` в Q8 (`7.325002 bpw`). Fresh
