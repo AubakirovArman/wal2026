@@ -11,13 +11,13 @@ WAL-TAT уже переводит настоящие матрицы Qwen3-1.7B �
 
 | Единица | Strict ternary | Mixed low-bit |
 |---|---:|---:|
-| Полные decoder blocks | 1 / 28 (`layer 27`) | 6 / 28 (`27`, `26`, `25`, `24`, `23`, `22`) |
-| Полные крупные матрицы | 11 / 197 | 42 / 197 |
+| Полные decoder blocks | 1 / 28 (`layer 27`) | 7 / 28 (`27`, `26`, `25`, `24`, `23`, `22`, `21`) |
+| Полные крупные матрицы | 11 / 197 | 49 / 197 |
 | Ternary weights | 76,673,024 (`4.456565%`) | 81,250,048 (`4.722601%`) |
 | Q4-g128 weights | 0 | 75,278,080 (`4.375485%`) |
-| Q8-g128 weights | 0 | 145,461,760 (`8.454862%`) |
-| Все low-bit weights | 76,673,024 | 301,989,888 (`17.552948%`) |
-| Осталось high precision | 1,643,778,048 | 1,418,461,184 (`82.447052%`) |
+| Q8-g128 weights | 0 | 195,793,408 (`11.380353%`) |
+| Все low-bit weights | 76,673,024 | 352,321,536 (`20.478440%`) |
+| Осталось high precision | 1,643,778,048 | 1,368,129,536 (`79.521560%`) |
 
 Strict-ветка по-прежнему не называет `layer 24` полным ternary-блоком. Mixed
 artifact честно завершает его как Q2/Q4-блок: attention полностью Q2, а три
@@ -105,9 +105,18 @@ gate добавлен Q8-scale recovery с неизменными codes/masks. �
 strict source и `1.000117` против parent. Layer 26 содержит `8.333333%` Q4 и
 `91.666667%` Q8 при `7.791667 bpw`; accepted artifact — `148908d...`.
 
+Следующим полностью low-bit стал `layer 21`. Full-Q4 почти прошёл абсолютный
+gate, но code ratio `1.021894` остался выше `1.02`. Частичный Q8 rescue до
+80% также не прошёл обязательный incremental gate против strict source.
+Полный Q8-вариант (`8.125 bpw`) прошёл fresh reload и новый непересекающийся
+audit-v44 с ratios `0.995521 / 0.940669 / 0.982427`; incremental worst равен
+`1.004746` против strict source и `1.000017` против accepted parent. Новый
+accepted artifact — `b68c291...`; layer 21 отдельно включён в очередь
+reverse Q8→Q4→Q2.
+
 ## Какой это quant
 
-У каждого принятого веса ровно три состояния:
+В strict-Q2 части у каждого принятого веса ровно три состояния:
 
 ```text
 -group_scale, 0, +group_scale
@@ -118,14 +127,15 @@ strict source и `1.000117` против parent. Layer 26 содержит `8.33
 - физическая стоимость: `2 + 16/128 = 2.125 bpw`.
 
 Корректное название: **ternary, logical 1.58-bit, physical Q2-g128
-2.125 bpw**. Текущий `.pt` хранит training state и не является компактным
-deploy-файлом.
+2.125 bpw**. Q4/Q8 rescue-группы имеют соответственно больше уровней и не
+засчитываются в ternary coverage. Текущий `.pt` хранит training state и не
+является компактным deploy-файлом.
 
 Strict `s0053` содержит 76,673,024 ternary weights. Mixed frontier содержит
-81,250,048 Q2-весов, 75,278,080 Q4-весов и 145,461,760 Q8-весов. Текущий
-734,156,159-byte `.pt` хранит дублирующиеся int8 training arrays и не является
-packed deploy-файлом. Расчётный packed payload этих low-bit весов —
-198.490 MiB против 576 MiB в BF16; реальная экономия VRAM появится только
+81,250,048 Q2-весов, 75,278,080 Q4-весов и 195,793,408 Q8-весов. Текущий
+`.pt` хранит дублирующиеся training arrays и не является packed deploy-файлом.
+Расчётный packed payload этих low-bit весов — 247.240 MiB против 672 MiB в
+BF16; реальная экономия VRAM появится только
 после versioned Q2/Q4/Q8 packer и runtime.
 
 ## Что именно преобразовано
@@ -1065,13 +1075,12 @@ wal2/checkpoints/wal-tat-block24_mlp_laterange_s0052r1.pt
 
 ## Следующий технический шаг
 
-1. заморозить artifact `148908d...` как новый accepted mixed frontier;
-2. начать полный low-bit проход `layer 21`, следующего по совпавшим sensitivity
-   scan, с Q4 start и Q8 rescue без параллельных GPU-campaign;
-3. отдельно запустить reverse rate--distortion для `layer 26`: Q8→Q4→Q2 с
+1. заморозить artifact `b68c291...` как новый accepted mixed frontier;
+2. начать полный low-bit проход `layer 20` с Q4 start и минимальным Q8 rescue;
+3. отдельно запустить reverse rate--distortion для `layer 21` и `layer 26`: Q8→Q4→Q2 с
    неизменным общим coverage и новым sealed audit на каждом принятом шаге;
 4. расширить reference packer до mixed Q2/Q4/Q8 manifest и проверять
-   pack→reload logits/NLL для всех шести закрытых блоков;
+   pack→reload logits/NLL для всех семи закрытых блоков;
 5. добавить cumulative task-canary до дальнейшего массового роста coverage;
-6. после `layer 21` перейти к progressive multi-block stages, сохраняя строгий
+6. после `layer 20` перейти к progressive multi-block stages, сохраняя строгий
    source gate `1.005` и отдельный parent-incremental gate.

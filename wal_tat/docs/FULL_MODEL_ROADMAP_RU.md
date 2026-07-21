@@ -20,14 +20,14 @@ signed Q4-g128 4.125 bpw для групп, которые не проходят
 
 ```text
 strict decoder blocks: 1 / 28 complete
-mixed low-bit blocks:  6 / 28 complete, 22 remain
+mixed low-bit blocks:  7 / 28 complete, 21 remain
 strict major matrices: 11 / 197 complete
-mixed major matrices:  42 / 197 complete, 155 remain
+mixed major matrices:  49 / 197 complete, 148 remain
 strict ternary weights: 81,250,048 / 1,720,451,072 = 4.722601% in mixed artifact
 Q4 rescue weights:      75,278,080 / 1,720,451,072 = 4.375485%
-Q8 rescue weights:      145,461,760 / 1,720,451,072 = 8.454862%
-all low-bit weights:    301,989,888 / 1,720,451,072 = 17.552948%
-remaining high precision: 1,418,461,184 = 82.447052%
+Q8 rescue weights:      195,793,408 / 1,720,451,072 = 11.380353%
+all low-bit weights:    352,321,536 / 1,720,451,072 = 20.478440%
+remaining high precision: 1,368,129,536 = 79.521560%
 embedding/head:       0 / 1 tied matrix
 packed runtime:       Q2 reference packer ready; mixed Q2/Q4/Q8 packer and kernels remain
 ```
@@ -261,6 +261,14 @@ sklearn code дал `0.992036 / 0.940191 / 0.978863`; incremental worst раве
 `1.003721` против strict source и `1.000117` против parent. Это шестой полный
 low-bit decoder block. Accepted artifact SHA-256:
 `148908dbc2f43d72d73402904e68a6642c8d1e1817c6400cd4209d0b30f7c76a`.
+
+Layer 21 затем полностью закрыт в Q8. Full-Q4 code ratio `1.021894` не прошёл
+абсолютный gate, а частичные rescue-точки до 80% не прошли strict-source gate.
+All-Q8 candidate прошёл fresh reload и one-shot audit-v44 с ratios
+`0.995521 / 0.940669 / 0.982427`; incremental worst равен `1.004746` против
+strict source и `1.000017` против parent. Это седьмой полный low-bit block.
+Accepted artifact SHA-256:
+`b68c29189b676a4d195ecb939e1c17d80b1f80328b000c2f5be620e1d8dff0c0`.
 
 Layer 22 показал распределённую чувствительность: полный Q4 имел development
 code ratio `1.021613`. Минимальная проверенная глобальная rescue-точка оставила

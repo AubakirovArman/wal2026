@@ -43,6 +43,28 @@ PROJECTION_MAP = {
 }
 
 
+def passes_cumulative_and_incremental_gates(
+    metric_ratios: dict[str, float],
+    incremental_ratios_vs_source: dict[str, float],
+    incremental_ratios_vs_parent: dict[str, float],
+    *,
+    gate_ratio: float,
+    incremental_gate_ratio: float,
+) -> bool:
+    """Apply the same three-way policy as the fresh artifact verifier."""
+    return (
+        all(value <= gate_ratio for value in metric_ratios.values())
+        and all(
+            value <= incremental_gate_ratio
+            for value in incremental_ratios_vs_source.values()
+        )
+        and all(
+            value <= incremental_gate_ratio
+            for value in incremental_ratios_vs_parent.values()
+        )
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-checkpoint", type=Path, required=True)
@@ -134,6 +156,8 @@ def main() -> None:
     baseline = evaluate_domains(model, gates, args.device)
     selection_baseline = evaluate_domains(model, selection_gates, args.device)
     install_checkpoint(model, source_payload, args.device)
+    source = evaluate_domains(model, gates, args.device)
+    source_selection = evaluate_domains(model, selection_gates, args.device)
     install_mixed_q2_q4_artifact(
         model,
         parent_artifact,
@@ -231,6 +255,7 @@ def main() -> None:
         install_rescue(masks)
         metrics = evaluate_domains(model, selection_gates, args.device)
         metric_ratios = ratios(metrics, selection_baseline)
+        incremental_vs_source = ratios(metrics, source_selection)
         incremental = ratios(metrics, parent_selection)
         actual_fraction = count / eligible_groups
         q8_fraction_all_target = count / total_groups
@@ -247,13 +272,14 @@ def main() -> None:
             "target_physical_bpw": target_bpw,
             "selection_metrics": metrics,
             "selection_ratios": metric_ratios,
+            "selection_incremental_ratios_vs_source": incremental_vs_source,
             "selection_incremental_ratios_vs_parent": incremental,
-            "selection_passed": all(
-                value <= args.gate_ratio for value in metric_ratios.values()
-            )
-            and all(
-                value <= args.incremental_gate_ratio
-                for value in incremental.values()
+            "selection_passed": passes_cumulative_and_incremental_gates(
+                metric_ratios,
+                incremental_vs_source,
+                incremental,
+                gate_ratio=args.gate_ratio,
+                incremental_gate_ratio=args.incremental_gate_ratio,
             ),
         }
         candidate_masks[key] = {name: mask.cpu() for name, mask in masks.items()}
@@ -271,15 +297,19 @@ def main() -> None:
         install_rescue(masks)
         metrics = evaluate_domains(model, gates, args.device)
         metric_ratios = ratios(metrics, baseline)
+        incremental_vs_source = ratios(metrics, source)
         incremental = ratios(metrics, parent)
-        passed = all(
-            value <= args.gate_ratio for value in metric_ratios.values()
-        ) and all(
-            value <= args.incremental_gate_ratio for value in incremental.values()
+        passed = passes_cumulative_and_incremental_gates(
+            metric_ratios,
+            incremental_vs_source,
+            incremental,
+            gate_ratio=args.gate_ratio,
+            incremental_gate_ratio=args.incremental_gate_ratio,
         )
         full_evaluations[key] = {
             "metrics": metrics,
             "ratios": metric_ratios,
+            "incremental_ratios_vs_source": incremental_vs_source,
             "incremental_ratios_vs_parent": incremental,
             "passed": passed,
         }
@@ -299,6 +329,9 @@ def main() -> None:
             "source_candidate_sha256": sha256_file(candidate_path),
             "candidate": first_full_pass,
             "development_ratios": full_evaluations[first_full_pass]["ratios"],
+            "development_incremental_ratios_vs_source": full_evaluations[
+                first_full_pass
+            ]["incremental_ratios_vs_source"],
             "development_incremental_ratios_vs_parent": full_evaluations[
                 first_full_pass
             ]["incremental_ratios_vs_parent"],
@@ -344,6 +377,8 @@ def main() -> None:
         "selection_gate_sequences": args.selection_gate_sequences,
         "gate_ratio": args.gate_ratio,
         "incremental_gate_ratio": args.incremental_gate_ratio,
+        "source_metrics": source,
+        "source_ratios": ratios(source, baseline),
         "parent_metrics": parent,
         "parent_ratios": ratios(parent, baseline),
         "candidate_metrics": candidate,
